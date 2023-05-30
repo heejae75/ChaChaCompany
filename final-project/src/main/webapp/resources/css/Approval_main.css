@@ -1,9 +1,8 @@
 div{
-    border: 1px solid black;
     box-sizing: border-box;
 }
 .approval-home{
-    width: 800px;
+    width: 1000px;
     height: 800px;
     margin: auto;
 }
@@ -29,6 +28,10 @@ div{
     padding-top: 25px;
     padding-right: 100px;
 }
+#approval_short_list{
+        	width: 100%;
+        	text-align : center;
+        }
    #approval_short_list>tbody>tr:hover{
     background-color: rgb(209, 207, 207);
     cursor: pointer;
