@@ -116,11 +116,11 @@
 			<version>4.7</version>
 			<scope>test</scope>
 		</dependency>    
-		<!-- ojdbc6 -->
+		<!-- ojdbc8 -->
 		<dependency>
 		    <groupId>com.oracle.database.jdbc</groupId>
-		    <artifactId>ojdbc6</artifactId>
-		    <version>11.2.0.4</version>
+		    <artifactId>ojdbc8</artifactId>
+		    <version>19.7.0.0</version>
 		</dependency>
 		<!-- spring-jdbc -->
 		<dependency>
