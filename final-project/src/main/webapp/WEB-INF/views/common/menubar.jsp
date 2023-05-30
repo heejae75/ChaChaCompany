@@ -9,172 +9,7 @@
     <title>Document</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <style>
-        
-        :root{
-            --header-height: 3rem;
-            --nav-width: 68px;
-            --menubar-color: #0E6251; /*메뉴바 색상*/
-            --menubar-font-color: white; /*메뉴바 글씨 색상*/
-            --header-color: red; /*헤더 색상*/
-            --body-font: ; /*폰트*/
-            --normal-font-size: 1rem; /*기본 글씨 크기*/
-            --z-fixed: 100; /*?*/
-        }*,
-
-        ::before, ::after{
-            box-sizing: border-box;
-        }
-
-        body{
-            position: relative;
-            margin: var(--header-height) 0 0 0;
-            padding: 0 1rem;
-            font-family: var(--body-font);
-            font-size: var(--normal-font-size);
-            transition: .5s;
-        }
-
-        a{
-            text-decoration: none;
-        }
-
-        .header{
-            width: 100%;
-            height: var(--header-height);
-            position: fixed;
-            top: 0;
-	        left: 0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 1rem;
-            background-color: var(--header-color);
-            z-index: var(--z-fixed);
-            transition: .5s;
-        }
-
-        
-        .head{
-            color: var(--menubar-color);
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-        
-        .header_right{
-            display: flex;
-            /* padding: .5rem 1rem 0 0; */
-            column-gap: 2rem;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-        /* 왜 있는 것일까 */
-        /* .header_profile{
-
-        } */
-
-        .header_profile img{
-            border: 1px solid black;
-            width: 35px;
-            height: 35px;
-            display: flex;
-            justify-content: center;
-            border-radius: 50%;
-            cursor: pointer;
-        }
-
-        .menubar{
-            position: fixed;
-            background-color: var(--menubar-color);
-            top: 0;
-            left: -30%;
-            width: var(--nav-width);
-            height: 100vh;
-            padding: .5rem 1rem 0 0;
-            transition: .5s;
-
-            z-index: var(--z-fixed);
-        }
-
-        /* 이해 잘 못함 */
-        .nav{
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            overflow: hidden;
-        }
-
-        .nav_logo, .nav_link{
-            display: grid;
-            grid-template-columns: max-content max-content;
-            align-items: center;
-            column-gap: 1rem;
-	        padding: .5rem 0 .5rem 1.5rem; 
-        }
-
-        .nav_link{
-            position: relative;
-            color: var(--menubar-font-color);
-            margin-bottom: 1.5rem;
-            transition: .3s;
-        }
-
-        .nav_link:hover{
-            color: var(--white-color);
-        }
-
-        .show{
-    	left: 0;
-    }
-
-        .body-pd{
-    	padding-left: calc(var(--nav-width) + 1rem);
-    }
-    .active{
-    	color: var(--white-color);
-    }
-    .active::before{
-	    content: '';
-	    position: absolute;
-	    left: 0;
-	    width: 2px;
-	    height: 32px;
-	    background-color: var(--white-color);
-    }
-    .height-100{
-    	height:100vh;
-    }
-    @media screen and (min-width: 768px){
-    body{
-	    margin: calc(var(--header-height) + 1rem) 0 0 0;
-	    padding-left: calc(var(--nav-width) + 2rem);
-    }
-    .header{
-	    height: calc(var(--header-height) + 1rem);
-	    padding: 0 2rem 0 calc(var(--nav-width) + 2rem);
-    }
-    .header_profile{
-	    width: 40px;
-	    height: 40px;
-    }
-    .header_profile img{
-    	width: 45px;
-    }
-    .menubar{
-    	left: 0;
-    	padding: 1rem 1rem 0 0;
-    }
-    .show{
-    	width: calc(var(--nav-width) + 156px);
-    }
-    .body-pd{
-    	padding-left: calc(var(--nav-width) + 188px)
-    }
-    }
-
-
-    </style>
+    <link href="resources/css/menubar.css" rel="stylesheet">
 </head>
 <body id="body-pd">
     <div class="header" id="header">
@@ -224,7 +59,7 @@
                     </a>
 
                     <div class="nav_list">
-                        <a href="#" class="nav_link">
+                      <a href="#" class="nav_link">
                             <i class="fa-sharp fa-solid fa-business-time" style="color: #ffffff;"></i>
                             <span class="nav_name">근태관리</span>
                         </a>
@@ -246,11 +81,9 @@
     
                         <a href="#" class="nav_link">
                             <i class="fa-sharp fa-solid fa-newspaper" style="color: #ffffff;"></i>
-                            
                             <span class="nav_name">커뮤니티</span>
                         </a>
                     </div>
-                    
                 </div>
             </div>
 
