@@ -18,7 +18,7 @@ local.properties
 server.xml
 pom.xml
 .MF
-.properties
+/properties
 
 # External tool builders
 .externalToolBuilders/
@@ -165,3 +165,4 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/eclipse,windows,macos
+>>>>>>> branch 'main' of https://github.com/Lee-dongs/final3.git
