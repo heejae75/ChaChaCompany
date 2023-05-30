@@ -21,7 +21,7 @@ local.properties
 server.xml
 pom.xml
 .MF
-.properties
+/properties
 
 # External tool builders
 .externalToolBuilders/
