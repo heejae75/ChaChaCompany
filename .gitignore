@@ -1,3 +1,4 @@
+/final-project/
 # Created by https://www.toptal.com/developers/gitignore/api/eclipse,windows,macos
 # Edit at https://www.toptal.com/developers/gitignore?templates=eclipse,windows,macos
 
@@ -16,8 +17,8 @@ local.properties
 .classpath
 server.xml
 pom.xml
-MANIFEST.MF
-pom.properties
+.MF
+/properties
 
 # External tool builders
 .externalToolBuilders/
@@ -84,6 +85,12 @@ pom.properties
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
+
+git rm -r --cached .
+
+git add .
+
+git commit -m "fixed untracked files"
 
 # Package Files #
 *.jar
@@ -158,3 +165,4 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/eclipse,windows,macos
+>>>>>>> branch 'main' of https://github.com/Lee-dongs/final3.git
