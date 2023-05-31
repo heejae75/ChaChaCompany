@@ -1,4 +1,3 @@
-/final-project/
 # Created by https://www.toptal.com/developers/gitignore/api/eclipse,windows,macos
 # Edit at https://www.toptal.com/developers/gitignore?templates=eclipse,windows,macos
 
@@ -17,9 +16,8 @@ local.properties
 .classpath
 server.xml
 pom.xml
-.MF
-/properties
-*/target/*
+MANIFEST.MF
+pom.properties
 
 # External tool builders
 .externalToolBuilders/
@@ -86,12 +84,6 @@ pom.xml
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
-
-git rm -r --cached .
-
-git add .
-
-git commit -m "fixed untracked files"
 
 # Package Files #
 *.jar
