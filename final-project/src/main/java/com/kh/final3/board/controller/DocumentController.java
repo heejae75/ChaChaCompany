@@ -61,7 +61,10 @@ public class DocumentController {
 				at.setChangeName(saveFile.getSaveFile(file, session));
 
 				at.setFilePath(session.getServletContext().getRealPath("/resources/uploadFiles/boardDocument"));
-			
+			 
+				
+				//테스트 주석 
+				
 				atList.add(at);
 			}
 			
