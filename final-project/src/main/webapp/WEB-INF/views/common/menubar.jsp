@@ -89,7 +89,6 @@
                                 <span class="nav_name">근태관리</span>
                             </a>
                         </li>
-
 						<!-- 전자결재 -->
                         <li class ="menu">
                             <a href="home.ap" class="nav_link" data-toggle="collapse" data-target="">
