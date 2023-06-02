@@ -79,7 +79,7 @@
                             <span class="nav_name">일정관리</span>
                         </a>
     
-                        <a href="#" class="nav_link">
+                        <a href="home.cm" class="nav_link">
                             <i class="fa-sharp fa-solid fa-newspaper" style="color: #ffffff;"></i>
                             <span class="nav_name">커뮤니티</span>
                         </a>
