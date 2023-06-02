@@ -7,9 +7,10 @@
   			<setting name="jdbcTypeForNull" value="NULL"/>
   		</settings>
   		<typeAliases>
-  			
+  			<typeAlias type="com.kh.final3.approval.model.vo.ApprovalDoc" alias="approvalDoc"/>
   		</typeAliases>
   		
   		<mappers>
+  			<mapper resource="/mappers/approval-mapper.xml"/>
   		</mappers>
   </configuration>
