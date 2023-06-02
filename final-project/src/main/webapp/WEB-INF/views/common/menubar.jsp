@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,6 +14,7 @@
     <!--아이콘 cdn-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 	<link href="resources/css/menubar.css" rel="stylesheet">
+
 </head>
 <body id="body-pd">
     <div class="header" id="header">
@@ -90,6 +92,7 @@
                             </a>
                         </li>
 
+
 						<!-- 전자결재 -->
                         <li class ="menu">
                             <a href="home.ap" class="nav_link" data-toggle="collapse" data-target="">
@@ -130,13 +133,14 @@
                         
                         <!--커뮤니티  -->
                         <li>
-                            <a href="#" class="nav_link">
+                            <a href="list.no" class="nav_link">
                                 <i class="fa-sharp fa-solid fa-newspaper fa-xl" style="color: #ffffff; font-size: 28px;"></i>
                                 &nbsp;
                                 <span class="nav_name">커뮤니티</span>
                             </a>
                         </li>
                     </ul>
+
                 </div>
             </div>
 

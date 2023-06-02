@@ -1,4 +1,4 @@
-package com.kh.final3.approval.model.vo;
+package com.kh.final3.Approval.model.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

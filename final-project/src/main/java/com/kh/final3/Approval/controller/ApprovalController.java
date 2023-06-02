@@ -1,4 +1,4 @@
-package com.kh.final3.approval.controller;
+package com.kh.final3.Approval.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

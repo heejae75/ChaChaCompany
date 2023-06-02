@@ -1,4 +1,4 @@
-package com.kh.final3.approval.model.dao;
+package com.kh.final3.Approval.model.dao;
 
 import org.springframework.stereotype.Repository;
 
