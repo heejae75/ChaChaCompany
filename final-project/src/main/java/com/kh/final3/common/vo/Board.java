@@ -13,7 +13,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class Baord {
+public class Board {
 	private int boardNo;
 	private String boardWriter;
 	private String categoryCode;
@@ -25,4 +25,5 @@ public class Baord {
 	private String status;
 	private String bookmark;
 	private String importanceLevel;
+	private String deptName;
 }

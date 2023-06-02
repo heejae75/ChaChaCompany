@@ -7,9 +7,12 @@
   			<setting name="jdbcTypeForNull" value="NULL"/>
   		</settings>
   		<typeAliases>
+  			<typeAlias type="com.kh.final3.common.vo.Board" alias="board"/>
   			
   		</typeAliases>
   		
   		<mappers>
+  			<mapper resource="/mappers/boardMappers/notice-mapper.xml"/>
+  		
   		</mappers>
   </configuration>

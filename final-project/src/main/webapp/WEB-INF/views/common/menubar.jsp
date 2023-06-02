@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -244,7 +245,7 @@
                             <span class="nav_name">일정관리</span>
                         </a>
     
-                        <a href="#" class="nav_link">
+                        <a href="list.no" class="nav_link">
                             <i class="fa-sharp fa-solid fa-newspaper" style="color: #ffffff;"></i>
                             
                             <span class="nav_name">커뮤니티</span>
