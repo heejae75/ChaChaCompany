@@ -133,7 +133,7 @@
                         
                         <!--커뮤니티  -->
                         <li>
-                            <a href="#" class="nav_link">
+                            <a href="list.no" class="nav_link">
                                 <i class="fa-sharp fa-solid fa-newspaper fa-xl" style="color: #ffffff; font-size: 28px;"></i>
                                 &nbsp;
                                 <span class="nav_name">커뮤니티</span>
