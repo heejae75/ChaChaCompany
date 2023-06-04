@@ -8,11 +8,11 @@
   		</settings>
   		<typeAliases>
   			<typeAlias type="com.kh.final3.common.vo.Board" alias="board"/>
-  			
+  			<typeAlias type="com.kh.final3.approval.model.vo.ApprovalDoc" alias="approvalDoc"/>
   		</typeAliases>
   		
   		<mappers>
   			<mapper resource="/mappers/boardMappers/notice-mapper.xml"/>
-  		
+  			<mapper resource="/mappers/approval/approval-mapper.xml"/>
   		</mappers>
   </configuration>
