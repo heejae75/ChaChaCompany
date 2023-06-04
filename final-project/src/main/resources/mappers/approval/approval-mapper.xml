@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="approvalMapper">
+ 	<resultMap type="approvalDoc" id="approvalResultSet">
+ 		<result column ="DOC_NO" property="docNo"/>
+ 		<result column ="DEPT_NAME" property="deptCode"/>
+ 		<result column ="DOC_NAME" property="docType"/>
+ 		<result column ="DOC_WRITER" property="docWriter"/>
+ 		<result column ="DOC_TITLE" property="docTitle"/>
+ 		<result column ="CREATE_DATE" property="createDate"/>
+ 		<result column ="STATUS" property="status"/>
+ 	</resultMap>
+ 
+ 	<select id="selectListCount" resultType="_int">
+ 		SELECT COUNT(*)
+		FROM APPROVAL_DOC
+		<if test="status !=null">
+			WHERE STATUS = #{status}
+		</if>
+ 	</select>
+ 	<select id="selectApprovalList" parameterType="approvalDoc" resultMap="approvalResultSet">
+		SELECT A.DOC_NO, D.DEPT_NAME,T.DOC_NAME, A.DOC_TITLE, TO_CHAR(A.CREATE_DATE,'YYYY-MM-DD')"CREATE_DATE", A.STATUS
+ 		FROM APPROVAL_DOC A
+ 		JOIN DEPARTMENT D ON (A.DEPT_CODE = D.DEPT_CODE)
+ 		JOIN DOC_TYPE T ON (A.DOC_TYPE = T.DOC_TYPE)
+ 		<if test="status !=null">
+			WHERE STATUS = #{status}
+		</if>
+		ORDER BY A.CREATE_DATE DESC
+ 	</select>
+ 	<select id="approvalMainList" parameterType="approvalDoc" resultMap="approvalResultSet">
+ 		<![CDATA[
+ 		SELECT *
+ 		FROM (SELECT RANK()OVER(ORDER BY A.CREATE_DATE DESC) AS RANK
+ 				     ,DOC_NO
+ 				     ,D.DEPT_NAME
+ 				     ,T.DOC_NAME
+ 				     ,DOC_TITLE
+ 				     ,TO_CHAR(A.CREATE_DATE,'YYYY-MM-DD')"CREATE_DATE"
+ 			  FROM APPROVAL_DOC A
+ 			  JOIN DEPARTMENT D ON (A.DEPT_CODE = D.DEPT_CODE)
+ 			  JOIN DOC_TYPE T ON (A.DOC_TYPE = T.DOC_TYPE)
+ 			  )
+ 		WHERE RANK<6
+ 		<if test="status !=null">
+			AND STATUS = #{status}
+		</if>
+ 		]]>
+ 	</select>
+ 
+ </mapper>
