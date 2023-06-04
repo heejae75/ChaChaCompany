@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.kh.final3.approval.model.vo.ApprovalDoc;
 import com.kh.final3.common.vo.PageInfo;
 
+
 public interface ApprovalService {
 	
 	//게시글 수 조회
