@@ -100,13 +100,13 @@
                             </a>
                             <ul id="menu_submenu" class="collapse">
                                 <li>
-                                    <a href="#">결재홈</a>
+                                    <a href="home.ap">결재홈</a>
                                 </li>
                                 <li>
-                                    <a href="#">결재 작성</a>
+                                    <a href="enrollList.ap">결재 작성</a>
                                 </li>
                                 <li>
-                                    <a href="#">결재함</a>
+                                    <a href="list.ap">결재함</a>
                                 </li>
                             </ul>
                         </li>
