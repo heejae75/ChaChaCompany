@@ -48,6 +48,12 @@ public class ApprovalController {
 	@RequestMapping(value="approvalMainList.ap", produces="application/json; charset=UTF-8")
 	public String approvalMainList(String status) {
 		ArrayList<ApprovalDoc> list = as.approvalMainList(status);
+		
 		return new Gson().toJson(list);
+	}
+	
+	@RequestMapping("enrollList.ap")
+	public String enrollList() {
+		return "approval/enrollListView";
 	}
 }
