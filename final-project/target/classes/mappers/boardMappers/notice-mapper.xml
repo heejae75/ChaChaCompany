@@ -46,11 +46,28 @@
   	<result column="BOARD_TITLE" property="boardTitle"/>
   	<result column="BOARD_CONTENT" property="boardContent"/>
   	<result column="CREATE_DATE" property="createDate"/>
+  	<result column="MODIFY_DATE" property="modifyDate"/>
   	<result column="COUNT" property="count"/>
   	<result column="BOOKMARK" property="bookmark"/>
   	<result column="IMPORTANCE_LEVEL" property="importanceLevel"/>
   	<result column="DEPT_NAME" property="deptName"/>
   </resultMap>
+  
+  <update id="increaseCount">
+  	UPDATE BOARD
+  	SET COUNT = COUNT + 1
+  	WHERE BOARD_NO = #{boardNo}
+  	AND STATUS = 'Y'
+  </update>
+  
+  <select id="selectNotice" resultMap = "boardResultSet">
+	SELECT BOARD_NO, USER_NAME, BOARD_TITLE, BOARD_CONTENT, B.CREATE_DATE, IMPORTANCE_LEVEL, DEPT_NAME
+	FROM BOARD B 
+	JOIN MEMBER M ON(USER_NO = BOARD_WRITER)
+	JOIN DEPARTMENT USING(DEPT_CODE)
+	WHERE BOARD_NO = #{boardNo}
+	AND B.STATUS = 'Y'
+  </select>
   
   
   

@@ -116,7 +116,7 @@
             <div id="board-tap-area">
                 <ul id="nav-tabs">
                     <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="#">공지사항</a>
+                      <a class="nav-link active" aria-current="page" href="list.no">공지사항</a>
                     </li>
                     <li class="nav-item">
                       <a class="nav-link" href="#">자료실</a>
@@ -173,7 +173,8 @@
             
             <!-- 관리자에게만 보이도록 조건 걸기  -->
             <div id="board-btn-area">
-                <button class="btn btn-danger">삭제</button> <button class="btn btn-success">작성</button>               
+                <button class="btn btn-danger" onclick="location.href='delete.no'">삭제</button> 
+                <button class="btn btn-success" onclick="location.href='enroll.no'">작성</button>               
             </div>
             <div id="board-list-area">
                 <table id="board-list" class="table table-hover" align="center">
@@ -190,7 +191,7 @@
                     </thead>
                     <tbody align="center">
                     	<c:forEach var="n" items="${list }">
-	                        <tr onclick="location.href='detail.no?nno=${n.boardNo }'">
+	                        <tr onclick="location.href='detail.no?boardNo=${n.boardNo }'">
 	                            <td>${n.boardNo }</td>                            
 	                            <td align="left">
 	                            	<c:if test="${n.importanceLevel eq 'I' }">

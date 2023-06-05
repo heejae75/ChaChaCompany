@@ -6,6 +6,7 @@ import java.util.HashMap;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kh.final3.board.model.dao.NoticeDao;
 import com.kh.final3.common.vo.Board;
@@ -30,6 +31,22 @@ public class NoticeServiceImpl implements NoticeService {
 	@Override
 	public ArrayList<Board> selectList(PageInfo pi, HashMap<String, String> map) {
 		return noticeDao.selectList(sqlSession, pi, map);
+	}
+	// 조회수증가
+	@Override
+	public int increaseCount(int boardNo) {
+		return noticeDao.increaseCount(sqlSession, boardNo);
+	}
+	// 게시물 하나 조회
+	@Override
+	public Board selectNotice(int boardNo) {
+		return noticeDao.selectNotice(sqlSession, boardNo);
+	}
+	// 게시물작성
+	@Override
+	public int insertNotice(BoardAttachment at, Board b) {
+		
+		return 0;
 	}
 
 }
