@@ -1,4 +1,4 @@
-package com.kh.final3.Approval.controller;
+package com.kh.final3.approval.controller;
 
 import java.util.ArrayList;
 
@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
-import com.kh.final3.Approval.model.service.ApprovalService;
-import com.kh.final3.Approval.model.vo.Approval;
-import com.kh.final3.Approval.model.vo.ApprovalDoc;
+import com.kh.final3.approval.model.service.ApprovalService;
+import com.kh.final3.approval.model.vo.Approval;
+import com.kh.final3.approval.model.vo.ApprovalDoc;
 import com.kh.final3.common.template.Pagination;
 import com.kh.final3.common.vo.PageInfo;
 

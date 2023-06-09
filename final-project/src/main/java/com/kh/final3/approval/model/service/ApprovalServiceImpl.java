@@ -1,4 +1,4 @@
-package com.kh.final3.Approval.model.service;
+package com.kh.final3.approval.model.service;
 
 import java.util.ArrayList;
 
@@ -6,9 +6,9 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.kh.final3.Approval.model.dao.ApprovalDao;
-import com.kh.final3.Approval.model.vo.Approval;
-import com.kh.final3.Approval.model.vo.ApprovalDoc;
+import com.kh.final3.approval.model.dao.ApprovalDao;
+import com.kh.final3.approval.model.vo.Approval;
+import com.kh.final3.approval.model.vo.ApprovalDoc;
 import com.kh.final3.common.vo.PageInfo;
 
 @Service

@@ -1,4 +1,4 @@
-package com.kh.final3.Approval.model.dao;
+package com.kh.final3.approval.model.dao;
 
 import java.util.ArrayList;
 
@@ -6,8 +6,8 @@ import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.kh.final3.Approval.model.vo.Approval;
-import com.kh.final3.Approval.model.vo.ApprovalDoc;
+import com.kh.final3.approval.model.vo.Approval;
+import com.kh.final3.approval.model.vo.ApprovalDoc;
 import com.kh.final3.common.vo.PageInfo;
 
 @Repository

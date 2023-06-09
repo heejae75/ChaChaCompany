@@ -1,8 +1,8 @@
-package com.kh.final3.Approval.model.service;
+package com.kh.final3.approval.model.service;
 
 import java.util.ArrayList;
 
-import com.kh.final3.Approval.model.vo.ApprovalDoc;
+import com.kh.final3.approval.model.vo.ApprovalDoc;
 import com.kh.final3.common.vo.PageInfo;
 
 
