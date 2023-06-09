@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="noticeMapper">
+  
+  <select id="selectListCount" resultType="_int">
+  	
+  	SELECT COUNT(*)
+	FROM BOARD B
+	JOIN MEMBER M ON(B.BOARD_WRITER = M.USER_NO)
+	WHERE B.STATUS = 'Y'
+	AND CATEGORY_CODE = 'B1'
+	<if test="status != null and status != '부서선택'">
+	AND M.DEPT_CODE = #{status}
+  	</if>
+  </select>
+  
+  <select id="selectList" resultMap="boardResultSet" parameterType="hashmap">
+	SELECT B.BOARD_NO, M.USER_NAME, D.DEPT_NAME, B.BOARD_TITLE, B.BOARD_CONTENT, B.CREATE_DATE, B.COUNT, B.BOOKMARK, B.IMPORTANCE_LEVEL
+	FROM 
+	    (SELECT *
+	    FROM (SELECT * FROM BOARD WHERE CATEGORY_CODE = 'B1' AND IMPORTANCE_LEVEL = 'I' AND STATUS = 'Y' ORDER BY CREATE_DATE DESC)
+	    
+	    UNION ALL
+	    
+	    SELECT *
+	    FROM (SELECT * FROM BOARD WHERE CATEGORY_CODE = 'B1' AND IMPORTANCE_LEVEL = 'R' AND STATUS = 'Y' ORDER BY CREATE_DATE DESC))B
+	JOIN MEMBER M ON( B.BOARD_WRITER = M.USER_NO)
+	LEFT JOIN DEPARTMENT D USING(DEPT_CODE)
+	<choose>
+		<when test="status == '부서선택'">
+		WHERE BOARD_TITLE LIKE '%'||#{keyword}||'%'
+		</when>
+		<when test="status != null">
+		WHERE DEPT_CODE = #{status}
+		AND BOARD_TITLE LIKE '%'||#{keyword}||'%'
+		</when>
+	</choose>
+  </select>
+  
+  <resultMap type="board" id="boardResultSet">
+  	<result column="BOARD_NO" property="boardNo"/>
+  	<result column="USER_NAME" property="boardWriter"/>
+  	<result column="BOARD_TITLE" property="boardTitle"/>
+  	<result column="BOARD_CONTENT" property="boardContent"/>
+  	<result column="CREATE_DATE" property="createDate"/>
+  	<result column="COUNT" property="count"/>
+  	<result column="BOOKMARK" property="bookmark"/>
+  	<result column="IMPORTANCE_LEVEL" property="importanceLevel"/>
+  	<result column="DEPT_NAME" property="deptName"/>
+  </resultMap>
+  
+  
+  
+  </mapper>
