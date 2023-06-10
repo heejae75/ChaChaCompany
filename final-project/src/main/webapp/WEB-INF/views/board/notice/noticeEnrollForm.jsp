@@ -37,14 +37,23 @@
             <br>
 
             <form id="enrollForm" method="post" action="insert.no" enctype="multipart/form-data">
+            <input type="hidden" name="categoryCode" value="B1">
                 <table algin="center">
                     <tr>
                         <th><label for="title">제목</label></th>
                         <td><input type="text" id="title" class="form-control" name="boardTitle" required></td>
                     </tr>
                     <tr>
-                        <th><label for="writer">작성자</label></th>
-                        <td><input type="text" id="boardWriter" class="form-control" value="" name="boardWriter" readonly></td>
+                        <th><label for="writer">작성자</label></th><!-- loginUser에서 userNo뽑기 -readonly적용-->
+                        <td><input type="text" id="boardWriter" class="form-control" value="" name="boardWriter"></td>
+                    </tr>
+                    <tr>
+                    	<th>중요도</th>
+                    	<td><select name="importanceLevel" style=" width :100%; height:100%; font-size: 20px; ">
+	   	                        <option value="R">일반</option>
+	       	                    <option value="I">중요</option>
+	           	             </select>
+	           	        </td>
                     </tr>
                     <tr>
                         <th><label for="upfile">첨부파일</label></th>

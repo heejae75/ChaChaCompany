@@ -1,10 +1,7 @@
 package com.kh.final3.board.controller;
 
 import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
@@ -12,14 +9,20 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
 import com.kh.final3.board.model.service.NoticeService;
+import com.kh.final3.board.model.vo.Board;
+import com.kh.final3.board.model.vo.BoardAttachment;
+import com.kh.final3.board.model.vo.Reply;
 import com.kh.final3.common.template.Pagination;
-import com.kh.final3.common.vo.Board;
+import com.kh.final3.common.template.SaveFile;
 import com.kh.final3.common.vo.PageInfo;
 
 @Controller
@@ -27,6 +30,12 @@ public class NoticeController {
 	
 	@Autowired
 	private NoticeService noticeService;
+	
+	@Autowired
+	public SaveFile saveFile;
+	
+	@Autowired
+	public BoardAttachment at; 
 	
 	// 게시판 메인으로 이동, 검색기능
 	@RequestMapping("list.no")
@@ -45,15 +54,34 @@ public class NoticeController {
 		map.put("status", status);
 		
 		ArrayList<Board> list = noticeService.selectList(pi, map);
-		
+
 		model.addAttribute("list", list);
 		model.addAttribute("pi", pi);
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("status", status);
 		
+		return "board/notice/noticeListView";
+	}
+	// 즐겨찾기 한 게시물 조회
+	@RequestMapping("bookmarkList.no")
+	public String bookmarkList(@RequestParam(value="currentPage", defaultValue="1") int currentPage, int userNo, Model model) {
+		// hidden으로 userNo 가져오기 또는 세션에서 꺼내기
+		
+		// 게시글 목록 조회
+		int listCount = noticeService.selectBookmarkCount(userNo);
+		int pageLimit = 5;
+		int boardLimit = 10;
+		
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
+				
+		ArrayList<Board> list = noticeService.selectBookmarkList(pi, userNo);
+
+		model.addAttribute("list", list);
+		model.addAttribute("pi", pi);
 		
 		return "board/notice/noticeListView";
 	}
+	
 	
 	// 디테일뷰
 	@RequestMapping("detail.no")
@@ -64,9 +92,12 @@ public class NoticeController {
 		
 		if(result > 0) {
 			Board b = noticeService.selectNotice(boardNo);
+			BoardAttachment at = noticeService.selectAttachment(boardNo);
+			
+			mv.addObject("at", at);
 			mv.addObject("b", b).setViewName("board/notice/noticeDetailView");
 		}else {
-//			mv.addObject("errorMsg","조회실패").setViewName("common/errorPage");
+			mv.addObject("errorMsg", "조회실패").setViewName("board/notice/noticeDetailView");
 		}
 		return mv;
 	}
@@ -80,61 +111,171 @@ public class NoticeController {
 	// 글작성 insert
 	@RequestMapping("insert.no")
 	public ModelAndView insertBoard(ModelAndView mv, Board b, BoardAttachment at, MultipartFile upfile, HttpSession session) {
-		
-		// 첨부파일을 지정하든 안하든 이미 객체는 만들어져서 넘어온다.(filename의 원본명을 찾아서 있는지 없는지로 판별필요. null이 아니고)
-		
-		// 전달된 파일 있을 경우 - 파일명 수정작업 후 서버로 업로드 -> 원본명, 서버에 업로드 된 파일명 경로를 b에 추가하여 전달
-		//System.out.println(upfile.getOriginalFilename()); // 첨부 안하면 빈 문자열
-		
-		if(!upfile.getOriginalFilename().equals("")) {
+
+		if(!upfile.getOriginalFilename().equals("")) { // 첨부파일이 있는 경우
 			
-			String changeName = saveFile(upfile, session);
+			at.setCategoryCode(b.getCategoryCode());
 			at.setOriginName(upfile.getOriginalFilename());
-			at.setChangeName("resources/uploadFiles/" + changeName);
-			
-			int result = noticeService.insertNotice(at, b);
-			
-			if(result > 0) {
-				mv.addObject("alertMsg","게시글 작성 성공").setViewName("redirect:list.no");
-			}else {
-				//mv.addObject("errorMsg","게시글 작성 실패").setViewName("common/errorPage");
+			at.setChangeName(saveFile.getSaveFile(upfile, session));
+			at.setFilePath(session.getServletContext().getRealPath("/resources/uploadFiles/boardDocument"));
+		}else { // 첨부파일이 없는 경우
+			at = null;
+		}
+		
+		int result = noticeService.insertNotice(at, b);
+		
+		if(result > 0) {
+			mv.addObject("alertMsg","게시글 작성 성공").setViewName("redirect:list.no");
+		}else {
+			mv.addObject("errorMsg","게시글 작성 실패").setViewName("redirect:list.no");
+		}
+		
+		return mv;
+	}
+
+	// 댓글 불러오기
+	@ResponseBody
+	@RequestMapping(value = "replyList.no", produces = "application/json; charset=UTF-8")
+	public String selectReplyList(int boardNo) {
+
+		ArrayList<Reply> list = noticeService.selectReplyList(boardNo);
+		return new Gson().toJson(list);
+	}
+
+	// 댓글 작성하기
+	@ResponseBody
+	@RequestMapping("insertReply.no")
+	public String insertReply(Reply reply) {
+
+		int result = noticeService.insertReply(reply);
+
+		return (result > 0) ? "success" : "fail";
+
+	}
+	
+	// 게시글 수정페이지로 이동
+	@RequestMapping("updateForm.no")
+	public String updateForm(int boardNo, Model model) {
+		
+		Board b = noticeService.selectNotice(boardNo);
+		BoardAttachment at = noticeService.selectAttachment(boardNo);
+		
+		model.addAttribute("b",b);
+		model.addAttribute("at", at);
+		
+		return "board/notice/noticeUpdateView";
+	}
+	// 게시글 수정하기
+//	@PostMapping("update.no")
+//	public ModelAndView updateBoard(ModelAndView mv, MultipartFile upfile, BoardAttachment at, Board b, HttpSession session) {
+//		
+//		// 새로 등록하는 사진이 있다면
+//		if(!upfile.getOriginalFilename().equals("")) {
+//			
+//			// 기존에 사진이 있었다면 : 삭제하고 등록
+//			if(b.getOriginName() != null) { // hidden으로 가져온 originName
+//				
+//				new File(session.getServletContext().getRealPath(b.getChangeName())).delete();
+//				
+//			}
+//			// 새로 넘어온 첨부파일을 서버에 업로드
+//			String changeName = saveFile(upfile, session);
+//			
+//			// 처리된 변경이름, 넘어온 실제이름 b에 담아서 요청보내기
+//			b.setOriginName(upfile.getOriginalFilename());
+//			b.setChangeName("resources/uploadFiles/" + changeName);
+//			
+//		}
+//		
+//		/*
+//		 * b에는 boardNo, boardTitle, boardContent가 담겨있고, 추가적으로 고려해야하는 경우는 1. 새로 첨부된 파일이
+//		 * 없고, 기존에 파일이 없을 때 2. 새로 첨부된 파일이 없고, 기존에 파일이 있을 때 3. 새로 첨부된 파일이 있고, 기존에 파일이 없을
+//		 * 때 : 새로 전달된 파일을 서버에 저장하고 데이터베이스에 등록 4. 새로 첨부된 파일이 있고, 기존에 파일도 있을 때 : 기존 파일을
+//		 * 삭제하고 새로 첨부된 파일을 저장 및 등록
+//		 */
+//
+//		// 게시판 내용 수정
+//		int result = boardService.updateBoard(b);
+//
+//		if (result > 0) {
+//			session.setAttribute("alertMsg", "수정성공");
+//			mv.setViewName("redirect:detail.bo?bno="+b.getBoardNo());
+//		} else {
+//			mv.addObject("errorMsg", "수정실패").setViewName("common/errorPage");
+//		}
+//		return mv;
+//	}
+//	
+	@RequestMapping("delete.bo")
+	public ModelAndView deleteBoard(int boardNo, String filePath, ModelAndView mv, HttpSession session) {
+
+		int result = noticeService.deleteBoard(boardNo);
+
+		if (result > 0) {
+			if (!filePath.equals("")) { // 넘어온 파일 정보가 있을 때
+				new File(session.getServletContext().getRealPath(filePath)).delete();
 			}
+
+			session.setAttribute("alertMsg", "게시글 삭제완료");
+			mv.setViewName("redirect:list.bo");
+		} else {
+			mv.addObject("errorMsg", "삭제실패").setViewName("redirect:list.bo");
 		}
 		return mv;
 	}
 	
-	// 파일 업로드 처리 메소드(모듈)
-	public String saveFile(MultipartFile upfile, HttpSession session) {
-
-		// 1. 원본 파일명 뽑기
-		String originName = upfile.getOriginalFilename();
-
-		// 2. 시간형식 문자열로 뽑아내기
-		String currentTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-
-		// 3. 뒤에 붙을 다섯자리 랜덤값 뽑아주기
-		int ranNum = (int) (Math.random() * 90000 + 10000); // 다섯자리 랜덤값
-
-		// 4. 확장자명 추출하기
-		String ext = originName.substring(originName.lastIndexOf("."));
-
-		// 5. 추출한 문자열들 다 합해서 changeName만들기
-		String changeName = currentTime + ranNum + ext;
-
-		// 6. 업로드 하고자하는 물리적인 경로 알아내기
-		String savePath = session.getServletContext().getRealPath("/resources/uploadFiles/");
-
-		// 7. 경로와 수정파일명을 합쳐 파일 업로드 하기
-		try {
-			upfile.transferTo(new File(savePath + changeName));
-		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	// 즐겨찾기 여부 조회
+	@ResponseBody
+	@RequestMapping("bookmark.no")
+	public String selectBookmark(int boardNo, int userNo) {
+		
+		HashMap<String, Integer> map = new HashMap<>();
+		map.put("boardNo", boardNo);
+		map.put("userNo", userNo);
+		
+		int count = noticeService.selectBookmark(map);
+		
+		String result = "";
+		if(count > 0) {
+			result = "Y";
+		}else {
+			result = "N";
 		}
-		return changeName;
-	}
+		return result;
+	} 
+	
+	// 즐겨찾기 선택 및 해제
+	@ResponseBody
+	@RequestMapping("checkBookmark.no")
+	public String checkBookmark(int boardNo, int userNo) {
+		
+		HashMap<String, Integer> map = new HashMap<>();
+		map.put("boardNo", boardNo);
+		map.put("userNo", userNo);
+		
+		int count = noticeService.selectBookmark(map);
+		
+		String result = "";
+		
+		if(count > 0) { // 기존 즐겨찾기에 있음 - 즐겨찾기에서 삭제("D"전송)
+			int deleteResult = noticeService.deleteBookmark(map);
+			if(deleteResult > 0) {
+				result = "D";
+			}else {
+				result = "F";
+			}
+		}else { // 기존 즐겨찾기에 없음 - 즐겨찾기에 추가("I"전송)
+			int insertResult = noticeService.insertBookmark(map);
+			if(insertResult > 0) {
+				result = "I";
+			}else {
+				result = "F";
+			}
+		}
 
+		return result;
+
+	}
+	
+	
 }

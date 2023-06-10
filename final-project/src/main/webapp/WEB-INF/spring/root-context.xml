@@ -25,4 +25,8 @@
 			<property name="maxUploadSize" value="10000000"/> <!-- 업로드 파일 용량제한 -->
 			<property name="maxInMemorySize" value="10000000"/>	<!-- 메모리 보관 최대크기 --> 	 
 	 	 </bean>
+	 	 
+	 	 <bean class="com.kh.final3.common.template.SaveFile" id="saveFile"/>
+	 	 <bean class="com.kh.final3.board.model.vo.BoardAttachment" id="boardAttachment" />
+	 	 
 </beans>

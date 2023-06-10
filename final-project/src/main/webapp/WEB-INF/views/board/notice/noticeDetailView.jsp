@@ -36,13 +36,14 @@
             <h2>게시글 상세보기</h2>
             <br>
 ​
-            <a class="btn btn-secondary" style="float:right;" href="">목록으로</a>
+            <a class="btn btn-secondary" style="float:right;" href="list.no">목록으로</a>
             <br><br>
 ​
-            <table id="contentArea" algin="center" class="table">
+            <table id="contentArea" align="center" class="table">
                 <tr>
                     <th width="100">제목</th>
-                    <td colspan="3">${b.boardTitle }</td>
+                    <td colspan="2">${b.boardTitle }</td>
+                    <td align="right"><button id="bookmarkButton"><span id="bookmarkIcon"></span></button></td>
                 </tr>
                 <tr>
                     <th>작성자</th>
@@ -53,7 +54,7 @@
                 <tr>
                     <th>첨부파일</th>
                     <td colspan="3">
-                        <a href="" download="">파일명.jpg</a>
+                        <a href="${at.changeName }" download="${at.originName }">${at.originName}</a>
                     </td>
                 </tr>
                 <tr>
@@ -68,8 +69,8 @@
 ​
             <div align="center">
                 <!-- 수정하기, 삭제하기 버튼은 이 글이 본인이 작성한 글일 경우에만 보여져야 함 -->
-                <a class="btn btn-primary" href="">수정하기</a>
-                <a class="btn btn-danger" href="">삭제하기</a>
+                <a class="btn btn-primary" href="updateForm.no">수정하기</a>
+                <a class="btn btn-danger" href="delete.no">삭제하기</a>
             </div>
             <br><br>
 ​
@@ -77,37 +78,153 @@
             <table id="replyArea" class="table" align="center">
                 <thead>
                     <tr>
-                        <th colspan="2">
-                            <textarea class="form-control" name="" id="content" cols="55" rows="2" style="resize:none; width:100%;"></textarea>
-                        </th>
-                        <th style="vertical-align:middle"><button class="btn btn-secondary">등록하기</button></th>
+                    	<%-- <c:choose>
+                    	<c:when test="${not empty loginUser }"> --%>
+	                        <th colspan="2">
+	                            <textarea class="form-control" name="replyContent" id="content" cols="55" rows="2" style="resize:none; width:100%;"></textarea>
+	                        </th>
+	                        <th style="vertical-align:middle"><button class="btn btn-secondary" onclick="insertReply();">등록하기</button></th>
+                    <%-- 	</c:when>
+                    	<c:otherwise>
+                    		<th colspan="2">
+	                            <textarea class="form-control" name="replyContent" id="content" cols="55" rows="2" style="resize:none; width:100%;"></textarea>
+	                        </th>
+	                        <th style="vertical-align:middle"><button class="btn btn-secondary" disalbed>로그인 후 이용가능</button></th>
+                    	</c:otherwise>
+                    	</c:choose> --%>
                     </tr>
                     <tr>
-                        <td colspan="3">댓글(<span id="rcount">3</span>)</td>
+                        <td colspan="3">댓글(<span id="rcount"></span>)</td>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <th>user02</th>
-                        <td>ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ꿀잼</td>
-                        <td>2020-03-12</td>
-                    </tr>
-                    <tr>
-                        <th>user01</th>
-                        <td>재밌어요</td>
-                        <td>2020-03-11</td>
-                    </tr>
-                    <tr>
-                        <th>admin</th>
-                        <td>댓글입니다!!</td>
-                        <td>2020-03-10</td>
-                    </tr>
+                    <!-- 댓글출력 -->
                 </tbody>
             </table>
         </div>
         <br><br>
 ​
     </div>
+     <script>
+    // 댓글불러오기
+    $(function(){
+    	selectReplyList();
+    	
+    });
+    	function selectReplyList(){
+    		
+	    	$.ajax({
+	    		url : "replyList.no",
+	    		data : {
+	    			boardNo : "${b.boardNo}"
+	    		},
+	    		success : function(list){
+	    			
+	    			var str = "";    				
+	    			for(var i in list){
+	    				str += "<tr>"
+	    					+ "<th>" + list[i].deptName + " " + list[i].userName + "</th>"
+	    					+ "<td>" + list[i].replyContent + "</td>"
+	    					+ "<td>" + list[i].createDate + "</td>"
+	    					+ "</tr>"
+	    			}
+	    			
+	    			$("#replyArea tbody").html(str);
+	    			$("#rcount").text(list.length);
+	    		
+	    		},
+	    		error : function(){
+	    			console.log("통신오류");
+	    		}
+	    	});
+    
+    	};
+    	
+    
+    // 댓글쓰기
+   function insertReply(){
+    	
+    	$.ajax({
+    		url : "insertReply.no",
+    		data : {
+    			replyWriter : "1",
+    			replyContent : $("#replyArea #content").val(),
+    			refBno : "${b.boardNo}"
+    		},
+    		success : function(result){
+    			if(result == "success"){
+	    			selectReplyList();
+	    			$("#content").val("");
+    			}
+    		},
+    		error : function(){
+    			console.log("통신오류");
+    		}
+    	});
+    	
+    }
+    
+    // 즐겨찾기여부 불러오기
+    $(function(){
+    	selectBookmark();
+    });
+    
+    function selectBookmark(){
+    	
+    	$.ajax({
+    		url : "bookmark.no",
+    		data : {
+    			boardNo : "${b.boardNo}",
+    			userNo : /* "${loginUser.userNo}" */ "1"
+    		},
+    		success : function(result){
+    			console.log("통신성공");
+    			
+    			if(result == "Y"){ // 즐겨찾기 한 글이라면 빨간 아이콘
+    				var icon = $('<i>').addClass('fa-solid fa-bookmark').css('color', '#e91616');
+    			    $('#bookmarkIcon').append(icon);
+    			}else{ // 즐겨찾기 안했으면 빈 아이콘
+    			    var icon = $('<i>').addClass('fa-regular fa-bookmark');
+    			    $('#bookmarkIcon').append(icon);  
+    			}
+    			
+    		},
+    		error : function(){
+    			console.log("통신오류");
+    		}
+    	});
+    };
+    // 즐겨찾기 추가 또는 즐겨찾기 해제
+    
+    $("#bookmarkButton").click(function(){
+    	
+    	$.ajax({
+    		url : "checkBookmark.no",
+    		data : {
+    			boardNo : "${b.boardNo}",
+    			userNo : /* "${loginUser.userNo}" */ "1"
+    		},
+    		success : function(result){
+    			if(result == 'I'){ // 즐겨찾기 추가한 경우
+    				window.alert("즐겨찾기에 추가되었습니다.");
+    				$('#bookmarkIcon').remove();
+    			}else if(result == "D"){ // 즐겨찾기 해제한 경우
+    				window.alert("즐겨찾기에서 해체되었습니다.");
+    				$('#bookmarkIcon').remove();
+    			}else{
+    				console.log("즐겨찾기 기능 실패");
+    			}
+    			
+    			selectBookmark();
+    			location.reload();
+    		},
+    		error : function(){
+    			console.log("통신오류");
+    		}
+    	});
+    });
+   
+    </script>
     
 </body>
 </html>

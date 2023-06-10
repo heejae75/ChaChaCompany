@@ -7,12 +7,15 @@
   			<setting name="jdbcTypeForNull" value="NULL"/>
   		</settings>
   		<typeAliases>
-  			<typeAlias type="com.kh.final3.common.vo.Board" alias="board"/>
-  			<typeAlias type="com.kh.final3.approval.model.vo.ApprovalDoc" alias="approvalDoc"/>
+  			<typeAlias type="com.kh.final3.board.model.vo.Board" alias="board"/>
+  			<typeAlias type="com.kh.final3.board.model.vo.BoardAttachment" alias="boardAttachment"/>
+  			<typeAlias type="com.kh.final3.board.model.vo.Reply" alias="reply"/>
+  			<typeAlias type="com.kh.final3.board.model.vo.Reservation" alias="reservation"/>
   		</typeAliases>
   		
   		<mappers>
   			<mapper resource="/mappers/boardMappers/notice-mapper.xml"/>
-  			<mapper resource="/mappers/approval/approval-mapper.xml"/>
+  			<!-- <mapper resource="/mappers/boardMappers/reservation-mapper.xml"/> -->
+<!--   			<mapper resource="/mappers/approval/approval-mapper.xml"/> -->
   		</mappers>
   </configuration>

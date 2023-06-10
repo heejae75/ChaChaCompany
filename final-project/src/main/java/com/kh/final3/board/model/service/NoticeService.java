@@ -3,7 +3,9 @@ package com.kh.final3.board.model.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.kh.final3.common.vo.Board;
+import com.kh.final3.board.model.vo.Board;
+import com.kh.final3.board.model.vo.BoardAttachment;
+import com.kh.final3.board.model.vo.Reply;
 import com.kh.final3.common.vo.PageInfo;
 
 public interface NoticeService {
@@ -15,7 +17,25 @@ public interface NoticeService {
 	int increaseCount(int boardNo);
 	// 게시물 하나 조회
 	Board selectNotice(int boardNo);
+	// 첨부파일 조회
+	BoardAttachment selectAttachment(int boardNo);
 	// 게시물작성
 	int insertNotice(BoardAttachment at, Board b);
-
+	// 댓글 조회
+	ArrayList<Reply> selectReplyList(int boardNo);
+	// 댓글작성
+	int insertReply(Reply reply);
+	// 게시글삭제
+	int deleteBoard(int boardNo);
+	// 즐겨찾기 여부 조회
+	int selectBookmark(HashMap<String, Integer> map);
+	// 즐겨찾기 해제
+	int deleteBookmark(HashMap<String, Integer> map);
+	// 즐겨찾기 등록
+	int insertBookmark(HashMap<String, Integer> map);
+	// 즐겨찾기 한 게시물 갯수
+	int selectBookmarkCount(int userNo);
+	// 즐겨찾기 리스트 조회
+	ArrayList<Board> selectBookmarkList(PageInfo pi, int userNo);
+	
 }

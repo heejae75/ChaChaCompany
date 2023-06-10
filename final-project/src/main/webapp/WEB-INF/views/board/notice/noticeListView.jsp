@@ -122,7 +122,7 @@
                       <a class="nav-link" href="#">자료실</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="#">대여</a>
+                      <a class="nav-link" href="list.re">대여</a>
                     </li>
                     <li class="nav-item">
                       <a class="nav-link" href="#">자유게시판</a>
@@ -137,7 +137,7 @@
                     <input type="hidden" name="currentPage" value="1">
                         <select name="status" id="dept_code" class="btn btn-secondary dropdown-toggle" style="background-color: white; color:#0c0d0d; height: 38px; margin-right: 3px;">
                             <option>부서선택</option>
-                            <option value="D1">인사관리부</option>
+                            <option value="D1">기타</option>
                             <option value="D2">회계관리부</option>
                             <option value="D3">마케팅부</option>
                             <option value="D4">국내영업부</option>
@@ -145,7 +145,7 @@
                             <option value="D6">기술지원부</option>
                             <option value="D7">총무부</option>
                             <option value="D8">회계부</option>
-                            <option value="D9">기타</option>
+                            <option value="D9">인사관리부</option>
                         </select>
                     </div>
                     <div id="search-box">
@@ -173,8 +173,7 @@
             
             <!-- 관리자에게만 보이도록 조건 걸기  -->
             <div id="board-btn-area">
-                <button class="btn btn-danger" onclick="location.href='delete.no'">삭제</button> 
-                <button class="btn btn-success" onclick="location.href='enroll.no'">작성</button>               
+                <button class="btn btn-success" onclick="location.href='enroll.no'">공지사항 작성</button>               
             </div>
             <div id="board-list-area">
                 <table id="board-list" class="table table-hover" align="center">
@@ -185,8 +184,7 @@
                             <th>작성자</th>
                             <th>조회수</th>
                             <th>작성일</th>
-                            <th>첨부파일</th>
-                            <th>즐겨찾기</th>
+                            <th>북마크</th>
                         </tr>
                     </thead>
                     <tbody align="center">
@@ -197,12 +195,18 @@
 	                            	<c:if test="${n.importanceLevel eq 'I' }">
 	                            		<button type="button" class="btn btn-danger btn-sm" disabled style="background-color: #c42d2d">중요</button>
 	                            	</c:if>
-	                            ${n.boardTitle }</td>      
+	                            ${n.boardTitle }
+	                            	<c:if test="${!empty n.attachmentNo }">
+	                            		<i class="fa-solid fa-download fa-lg " style="color : #0c0d0d"></i>
+	                            		<i class="fa-sharp fa-regular fa-paperclip" style="color : #0c0d0d"></i>
+	                            	</c:if>
+	                            </td>      
 	                            <td>${n.deptName }</td>
 	                            <td>${n.count }</td>
 	                            <td>${n.createDate }</td>
-	                            <td><i class="fa-solid fa-download fa-lg " style="color : #0c0d0d"></i></td>      
-	                            <td><input type="checkbox"></td>
+	                            <td>
+		                            <!-- 즐겨찾기 여부 -->
+	                           </td>      
 	                        </tr>
                        </c:forEach>
                         
@@ -269,6 +273,7 @@
         </div>
         <br><br><br>
     </div>
-
+    
+   
 </body>
 </html>
