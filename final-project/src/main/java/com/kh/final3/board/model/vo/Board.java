@@ -1,4 +1,4 @@
-package com.kh.final3.common.vo;
+package com.kh.final3.board.model.vo;
 
 import java.sql.Date;
 
@@ -26,4 +26,6 @@ public class Board {
 	private String bookmark;
 	private String importanceLevel;
 	private String deptName;
+	
+	
 }

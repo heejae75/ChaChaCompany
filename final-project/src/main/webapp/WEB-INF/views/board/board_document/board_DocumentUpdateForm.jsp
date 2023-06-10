@@ -4,13 +4,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
-   <title>자료실 작성페이지</title>
+   <title>자료실 수정페이지 </title>
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <style>
-	  
-	 .document-content{
-	  	width : 100%;
-	  	height: 100%;
+	
+	 .board-content{
+	  	width : 1400px;
 	}
   	
   	/* navi */
@@ -22,7 +21,7 @@
   
 	#board-tap-area>ul{
 		padding-top : 50px;
-		height : 100px;
+		height : 120px;
 		list-style-type : none;
 	}
 	
@@ -65,7 +64,6 @@
 		border-top-right-radius:0.25rem;
 	}  
 	
-	/* 테이블 영역  */
 	#document-detail{
 		width : 100%;
 		margin-top:40px;
@@ -99,18 +97,20 @@
 		padding: 0;
 		border: 0;
 	}
+
     </style>
     
 </head>
 <%@ include file="../../common/menubar.jsp" %>
 <body id="body-pd">
     <div class="content">
-    	<div class="document-content">
+    	<div class="board-content">
+ 
             <div id="board-tap-area">
             	<h1>자료실</h1>
                 <ul id="nav-tabs">
 				  	<li class="nav-item">
-				    	<a class="nav-link" aria-current="page" href="list.no">공지사항</a>
+				    	<a class="nav-link" aria-current="page" href="#">공지사항</a>
 				 	</li>
 				  	<li class="nav-item">
 				    	<a class="nav-link active" id="link_active" href="list.dc">자료실</a>
@@ -126,45 +126,68 @@
             
 	       	<div id="document-detail">
 				<div id="document-table-area">
-	            	<form action="insertDoc.dc" method="post" enctype="multipart/form-data">
+	            	<form action="update.dc" method="post" enctype="multipart/form-data">
+	            	<input type="hidden" name="boardNo" value="${b.boardNo}">
 	                <table id="document-table">
 	                    <thead>
 	                        <tr>
 	                            <td width="10%" style="text-align: center;">
 	                            	<select name="importanceLevel" style=" width :100%; height:100%; font-size: 20px; ">
-	   	                        		<option value="R">일반</option>
-	       	                    		<option value="I">중요</option>
+	                            		<c:choose>
+	                            			<c:when test="${b.importanceLevel eq 'R'}">
+			   	                        		<option value="R">일반</option>
+			       	                    		<option value="I">중요</option>
+	                            			</c:when>
+	                            			<c:otherwise>
+			       	                    		<option value="I">중요</option>	                            			
+												<option value="R">일반</option>
+	                            			</c:otherwise>
+	                            		</c:choose>
 	           	                	</select>
 	                            </td> 
 	                            <td width="10%" style="text-align: center;">
 	                            	<select name="categoryCode" style=" width :100%; height:100%; font-size: 20px; ">
-	       	                    		<option value="B2">자료실</option>
-	   	                        		<option value="B1">공지사항</option>
-	       	                    		<option value="B3">커뮤니티</option>
+	       	                    		<c:choose>
+	                            			<c:when test="${b.categoryCode eq 'B1'}">
+			   	                        		<option value="B1">공지사항</option>
+			       	                    		<option value="B2">자료실</option>
+			       	                    		<option value="B3">커뮤니티</option>
+	                            			</c:when>
+	                            			<c:when test="${b.categoryCode eq 'B2'}">
+			       	                    		<option value="B2">자료실</option>
+			   	                        		<option value="B1">공지사항</option>
+			       	                    		<option value="B3">커뮤니티</option>
+	                            			</c:when>
+	                            			<c:otherwise>
+			       	                    		<option value="B3">커뮤니티</option>
+			   	                        		<option value="B1">공지사항</option>
+			       	                    		<option value="B2">자료실</option>
+	                            			</c:otherwise>
+	                            		</c:choose>
 	           	                	</select>
 	                            </td>  
 	                            <td style="text-align: center; font-size:20px; font-weight: 800;">제목</td>  
-	                            <td><input id="title" name="boardTitle" type="text" style="width :100%; height:100%; font-size: 20px;"></td>      
+	                            <td><input id="title" name="boardTitle" type="text" style="width :100%; height:100%; font-size: 20px;" value="${b.boardTitle}"></td>      
                         	</tr>
 	                    </thead>
 	                    <tbody>
 	                        <tr>
-	                            <td colspan="4">
-	                            <div id="file-area" style="margin-left: 0;">
-	                            <br>
-	                            	<input type="file" name="upfile" required> <br>
-                                    <input type="file" name="upfile"> <br>
-                                    <input type="file" name="upfile"> <br>
-                                    <input type="file" name="upfile">
-                          		<br>
-                                </div>
-                                <br>
-	                            </td>
+	                        	<td align="center">업로드 파일</td>
+	                        	
+	                            <td colspan="3">
+                       	 		<c:forEach var="at" items="${atList}">
+	                           		${at.originName} <br>
+                     			</c:forEach>		
+                           		</td>
 	                        </tr>
 	                        <tr>
-	                            <td colspan="4"><textarea name ="boardContent" style="resize: none; width: 100%; height: 300px; padding: 0;" required></textarea></td>
+		                        <td colspan="4">
+		                        	<input type="file" name="upfile" multiple>
+		                        </td>
 	                        </tr>
-	
+	                        <tr>
+	                            <td colspan="4"><textarea name ="boardContent" style="resize: none; width: 100%; height: 300px; padding: 0;" required>${b.boardContent}</textarea></td>
+	                        </tr>
 	                    </tbody>
 	                </table>
 	                <!-- 임시저장 기능 한번 확인 -->

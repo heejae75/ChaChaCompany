@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.kh.final3.board.model.service.NoticeService;
+import com.kh.final3.board.model.vo.Board;
 import com.kh.final3.common.template.Pagination;
-import com.kh.final3.common.vo.Board;
 import com.kh.final3.common.vo.PageInfo;
 
 @Controller

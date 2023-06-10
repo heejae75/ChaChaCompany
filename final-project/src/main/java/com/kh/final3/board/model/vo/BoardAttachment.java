@@ -1,4 +1,4 @@
-package com.kh.final3.board.vo;
+package com.kh.final3.board.model.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +17,6 @@ public class BoardAttachment {
 	public String changeName;		//CHANGE_NAME	VARCHAR2(1000 BYTE)
 	public String filePath;			//FILE_PATH	VARCHAR2(1000 BYTE)
 	public String status;			//STATUS	VARCHAR2(1 BYTE)
-	
 	
 }
 
