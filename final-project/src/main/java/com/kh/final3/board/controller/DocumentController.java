@@ -19,14 +19,14 @@ import com.kh.final3.common.vo.Board;
 public class DocumentController {
 	
 	
-	@Autowired
-	public SaveFile saveFile;
-	
-	@Autowired
-	public BoardAttachment at; 
-	
-	@Autowired 
-	public BoardDocService boardDocService;
+//	@Autowired
+//	public SaveFile saveFile;
+//	
+//	@Autowired
+//	public BoardAttachment at; 
+//	
+//	@Autowired 
+//	public BoardDocService boardDocService;
 	
 	//mapping주소 수정해야함 
 	@RequestMapping("home.cm")
