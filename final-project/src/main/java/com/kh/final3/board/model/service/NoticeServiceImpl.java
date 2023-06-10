@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.final3.board.model.dao.NoticeDao;
-import com.kh.final3.common.vo.Board;
+import com.kh.final3.board.model.vo.Board;
 import com.kh.final3.common.vo.PageInfo;
 
 @Service
