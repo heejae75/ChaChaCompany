@@ -17,31 +17,30 @@ import com.kh.final3.common.vo.Board;
 
 @Controller
 public class DocumentController {
+//	@Autowired
+//	public SaveFile saveFile;
+//	
+//	@Autowired
+//	public BoardAttachment at; 
+//	
+//	@Autowired 
+//	public BoardDocService boardDocService;
 	
 	
-	@Autowired
-	public SaveFile saveFile;
-	
-	@Autowired
-	public BoardAttachment at; 
-	
-	@Autowired 
-	public BoardDocService boardDocService;
-	
-	//mapping주소 수정해야함 
+	//mapping二쇱냼 �닔�젙�빐�빞�븿
 	@RequestMapping("home.cm")
 	public String boardHome() {
 		return "board/board_document/board_DocumentList";
 	}
 	
-	//자료 작성 페이지 이동 메소드
+	//�옄猷� �옉�꽦 �럹�씠吏� �씠�룞 硫붿냼�뱶
 	@RequestMapping("enroll.dc")
 	public String documentEnrollFrom() {
 		
 		return "board/board_document/board_DocumentEnrollForm";
 	}
 
-	//게시글 작성 메소드 
+	//寃뚯떆湲� �옉�꽦 硫붿냼�뱶 
 	@RequestMapping("insertDoc.dc")
 	public ModelAndView insertDoc(Board b,  ArrayList<MultipartFile> upfile , ModelAndView mv, HttpSession session) {
 		
@@ -50,7 +49,7 @@ public class DocumentController {
 		for(MultipartFile file : upfile) {
 			
 			if(!file.getOriginalFilename().equals("")) {
-				//BoardAttachment에 (bno, categoryCode, originName, changeName, filePath 담아주기)
+				//BoardAttachment�뿉 (bno, categoryCode, originName, changeName, filePath �떞�븘二쇨린)
 				
 				at.setRefBno(b.getBoardNo());
 				
@@ -63,14 +62,14 @@ public class DocumentController {
 				at.setFilePath(session.getServletContext().getRealPath("/resources/uploadFiles/boardDocument"));
 			 
 				
-				//테스트 주석 
+				//�뀒�뒪�듃 二쇱꽍 
 				
 				atList.add(at);
 			}
 			
 		}
 		
-		b.setBoardWriter("2"); //로그인 가능 후 지우고 로그인 유저 번호로 바꾸기 
+		b.setBoardWriter("2"); //濡쒓렇�씤 媛��뒫 �썑 吏��슦怨� 濡쒓렇�씤 �쑀�� 踰덊샇濡� 諛붽씀湲� 
 		
 		int result = boardDocService.insertDoc(b,atList);
 		

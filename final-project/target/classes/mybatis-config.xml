@@ -9,6 +9,8 @@
   		<typeAliases>
   			<typeAlias type="com.kh.final3.common.vo.Board" alias="board"/>
   			<typeAlias type="com.kh.final3.approval.model.vo.ApprovalDoc" alias="approvalDoc"/>
+  			<typeAlias type="com.kh.final3.approval.model.vo.DocType" alias="docType"/>
+  			<typeAlias type="com.kh.final3.member.model.vo.Member" alias="member"/>
   		</typeAliases>
   		
   		<mappers>

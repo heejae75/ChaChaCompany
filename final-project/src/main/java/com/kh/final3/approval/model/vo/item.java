@@ -9,14 +9,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Approval {
-	private int appNo;
-	private int DocNo;
+public class item {
+	private int docNo;
 	private String deptCode;
-	private String secondApprover;
-	private String lastApprover;
-	private String secondeDate;
-	private String lastDate;
-	private String returnReason;
+	private String supplyName;
+	private double supplySize;
+	private int amount;
+	private int price;
+	private String createDate;
 	private String status;
 }

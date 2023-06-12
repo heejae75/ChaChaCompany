@@ -20,7 +20,6 @@ public class BoardDocServiceImple implements BoardDocService{
 	@Autowired
 	public SqlSessionTemplate sqlSession;
 	
-	//게시글 작성 메소드
 	@Override
 	@Transactional
 	public int insertDoc(Board b, ArrayList<BoardAttachment> atList) {
