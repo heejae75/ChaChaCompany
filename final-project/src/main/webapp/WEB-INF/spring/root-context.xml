@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 	
 		<bean class="org.apache.commons.dbcp.BasicDataSource" id="dataSource">
 	 	<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
@@ -12,18 +14,29 @@
 	 
 	 <bean class="org.mybatis.spring.SqlSessionFactoryBean" id="sqlSessionFactory">
 	 	<property name="configLocation" value="classpath:mybatis-config.xml"/> 
+	 	<property name="mapperLocations" value="classpath:/mappers/*-mapper.xml"></property>
 	 	<property name="dataSource" ref="dataSource"/>
-	 	
-	 	
 	 </bean>
+	 
 	 <bean class="org.mybatis.spring.SqlSessionTemplate" id="sqlSession">
 	  	<constructor-arg ref="sqlSessionFactory"/>
 	 </bean>
-	 	 <!-- 파일 업로드 관련 빈 등록 -->
-	 	 <bean class="org.springframework.web.multipart.commons.CommonsMultipartResolver" id="multipartResolver">
-			<!-- defailtEncoding : 업로드 되는 파일에 대한 인코딩 처리 지정 -->
-			<property name="defaultEncoding" value="UTF-8"/>
-			<property name="maxUploadSize" value="10000000"/> <!-- 업로드 파일 용량제한 -->
-			<property name="maxInMemorySize" value="10000000"/>	<!-- 메모리 보관 최대크기 --> 	 
-	 	 </bean>
+	 
+	<!-- 파일 업로드 관련 빈 등록 -->
+	<bean class="org.springframework.web.multipart.commons.CommonsMultipartResolver" id="multipartResolver">
+		<!-- defailtEncoding : 업로드 되는 파일에 대한 인코딩 처리 지정 -->
+		<property name="defaultEncoding" value="UTF-8"/>
+		<property name="maxUploadSize" value="10000000"/> <!-- 업로드 파일 용량제한 -->
+		<property name="maxInMemorySize" value="10000000"/>	<!-- 메모리 보관 최대크기 --> 	 
+	</bean>
+	 	
+	 <!-- 트랜젝션 어노테이션  -->	 
+	 <tx:annotation-driven/>
+	  	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	  		<property name="dataSource" ref="dataSource"></property>
+		</bean>
+	
+	<!-- saveFile 빈등록 -->	
+	<bean class="com.kh.final3.common.template.SaveFile" id="saveFile"/>
+	  
 </beans>

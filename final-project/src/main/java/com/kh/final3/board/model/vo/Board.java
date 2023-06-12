@@ -27,4 +27,5 @@ public class Board {
 	private String importanceLevel;
 	private String deptName;
 	private String attachmentNo; // 첨부파일 여부
+
 }

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,9 +19,25 @@
     
     <!--아이콘 cdn-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-	<link href="resources/css/menubar.css" rel="stylesheet">
+	<link href="/final3/resources/css/menubar.css" rel="stylesheet">
+
 </head>
 <body id="body-pd">
+	<!-- 알림메세지 -->
+	<c:if test="${not empty alertMsg }">
+		<script>
+			alert("${alertMsg}");
+		</script>
+		<c:remove var="alertMsg" scope="session"/>
+	</c:if>
+	<c:if test="${not empty errorMsg }">
+		<script>
+			alert("${errorMsg}")		
+		</script>
+		<c:remove var="errorMsg" scope="session"/>
+	</c:if>
+	
+
     <div class="header" id="header">
     	
     	<!-- 헤더 메뉴버튼  -->
@@ -104,7 +121,6 @@
                                 <span class="nav_name">근태관리</span>
                             </a>
                         </li>
-
 						<!-- 전자결재 -->
                         <li class ="menu">
                             <a href="home.ap" class="nav_link" data-toggle="collapse" data-target="">
@@ -114,13 +130,13 @@
                             </a>
                             <ul id="menu_submenu" class="collapse">
                                 <li>
-                                    <a href="#">결재홈</a>
+                                    <a href="home.ap">결재홈</a>
                                 </li>
                                 <li>
-                                    <a href="#">결재 작성</a>
+                                    <a href="enrollList.ap">결재 작성</a>
                                 </li>
                                 <li>
-                                    <a href="#">결재함</a>
+                                    <a href="list.ap">결재함</a>
                                 </li>
                             </ul>
                         </li>
@@ -145,13 +161,14 @@
                         
                         <!--커뮤니티  -->
                         <li>
-                            <a href="#" class="nav_link">
+                            <a href="list.dc" class="nav_link">
                                 <i class="fa-sharp fa-solid fa-newspaper fa-xl" style="color: #ffffff; font-size: 28px;"></i>
                                 &nbsp;
                                 <span class="nav_name">커뮤니티</span>
                             </a>
                         </li>
                     </ul>
+
                 </div>
             </div>
 
@@ -166,62 +183,62 @@
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function(event) {
-	        const showNavbar = (toggleId, navId, bodyId, headerId) =>{
-			const toggle = document.getElementById(toggleId),
-			nav = document.getElementById(navId),
-			bodypd = document.getElementById(bodyId),
-			headerpd = document.getElementById(headerId)
+    document.addEventListener("DOMContentLoaded", function(event) {
+        const showNavbar = (toggleId, navId, bodyId, headerId) =>{
+		const toggle = document.getElementById(toggleId),
+		nav = document.getElementById(navId),
+		bodypd = document.getElementById(bodyId),
+		headerpd = document.getElementById(headerId)
 
-			// Validate that all variables exist
-			if(toggle && nav && bodypd && headerpd){
-				toggle.addEventListener('click', ()=>{
-				// show navbar
-				nav.classList.toggle('show')
-				// add padding to body
-				bodypd.classList.toggle('body-pd')
-				// add padding to header
-				headerpd.classList.toggle('body-pd')
-				})
+		// Validate that all variables exist
+		if(toggle && nav && bodypd && headerpd){
+			toggle.addEventListener('click', ()=>{
+			// show navbar
+			nav.classList.toggle('show')
+			// add padding to body
+			bodypd.classList.toggle('body-pd')
+			// add padding to header
+			headerpd.classList.toggle('body-pd')
+			})
+		}
+		}
+
+		showNavbar('header-toggle','nav-bar','body-pd','header')
+
+		const linkColor = document.querySelectorAll('.nav_link')
+
+		function colorLink(){
+			if(linkColor){
+				linkColor.forEach(l=> l.classList.remove('active'))
+				this.classList.add('active')
 			}
-			}
-
-			showNavbar('header-toggle','nav-bar','body-pd','header')
-	
-			const linkColor = document.querySelectorAll('.nav_link')
-	
-			function colorLink(){
-				if(linkColor){
-					linkColor.forEach(l=> l.classList.remove('active'))
-					this.classList.add('active')
-				}
-			}
-			
-			linkColor.forEach(l=> l.addEventListener('click', colorLink))
-		});
-
-
-        $(document).ready(function(){
-		    $("#header-toggle").click(function() {
-		        var submenu = $(this).parents('.header').next(".menubar").find("#menu_submenu");
+		}
 		
-		        if(submenu.is(":visible")) {
-		            submenu.slideUp();
-		        }
-		    });
-		});
+		linkColor.forEach(l=> l.addEventListener('click', colorLink))
+	});
 
-        $(document).ready(function(){
-            $(".menu>a").click(function() {
-                var submenu = $(this).next("#menu_submenu");
 
-                if(submenu.is(":visible")) {
-                    submenu.slideUp();
-                }else {
-                    submenu.slideDown();
-                }
-            });
+    $(document).ready(function(){
+	    $("#header-toggle").click(function() {
+	        var submenu = $(this).parents('.header').next(".menubar").find("#menu_submenu");
+	
+	        if(submenu.is(":visible")) {
+	            submenu.slideUp();
+	        }
+	    });
+	});
+
+    $(document).ready(function(){
+        $(".menu>a").click(function() {
+            var submenu = $(this).next("#menu_submenu");
+
+            if(submenu.is(":visible")) {
+                submenu.slideUp();
+            }else {
+                submenu.slideDown();
+            }
         });
+    });
         
     </script>
 </body>

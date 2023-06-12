@@ -1,4 +1,4 @@
-		:root{
+        :root{
             --header-height: 5.4rem;
             --nav-width: 80px;
             --menubar-color: #0E6251; /*메뉴바 색상*/
@@ -136,6 +136,7 @@
         .body-pd{
     	padding-left: calc(var(--nav-width) + 1rem);
         }
+        
     .active{
     	color: var(--white-color);
     }
