@@ -7,9 +7,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-   <!--  <script src="js/simple-sidebar.js"></script> -->
+    
+    <!--  캘린더 & 부트스트 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.css" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    
     <!--아이콘 cdn-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 	<link href="resources/css/menubar.css" rel="stylesheet">
@@ -54,9 +60,18 @@
             
             <!-- 회원 프로필  -->
             <div class="header_profile">
-            	<a href="#">
-                	<img src="https://i.imgur.com/hczKIze.jpg" alt="" >
-                </a>
+            	<ul class="header_profile_menu">
+                    <li>
+                        <a href="#"><img src="https://i.imgur.com/hczKIze.jpg" alt="" ></a>
+
+                        <div class="hd_pro_con">
+                            <ul class="header_profile_submenu">
+                                <li><a href="#">상태 표시</a></li>
+                                <li><a href="#">마이 페이지</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
             </div>  
         </div>
     </div>
@@ -124,7 +139,7 @@
                             <a href="#" class="nav_link">
                                 <i class="fa-sharp fa-solid fa-calendar-day" style="color: #ffffff; font-size: 28px;"></i>
                                 &nbsp;
-                                <span class="nav_name">일정관리</span>
+                                <span class="nav_name">&nbsp;일정관리</span>
                             </a>
                         </li>
                         
@@ -144,7 +159,7 @@
             <div class="nav_logout">
                 <a href="#" class="nav_link">
                     <i class="fa-sharp fa-solid fa-right-from-bracket fa-xl" style="color: #ffffff;"></i>
-                    <span class="nav_name">로그아웃</span>
+                    <span class="nav_name">&nbsp;로그아웃</span>
                 </a>
             </div>
         </nav>
