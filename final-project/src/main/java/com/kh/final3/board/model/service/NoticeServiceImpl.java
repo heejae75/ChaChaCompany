@@ -75,8 +75,17 @@ public class NoticeServiceImpl implements NoticeService {
 	}
 	// 게시글삭제
 	@Override
-	public int deleteBoard(int boardNo) {
-		return noticeDao.deleteBoard(sqlSession, boardNo);
+	public int deleteBoard(int boardNo, String filePath) {
+		
+		int result1 = noticeDao.deleteBoard(sqlSession, boardNo);
+		int result2 = 0;
+		
+		if(filePath == null) { // 첨부파일이 없는 경우 : 게시글만 삭제
+			result2 = 1;
+		}else { // 첨부파일이 있는 경우 : 게시글 삭제 및 첨부파일 삭제
+			result2 = noticeDao.deleteBoardAttachment(sqlSession, boardNo);
+		}
+		return result1 * result2;
 	}
 	// 즐겨찾기 여부 조회
 	@Override
@@ -102,6 +111,11 @@ public class NoticeServiceImpl implements NoticeService {
 	@Override
 	public ArrayList<Board> selectBookmarkList(PageInfo pi, int userNo) {
 		return noticeDao.selectBookmarkList(sqlSession, pi, userNo);
+	}
+	// 개시글 수정
+	@Override
+	public int updateBoard(Board b, BoardAttachment at) {
+		return 0;
 	}
 
 

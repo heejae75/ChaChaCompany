@@ -101,6 +101,7 @@
   	JOIN DEPARTMENT D USING(DEPT_CODE)
   	WHERE REF_BNO = #{boardNo}
   	AND R.STATUS = 'Y'
+  	ORDER BY R.CREATE_DATE DESC
   </select>
   
   <resultMap type="reply" id="replyResultSet">
@@ -121,6 +122,13 @@
   	UPDATE BOARD
   	SET STATUS = 'N'
   	WHERE BOARD_NO = #{boardNo}
+  	AND STATUS = 'Y'
+  </update>
+  
+  <update id="deleteBoardAttachment">
+  	UPDATE BOARD_ATTACHMENT
+  	SET STATUS = 'N'
+  	WHERE REF_BNO = #{boardNo}
   	AND STATUS = 'Y'
   </update>
   

@@ -26,7 +26,7 @@ public interface NoticeService {
 	// 댓글작성
 	int insertReply(Reply reply);
 	// 게시글삭제
-	int deleteBoard(int boardNo);
+	int deleteBoard(int boardNo, String filePath);
 	// 즐겨찾기 여부 조회
 	int selectBookmark(HashMap<String, Integer> map);
 	// 즐겨찾기 해제
@@ -37,5 +37,7 @@ public interface NoticeService {
 	int selectBookmarkCount(int userNo);
 	// 즐겨찾기 리스트 조회
 	ArrayList<Board> selectBookmarkList(PageInfo pi, int userNo);
+	// 게시글 수정
+	int updateBoard(Board b, BoardAttachment at);
 	
 }

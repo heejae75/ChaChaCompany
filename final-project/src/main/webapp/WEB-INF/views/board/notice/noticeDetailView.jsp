@@ -69,29 +69,42 @@
 ​
             <div align="center">
                 <!-- 수정하기, 삭제하기 버튼은 이 글이 본인이 작성한 글일 경우에만 보여져야 함 -->
-                <a class="btn btn-primary" href="updateForm.no">수정하기</a>
-                <a class="btn btn-danger" href="delete.no">삭제하기</a>
+         		<a class="btn btn-primary" onclick="formSubmit(1);">수정하기</a>
+	            <a class="btn btn-danger" onclick="formSubmit(2);">삭제하기</a>
             </div>
             <br><br>
+            
+            <script>
+            // 수정/삭제시 글번호와 첨부파일 번호 보내기
+            function formSubmit(num){
+            	var formObj = $("<form>");
+            	
+            	var boardNo = $("<input>").prop("type", "hidden").prop("name", "boardNo").prop("value", "${b.boardNo}");
+            	var filePath = $("<input>").prop("type","hidden").prop("name","filePath").prop("value","${at.changeName}")
+            	var obj = formObj.append(boardNo);
+            	
+            	if(num == 1){ // 수정
+            		obj.attr("action","updateForm.no").attr("method","get");
+            	}else{ // 삭제
+            		obj.append(filePath);
+            		obj.attr("action","delete.no").attr("method","post");
+            	}
+            	
+            	$("body").append(obj);
+            	
+            	obj.submit();
+            
+            	}
+            
+            </script>
 ​
-            <!-- 댓글 기능은 나중에 ajax 배우고 나서 구현할 예정! 우선은 화면구현만 해놓음 -->
             <table id="replyArea" class="table" align="center">
                 <thead>
                     <tr>
-                    	<%-- <c:choose>
-                    	<c:when test="${not empty loginUser }"> --%>
-	                        <th colspan="2">
-	                            <textarea class="form-control" name="replyContent" id="content" cols="55" rows="2" style="resize:none; width:100%;"></textarea>
-	                        </th>
-	                        <th style="vertical-align:middle"><button class="btn btn-secondary" onclick="insertReply();">등록하기</button></th>
-                    <%-- 	</c:when>
-                    	<c:otherwise>
-                    		<th colspan="2">
-	                            <textarea class="form-control" name="replyContent" id="content" cols="55" rows="2" style="resize:none; width:100%;"></textarea>
-	                        </th>
-	                        <th style="vertical-align:middle"><button class="btn btn-secondary" disalbed>로그인 후 이용가능</button></th>
-                    	</c:otherwise>
-                    	</c:choose> --%>
+	                   <th colspan="2">
+	                       <textarea class="form-control" name="replyContent" id="reply-input" cols="55" rows="2" style="resize:none; width:100%;"></textarea>
+	                   </th>
+	                   <th style="vertical-align:middle"><button class="btn btn-secondary" id="reply-btn" onclick="insertReply();">등록하기</button></th>
                     </tr>
                     <tr>
                         <td colspan="3">댓글(<span id="rcount"></span>)</td>
@@ -106,6 +119,14 @@
 ​
     </div>
      <script>
+     // 댓글 입력창 빈칸일때 알람
+ 	$("#reply-btn").click(function(){
+ 		chkblankReply =$("#reply-input").val();
+ 		if(chkblankReply.length==0){
+ 			alert("댓글을 입력해주세요.")
+ 		}
+ 	});
+     
     // 댓글불러오기
     $(function(){
     	selectReplyList();
@@ -148,13 +169,13 @@
     		url : "insertReply.no",
     		data : {
     			replyWriter : "1",
-    			replyContent : $("#replyArea #content").val(),
+    			replyContent : $("#reply-input").val(),
     			refBno : "${b.boardNo}"
     		},
     		success : function(result){
     			if(result == "success"){
 	    			selectReplyList();
-	    			$("#content").val("");
+	    			$("#reply-input").val("");
     			}
     		},
     		error : function(){

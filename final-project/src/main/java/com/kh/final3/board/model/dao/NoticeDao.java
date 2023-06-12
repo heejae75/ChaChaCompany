@@ -58,6 +58,10 @@ public class NoticeDao {
 	public int deleteBoard(SqlSessionTemplate sqlSession, int boardNo) {
 		return sqlSession.update("noticeMapper.deleteBoard", boardNo);
 	}
+	// 첨부파일 삭제
+	public int deleteBoardAttachment(SqlSessionTemplate sqlSession, int boardNo) {
+		return sqlSession.update("noticeMapper.deleteBoardAttachment", boardNo);
+	}
 	// 즐겨찾기 조회
 	public int selectBookmark(SqlSessionTemplate sqlSession, HashMap<String, Integer> map) {
 		return sqlSession.selectOne("noticeMapper.selectBookmark", map);
@@ -82,6 +86,7 @@ public class NoticeDao {
 		
 		return (ArrayList)sqlSession.selectList("noticeMapper.selectBookmarkList", userNo, rowBounds);
 	}
+	
 	
 
 }

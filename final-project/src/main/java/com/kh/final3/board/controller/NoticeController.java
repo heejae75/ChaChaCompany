@@ -1,6 +1,7 @@
 package com.kh.final3.board.controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -112,12 +113,23 @@ public class NoticeController {
 	@RequestMapping("insert.no")
 	public ModelAndView insertBoard(ModelAndView mv, Board b, BoardAttachment at, MultipartFile upfile, HttpSession session) {
 
+		String savePath = session.getServletContext().getRealPath("/resources/uploadFiles/boardDocument/");
+		
 		if(!upfile.getOriginalFilename().equals("")) { // 첨부파일이 있는 경우
 			
 			at.setCategoryCode(b.getCategoryCode());
 			at.setOriginName(upfile.getOriginalFilename());
 			at.setChangeName(saveFile.getSaveFile(upfile, session));
-			at.setFilePath(session.getServletContext().getRealPath("/resources/uploadFiles/boardDocument"));
+			at.setFilePath("/resources/uploadFiles/boardDocument/");
+			
+			
+			try { // 파일 업로드
+				upfile.transferTo(new File(savePath + at.getChangeName()));
+			} catch (IllegalStateException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		}else { // 첨부파일이 없는 경우
 			at = null;
 		}
@@ -127,6 +139,7 @@ public class NoticeController {
 		if(result > 0) {
 			mv.addObject("alertMsg","게시글 작성 성공").setViewName("redirect:list.no");
 		}else {
+			new File(savePath + at.getChangeName()).delete();
 			mv.addObject("errorMsg","게시글 작성 실패").setViewName("redirect:list.no");
 		}
 		
@@ -166,50 +179,55 @@ public class NoticeController {
 		return "board/notice/noticeUpdateView";
 	}
 	// 게시글 수정하기
-//	@PostMapping("update.no")
-//	public ModelAndView updateBoard(ModelAndView mv, MultipartFile upfile, BoardAttachment at, Board b, HttpSession session) {
-//		
-//		// 새로 등록하는 사진이 있다면
-//		if(!upfile.getOriginalFilename().equals("")) {
-//			
-//			// 기존에 사진이 있었다면 : 삭제하고 등록
-//			if(b.getOriginName() != null) { // hidden으로 가져온 originName
-//				
-//				new File(session.getServletContext().getRealPath(b.getChangeName())).delete();
-//				
-//			}
-//			// 새로 넘어온 첨부파일을 서버에 업로드
-//			String changeName = saveFile(upfile, session);
-//			
-//			// 처리된 변경이름, 넘어온 실제이름 b에 담아서 요청보내기
-//			b.setOriginName(upfile.getOriginalFilename());
-//			b.setChangeName("resources/uploadFiles/" + changeName);
-//			
-//		}
-//		
-//		/*
-//		 * b에는 boardNo, boardTitle, boardContent가 담겨있고, 추가적으로 고려해야하는 경우는 1. 새로 첨부된 파일이
-//		 * 없고, 기존에 파일이 없을 때 2. 새로 첨부된 파일이 없고, 기존에 파일이 있을 때 3. 새로 첨부된 파일이 있고, 기존에 파일이 없을
-//		 * 때 : 새로 전달된 파일을 서버에 저장하고 데이터베이스에 등록 4. 새로 첨부된 파일이 있고, 기존에 파일도 있을 때 : 기존 파일을
-//		 * 삭제하고 새로 첨부된 파일을 저장 및 등록
-//		 */
-//
-//		// 게시판 내용 수정
-//		int result = boardService.updateBoard(b);
-//
-//		if (result > 0) {
-//			session.setAttribute("alertMsg", "수정성공");
-//			mv.setViewName("redirect:detail.bo?bno="+b.getBoardNo());
-//		} else {
-//			mv.addObject("errorMsg", "수정실패").setViewName("common/errorPage");
-//		}
-//		return mv;
-//	}
-//	
-	@RequestMapping("delete.bo")
-	public ModelAndView deleteBoard(int boardNo, String filePath, ModelAndView mv, HttpSession session) {
+	@PostMapping("update.no")
+	public ModelAndView updateBoard(ModelAndView mv, MultipartFile upfile, BoardAttachment at, Board b, HttpSession session) throws IllegalStateException, IOException {
+		
+		String savePath = session.getServletContext().getRealPath("/resources/uploadFiles/boardDocument/");
+		
+		// 새로 등록하는 사진이 있다면
+		if(!upfile.getOriginalFilename().equals("")) {
+			
+			// 기존에 사진이 있었다면 : 삭제하고 등록
+			if(at.getOriginName() != null) { // hidden으로 가져온 originName
+				
+				new File(session.getServletContext().getRealPath(at.getChangeName())).delete();
+				
+			}
+			
+			// 처리된 변경이름, 넘어온 실제이름 
+			at.setCategoryCode(b.getCategoryCode());
+			at.setOriginName(upfile.getOriginalFilename());
+			at.setChangeName(saveFile.getSaveFile(upfile, session));
+			at.setFilePath("/resources/uploadFiles/boardDocument/");
+			
+			// 새로 넘어온 첨부파일을 서버에 업로드
+			upfile.transferTo(new File(savePath + at.getChangeName()));
+			
+		}
+		
+		/*
+		 * 1. 새로 첨부된 파일이 없고, 기존에 파일이 없을 때 : 게시판 내용만 수정
+		 * 2. 새로 첨부된 파일이 없고, 기존에 파일이 있을 때 : 기존 파일 삭세하고, 게시판 내용 수정
+		 * 3. 새로 첨부된 파일이 있고, 기존에 파일이 없을 때 : 새로 전달된 파일을 서버에 저장하고 데이터베이스에 등록 
+		 * 4. 새로 첨부된 파일이 있고, 기존에 파일도 있을 때 : 기존 파일을 삭제하고 새로 첨부된 파일을 저장 및 등록
+		 */
 
-		int result = noticeService.deleteBoard(boardNo);
+		// 게시판 내용 수정
+		int result = noticeService.updateBoard(b, at);
+
+		if (result > 0) {
+			session.setAttribute("alertMsg", "수정성공");
+			mv.setViewName("redirect:detail.bo?bno="+b.getBoardNo());
+		} else {
+			mv.addObject("errorMsg", "수정실패").setViewName("common/errorPage");
+		}
+		return mv;
+	}
+	
+	@RequestMapping("delete.no")
+	public ModelAndView deleteBoard(int boardNo, String filePath, ModelAndView mv, HttpSession session) {
+				
+		int result = noticeService.deleteBoard(boardNo, filePath);
 
 		if (result > 0) {
 			if (!filePath.equals("")) { // 넘어온 파일 정보가 있을 때
@@ -217,9 +235,9 @@ public class NoticeController {
 			}
 
 			session.setAttribute("alertMsg", "게시글 삭제완료");
-			mv.setViewName("redirect:list.bo");
+			mv.setViewName("redirect:list.no");
 		} else {
-			mv.addObject("errorMsg", "삭제실패").setViewName("redirect:list.bo");
+			mv.addObject("errorMsg", "삭제실패").setViewName("redirect:list.no");
 		}
 		return mv;
 	}
