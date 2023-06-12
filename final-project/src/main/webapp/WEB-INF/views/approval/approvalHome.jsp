@@ -132,7 +132,7 @@
 	<%@ include file="../common/menubar.jsp" %>
     <div class="approval-home">
         <div id="approval-home_1">
-        <br><br>
+        <br><br><br><br>
                 <table id="lately-area">
                 <tr>
                     <th>최근사용내역</th>

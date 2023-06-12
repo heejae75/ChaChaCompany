@@ -10,8 +10,21 @@
  		<result column ="DOC_TITLE" property="docTitle"/>
  		<result column ="CREATE_DATE" property="createDate"/>
  		<result column ="STATUS" property="status"/>
+ 		<result column ="EMERGENCY" property="emergency"/>
  	</resultMap>
- 
+ 	
+ 	<resultMap type="docType" id="docTypeResultSet">
+ 		<result column="DOC_TYPE" property="docType"/>
+ 		<result column="DOC_NAME" property="docName"/>
+ 	</resultMap>
+ 	<resultMap type="member" id="memberResultSet">
+    	<result column="USER_NAME" property="userName"/>
+    	<result column="DEPT_NAME" property="deptCode"/>
+    	<result column="JOB_NAME" property="jobCode"/>
+    	<result column="USER_NO" property="userNo"/>
+    </resultMap>
+    
+    
  	<select id="selectListCount" resultType="_int">
  		SELECT COUNT(*)
 		FROM APPROVAL_DOC
@@ -20,14 +33,14 @@
 		</if>
  	</select>
  	<select id="selectApprovalList" parameterType="approvalDoc" resultMap="approvalResultSet">
-		SELECT A.DOC_NO, D.DEPT_NAME,T.DOC_NAME, A.DOC_TITLE, TO_CHAR(A.CREATE_DATE,'YYYY-MM-DD')"CREATE_DATE", A.STATUS
+		SELECT A.DOC_NO, D.DEPT_NAME,T.DOC_NAME, A.DOC_TITLE, TO_CHAR(A.CREATE_DATE,'YYYY-MM-DD')"CREATE_DATE", A.STATUS, A.EMERGENCY
  		FROM APPROVAL_DOC A
  		JOIN DEPARTMENT D ON (A.DEPT_CODE = D.DEPT_CODE)
  		JOIN DOC_TYPE T ON (A.DOC_TYPE = T.DOC_TYPE)
  		<if test="status !=null">
 			WHERE STATUS = #{status}
 		</if>
-		ORDER BY A.CREATE_DATE DESC
+		ORDER BY DECODE(EMERGENCY,'Y',2), A.CREATE_DATE DESC
  	</select>
  	<select id="approvalMainList" parameterType="approvalDoc" resultMap="approvalResultSet">
  		SELECT *
@@ -46,7 +59,50 @@
               ORDER BY P.CREATE_DATE DESC
               ) A)
     	WHERE ROWNUM BETWEEN 1 AND 5
- 		
  	</select>
- 
+ 	<select id="selectEnrollList" parameterType="docType" resultMap="docTypeResultSet">
+ 		SELECT * 
+ 		FROM DOC_TYPE
+ 	</select>
+ 	<select id="selectApproverList" parameterType="member" resultMap="memberResultSet">
+ 		SELECT USER_NAME, DEPT_NAME, JOB_NAME,USER_NO
+		FROM MEMBER
+		JOIN DEPARTMENT USING(DEPT_CODE)
+		JOIN JOB USING(JOB_CODE)
+		WHERE STATUS = 'Y'
+		<if test="status !=null">
+		AND DEPT_CODE = #{status}
+		</if>
+ 	</select>
+ 	<select id="searchApproverList" parameterType="member" resultMap="memberResultSet">
+ 		SELECT USER_NAME, DEPT_NAME, JOB_NAME,USER_NO
+		FROM MEMBER
+		JOIN DEPARTMENT USING(DEPT_CODE)
+		JOIN JOB USING(JOB_CODE)
+		WHERE STATUS = 'Y'
+		<choose>
+			<when test="status==1 and keyword !=null">
+				AND DEPT_NAME = #{keyword}
+			</when>
+			<when test="status==2 and keyword != null">
+				AND USER_NAME = #{keyword}
+			</when>
+		</choose>
+ 	</select>
+ 	<insert id="insertApprovalDoc">
+ 		INSERT INTO APPROVAL_DOC(DOC_NO,DEPT_CODE,DOC_TYPE,DOC_WRITER,DOC_TITLE,DOC_CONTENT,EMERGENCY) VALUES
+		(SEQ_ADNO.NEXTVAL,#{deptCode},#{docType},#{docWriter},#{docTitle},#{docContent},#{emergency})
+ 	</insert>
+ 	<insert id="insertApproval">
+ 		INSERT INTO APPROVAL (APP_NO, DOC_NO, DEPT_CODE,SECOND_APPROVER,LAST_APPROVER) VALUES
+		(SEQ_ANO.NEXTVAL,SEQ_ADNO.CURRVAL,#{deptCode},#{secondApprover},#{lastApprover})
+ 	</insert>
+ 	<insert id="insertApprovalAttachment">
+ 		INSERT INTO APPROVAL_ATTACHMENT (APP_FILE_NO, DOC_NO, DEPT_CODE,ORIGIN_NAME,CHANGE_NAME,FILE_PATH) VALUES
+		(SEQ_AFNO.NEXTVAL,SEQ_ADNO.CURRVAL,#{deptCode},#{originName},#{changeName},#{filePath})
+ 	</insert>
+ 	<insert id="insertItem">
+ 		INSERT INTO ITEM(DOC_NO,DEPT_CODE,SUPPLY_NAME,SUPPLY_SIZE,AMOUNT,PRICE) VALUES
+		(SEQ_ADNO.CURRVAL,#{deptCode},#{supplyName},#{supplySize},#{amount},#{price})
+ 	</insert>
  </mapper>

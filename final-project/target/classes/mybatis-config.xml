@@ -11,6 +11,9 @@
   			<typeAlias type="com.kh.final3.board.model.vo.BoardAttachment" alias="attachment"/>
   			<typeAlias type="com.kh.final3.member.model.vo.Member" alias="member"/>
   			<typeAlias type="com.kh.final3.approval.model.vo.ApprovalDoc" alias="approvalDoc"/>
+      	<typeAlias type="com.kh.final3.approval.model.vo.DocType" alias="docType"/>
+  			<typeAlias type="com.kh.final3.member.model.vo.Member" alias="member"/>
+
   			<typeAlias type="com.kh.final3.email.model.vo.Email" alias="email"/>
   		</typeAliases>
   		

@@ -27,6 +27,14 @@ import com.kh.final3.common.vo.PageInfo;
 
 @Controller
 public class DocumentController {
+//	@Autowired
+//	public SaveFile saveFile;
+//	
+//	@Autowired
+//	public BoardAttachment at; 
+//	
+//	@Autowired 
+//	public BoardDocService boardDocService;
 	
 	@Autowired
 	public DocumentService documentService;
@@ -114,7 +122,7 @@ public class DocumentController {
 		return "board/board_document/board_DocumentEnrollForm";
 	}
 
-	//게시글 작성 메소드 
+	//寃뚯떆湲� �옉�꽦 硫붿냼�뱶 
 	@RequestMapping("insertDoc.dc")
 	public ModelAndView insertDocument(Board b,  ArrayList<MultipartFile> upfile, ModelAndView mv, HttpSession session) {
 		
@@ -124,7 +132,7 @@ public class DocumentController {
 		for(MultipartFile file : upfile) {
 			
 			if(!file.getOriginalFilename().equals("")) {
-				//BoardAttachment에 (bno, categoryCode, originName, changeName, filePath 담아주기)
+				//BoardAttachment�뿉 (bno, categoryCode, originName, changeName, filePath �떞�븘二쇨린)
 				
 				//changeName
 				String changeName = saveFile.getSaveFile(file, session);
