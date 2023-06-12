@@ -153,16 +153,23 @@
                             <th>문서종류</th>
                             <th>제목</th>
                             <th>작성일</th>
+                            <th></th>
                         </tr>
                     </thead>
-                    <tbody align="center">
+                    <tbody>
                         <c:forEach var="a" items="${list}">
                         	<tr>
-                        		<td>${a.docNo}</td>
-                        		<td>${a.deptCode}</td>
-                        		<td>${a.docType }</td>
-                        		<td>${a.docTitle }</td>
-                        		<td>${a.createDate}</td>
+                        		<td width="10%">${a.docNo}</td>
+                        		<td width="10%">${a.deptCode}</td>
+                        		<td width="10%">${a.docType }</td>
+                        		<td width="40%">
+                        			<c:if test="${a.emergency eq 'Y' && a.status eq 'P'}">
+	                            		<button type="button" class="btn btn-danger btn-sm" disabled style="background-color: #c42d2d">긴급</button>
+	                            	</c:if>
+                        			${a.docTitle }
+                        		</td>
+                        		<td width="10%">${a.createDate}</td>
+                        		<td width="10%"><button class="btn btn-danger">삭제</button></td>
                         	</tr>
                         </c:forEach>
                     </tbody>
