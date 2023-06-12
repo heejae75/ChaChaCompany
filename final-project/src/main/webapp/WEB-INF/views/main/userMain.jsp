@@ -21,9 +21,9 @@
         border: 1px solid black;
         width: 22%;
         height: 800px;
-        margin-top: 105px;
         border-radius: 20px;
         background-color: lightblue;
+        float: left;
     }
 
     #main_profile img{
@@ -38,8 +38,10 @@
     .main_profile_area a{
         text-decoration: none;
         color: black;
+        cursor: pointer;
     }
 
+	/* 출퇴근 기록하는 div */
     #main_profile_work {
         background-color: white;
         width: 310px;
@@ -51,6 +53,94 @@
         background-color: #0E6251;
         width: 100px;
         border-radius: 50px;
+    }
+    
+    /* 메인 가운데 전체 div */
+    .content_center{
+        background-color: gold;
+        border: 1px solid black;
+        float: left;
+        width: 800px;
+        height: 100%;
+        margin-left: 40px;
+    }
+
+    /* 최근 온 메일 */
+    .main_mail{
+        border: 1px solid black;
+        border-radius: 20px;
+        width: 100%;
+        height: 250px;
+        margin-bottom: 24px;
+        background-color: pink;
+    }
+
+    /* 공지사항 */
+    .main_notice{
+        border: 1px solid black;
+        border-radius: 20px;
+        width: 100%;
+        height: 250px;
+        margin-bottom: 24px;
+        background-color: bisque;
+    }
+
+    /* 이름 바꿀예정 */
+    .main_others{
+        border: 1px solid black;
+        border-radius: 20px;
+        width: 100%;
+        height: 250px;
+        background-color: salmon;
+    }
+
+    /* 제목 */
+    .main_ctn_title{
+        float: left;
+        margin: 12px 0 0 25px;
+        font-size: 25px;
+    }
+    
+    /* 플러스 아이콘 */
+    .main_ctn_plus{
+        float: right;
+        margin: 18px 25px;
+        cursor: pointer;
+    }
+
+    /* 메인 왼쪽 전체 div */
+    .content_right{
+        border: 1px solid black;
+        background-color: lightyellow;
+        float: right;
+        width: 350px;
+        height: 100%;
+        
+    }
+
+    /* 일정 */
+    .main_calender{
+        border: 1px solid black;
+        width: 100%;
+        height: 523px;
+        border-radius: 20px;
+        background-color: thistle;
+        margin-bottom: 26px;
+    }
+
+    /* 경조사 */
+    .main_event{
+        border: 1px solid black;
+        width: 100%;
+        height: 250px;
+        border-radius: 20px;
+        background-color: hotpink;
+    }
+    
+    #mainNoticeList{
+    	width: 750px;
+    	margin: auto;
+    	font-size: 18px;
     }
 }</style>
 </head>
@@ -79,7 +169,7 @@
                 <div>
                     <a href="#">
                         <i class="fa-sharp fa-regular fa-address-card" style="color: #000000; font-size: 70px;"></i>
-                        <p>명함 신청</p>
+                        <p style="margin:0 0 0 0;">명함 신청</p>
                     </a>
                 </div>
             </div>
@@ -87,8 +177,8 @@
             <div id="main_profile_work">
                 <div id="mp_sysdate">
                         <br>
-                        <p style="font-size: 22px; margin: 0 0 0 0;">2023년 5월 30일 화요일</p>
-                        <h1 class="user_clock">PM 00:00:00</h1>
+                        <p id="user_date" style="font-size: 22px; margin: 0 0 0 0;"></p>
+                        <h1 id="user_clock"></h1>
                         <!-- <span style="font-size: 45px; font-weight: bold;"></span> -->
                 </div>
 
@@ -102,12 +192,196 @@
                     </div>
                 </div>
                 <div id="mp_work_input">
-                    <button type="button" class="btn btn-primary" style="margin-right: 20px;">출근</button>
-                    <button type="button" class="btn btn-primary">퇴근</button>
+                	<form action="insertGo.ar" method="post">
+	                    <button type="submit" class="btn btn-primary" style="margin-right: 20px;">출근</button>
+                    </form>
+                    
+                    <form action="insertLeave.ar" method="post">
+	                    <button type="submit" class="btn btn-primary">퇴근</button>
+                    </form>
                 </div>
             </div>
-           
+        </div>
+        
+        <!-- 메인 가운데 부분 -->
+        <div class="content_center">
+            <div class="main_mail">
+                <div>
+                    <div class="main_ctn_title">
+                        <span>최근 온 메일</span>
+                    </div>
+                    <div class="main_ctn_plus">
+                        <a href="#">
+                            <i class="fa-solid fa-plus fa-2xl" style="color: #0e6251;"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <table id="mainEmailList" border=1 align="center">
+                	<tbody>
+                	
+                	</tbody>
+                </table>
+            </div>
+
+            <div class="main_notice">
+                <div>
+                    <div class="main_ctn_title">
+                        <span>공지 사항</span>
+                    </div>
+                    <div class="main_ctn_plus">
+                        <a href="list.no">
+                            <i class="fa-solid fa-plus fa-2xl" style="color: #0e6251;"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <table id="mainNoticeList" border=1 align="center">
+<!--                 	<thead> -->
+<!--                 		<tr> -->
+<!--                 			<th>제목</th> -->
+<!--                 			<th>작성자 </th> -->
+<!--                 			<th>작성일 </th> -->
+<!--                 			<th>조회수 </th> -->
+<!--                 		</tr> -->
+<!--                 	</thead> -->
+                	
+                	<tbody>
+                	
+                	</tbody>
+                </table>
+            </div>
+
+            <div class="main_others">
+                <div>
+                    <div class="main_ctn_title">
+                        <span>임직원 조회 </span>
+                    </div>
+                    <div class="main_ctn_plus">
+                        <a href="#">
+                            <i class="fa-solid fa-plus fa-2xl" style="color: #0e6251;"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 메인 오른쪽 부분 -->
+        <div class="content_right">
+            <div class="main_calender">
+                <div>
+                    <div class="main_ctn_title">
+                        <span>일정</span>
+                    </div>
+                    <div class="main_ctn_plus">
+                        <a href="#">
+                            <i class="fa-solid fa-plus fa-2xl" style="color: #0e6251;"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="main_event">
+                <div>
+                    <div class="main_ctn_title">
+                        <span>경조사</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+    
+    <script>
+	  	//자바스크립트 실시간 시계
+	    function getTime() {
+	        const clock = document.getElementById("user_clock");
+	        const date = document.getElementById("user_date");
+	        const time = new Date();
+	        const weekList = ['일', '월', '화', '수', '목', '금', '토'];
+	        const calendar = time.getFullYear() + "년 " + (time.getMonth()+1) + "월 " + time.getDate() +"일 " + weekList[time.getDay()] + "요일";
+	        let amPm = "AM";
+	        let hours = addZeros(time.getHours(),2);
+	        const minutes = addZeros(time.getMinutes(),2);
+	        const seconds = addZeros(time.getSeconds(),2);
+	
+	        if(hours >= 12) {
+	            amPm="PM"
+	            hours = addZeros(hours-12,2);
+	        }
+	
+	        date.innerHTML = calendar;
+	        clock.innerHTML = amPm + " " + hours + ":" + minutes + ":" + seconds;
+	
+	        setTimeout(getTime, 1000);
+	   }
+	
+	   function addZeros(num, digit){
+	        let zero = "";
+	        num = num.toString();
+	        if(num.length < digit) {
+	            for(let i =0; i<digit - num.length; i++){
+	                zero += "0";
+	            }
+	        }
+	        return zero + num;
+	   }
+	   getTime();
+	   
+	   
+	   //공지사항 최신순으로 조회 
+	   $(function() {
+		  mainNoticeBoardList();
+		   
+// 		  $(document).on("click","#mainNoticeList>tbody>tr",function() {
+// 			  location.href="detail.no?boardNo="+$(this).children().eq(0).text();
+// 		  })
+	   });
+	   
+	   function mainNoticeBoardList() {
+		   $.ajax({
+			   url : "mainNoticeList.ma",
+			   success : function(result) {
+				   var str = "";
+				   
+				   for(var i in result) {
+					   str += "<tr>"
+					   		+ "<td>" + result[i].boardTitle + "</td>"
+					   		+ "<td>" + result[i].boardWriter + "</td>"
+					   		+ "<td>" + result[i].createDate + "</td>"
+					   		+ "</tr>"
+				   }
+				   
+				   $("#mainNoticeList tbody").html(str);
+			   },
+			   error : function() {
+				   console.log("통신 실패 ");
+			   }
+		   });
+	   }
+	   
+	   //메일 최신순으로 조회
+	   function mainEmailList() {
+		   $.ajax({
+			   url : "mainEmailList.ma",
+			   success : function(result) {
+				   var str = ""
+				   
+				   for(var i in result) {
+					   str += "<tr>"
+					   		+ "<td>" + result[i].emailTitle + "</td>"
+					   		+ "<td>" + result[i].sender + "</td>"
+					   		+ "<td>" + result[i].sendDate + "</td>"
+					   		+ "</tr>"
+				   }
+				   
+				   $("#mainEmailList tbody").html(str);
+			   },
+			   error : function() {
+				   console.log("통신 실패 ");
+			   }
+		   });
+	   }
+    </script>
 </body>
 </html>

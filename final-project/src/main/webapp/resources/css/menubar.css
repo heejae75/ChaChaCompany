@@ -1,12 +1,11 @@
-
         :root{
-            --header-height: 3rem;
+            --header-height: 5.4rem;
             --nav-width: 80px;
             --menubar-color: #0E6251; /*메뉴바 색상*/
             --menubar-font-color: white; /*메뉴바 글씨 색상*/
             --header-color: #F3F5F3; /*헤더 색상*/
             --body-font: ; /*폰트*/
-            --normal-font-size: 1rem; /*기본 글씨 크기*/
+            --normal-font-size: 1.7rem; /*기본 글씨 크기*/
             --z-fixed: 100; /*?*/
             --main_profile_height: ;
         }*,
@@ -21,7 +20,6 @@
             padding: 0 1rem;
             font-family: var(--body-font);
             font-size: var(--normal-font-size);
-            transition: .5s;
         }
 
         a{
@@ -45,22 +43,18 @@
 
         
         .head{
-            font-size: 1.5rem;
+            font-size: 2.4rem;
             cursor: pointer;
         }
         
         .header_right{
             display: flex;
             padding: .5rem 1rem 0 0;
-            column-gap: 2rem;
-            font-size: 1.5rem;
+            column-gap: 4rem;
+            font-size: 2.4rem;
             cursor: pointer;
             align-items: center;
         }
-        /* 왜 있는 것일까 */
-        /* .header_profile{
-
-        } */
 
         .header_profile img{
             border: 1px solid black;
@@ -82,7 +76,6 @@
             height: 100vh;
             padding: .5rem 1rem 0 0;
             transition: .5s;
-
             z-index: var(--z-fixed);
         }
 
@@ -93,6 +86,11 @@
             justify-content: space-between;
             overflow: hidden;
         }
+        
+        .nav_logo{
+	        margin-top: 10px;
+        
+        }
 
         .nav_logo, .nav_link{
             display: grid;
@@ -100,6 +98,7 @@
             align-items: center;
             column-gap: 1rem;
 	        padding: .5rem 0 .5rem 1.5rem; 
+	        position: relative;
         }
 
         .nav_link{
@@ -112,9 +111,23 @@
             color: var(--white-color);
         }
 
+
         .nav_logout{
-            margin-bottom: 10px;
+            margin-left: 15px;
+            margin-top: auto;
+      		margin-bottom: 10px;
         }
+        
+	    @media (max-width: 768px) {
+	      .nav_logo,
+	      .nav_link,
+	      .nav_logout {
+	        display: block;
+	        text-align: center;
+	        margin-top: 10px;
+	      }
+	    }
+
 
         .show{
     	left: 0;
@@ -217,10 +230,90 @@
     #menu_submenu{
         display: none;
     }
+	
+	/* --------------- */
+    /* 프로필 호버시 메뉴 */
+    .header_profile_menu{
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .header_profile_submenu{
+        list-style: none;
+        /* margin: 0; */
+        /* padding: 0; */
+    }
+
+    .header_profile_menu:after{
+        display: block;
+        content: '';
+        clear: both;
+    }
+
+    .header_profile_menu>li{
+        position: relative;
+        float: left;
+        margin-right: 5px;
+    }
+
+    .header_profile_menu>li>a{
+        display: block;
+        padding: 0 25px 0 0;
+        height: 48px;
+        line-height: 40px;
+    }
+
+    .header_profile_menu>li:hover .header_profile_submenu,
+    .header_profile_menu:hover .hd_pro_con{
+        display: block;
+    }
+
+    .header_profile_menu .header_profile_submenu{
+        display: none;
+        position: absolute;
+        right: 1px;
+        text-align: center;
+    }
+
+    .header_profile_menu .header_profile_submenu a {
+        display: block;
+        padding: 5px;
+        font-size: 18px;
+        background-color: #0E6251;
+        color: white;
+        width: 100px;
+        height: 40px;
+        padding: 10px 0;
+        
+    }
     
+    /* 말풍선 말꼬리 만들기  */
+    .hd_pro_con::after{
+        content: "";
+        position: absolute;
+        top: 25px;
+        left: 8px;
+        border: 13px solid transparent;
+        border-bottom: 10px solid #0E6251;
+        z-index: 999;
+    }
+
+    .header_profile_menu .hd_pro_con {
+        display: none;
+    }
+
+    .header_profile_menu:hover .hd_pro_con {
+        display: block;
+    }
+ 
+   .header_profile_submenu a:hover{
+        background: #234d42;
+   }
+   
    .content{
         width: 1570px;
-        /*height: 800px;*/
+        /* height: 800px; */
         margin-top: 105px;
         background-color: khaki;
     }
