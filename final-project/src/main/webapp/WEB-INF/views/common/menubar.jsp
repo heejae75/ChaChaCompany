@@ -13,13 +13,27 @@
    <!--  <script src="js/simple-sidebar.js"></script> -->
     <!--아이콘 cdn-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-	<link href="resources/css/menubar.css" rel="stylesheet">
-	 
+	<link href="/final3/resources/css/menubar.css" rel="stylesheet">
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
-	
+
 </head>
 <body id="body-pd">
+	<!-- 알림메세지 -->
+	<c:if test="${not empty alertMsg }">
+		<script>
+			alert("${alertMsg}");
+		</script>
+		<c:remove var="alertMsg" scope="session"/>
+	</c:if>
+	<c:if test="${not empty errorMsg }">
+		<script>
+			alert("${errorMsg}")		
+		</script>
+		<c:remove var="errorMsg" scope="session"/>
+	</c:if>
+	
+
     <div class="header" id="header">
     	
     	<!-- 헤더 메뉴버튼  -->
@@ -134,7 +148,7 @@
                         
                         <!--커뮤니티  -->
                         <li>
-                            <a href="list.no" class="nav_link">
+                            <a href="list.dc" class="nav_link">
                                 <i class="fa-sharp fa-solid fa-newspaper fa-xl" style="color: #ffffff; font-size: 28px;"></i>
                                 &nbsp;
                                 <span class="nav_name">커뮤니티</span>
@@ -156,62 +170,62 @@
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function(event) {
-	        const showNavbar = (toggleId, navId, bodyId, headerId) =>{
-			const toggle = document.getElementById(toggleId),
-			nav = document.getElementById(navId),
-			bodypd = document.getElementById(bodyId),
-			headerpd = document.getElementById(headerId)
+    document.addEventListener("DOMContentLoaded", function(event) {
+        const showNavbar = (toggleId, navId, bodyId, headerId) =>{
+		const toggle = document.getElementById(toggleId),
+		nav = document.getElementById(navId),
+		bodypd = document.getElementById(bodyId),
+		headerpd = document.getElementById(headerId)
 
-			// Validate that all variables exist
-			if(toggle && nav && bodypd && headerpd){
-				toggle.addEventListener('click', ()=>{
-				// show navbar
-				nav.classList.toggle('show')
-				// add padding to body
-				bodypd.classList.toggle('body-pd')
-				// add padding to header
-				headerpd.classList.toggle('body-pd')
-				})
+		// Validate that all variables exist
+		if(toggle && nav && bodypd && headerpd){
+			toggle.addEventListener('click', ()=>{
+			// show navbar
+			nav.classList.toggle('show')
+			// add padding to body
+			bodypd.classList.toggle('body-pd')
+			// add padding to header
+			headerpd.classList.toggle('body-pd')
+			})
+		}
+		}
+
+		showNavbar('header-toggle','nav-bar','body-pd','header')
+
+		const linkColor = document.querySelectorAll('.nav_link')
+
+		function colorLink(){
+			if(linkColor){
+				linkColor.forEach(l=> l.classList.remove('active'))
+				this.classList.add('active')
 			}
-			}
-
-			showNavbar('header-toggle','nav-bar','body-pd','header')
-	
-			const linkColor = document.querySelectorAll('.nav_link')
-	
-			function colorLink(){
-				if(linkColor){
-					linkColor.forEach(l=> l.classList.remove('active'))
-					this.classList.add('active')
-				}
-			}
-			
-			linkColor.forEach(l=> l.addEventListener('click', colorLink))
-		});
-
-
-        $(document).ready(function(){
-		    $("#header-toggle").click(function() {
-		        var submenu = $(this).parents('.header').next(".menubar").find("#menu_submenu");
+		}
 		
-		        if(submenu.is(":visible")) {
-		            submenu.slideUp();
-		        }
-		    });
-		});
+		linkColor.forEach(l=> l.addEventListener('click', colorLink))
+	});
 
-        $(document).ready(function(){
-            $(".menu>a").click(function() {
-                var submenu = $(this).next("#menu_submenu");
 
-                if(submenu.is(":visible")) {
-                    submenu.slideUp();
-                }else {
-                    submenu.slideDown();
-                }
-            });
+    $(document).ready(function(){
+	    $("#header-toggle").click(function() {
+	        var submenu = $(this).parents('.header').next(".menubar").find("#menu_submenu");
+	
+	        if(submenu.is(":visible")) {
+	            submenu.slideUp();
+	        }
+	    });
+	});
+
+    $(document).ready(function(){
+        $(".menu>a").click(function() {
+            var submenu = $(this).next("#menu_submenu");
+
+            if(submenu.is(":visible")) {
+                submenu.slideUp();
+            }else {
+                submenu.slideDown();
+            }
         });
+    });
         
     </script>
 </body>

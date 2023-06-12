@@ -14,13 +14,13 @@ import com.kh.final3.member.model.vo.Member;
 
 public interface ApprovalService {
 	
-	//°Ô½Ã±Û ¼ö Á¶È¸
+	//ï¿½Ô½Ã±ï¿½ ï¿½ï¿½ ï¿½ï¿½È¸
 	int selectListCount(String status);
 	
-	//°áÀçÇÔ ÀüÃ¼Á¶È¸
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½È¸
 	ArrayList<ApprovalDoc> selectApprovalList(PageInfo pi, String status);
 	
-	//¸ÞÀÎ ÃÖ±Ù ¸ñ·ÏÁ¶È¸
+	//ï¿½ï¿½ï¿½ï¿½ ï¿½Ö±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½È¸
 	ArrayList<ApprovalDoc> approvalMainList(String status);
 	
 	//¾ç½Ä¸®½ºÆ® °¡Á®¿À±â

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="memberMapper">
+	<resultMap type="member" id="memberResultSet">
+		<result column="USER_NO" property="userNo"/>
+	 	<result column="USER_ID" property="userId"/>
+	 	<result column="USER_NAME" property="userName"/>
+	 	<result column="USER_PWD" property="userPwd"/>
+	 	<result column="PHONE" property="phone"/>
+	 	<result column="EMAIL" property="email"/>
+	 	<result column="ADDRESS" property="address"/>
+	 	<result column="BIRTH" property="birth"/>
+	 	<result column="DEPT_CODE" property="deptCode"/>
+	 	<result column="JOB_CODE" property="jobCode"/>
+	 	<result column="EMPOLYMENT_DATE" property="empolymentDate"/>
+	 	<result column="DEPATURE_DATE" property="depatureDate"/>
+	 	<result column="AUTH" property="auth"/>
+	 	<result column="ENABLED" property="enabled"/>
+	 	<result column="STATUS" property="status"/>
+	</resultMap>
+
+	<insert id="insertMember" parameterType="member">
+		INSERT INTO MEMBER(USER_NO, USER_ID, USER_NAME, USER_PWD, PHONE, EMAIL, ADDRESS, BIRTH, DEPT_CODE, JOB_CODE,
+							EMPOLYMENT_DATE, DEPATURE_DATE, AUTH, ENABLED)
+		VALUES(SEQ_UNO.NEXTVAL, #{userId}, '관리자', #{userPwd}, 'n', 'n', 'n', SYSDATE, 'n', 'n', SYSDATE, SYSDATE, 'ROLE_MEMBER', 1)
+	</insert>
+	
+	<select id="selectMemberById" resultMap="memberResultSet">
+		SELECT *
+		FROM MEMBER
+		WHERE USER_ID = #{userId}
+		AND STATUS = 'Y'
+	</select>
+	
+	<resultMap type="com.kh.final3.member.model.vo.CustomUserDetails" id="customUserSet">
+	 	<result column="USER_ID" property="userId"/>
+	 	<result column="USER_PWD" property="userPwd"/>
+	 	<result column="AUTH" property="auth"/>
+	</resultMap>
+	
+	<select id="selectMember" parameterType="String" resultMap="customUserSet">
+		SELECT *
+		FROM MEMBER
+		WHERE USER_ID = #{userId}
+	</select>
+	
+</mapper>

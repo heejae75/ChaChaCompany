@@ -119,7 +119,7 @@
                       <a class="nav-link active" aria-current="page" href="#">공지사항</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="#">자료실</a>
+                      <a class="nav-link" href="list.dc">자료실</a>
                     </li>
                     <li class="nav-item">
                       <a class="nav-link" href="#">대여</a>

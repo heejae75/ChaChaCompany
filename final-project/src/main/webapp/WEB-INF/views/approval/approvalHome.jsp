@@ -8,6 +8,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <title>Document</title>
+    <style>
+        div{
+            box-sizing: border-box;
+        }
+        .approval-home{
+            width: 1000px;
+            height: 800px;
+            margin: auto;
+        }
+        .approval-home>div{
+            width: 100%;
+        }
+        #approval-home_1{
+            height: 30%;
+        }
+        #approval-home_2{
+            height: 40%;
+        }
+        #approval-home_3{
+            height: 30%;
+        }
+        #approval-home_1>div{
+            height: 100%;
+            float: left;
+        }
+        #lately-area{
+            float: right;
+            font-size: 20px;
+            padding-top: 25px;
+            padding-right: 100px;
+        }
+        #approval_short_list{
+        	width: 100%;
+        	text-align : center;
+        }
+        #approval_short_list>tbody>tr:hover{
+		    background-color: rgb(209, 207, 207);
+		    cursor: pointer;
+		}
+       
+
+    </style>
 </head>
 <style>
 	div{
@@ -149,9 +191,16 @@
             </table>
         </div>
         <div id="approval-home_3">
+<<<<<<< HEAD
+
+            
+=======
 			<h1>그래프 넣기</h1>
+>>>>>>> refs/remotes/origin/main
         </div>
     </div>
+<<<<<<< HEAD
+=======
     <script>
     	$(function(){
         	approvalList();
@@ -184,5 +233,6 @@
     	}
     </script>
    
+>>>>>>> refs/remotes/origin/main
 </body>
 </html>
