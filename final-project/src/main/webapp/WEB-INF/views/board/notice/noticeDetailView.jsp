@@ -116,8 +116,47 @@
             </table>
         </div>
         <br><br>
-​
     </div>
+    
+     <!-- 댓글 수정/삭제 모달시작 -->
+   	<div class="modal fade" id="updateReply-modal" role="dialog">
+		<div class="modal-dialog">
+			    
+			<!-- Modal content-->
+			<div class="modal-content">
+				
+				    <div class="modal-header">
+				       <button type="button" class="close" data-dismiss="modal">&times;</button>
+				       <h4 class="modal-title">댓글 수정</h4>
+				    </div>
+				    <div class="modal-body">
+				    
+				      	<div class="form-group">
+		                    <label for="update_replyNo">댓글 번호</label>
+		                    <input class="form-control" id="update_replyNo" name="replyNo" readonly>
+		                </div>
+		                <div class="form-group">
+		                    <label for="update_replyContent">댓글 내용</label>
+		                    <input class="form-control" id="update_replyContent" name="replyContent">
+		                </div>
+		                <div class="form-group">
+		                    <label for="update_replyWriter">댓글 작성자</label>
+		                    <input class="form-control" id="update_replyWriter" name="replyWriter" readonly>
+		                </div>
+				      
+				    </div>
+				    <div class="modal-footer">
+				      <button type="button" class="btn btn-default" data-dismiss="modal" onclick="updateReply()">수정</button>
+				      <button type="button" class="btn btn-default" data-dismiss="modal" onclick="deleteReply()">삭제</button>
+				    </div>
+			    
+			    
+			  </div>
+		</div>
+	</div>
+  <!-- 댓글 수정/삭제 모달 끝 -->
+
+   
      <script>
      // 댓글 입력창 빈칸일때 알람
  	$("#reply-btn").click(function(){
@@ -143,12 +182,21 @@
 	    			
 	    			var str = "";    				
 	    			for(var i in list){
-	    				str += "<tr>"
-	    					+ "<th>" + list[i].deptName + " " + list[i].userName + "</th>"
-	    					+ "<td>" + list[i].replyContent + "</td>"
-	    					+ "<td>" + list[i].createDate + "</td>"
-	    					+ "</tr>"
+	    				str += "<tr id='reply-row'>"
+	    					+ "<td id='replyNo-data'>" + list[i].replyNo + "</td>"
+	    					+ "<th id='replyWriter-data'>" + list[i].deptName + " " + list[i].userName + "</th>"
+	    					+ "<td id='replyContent-data'>" + list[i].replyContent + "</td>"
+	    					+ "<td>" + list[i].createDate + "</td>";
+	    					
+	    				/* if (${loginUser.userNo} == list[i].replyWriter) {
+	    		            str += 
+	    		            	"<td><button type='button' class='btn btn-xs btn-success' data-toggle='modal' data-target='#updateReply-modal'>댓글 수정</button></td>"
+	    				}
+ */
+	    		          str += "<td><button type='button' id='update-modal-btn' class='btn btn-xs btn-success' data-toggle='modal' data-target='#updateReply-modal'>댓글 수정</button></td>"
+	    		        	 + "</tr>";
 	    			}
+	    			
 	    			
 	    			$("#replyArea tbody").html(str);
 	    			$("#rcount").text(list.length);
@@ -180,6 +228,42 @@
     		},
     		error : function(){
     			console.log("통신오류");
+    		}
+    	});
+    	
+    }
+    
+    // 댓글 수정 모달에 정보 띄우기
+   $("#replyArea button[id=update-modal-btn]").on("click", function () {
+	    var reply = $(this).parent();
+	    console.log(this);
+
+	    var replyNo = reply.find("#replyNo-data").text();
+	    var replyContent = reply.find("#replyContent-data").text();
+	    var replyWriter = reply.find("#replyWriter-data").text();
+
+	    $("#update_replyNo").val(replyNo);
+	    $("#update_replyContent").val(replyContent);
+	    $("#update_replyWriter").val(replyWriter);
+
+	});
+    
+    // 댓글 수정
+   function updateReply(){
+    	
+    	$.ajax({
+    		url : "updqteReply.no",
+    		data : {
+    			replyNo : $("#update_replyNo").val(),
+    			replyContent : $("#update_replyContent").val()
+    		},
+    		success : function(result){
+    			if(result == "success"){
+    				selectReplyList();
+    			}
+    		},
+    		error : function(){
+    			console.log("통신오류");	
     		}
     	});
     	
@@ -246,6 +330,5 @@
     });
    
     </script>
-    
 </body>
 </html>
