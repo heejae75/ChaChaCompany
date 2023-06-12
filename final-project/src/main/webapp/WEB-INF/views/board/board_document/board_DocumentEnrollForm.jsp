@@ -8,8 +8,9 @@
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <style>
 	  
-	 .board-content{
-	  	width : 1400px;
+	 .document-content{
+	  	width : 100%;
+	  	height: 100%;
 	}
   	
   	/* navi */
@@ -21,7 +22,7 @@
   
 	#board-tap-area>ul{
 		padding-top : 50px;
-		height : 120px;
+		height : 100px;
 		list-style-type : none;
 	}
 	
@@ -64,6 +65,7 @@
 		border-top-right-radius:0.25rem;
 	}  
 	
+	/* 테이블 영역  */
 	#document-detail{
 		width : 100%;
 		margin-top:40px;
@@ -103,16 +105,15 @@
 <%@ include file="../../common/menubar.jsp" %>
 <body id="body-pd">
     <div class="content">
-    	<div class="board-content">
- 
+    	<div class="document-content">
             <div id="board-tap-area">
             	<h1>자료실</h1>
                 <ul id="nav-tabs">
 				  	<li class="nav-item">
-				    	<a class="nav-link" aria-current="page" href="#">공지사항</a>
+				    	<a class="nav-link" aria-current="page" href="list.no">공지사항</a>
 				 	</li>
 				  	<li class="nav-item">
-				    	<a class="nav-link active" id="link_active" href="home.cm">자료실</a>
+				    	<a class="nav-link active" id="link_active" href="list.dc">자료실</a>
 				  	</li>	
 				  	<li class="nav-item">
 				    	<a class="nav-link" href="#">대여</a>
@@ -137,9 +138,9 @@
 	                            </td> 
 	                            <td width="10%" style="text-align: center;">
 	                            	<select name="categoryCode" style=" width :100%; height:100%; font-size: 20px; ">
-	       	                    		<option value="b2">자료실</option>
-	   	                        		<option value="b1">공지사항</option>
-	       	                    		<option value="b3">커뮤니티</option>
+	       	                    		<option value="B2">자료실</option>
+	   	                        		<option value="B1">공지사항</option>
+	       	                    		<option value="B3">커뮤니티</option>
 	           	                	</select>
 	                            </td>  
 	                            <td style="text-align: center; font-size:20px; font-weight: 800;">제목</td>  
@@ -151,23 +152,24 @@
 	                            <td colspan="4">
 	                            <div id="file-area" style="margin-left: 0;">
 	                            <br>
-	                            	<input type="file" download="" name="upfile"> <br>
-                                    <input type="file" download="" name="upfile"> <br>
-                                    <input type="file" download="" name="upfile"> <br>
-                                    <input type="file" download="" name="upfile">
+	                            	<input type="file" name="upfile" required> <br>
+                                    <input type="file" name="upfile"> <br>
+                                    <input type="file" name="upfile"> <br>
+                                    <input type="file" name="upfile">
                           		<br>
                                 </div>
                                 <br>
 	                            </td>
 	                        </tr>
 	                        <tr>
-	                            <td colspan="4"><textarea name ="boardContent" style="resize: none; width: 100%; height: 300px; padding: 0;" readonly> 게시글 내용 영역 </textarea></td>
+	                            <td colspan="4"><textarea name ="boardContent" style="resize: none; width: 100%; height: 300px; padding: 0;" required></textarea></td>
 	                        </tr>
 	
 	                    </tbody>
 	                </table>
+	                <!-- 임시저장 기능 한번 확인 -->
 		            <div id="board-btn-area">
-		                <button class="btn btn-secondary">취소</button> <button type="submit" class="btn btn-success">확인</button>               
+		                <button class="btn btn-secondary" onclick="location.href=list.dc">취소</button> <button type="submit" class="btn btn-success">확인</button>               
 		            </div>
 		       		</form>
 	            </div>
