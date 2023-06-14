@@ -9,18 +9,17 @@
   		<typeAliases>
   			<typeAlias type="com.kh.final3.board.model.vo.Board" alias="board"/>
   			<typeAlias type="com.kh.final3.board.model.vo.BoardAttachment" alias="attachment"/>
-  			<typeAlias type="com.kh.final3.member.model.vo.Member" alias="member"/>
+  			<typeAlias type="com.kh.final3.board.model.vo.Reply" alias="reply"/>
+  			<typeAlias type="com.kh.final3.board.model.vo.Reservation" alias="reservation"/>
   			<typeAlias type="com.kh.final3.approval.model.vo.ApprovalDoc" alias="approvalDoc"/>
-      	<typeAlias type="com.kh.final3.approval.model.vo.DocType" alias="docType"/>
+  			<typeAlias type="com.kh.final3.approval.model.vo.DocType" alias="docType"/>
   			<typeAlias type="com.kh.final3.member.model.vo.Member" alias="member"/>
-
   			<typeAlias type="com.kh.final3.email.model.vo.Email" alias="email"/>
   		</typeAliases>
   		
   		<mappers>
   			<mapper resource="/mappers/boardMappers/notice-mapper.xml"/>
-  			<mapper resource="/mappers/boardMappers/document-mapper.xml"/>
+  			<mapper resource="/mappers/boardMappers/reservation-mapper.xml"/>
   			<mapper resource="/mappers/approval/approval-mapper.xml"/>
-  			<mapper resource="/mappers/main-mapper.xml"/>
   		</mappers>
   </configuration>

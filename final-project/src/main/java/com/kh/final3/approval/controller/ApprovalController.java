@@ -1,6 +1,7 @@
 package com.kh.final3.approval.controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -8,11 +9,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,7 +31,11 @@ import com.kh.final3.common.template.SaveFile;
 import com.kh.final3.common.vo.PageInfo;
 import com.kh.final3.member.model.vo.Member;
 
-@Controller 
+import lombok.extern.slf4j.Slf4j;
+
+@Controller
+@Slf4j
+@RequestMapping(value = {"/member", "/admin"}, method= {RequestMethod.GET,RequestMethod.POST})
 public class ApprovalController {
 	@Autowired
 	private ApprovalService as;
@@ -84,23 +89,23 @@ public class ApprovalController {
 			mv.setViewName("approval/itemForm");
 		}else if(appNo==3) {
 			mv.setViewName("approval/minutes");
-		}else if(appNo==4) {
-			mv.setViewName("approval/relocation");
 		}
 		return mv;
 	}
 	
-//	//¸â¹ö ºÒ·¯¿À±â
+//	//ï¿½ï¿½ï¿½ ï¿½Ò·ï¿½ï¿½ï¿½ï¿½ï¿½
 	@ResponseBody
-	@RequestMapping(value="selectApproverList.ap", produces = "application/json; charset=UTF-8")
-	public String selectApproverList(String deptCode) {
+	@PostMapping(value="selectApproverList.ap",produces = "application/json; charset=UTF-8")
+//	@RequestMapping(value="selectApproverList.ap", method = {RequestMethod.GET,RequestMethod.POST}, produces = "application/json; charset=UTF-8")
+	public String selectApproverList(@RequestParam String deptCode) {
 		ArrayList<Member> list = as.selectApproverList(deptCode);
-		
+		log.debug("ï¿½ï¿½ï¿½?");
 		return new Gson().toJson(list);
 	}
-	//°Ë»ö
+	//ï¿½Ë»ï¿½
 	@ResponseBody
-	@RequestMapping(value="searchApprover.ap",produces="application/json; charset=UTF-8")
+	@PostMapping(value="searchApprover.ap",produces = "application/json; charset=UTF-8")
+//	@RequestMapping(value="searchApprover.ap",method = {RequestMethod.GET,RequestMethod.POST},produces="application/json; charset=UTF-8")
 	public String searchApprover(String status, String keyword){
 		HashMap<String, String> map = new HashMap<>();
 		
@@ -112,7 +117,7 @@ public class ApprovalController {
 		return new Gson().toJson(list);
 	}
 	
-	//±¸¸ÅÇ°ÀÇ¼­ ÀÛ¼º
+	//ï¿½ï¿½ï¿½ï¿½Ç°ï¿½Ç¼ï¿½ ï¿½Û¼ï¿½
 	@RequestMapping("item.ap")
 	public ModelAndView insertItem(item i, ApprovalDoc ad, Approval a,ModelAndView mv,HttpSession session, ArrayList<MultipartFile> upfile){
 		ArrayList<ApprovalAttachment> atList = new ArrayList<>();
@@ -121,6 +126,13 @@ public class ApprovalController {
 				String changeName = new SaveFile().getSaveFile(file, session);
 				
 				String filePath = session.getServletContext().getRealPath("/resources/uploadFiles/approvalDoc/");
+				
+				try {
+					file.transferTo(new File(filePath+changeName));
+				} catch (IllegalStateException | IOException e) {
+					e.printStackTrace();
+				}
+				
 				ApprovalAttachment at = ApprovalAttachment.builder().originName(file.getOriginalFilename())
 																	.changeName(changeName)
 																	.filePath(filePath)
@@ -132,13 +144,13 @@ public class ApprovalController {
 		
 		int result = as.insertItem(i,atList,ad,a);
 		if(result>0) {
-			session.setAttribute("alertMsg", "°áÀç¹®¼­°¡ µî·ÏµÇ¾ú½À´Ï´Ù.");
+			session.setAttribute("alertMsg", "ï¿½ï¿½ï¿½ç¹®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ÏµÇ¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
 			mv.setViewName("redirect:list.ap");
 		}else {
 			for(ApprovalAttachment aa : atList) {
 				new File(session.getServletContext().getRealPath(aa.getFilePath())).delete();
 			}
-			session.setAttribute("alertMsg", "°áÀç¹®¼­°¡ µî·ÏÀÌ ½ÇÆÐÇÏ¿´½À´Ï´Ù.");
+			session.setAttribute("alertMsg", "ï¿½ï¿½ï¿½ç¹®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¿ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
 			mv.setViewName("redirect:list.ap");
 		}
 		

@@ -23,9 +23,7 @@ public class Board {
 	private Date modifyDate;
 	private int count;
 	private String status;
-	private String bookmark;
 	private String importanceLevel;
 	private String deptName;
 	private String attachmentNo; // 첨부파일 여부
-
 }
