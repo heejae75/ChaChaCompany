@@ -15,6 +15,7 @@ import com.kh.final3.board.model.vo.Board;
 import com.kh.final3.email.model.vo.Email;
 import com.kh.final3.main.model.service.MainService;
 
+@RequestMapping(value={"/member","/admin"})
 @Controller
 public class MainController {
 	

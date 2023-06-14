@@ -37,6 +37,7 @@
             <br>
 ​
             <form id="updateForm" method="post" action="update.no" enctype="multipart/form-data">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                 <input type="hidden" name="boardNo" value="${b.boardNo }">
                 <table algin="center">
                     <tr>
@@ -55,6 +56,7 @@
                         	<c:if test="${not empty at.originName }">
 	                        	    현재 업로드된 파일 : 
 	                            <a href="${at.changeName }" download="${at.originName }">${at.originName }</a>
+	                            <input type="hidden" name="attachmentNo" value="${at.attachmentNo }">
 	                            <input type="hidden" name="originName" value="${at.originName }">
 	                            <input type="hidden" name="changeName" value="${at.changeName }">
                             </c:if>

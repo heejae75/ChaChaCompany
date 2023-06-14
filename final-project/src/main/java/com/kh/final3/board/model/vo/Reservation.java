@@ -1,6 +1,5 @@
 package com.kh.final3.board.model.vo;
 
-import java.sql.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,9 +13,11 @@ import lombok.NoArgsConstructor;
 public class Reservation {
 	private int reservationNo;
 	private int userNo;
-	private Date revDate;
+	private String revDate;
+	private String startTime;
+	private String endTime;
 	private String reserveCategory;
-	private String reserveContent;
-	private String approval;
 	private String status;
+	private String roomCode;
+	private String userName;
 }

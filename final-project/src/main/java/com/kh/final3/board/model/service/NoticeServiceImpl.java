@@ -73,6 +73,17 @@ public class NoticeServiceImpl implements NoticeService {
 	public int insertReply(Reply reply) {
 		return noticeDao.insertReply(sqlSession, reply);
 	}
+
+	// 댓글수정
+	@Override
+	public int updateReply(Reply reply) {
+		return noticeDao.updateReply(sqlSession, reply);
+	}
+	// 댓글삭제
+	@Override
+	public int deleteReply(int replyNo) {
+		return noticeDao.deleteReply(sqlSession, replyNo);
+	}
 	// 게시글삭제
 	@Override
 	public int deleteBoard(int boardNo, String filePath) {
@@ -115,8 +126,25 @@ public class NoticeServiceImpl implements NoticeService {
 	// 개시글 수정
 	@Override
 	public int updateBoard(Board b, BoardAttachment at) {
-		return 0;
+		
+		int result1 = noticeDao.updateBoard(sqlSession, b);
+		int result2 = 0;
+		
+		if(at == null) { // 새로 첨부하는 사진 없음
+			result2 = 1;
+		}else { // 새로 첨부하는 사진 있음
+			
+			if(at.getAttachmentNo() == 0) { // 기존에 사진 없었으면
+				result2 = noticeDao.insertNewAttachment(sqlSession, at);
+			}else {
+				result2 = noticeDao.updateBoardAttachment(sqlSession, at);
+			}
+		}
+		
+		return result1 * result2;
 	}
+	
+	
 
 
 }

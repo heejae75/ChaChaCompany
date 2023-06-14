@@ -54,6 +54,14 @@ public class NoticeDao {
 	public int insertReply(SqlSessionTemplate sqlSession, Reply reply) {
 		return sqlSession.insert("noticeMapper.insertReply", reply);
 	}
+	// 댓글수정
+	public int updateReply(SqlSessionTemplate sqlSession, Reply reply) {
+		return sqlSession.update("noticeMapper.updateReply", reply);
+	}
+	// 댓글 삭제
+	public int deleteReply(SqlSessionTemplate sqlSession, int replyNo) {
+		return sqlSession.update("noticeMapper.deleteReply", replyNo);
+	}
 	// 게시글 삭제
 	public int deleteBoard(SqlSessionTemplate sqlSession, int boardNo) {
 		return sqlSession.update("noticeMapper.deleteBoard", boardNo);
@@ -86,6 +94,20 @@ public class NoticeDao {
 		
 		return (ArrayList)sqlSession.selectList("noticeMapper.selectBookmarkList", userNo, rowBounds);
 	}
+	// 게시물 수정 - 글만 업데이트
+	public int updateBoard(SqlSessionTemplate sqlSession, Board b) {
+		return sqlSession.update("noticeMapper.updateBoard", b);
+	}
+	// 게시물 수정 - 기존 첨부파일 수정
+	public int updateBoardAttachment(SqlSessionTemplate sqlSession, BoardAttachment at) {
+		return sqlSession.update("noticeMapper.updateBoardAttachment", at);
+	}
+	// 게시물 수정 - 첨부파일 새로 넣기
+	public int insertNewAttachment(SqlSessionTemplate sqlSession, BoardAttachment at) {
+		return sqlSession.insert("noticeMapper.insertNewAttachment", at);
+	}
+	
+	
 	
 	
 

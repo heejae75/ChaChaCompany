@@ -37,6 +37,7 @@
             <br>
 
             <form id="enrollForm" method="post" action="insert.no" enctype="multipart/form-data">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
             <input type="hidden" name="categoryCode" value="B1">
                 <table algin="center">
                     <tr>

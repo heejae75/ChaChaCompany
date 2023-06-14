@@ -5,69 +5,145 @@
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <style>
-        .content {
-            background-color:rgb(247, 245, 245);
-            width:80%;
-            margin:auto;
-        }
-        .innerOuter {
-            border:1px solid lightgray;
-            width:80%;
-            margin:auto;
-            padding:5% 10%;
-            background-color:white;
-        }
-​
-        table * {margin:5px;}
-        table {width:100%;}
+    .content{
+        width: 1570px;
+        background-color: khaki;
+    }
+        /* navi */
+  	#board-tap-area{
+  		width: 100%;	
+  		margin:auto;
+  	}
+  
+  
+	#board-tap-area>ul{
+		padding-top : 50px;
+		height : 100px;
+		list-style-type : none;
+	}
+	
+	#board-tap-area>h1{
+		padding-top : 50px;
+		width : 10%;
+		float : left;
+		
+	}
+	
+	#nav-tabs{
+		padding : 0;
+		display: flex;
+	}
+	
+    #board-tap-area>ul li{
+    	width :98px;
+    	margin-right: 5px;
+    	float : left;
+    }
+    
+    #board-tap-area>ul li a{
+    	text-align: center; 	
+    }
+    
+    li:hover{
+    	border-top: 1px solid #dee2e6;
+		border-left: 1px solid #dee2e6;
+		border-right: 1px solid #dee2e6;
+		border-top-left-radius:0.25rem;
+		border-top-right-radius:0.25rem; 
+    }
+	
+	#link_active{
+		border-top: 1px solid #dee2e6;
+		border-left: 1px solid #dee2e6;
+		border-right: 1px solid #dee2e6;
+		border-bottom: none;
+		border-top-left-radius:0.25rem;
+		border-top-right-radius:0.25rem;
+	}  
+	
+	.table{
+		width : 80%;
+		margin : auto;
+	}
+	
     </style>
 </head>
-<body>
+<body id="body-pd">
         
 <%@ include file="../../common/menubar.jsp" %>
 ​
     <div class="content">
+    	<div id="board-tap-area">
+                <ul id="nav-tabs">
+				  	<li class="nav-item">
+				    	<a class="nav-link active" id="link_active" aria-current="page" href="list.no">공지사항</a>
+				 	</li>
+				  	<li class="nav-item">
+				    	<a class="nav-link" href="list.dc">자료실</a>
+				  	</li>	
+				  	<li class="nav-item">
+				    	<a class="nav-link" href="list.re">대여</a>
+				  	</li>
+				  	<li class="nav-item">
+				    	<a class="nav-link">커뮤니티</a>
+				  	</li>
+				</ul>
+		</div>
         <br><br>
-        <div class="innerOuter">
-            <h2>게시글 상세보기</h2>
-            <br>
-​
-            <a class="btn btn-secondary" style="float:right;" href="list.no">목록으로</a>
-            <br><br>
-​
-            <table id="contentArea" align="center" class="table">
-                <tr>
-                    <th width="100">제목</th>
-                    <td colspan="2">${b.boardTitle }</td>
-                    <td align="right"><button id="bookmarkButton"><span id="bookmarkIcon"></span></button></td>
-                </tr>
-                <tr>
-                    <th>작성자</th>
-                    <td>${b.deptName }</td>
-                    <th>작성일</th>
-                    <td>${b.createDate }</td>
-                </tr>
-                <tr>
-                    <th>첨부파일</th>
-                    <td colspan="3">
-                        <a href="${at.changeName }" download="${at.originName }">${at.originName}</a>
-                    </td>
-                </tr>
-                <tr>
-                    <th>내용</th>
-                    <td colspan="3"></td>
-                </tr>
-                <tr>
-                    <td colspan="4"><p style="height:150px;">${b.boardContent }</p></td>
-                </tr>
-            </table>
-            <br>
-​
-            <div align="center">
+        
+	        <div class="table">
+	            <a class="btn btn-secondary" style="float:right;" href="list.no">목록으로</a>
+	            <br><br>
+	​
+	            <table id="contentArea" align="center" class="table">
+	                <tr>
+	                    <th width="100">제목</th>
+	                    <td colspan="2">${b.boardTitle }</td>
+	                    <td align="right"><button id="bookmarkButton"><span id="bookmarkIcon"></span></button></td>
+	                </tr>
+	                <tr>
+	                    <th>작성자</th>
+	                    <td>${b.deptName }</td>
+	                    <th>작성일</th>
+	                    <td>${b.createDate }</td>
+	                </tr>
+	                <tr>
+	                    <th>첨부파일</th>
+	                    <td colspan="3">
+	                        <a href="/final3${at.filePath }" download="${at.originName }">${at.originName}</a>
+	                    </td>
+	                </tr>
+	                <tr>
+	                    <th>내용</th>
+	                    <td colspan="3"></td>
+	                </tr>
+	                <tr>
+	                    <td colspan="4"><p style="height:150px;">${b.boardContent }</p></td>
+	                </tr>
+	            </table>
+	​		</div>
+
+			<div class="table">
+	            <table id="replyArea" class="table" align="center">
+	                <thead>
+	                    <tr>
+		                   <th colspan="2">
+		                       <textarea class="form-control" name="replyContent" id="reply-input" cols="55" rows="2" style="resize:none; width:100%;"></textarea>
+		                   </th>
+		                   <th style="vertical-align:middle"><button class="btn btn-secondary" id="reply-btn" onclick="insertReply();">등록하기</button></th>
+	                    </tr>
+	                    <tr>
+	                        <td colspan="3">댓글(<span id="rcount"></span>)</td>
+	                    </tr>
+	                </thead>
+	                <tbody>
+	                    <!-- 댓글출력 -->
+	                </tbody>
+	            </table>
+	        </div>
+	        
+	         <div align="center">
                 <!-- 수정하기, 삭제하기 버튼은 이 글이 본인이 작성한 글일 경우에만 보여져야 함 -->
          		<a class="btn btn-primary" onclick="formSubmit(1);">수정하기</a>
 	            <a class="btn btn-danger" onclick="formSubmit(2);">삭제하기</a>
@@ -79,9 +155,10 @@
             function formSubmit(num){
             	var formObj = $("<form>");
             	
+            	var scr = $("<input>").prop("type","hidden").prop("name","${_csrf.parameterName}").prop("value","${_csrf.token}");
             	var boardNo = $("<input>").prop("type", "hidden").prop("name", "boardNo").prop("value", "${b.boardNo}");
-            	var filePath = $("<input>").prop("type","hidden").prop("name","filePath").prop("value","${at.changeName}")
-            	var obj = formObj.append(boardNo);
+            	var filePath = $("<input>").prop("type","hidden").prop("name","filePath").prop("value","${at.filePath}");
+            	var obj = formObj.append(boardNo).append(scr);
             	
             	if(num == 1){ // 수정
             		obj.attr("action","updateForm.no").attr("method","get");
@@ -97,28 +174,8 @@
             	}
             
             </script>
-​
-            <table id="replyArea" class="table" align="center">
-                <thead>
-                    <tr>
-	                   <th colspan="2">
-	                       <textarea class="form-control" name="replyContent" id="reply-input" cols="55" rows="2" style="resize:none; width:100%;"></textarea>
-	                   </th>
-	                   <th style="vertical-align:middle"><button class="btn btn-secondary" id="reply-btn" onclick="insertReply();">등록하기</button></th>
-                    </tr>
-                    <tr>
-                        <td colspan="3">댓글(<span id="rcount"></span>)</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- 댓글출력 -->
-                </tbody>
-            </table>
-        </div>
-        <br><br>
-    </div>
-    
-     <!-- 댓글 수정/삭제 모달시작 -->
+        
+              <!-- 댓글 수정/삭제 모달시작 -->
    	<div class="modal fade" id="updateReply-modal" role="dialog">
 		<div class="modal-dialog">
 			    
@@ -155,6 +212,11 @@
 		</div>
 	</div>
   <!-- 댓글 수정/삭제 모달 끝 -->
+           
+       
+ </div>
+    
+ 
 
    
      <script>
@@ -178,21 +240,24 @@
 	    		data : {
 	    			boardNo : "${b.boardNo}"
 	    		},
+	    		beforeSend : function(xhr){
+	                xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+	            },
 	    		success : function(list){
 	    			
 	    			var str = "";    				
 	    			for(var i in list){
 	    				str += "<tr id='reply-row'>"
-	    					+ "<td id='replyNo-data'>" + list[i].replyNo + "</td>"
-	    					+ "<th id='replyWriter-data'>" + list[i].deptName + " " + list[i].userName + "</th>"
-	    					+ "<td id='replyContent-data'>" + list[i].replyContent + "</td>"
+	    					+ "<td>" + list[i].replyNo + "</td>"
+	    					+ "<th>" + list[i].deptName + " " + list[i].userName + "</th>"
+	    					+ "<td>" + list[i].replyContent + "</td>"
 	    					+ "<td>" + list[i].createDate + "</td>";
 	    					
-	    				/* if (${loginUser.userNo} == list[i].replyWriter) {
+	    				 if (${loginUser.userNo} === list[i].replyWriter) {
 	    		            str += 
 	    		            	"<td><button type='button' class='btn btn-xs btn-success' data-toggle='modal' data-target='#updateReply-modal'>댓글 수정</button></td>"
 	    				}
- */
+ 
 	    		          str += "<td><button type='button' id='update-modal-btn' class='btn btn-xs btn-success' data-toggle='modal' data-target='#updateReply-modal'>댓글 수정</button></td>"
 	    		        	 + "</tr>";
 	    			}
@@ -220,6 +285,9 @@
     			replyContent : $("#reply-input").val(),
     			refBno : "${b.boardNo}"
     		},
+    		beforeSend : function(xhr){
+                xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+            },
     		success : function(result){
     			if(result == "success"){
 	    			selectReplyList();
@@ -234,17 +302,14 @@
     }
     
     // 댓글 수정 모달에 정보 띄우기
-   $("#replyArea button[id=update-modal-btn]").on("click", function () {
-	    var reply = $(this).parent();
-	    console.log(this);
-
-	    var replyNo = reply.find("#replyNo-data").text();
-	    var replyContent = reply.find("#replyContent-data").text();
-	    var replyWriter = reply.find("#replyWriter-data").text();
+   $("#replyArea > tbody").on("click", "#reply-row", function () {
+	    var replyNo = $(this).children().eq(0).text();
+	    var replyContent = $(this).children().eq(2).text();
+	    var replyWriter = $(this).children().eq(1).text();
 
 	    $("#update_replyNo").val(replyNo);
 	    $("#update_replyContent").val(replyContent);
-	    $("#update_replyWriter").val(replyWriter);
+	    $("#update_replyWriter").val(replyWriter); 
 
 	});
     
@@ -252,13 +317,17 @@
    function updateReply(){
     	
     	$.ajax({
-    		url : "updqteReply.no",
+    		url : "updateReply.no",
     		data : {
     			replyNo : $("#update_replyNo").val(),
     			replyContent : $("#update_replyContent").val()
     		},
+    		beforeSend : function(xhr){
+                xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+            },
     		success : function(result){
     			if(result == "success"){
+    				alert("댓글을 수정했습니다.");
     				selectReplyList();
     			}
     		},
@@ -266,7 +335,27 @@
     			console.log("통신오류");	
     		}
     	});
+    }
+    
+    // 댓글 삭제
+   function deleteReply(){
     	
+    	$.ajax({
+    		url : "deleteReply.no",
+    		data : {replyNo : $("#update_replyNo").val()},
+    		beforeSend : function(xhr){
+                xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+            },
+            success : function(result){
+            	if(result == "success"){
+    				alert("댓글을 삭제했습니다.");
+    				selectReplyList();
+    			}
+            },
+            error : function(){
+            	console.log("통신오류");
+            }
+    	});
     }
     
     // 즐겨찾기여부 불러오기
@@ -282,6 +371,9 @@
     			boardNo : "${b.boardNo}",
     			userNo : /* "${loginUser.userNo}" */ "1"
     		},
+    		beforeSend : function(xhr){
+                xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+            },
     		success : function(result){
     			console.log("통신성공");
     			
@@ -309,6 +401,9 @@
     			boardNo : "${b.boardNo}",
     			userNo : /* "${loginUser.userNo}" */ "1"
     		},
+    		beforeSend : function(xhr){
+                xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+            },
     		success : function(result){
     			if(result == 'I'){ // 즐겨찾기 추가한 경우
     				window.alert("즐겨찾기에 추가되었습니다.");

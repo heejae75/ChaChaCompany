@@ -111,27 +111,23 @@
 <%@ include file="../../common/menubar.jsp" %>
  
     <div class="content">
-        <div id="board">
-            <h1>공지사항</h1>
-            <div id="board-tap-area">
-                <ul id="nav-tabs">
-                    <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="list.no">공지사항</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="list.dc">자료실</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="list.re">대여</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="#">자유게시판</a>
-                    </li>
+         <div id="board-tap-area">
+             <ul id="nav-tabs">
+                 <li class="nav-item">
+                   	<a class="nav-link active" aria-current="page" href="list.no">공지사항</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="list.dc">자료실</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="list.re">대여</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">자유게시판</a>
+                  </li>
                 </ul>
+           </div>
 
-            </div>
-
-            <div>
                 <form action="list.no" id="board-search-area" method="get">
                     <div id="option-box" align="right" >
                     <input type="hidden" name="currentPage" value="1">
@@ -153,7 +149,7 @@
                         <button type="submit" class="btn btn-secondary" style="background-color: #0E6251; margin-left: 2px;"><i id="search-icon" class="fa-solid fa-magnifying-glass fa-lg"></i></button><!-- icon 사이즈 변경 fa-2xs /xs / sm / lg/ xl/ 2xl -->
                     </div>
                 </form>
-            </div>
+           
             
             <!-- 검색어 select값 유지 -->
             <c:if test="${not empty status }">
@@ -270,7 +266,7 @@
             </c:if>
             
             
-        </div>
+       
         <br><br><br>
     </div>
     

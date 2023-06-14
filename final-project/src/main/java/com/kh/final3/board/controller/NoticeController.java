@@ -27,6 +27,7 @@ import com.kh.final3.common.template.SaveFile;
 import com.kh.final3.common.vo.PageInfo;
 
 @Controller
+@RequestMapping(value = {"/member", "/admin"})
 public class NoticeController {
 	
 	@Autowired
@@ -49,7 +50,6 @@ public class NoticeController {
 		int boardLimit = 10;
 		
 		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
-		
 		HashMap<String, String> map = new HashMap<>();
 		map.put("keyword", keyword);
 		map.put("status", status);
@@ -111,24 +111,20 @@ public class NoticeController {
 	
 	// 글작성 insert
 	@RequestMapping("insert.no")
-	public ModelAndView insertBoard(ModelAndView mv, Board b, BoardAttachment at, MultipartFile upfile, HttpSession session) {
+	public ModelAndView insertBoard(ModelAndView mv, Board b, BoardAttachment at, MultipartFile upfile, HttpSession session) throws IllegalStateException, IOException {
 
 		String savePath = session.getServletContext().getRealPath("/resources/uploadFiles/boardDocument/");
 		
 		if(!upfile.getOriginalFilename().equals("")) { // 첨부파일이 있는 경우
 			
+			String changeName = saveFile.getSaveFile(upfile, session);
+			
 			at.setCategoryCode(b.getCategoryCode());
 			at.setOriginName(upfile.getOriginalFilename());
-			at.setChangeName(saveFile.getSaveFile(upfile, session));
-			at.setFilePath("/resources/uploadFiles/boardDocument/");
+			at.setChangeName(changeName);
+			at.setFilePath("/resources/uploadFiles/boardDocument/" + changeName);
 			
-			
-			try { // 파일 업로드
-				upfile.transferTo(new File(savePath + at.getChangeName()));
-			} catch (IllegalStateException | IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			upfile.transferTo(new File(savePath + at.getChangeName()));
 			
 		}else { // 첨부파일이 없는 경우
 			at = null;
@@ -163,9 +159,28 @@ public class NoticeController {
 		int result = noticeService.insertReply(reply);
 
 		return (result > 0) ? "success" : "fail";
-
 	}
 	
+	// 댓글 수정하기
+	@ResponseBody
+	@RequestMapping("updateReply.no")
+	public String updateReply(Reply reply) {
+
+		int result = noticeService.updateReply(reply);
+
+		return (result > 0) ? "success" : "fail";
+	}
+
+	// 댓글 수정하기
+	@ResponseBody
+	@RequestMapping("deleteReply.no")
+	public String deleteReply(int replyNo) {
+
+		int result = noticeService.deleteReply(replyNo);
+
+		return (result > 0) ? "success" : "fail";
+	}
+
 	// 게시글 수정페이지로 이동
 	@RequestMapping("updateForm.no")
 	public String updateForm(int boardNo, Model model) {
@@ -195,14 +210,19 @@ public class NoticeController {
 			}
 			
 			// 처리된 변경이름, 넘어온 실제이름 
+			
+			String changeName = saveFile.getSaveFile(upfile, session);
 			at.setCategoryCode(b.getCategoryCode());
 			at.setOriginName(upfile.getOriginalFilename());
-			at.setChangeName(saveFile.getSaveFile(upfile, session));
-			at.setFilePath("/resources/uploadFiles/boardDocument/");
+			at.setChangeName(changeName);
+			at.setFilePath("/resources/uploadFiles/boardDocument/" + changeName);
+			at.setRefBno(b.getBoardNo());
 			
 			// 새로 넘어온 첨부파일을 서버에 업로드
-			upfile.transferTo(new File(savePath + at.getChangeName()));
+			upfile.transferTo(new File(savePath + changeName));
 			
+		} else {
+			at = null;
 		}
 		
 		/*
@@ -217,13 +237,14 @@ public class NoticeController {
 
 		if (result > 0) {
 			session.setAttribute("alertMsg", "수정성공");
-			mv.setViewName("redirect:detail.bo?bno="+b.getBoardNo());
+			mv.setViewName("redirect:detail.no?boardNo="+b.getBoardNo());
 		} else {
-			mv.addObject("errorMsg", "수정실패").setViewName("common/errorPage");
+			new File(session.getServletContext().getRealPath(at.getFilePath())).delete();
+			mv.addObject("errorMsg", "수정실패").setViewName("redirect:/");
 		}
 		return mv;
 	}
-	
+	// 게시글 삭제
 	@RequestMapping("delete.no")
 	public ModelAndView deleteBoard(int boardNo, String filePath, ModelAndView mv, HttpSession session) {
 				
