@@ -10,7 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AttendanceRecord {
+	private int attRecordNo;
 	private int userNo;
-	private Date onTime;
-	private Date offTime;
+	private String onTime;
+	private String offTime;
 }

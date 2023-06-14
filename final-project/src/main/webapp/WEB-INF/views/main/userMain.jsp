@@ -12,17 +12,16 @@
         width: 1570px;
         height: 800px;
         margin-top: 105px;
-        background-color: khaki;
+/*      background-color: khaki; */
     }
 
 
     /* 메인 css */
     .main_profile_area{
-        border: 1px solid black;
         width: 22%;
         height: 800px;
         border-radius: 20px;
-        background-color: lightblue;
+        background-color: rgb(203, 235, 216);
         float: left;
     }
 
@@ -47,18 +46,20 @@
         width: 310px;
         height: 260px;
         border-radius: 20px;
+        margin: 13px;
     }
 
     #mp_work_input button{
         background-color: #0E6251;
         width: 100px;
         border-radius: 50px;
+        float: left;
+        margin-left: 35px;
     }
     
     /* 메인 가운데 전체 div */
     .content_center{
-        background-color: gold;
-        border: 1px solid black;
+/*         background-color: gold; */
         float: left;
         width: 800px;
         height: 100%;
@@ -67,51 +68,88 @@
 
     /* 최근 온 메일 */
     .main_mail{
-        border: 1px solid black;
+        border: 2px solid black;
         border-radius: 20px;
         width: 100%;
         height: 250px;
         margin-bottom: 24px;
-        background-color: pink;
     }
 
     /* 공지사항 */
     .main_notice{
-        border: 1px solid black;
+        border: 2px solid black;
         border-radius: 20px;
         width: 100%;
         height: 250px;
         margin-bottom: 24px;
-        background-color: bisque;
     }
-
+    
+    /* 공지사항 탭 메뉴 전체 div */
+    #main_user_tab_area{
+    	width: 20%;
+		margin: 15px 0 0 20px ;
+		float:left;
+    }
+    
+    #main_user_tab_area>ul{
+		width:100%;
+		height : 30px;
+		list-style-type : none;
+	}
+	
+	#nav-tabs{
+		padding : 0;
+		display: flex;
+	}
+	
+    #main_user_tab_area>ul li{
+    	width :98px;
+    	margin-right: 5px;
+    	float : left;
+        background-color : rgb(203, 235, 216);
+/*     	border : 1px solid black; */
+    	border-radius: 10px;
+    	
+    }
+    
+    
+    #notice_new>a, #notice_liked>a{
+    	text-decoration: none;
+    	color: black;
+    	margin-left: 18px;
+    	font-size: 20px;
+    }
+    
+    #notice_new:hover, #notice_liked:hover{
+    	backgroundcolor: rgb(203, 235, 216);
+    }
+    
     /* 이름 바꿀예정 */
     .main_others{
-        border: 1px solid black;
+        border: 2px solid black;
         border-radius: 20px;
         width: 100%;
         height: 250px;
-        background-color: salmon;
     }
 
     /* 제목 */
     .main_ctn_title{
         float: left;
-        margin: 12px 0 0 25px;
-        font-size: 25px;
+		margin: 12px 0 0 25px;
+        font-size: 30px;
+        font-weight: bold;
     }
     
     /* 플러스 아이콘 */
     .main_ctn_plus{
         float: right;
-        margin: 18px 25px;
+		margin: 18px 25px;
         cursor: pointer;
     }
 
     /* 메인 왼쪽 전체 div */
     .content_right{
-        border: 1px solid black;
-        background-color: lightyellow;
+/*         background-color: lightyellow; */
         float: right;
         width: 350px;
         height: 100%;
@@ -120,29 +158,35 @@
 
     /* 일정 */
     .main_calender{
-        border: 1px solid black;
+        border: 2px solid black;
         width: 100%;
         height: 523px;
         border-radius: 20px;
-        background-color: thistle;
         margin-bottom: 26px;
     }
 
     /* 경조사 */
     .main_event{
-        border: 1px solid black;
+        border: 2px solid black;
         width: 100%;
         height: 250px;
         border-radius: 20px;
-        background-color: hotpink;
     }
     
+    /* 공지사항 테이블  */
     #mainNoticeList{
     	width: 750px;
     	margin: auto;
-    	font-size: 18px;
+    	font-size: 20px;
     }
-}</style>
+    
+    /* 이메일 테이블  */
+    #mainEmailList{
+    	width: 750px;
+    	margin: auto;
+    	font-size: 20px;
+    }
+</style>
 </head>
 <body>
 	<%@ include file="../common/menubar.jsp" %>
@@ -150,8 +194,8 @@
         <div class="main_profile_area" align="center">
             <div id="main_profile">
                 <img src="https://i.imgur.com/hczKIze.jpg" alt="">
-                <p style="font-size: 30px; margin: 0 0 0 0;">권수지</p>
-                <p>개발1팀 / 사원</p>
+                <p style="font-size: 30px; margin: 0 0 0 0;">${loginUser.userName }</p>
+                <p>${loginUser.deptCode } / ${loginUser.jobCode }</p>
                 <div>
                     <a href="#">마이페이지</a>
                     <a href="#">로그아웃</a>
@@ -183,20 +227,40 @@
                 </div>
 
                 <div id="mp_work_output">
-                    <div style="margin-bottom: 4px;">
-                        <span>출근 시간</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span>09:30</span>
+                    <div id="begin_time" style="margin-bottom: 4px;">
+                    	<div>
+                    		출근 시간 
+                    	</div>
+                    	<div>
+                    		${mainAt.onTime }
+                    	</div>
                     </div>
                     <div style="border: 1px solid black; width: 280px;"></div>
-                    <div style="margin: 6px 0 12px 0;">
-                        <span>퇴근 시간</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span>09:30</span>
+                    <div id="end_time" style="margin: 6px 0 12px 0;">
+                    	<div>
+                    		퇴근 시간 
+                    	</div>
+                    	<div>
+                    		${mainAt.offTime}
+                    	</div>
                     </div>
                 </div>
                 <div id="mp_work_input">
-                	<form action="insertGo.ar" method="post">
-	                    <button type="submit" class="btn btn-primary" style="margin-right: 20px;">출근</button>
+                	<c:choose>
+                		<c:when test=""> <!-- 출근 버튼이 찍혔을때 한번만 버튼 누를수 있게 하기 -->
+             				
+                		</c:when>
+                		<c:otherwise> <!-- 출근이 안 찍혔으면 퇴근 버튼 비활성 -->
+                			
+                		</c:otherwise>
+                	</c:choose>
+                	<form action="insertGo.ma" method="post">
+                 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+	                    <button type="submit" class="btn btn-primary">출근</button>
                     </form>
                     
-                    <form action="insertLeave.ar" method="post">
+                    <form action="insertLeave.ma" method="post">
+                    	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 	                    <button type="submit" class="btn btn-primary">퇴근</button>
                     </form>
                 </div>
@@ -217,7 +281,7 @@
                     </div>
                 </div>
                 
-                <table id="mainEmailList" border=1 align="center">
+                <table id="mainEmailList"  align="center">
                 	<tbody>
                 	
                 	</tbody>
@@ -228,6 +292,17 @@
                 <div>
                     <div class="main_ctn_title">
                         <span>공지 사항</span>
+                        
+                    </div>
+                    <div id="main_user_tab_area">
+	                    <ul id="nav-tabs">
+							<li class="nav-item" id="notice_new" data-tab="mainNoticeList">
+							    <a class="nav-link active" id="link_active" aria-current="page" href="#">new </a>
+							</li>
+							<li class="nav-item" id="notice_liked" data-tab="mainNoticeLikedList">
+							    <a class="nav-link" href="#" id="link_active">liked </a>
+							</li>
+						</ul>
                     </div>
                     <div class="main_ctn_plus">
                         <a href="list.no">
@@ -236,18 +311,8 @@
                     </div>
                 </div>
                 
-                <table id="mainNoticeList" border=1 align="center">
-<!--                 	<thead> -->
-<!--                 		<tr> -->
-<!--                 			<th>제목</th> -->
-<!--                 			<th>작성자 </th> -->
-<!--                 			<th>작성일 </th> -->
-<!--                 			<th>조회수 </th> -->
-<!--                 		</tr> -->
-<!--                 	</thead> -->
-                	
+                <table id="mainNoticeList" align="center">
                 	<tbody>
-                	
                 	</tbody>
                 </table>
             </div>
@@ -264,6 +329,11 @@
                     </div>
                 </div>
 
+				<div>
+					<div>
+						<img src="https://i.imgur.com/hczKIze.jpg" alt="">
+					</div>
+				</div>
             </div>
         </div>
 
@@ -329,16 +399,17 @@
 	   getTime();
 	   
 	   
-	   //공지사항 최신순으로 조회 
+	   //최근 온 메일 조회 
 	   $(function() {
-		  mainNoticeBoardList();
+		  
+		  mainEmailList();
 		   
 // 		  $(document).on("click","#mainNoticeList>tbody>tr",function() {
 // 			  location.href="detail.no?boardNo="+$(this).children().eq(0).text();
 // 		  })
 	   });
 	   
-	   function mainNoticeBoardList() {
+	   /* function mainNoticeBoardList() {
 		   $.ajax({
 			   url : "mainNoticeList.ma",
 			   success : function(result) {
@@ -358,20 +429,25 @@
 				   console.log("통신 실패 ");
 			   }
 		   });
-	   }
+	   } */
 	   
 	   //메일 최신순으로 조회
 	   function mainEmailList() {
 		   $.ajax({
 			   url : "mainEmailList.ma",
+			   type : "POST",
+			   beforeSend : function(xhr)
+	            {
+	                xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+	            },
 			   success : function(result) {
 				   var str = ""
 				   
 				   for(var i in result) {
 					   str += "<tr>"
-					   		+ "<td>" + result[i].emailTitle + "</td>"
-					   		+ "<td>" + result[i].sender + "</td>"
-					   		+ "<td>" + result[i].sendDate + "</td>"
+					   		+ "<td style='width:60%; '>" + result[i].emailTitle + "</td>"
+					   		+ "<td style='width:20%; text-align:right; '>" + result[i].sender + "</td>"
+					   		+ "<td style='width:20%; text-align:right;'>" + result[i].sendDate + "</td>"
 					   		+ "</tr>"
 				   }
 				   
@@ -382,6 +458,75 @@
 			   }
 		   });
 	   }
+	   
+	   /* 공지사항 탭  */
+	    $(function() {
+	    	$("#notice_new").click(function(){
+	    		var activeTab = $(this).attr("data-tab");
+ 	    		$("#notice_liked").css("background-color", "rgb(203, 235, 216)"); //모든 탭의 배경색 초기화
+	    		$(this).css("background-color", "#0E6251"); // 클릭한 탭의 배경색 변경
+	    		$.ajax({
+	 			   url : "mainNoticeList.ma",
+	 			   type : "POST",
+				   beforeSend : function(xhr)
+		            {
+		                xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+		            },
+	 			   success : function(result) {
+	 				   
+	 				   var str = "";
+	 				   
+	 				   for(var i in result) {
+	 					   str += "<tr>"
+	 					   		+ "<td style='width:60%; '>" + result[i].boardTitle + "</td>"
+	 					   		+ "<td style='width:20%; text-align:right; '>" + result[i].boardWriter + "</td>"
+	 					   		+ "<td style='width:20%; text-align:right;'>" + result[i].createDate + "</td>"
+	 					   		+ "</tr>"
+	 				   }
+	 				   
+	 				   $("#mainNoticeList tbody").html(str);
+	 			   },
+	 			   error : function() {
+	 				   console.log("통신 실패 ");
+	 			   }
+	 		   });
+	    		
+	    	})
+	    		$("#notice_new").click();
+	    });
+	   
+	   $(function() {
+		   $("#notice_liked").click(function() {
+			   var activeTab = $(this).attr("data-tab");
+	    		$("#notice_new").css("background-color", "rgb(203, 235, 216)"); //모든 탭의 배경색 초기화
+	    		$(this).css({"background-color": "#0E6251", "color":"white"});  // 클릭한 탭의 배경색 변경
+			   $.ajax({
+				   url : "mainNoticeLiked.ma",
+				   type : "POST",
+				   beforeSend : function(xhr)
+		            {
+		                xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+		            },
+				   success : function(result) {
+					   console.log(result);
+					   var str ="";
+					   
+					   for(var i in result) {
+	 					   str += "<tr>"
+	 					   		+ "<td>" + result[i].boardTitle + "</td>"
+	 					   		+ "<td>" + result[i].boardWriter + "</td>"
+	 					   		+ "<td>" + result[i].createDate + "</td>"
+	 					   		+ "</tr>"
+	 				   }
+					   
+					   $("#mainNoticeList tbody").html(str);
+				   },
+	 			   error : function() {
+	 				   console.log("통신 실패 ");
+	 			   }
+			   });
+		   });
+	   });
     </script>
 </body>
 </html>
