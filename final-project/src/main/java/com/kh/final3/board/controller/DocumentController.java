@@ -1,5 +1,6 @@
 package com.kh.final3.board.controller;
 
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,7 +26,9 @@ import com.kh.final3.common.template.Pagination;
 import com.kh.final3.common.template.SaveFile;
 import com.kh.final3.common.vo.PageInfo;
 
+
 @Controller
+@RequestMapping(value = {"/member", "/admin"})
 public class DocumentController {
 	
 	@Autowired
@@ -114,7 +117,7 @@ public class DocumentController {
 		return "board/board_document/board_DocumentEnrollForm";
 	}
 
-	//게시글 작성 메소드 
+	//寃뚯떆湲� �옉�꽦 硫붿냼�뱶 
 	@RequestMapping("insertDoc.dc")
 	public ModelAndView insertDocument(Board b,  ArrayList<MultipartFile> upfile, ModelAndView mv, HttpSession session) {
 		
@@ -124,7 +127,7 @@ public class DocumentController {
 		for(MultipartFile file : upfile) {
 			
 			if(!file.getOriginalFilename().equals("")) {
-				//BoardAttachment에 (bno, categoryCode, originName, changeName, filePath 담아주기)
+				//BoardAttachment�뿉 (bno, categoryCode, originName, changeName, filePath �떞�븘二쇨린)
 				
 				//changeName
 				String changeName = saveFile.getSaveFile(file, session);
@@ -158,7 +161,6 @@ public class DocumentController {
 			}
 			
 		}
-		System.out.println(atList); //확인용 
 		
 		b.setBoardWriter("3"); //로그인 가능 후 지우고 로그인 유저 번호로 바꾸기 
 		

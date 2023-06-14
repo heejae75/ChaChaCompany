@@ -55,64 +55,32 @@
                             <th width="70px">번호</th>
                             <th width="70px">양식명</th>
                             <th width="140px">설명</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody align="center">
-                        <c:forEach var="a" items="${list}">
+                        <c:forEach var="t" items="${list}" varStatus="status">
                         	<tr>
-                        		<td width="70px">${a.docNo}</td>
-                        		<td width="70px">${a.docType}</td>
+                        		<td width="70px">${status.count}</td>
+                        		<td width="70px">${t.docName}</td>
                         		<td></td>
-                        		<td><button class="btn btn-danger">삭제</button></td>
+                        		<td width="70px"><button class="btn btn-danger">삭제</button></td>
                         	</tr>
                         </c:forEach>
                     </tbody>
                 </table>
                 <button class="btn btn-success">문서 추가</button> 
             </div>
-            <br><br>
-            <div id="board-pagebar-area">
-                <div id="pagingArea">
-                    <ul class="pagination">
-                    	<c:choose>
-                    		<c:when test="${pi.currentPage eq 1 }">
-		                        <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-                    		</c:when>
-                    		<c:when test="${!empty status}">
-                    			<li class="page-item"><a class="page-link" href="enrollList.ap?currentPage=${pi.currentPage-1}">Previous</a></li>
-                    		</c:when>
-                    		<c:otherwise>
-                    			<li class="page-item"><a class="page-link" href="enrollList.ap?currentPage=${pi.currentPage-1}">Previous</a></li>
-                    		</c:otherwise>
-                    	</c:choose>
-                    	<c:forEach var="p" begin="${pi.startPage}" end="${pi.endPage}" step="1"> 
-                    		<c:if test="${!empty status}">
-		                        <li class="page-item"><a class="page-link" href="enrollList.ap?currentPage=${p}">${p}</a></li>
-                    		</c:if>
-                    		<c:if test="${empty status}">
-		                        <li class="page-item"><a class="page-link" href="enrollList.ap?currentPage=${p}">${p}</a></li>
-                    		</c:if>
-                    	</c:forEach>
-                    	
-                       <c:choose>
-                			<c:when test="${pi.currentPage eq pi.maxPage}">
-								<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>                		
-							</c:when>
-							<c:when test="${!empty status}">
-								<li class="page-item"><a class="page-link" href="list.ap?currentPage=${pi.currentPage+1}">Next</a></li>                		
-                    		</c:when>
-                			<c:otherwise>
-                    			<li class="page-item"><a class="page-link" href="list.ap?currentPage=${pi.currentPage+1}">Previous</a></li>
-							</c:otherwise>
-                		</c:choose>
-                        
-                        
-                    </ul>
-                </div>
-            </div>
         </div>
-        <br><br><br>
     </div>
-	
+	<script>
+		$(function(){
+			$("#board-list>tbody>tr").click(function(){
+				var appNo = $(this).children().eq(0).text();
+				
+				location.href = "enrollForm.ap?appNo="+appNo;
+			});
+		});
+	</script>
 </body>
 </html>
