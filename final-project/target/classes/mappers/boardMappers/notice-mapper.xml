@@ -32,13 +32,23 @@
 	JOIN MEMBER M ON(B.BOARD_WRITER = M.USER_NO)
 	WHERE B.STATUS = 'Y'
 	AND CATEGORY_CODE = 'B1'
-	<if test="status != null and status != '부서선택'">
-	AND M.DEPT_CODE = #{status}
-  	</if>
+	<choose>
+		<when test="status == null or status == '부서선택'">
+			AND (B.BOARD_TITLE LIKE '%'||#{keyword}||'%' OR BOARD_CONTENT LIKE '%'||#{keyword}||'%')
+		</when>
+		<when test="status != null and keyword == null">
+			AND DEPT_CODE = #{status}
+		</when>
+		<when test="status != null">
+			AND (B.BOARD_TITLE LIKE '%'||#{keyword}||'%' OR BOARD_CONTENT LIKE '%'||#{keyword}||'%')
+			AND DEPT_CODE = #{status}
+		</when>
+	</choose>
+	
   </select>
   
   <select id="selectList" resultMap="boardResultSet" parameterType="hashmap">
-	SELECT B.BOARD_NO, M.USER_NAME, D.DEPT_NAME, B.BOARD_TITLE, B.BOARD_CONTENT, B.CREATE_DATE, B.COUNT, B.IMPORTANCE_LEVEL, A.ATTACHMENT_NO
+	SELECT R.REF_UNO, B.BOARD_NO, M.USER_NAME, D.DEPT_NAME, B.BOARD_TITLE, B.BOARD_CONTENT, TO_CHAR(B.CREATE_DATE,'YYYY-MM-DD') "CREATE_DATE", B.COUNT, B.IMPORTANCE_LEVEL, A.ATTACHMENT_NO
 	FROM 
 	    (SELECT *
 	    FROM (SELECT * FROM BOARD WHERE CATEGORY_CODE = 'B1' AND IMPORTANCE_LEVEL = 'I' AND STATUS = 'Y' ORDER BY CREATE_DATE DESC)
@@ -50,13 +60,18 @@
 	JOIN MEMBER M ON( B.BOARD_WRITER = M.USER_NO)
 	LEFT JOIN DEPARTMENT D USING(DEPT_CODE)
 	LEFT JOIN BOARD_ATTACHMENT A ON(B.BOARD_NO = A.REF_BNO)
+	LEFT JOIN RECOMMEND R ON(B.BOARD_NO = R.REF_BNO)
+	WHERE B.STATUS = 'Y'
 	<choose>
 		<when test="status == null or status == '부서선택'">
-		WHERE BOARD_TITLE LIKE '%'||#{keyword}||'%'
+			AND (B.BOARD_TITLE LIKE '%'||#{keyword}||'%' OR BOARD_CONTENT LIKE '%'||#{keyword}||'%')
+		</when>
+		<when test="status != null and keyword == null">
+			AND DEPT_CODE = #{status}
 		</when>
 		<when test="status != null">
-		WHERE DEPT_CODE = #{status}
-		AND BOARD_TITLE LIKE '%'||#{keyword}||'%'
+			AND (B.BOARD_TITLE LIKE '%'||#{keyword}||'%' OR BOARD_CONTENT LIKE '%'||#{keyword}||'%')
+			AND DEPT_CODE = #{status}
 		</when>
 	</choose>
   </select>
@@ -64,7 +79,7 @@
   <resultMap type="board" id="boardResultSet">
   	<result column="BOARD_NO" property="boardNo"/>
   	<result column="CATEGORY_CODE" property="categoryCode"/>
-  	<result column="USER_NAME" property="boardWriter"/>
+  	<result column="BOARD_WRITER" property="boardWriter"/>
   	<result column="BOARD_TITLE" property="boardTitle"/>
   	<result column="BOARD_CONTENT" property="boardContent"/>
   	<result column="CREATE_DATE" property="createDate"/>
@@ -73,6 +88,7 @@
   	<result column="IMPORTANCE_LEVEL" property="importanceLevel"/>
   	<result column="DEPT_NAME" property="deptName"/>
   	<result column="ATTACHMENT_NO" property="attachmentNo"/>
+  	<result column="REF_UNO" property="refUno"/>
   </resultMap>
   
   <resultMap type="attachment" id="boardAttachmentResultSet">
@@ -91,7 +107,7 @@
   </update>
   
   <select id="selectNotice" resultMap = "boardResultSet">
-	SELECT B.BOARD_NO, M.USER_NAME, B.CATEGORY_CODE, B.BOARD_TITLE, B.BOARD_CONTENT, B.CREATE_DATE, IMPORTANCE_LEVEL, DEPT_NAME
+	SELECT B.BOARD_NO, M.USER_NAME, B.BOARD_WRITER, B.CATEGORY_CODE, B.BOARD_TITLE, B.BOARD_CONTENT, TO_CHAR(B.CREATE_DATE,'YYYY-MM-DD') "CREATE_DATE", IMPORTANCE_LEVEL, DEPT_NAME
 	FROM BOARD B 
 	JOIN MEMBER M ON(USER_NO = BOARD_WRITER)
 	JOIN DEPARTMENT USING(DEPT_CODE)

@@ -15,8 +15,8 @@ import com.kh.final3.common.vo.PageInfo;
 @Repository
 public class NoticeDao {
 	// 게시글 갯수
-	public int selectListCount(SqlSessionTemplate sqlSession, String status) {
-		return sqlSession.selectOne("noticeMapper.selectListCount", status);
+	public int selectListCount(SqlSessionTemplate sqlSession, HashMap<String, String> map) {
+		return sqlSession.selectOne("noticeMapper.selectListCount", map);
 	}
 	// 게시글리스트
 	public ArrayList<Board> selectList(SqlSessionTemplate sqlSession, PageInfo pi, HashMap<String, String> map) {
