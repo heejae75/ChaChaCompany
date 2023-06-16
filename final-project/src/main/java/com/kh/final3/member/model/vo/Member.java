@@ -19,7 +19,7 @@ public class Member {
 	private String phone;//	PHONE	VARCHAR2(15 BYTE)
 	private String email;//	EMAIL	VARCHAR2(50 BYTE)
 	private String address;//	ADDRESS	VARCHAR2(300 BYTE)
-	private Date birth;//	BIRTH	DATE
+	private String birth;//	BIRTH	DATE
 	private String deptCode;//	DEPT_CODE	VARCHAR2(4 BYTE)
 	private String jobCode;//	JOB_CODE	VARCHAR2(4 BYTE)
 	private Date empolymentDate;//	EMPOLYMENT_DATE	DATE
@@ -27,4 +27,7 @@ public class Member {
 	private String auth;//	AUTH	VARCHAR2(50 BYTE)
 	private int enabled;//	ENABLED	NUMBER(1,0)
 	private String status;//	STATUS	VARCHAR2(1 BYTE)
+	
+	private String deptName;
+	private String jobName;
 }

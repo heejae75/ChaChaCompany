@@ -54,11 +54,11 @@
 
 <script>
 	function memberLogin(){
-		location.href = "member/mainPage";
+		location.href = "member/mainPage.me";
 	}
 	
 	function adminLogin(){
-		location.href = "admin/mainPage";
+		location.href = "admin/mainPage.me";
 	}
 	
 </script>    
