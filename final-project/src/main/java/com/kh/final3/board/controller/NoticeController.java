@@ -44,15 +44,16 @@ public class NoticeController {
 	public String selectList(@RequestParam(value="currentPage", defaultValue="1") int currentPage, String status, String keyword, Model model) {
 		
 		// 게시글 목록 조회
+		HashMap<String, String> map = new HashMap<>();
+		map.put("keyword", keyword);
+		map.put("status", status);
 		
-		int listCount = noticeService.selectListCount(status);
+		int listCount = noticeService.selectListCount(map);
 		int pageLimit = 5;
 		int boardLimit = 10;
 		
 		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
-		HashMap<String, String> map = new HashMap<>();
-		map.put("keyword", keyword);
-		map.put("status", status);
+		
 		
 		ArrayList<Board> list = noticeService.selectList(pi, map);
 

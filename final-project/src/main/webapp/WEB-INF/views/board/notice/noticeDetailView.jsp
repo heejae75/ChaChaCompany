@@ -5,29 +5,32 @@
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
-    <style>
-    .content{
+  <style>
+	.content{
         width: 1570px;
-        background-color: khaki;
+		margin-top:-105px;
     }
-        /* navi */
-  	#board-tap-area{
-  		width: 100%;	
-  		margin:auto;
-  	}
-  
-  
-	#board-tap-area>ul{
-		padding-top : 50px;
-		height : 100px;
-		list-style-type : none;
+	
+   /* 이전으로버튼 */
+   #boardList-btn{
+   		margin-right: 150px;
+   		text-align: right;
+   }
+   #boardList-btn > button{
+   		background-color: #0E6251;
+   		color: white;
+   }
+   /*navibar*/
+	#board-tap-area{
+		width: 80%;
+		margin: auto;
 	}
 	
-	#board-tap-area>h1{
-		padding-top : 50px;
-		width : 10%;
-		float : left;
-		
+	#board-tap-area>ul{
+		width:100%;
+		height : 42px;
+		list-style-type : none;
+		margin-bottom: 30px;
 	}
 	
 	#nav-tabs{
@@ -41,63 +44,81 @@
     	float : left;
     }
     
-    #board-tap-area>ul li a{
-    	text-align: center; 	
+    #board-tap-area a{
+    	width: 100%;
+    	height : 100%;
+    	display: inline-block;
+    	text-align: center;
+    	line-height: 40px;
+    	background-color: lightgrey;
+    	text-decoration: none;
+    	color: black;
     }
     
-    li:hover{
+    #board-tap-area>ul li:not(.active):hover{
     	border-top: 1px solid #dee2e6;
 		border-left: 1px solid #dee2e6;
 		border-right: 1px solid #dee2e6;
 		border-top-left-radius:0.25rem;
 		border-top-right-radius:0.25rem; 
     }
-	
-	#link_active{
-		border-top: 1px solid #dee2e6;
-		border-left: 1px solid #dee2e6;
-		border-right: 1px solid #dee2e6;
-		border-bottom: none;
-		border-top-left-radius:0.25rem;
-		border-top-right-radius:0.25rem;
-	}  
-	
-	.table{
-		width : 80%;
-		margin : auto;
-	}
-	
+	 #board-tap-area .active a{
+	 	border-botton: none;
+	 	background-color: #0E6251;
+	 	color: white;
+	 }
+	 
+    /* 게시글영역 */
+    #board-detail-area{
+        width: 80%;
+        margin: auto;
+        margin-top : 10px;
+    }
+    #board-detail-area p{
+    	padding: 10px 30px;
+    }
+    /* 게시글테이블 */
+    #board-detail th{
+        text-align:center;
+    }
+    #reply-input:hover{
+    	cursor: pointer;
+    }
+
+    
+   
     </style>
 </head>
 <body id="body-pd">
         
 <%@ include file="../../common/menubar.jsp" %>
 ​
-    <div class="content">
-    	<div id="board-tap-area">
-                <ul id="nav-tabs">
-				  	<li class="nav-item">
-				    	<a class="nav-link active" id="link_active" aria-current="page" href="list.no">공지사항</a>
-				 	</li>
-				  	<li class="nav-item">
-				    	<a class="nav-link" href="list.dc">자료실</a>
-				  	</li>	
-				  	<li class="nav-item">
-				    	<a class="nav-link" href="list.re">대여</a>
-				  	</li>
-				  	<li class="nav-item">
-				    	<a class="nav-link">커뮤니티</a>
-				  	</li>
+ <div class="content">
+    
+         <div id="board-tap-area">
+                <ul id="nav-tabs"  class="nav-tabs nav-pills">
+					<li role="presentation" class="active">
+						<a href="list.no">공지사항</a>
+					</li>
+					<li role="presentation">
+					 	<a href="list.dc">자료실</a>
+					</li>
+					<li role="presentation">
+						<a href="list.re">대여</a>
+					</li>
+					<li role="presentation">
+						<a href="#">커뮤니티</a>
+					</li>
 				</ul>
-		</div>
-        <br><br>
-        
-	        <div class="table">
-	            <a class="btn btn-secondary" style="float:right;" href="list.no">목록으로</a>
-	            <br><br>
-	​
-	            <table id="contentArea" align="center" class="table">
-	                <tr>
+            </div>
+            <br><br>
+            <div id="boardList-btn">
+		         <button class="btn btn-sm" onclick="location.href='list.no'">목록으로</button>
+		     </div>
+           
+            <div id="board-detail-area">
+                <table id="board-detail" class="table" align="center">
+	                <tr >
 	                    <th width="100">제목</th>
 	                    <td colspan="2">${b.boardTitle }</td>
 	                    <td align="right"><button id="bookmarkButton"><span id="bookmarkIcon"></span></button></td>
@@ -119,35 +140,40 @@
 	                    <td colspan="3"></td>
 	                </tr>
 	                <tr>
-	                    <td colspan="4"><p style="height:150px;">${b.boardContent }</p></td>
+	                    <td colspan="4"><p style="height:300px;">${b.boardContent }</p></td>
 	                </tr>
 	            </table>
-	​		</div>
-
-			<div class="table">
-	            <table id="replyArea" class="table" align="center">
+            
+            <br><br>
+            <div id="reply-detail-area">
+                <table id="replyArea" class="table" align="center">
 	                <thead>
 	                    <tr>
-		                   <th colspan="2">
+		                   <th colspan="4">
 		                       <textarea class="form-control" name="replyContent" id="reply-input" cols="55" rows="2" style="resize:none; width:100%;"></textarea>
 		                   </th>
 		                   <th style="vertical-align:middle"><button class="btn btn-secondary" id="reply-btn" onclick="insertReply();">등록하기</button></th>
 	                    </tr>
 	                    <tr>
-	                        <td colspan="3">댓글(<span id="rcount"></span>)</td>
+	                        <td colspan="5">댓글(<span id="rcount"></span>)</td>
 	                    </tr>
 	                </thead>
 	                <tbody>
 	                    <!-- 댓글출력 -->
 	                </tbody>
 	            </table>
-	        </div>
-	        
-	         <div align="center">
-                <!-- 수정하기, 삭제하기 버튼은 이 글이 본인이 작성한 글일 경우에만 보여져야 함 -->
-         		<a class="btn btn-primary" onclick="formSubmit(1);">수정하기</a>
-	            <a class="btn btn-danger" onclick="formSubmit(2);">삭제하기</a>
             </div>
+            <div align="center">
+                <c:if test="${loginUser.userNo eq b.boardWriter }">
+                    <a class="btn btn-default" onclick="formSubmit(1);">수정하기</a>
+                   <a class="btn btn-default" onclick="formSubmit(2);">삭제하기</a>
+               </c:if>
+           </div>
+           <br><br><br>
+        </div>
+        
+    </div>
+            
             <br><br>
             
             <script>
@@ -203,22 +229,15 @@
 				      
 				    </div>
 				    <div class="modal-footer">
-				      <button type="button" class="btn btn-default" data-dismiss="modal" onclick="updateReply()">수정</button>
-				      <button type="button" class="btn btn-default" data-dismiss="modal" onclick="deleteReply()">삭제</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal" onclick="updateReply()">수정</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal" onclick="deleteReply()">삭제</button>
 				    </div>
-			    
 			    
 			  </div>
 		</div>
 	</div>
   <!-- 댓글 수정/삭제 모달 끝 -->
            
-       
- </div>
-    
- 
-
-   
      <script>
      // 댓글 입력창 빈칸일때 알람
  	$("#reply-btn").click(function(){
@@ -252,20 +271,18 @@
 	    					+ "<th>" + list[i].deptName + " " + list[i].userName + "</th>"
 	    					+ "<td>" + list[i].replyContent + "</td>"
 	    					+ "<td>" + list[i].createDate + "</td>";
-	    					
-	    				 if (${loginUser.userNo} === list[i].replyWriter) {
+	    				 if (${loginUser.userNo} == list[i].replyWriter) {
 	    		            str += 
-	    		            	"<td><button type='button' class='btn btn-xs btn-success' data-toggle='modal' data-target='#updateReply-modal'>댓글 수정</button></td>"
+	    		            	"<td><button type='button' class='btn btn-xs btn-success' data-toggle='modal' data-target='#updateReply-modal'>댓글 수정</button></td></tr>"
+	    				}else{
+	    					str += "<td></td></tr>"
 	    				}
- 
-	    		          str += "<td><button type='button' id='update-modal-btn' class='btn btn-xs btn-success' data-toggle='modal' data-target='#updateReply-modal'>댓글 수정</button></td>"
-	    		        	 + "</tr>";
+	    		        
 	    			}
 	    			
 	    			
 	    			$("#replyArea tbody").html(str);
 	    			$("#rcount").text(list.length);
-	    		
 	    		},
 	    		error : function(){
 	    			console.log("통신오류");
@@ -281,7 +298,7 @@
     	$.ajax({
     		url : "insertReply.no",
     		data : {
-    			replyWriter : "1",
+    			replyWriter : "${loginUser.userNo}",
     			replyContent : $("#reply-input").val(),
     			refBno : "${b.boardNo}"
     		},
@@ -369,13 +386,12 @@
     		url : "bookmark.no",
     		data : {
     			boardNo : "${b.boardNo}",
-    			userNo : /* "${loginUser.userNo}" */ "1"
+    			userNo :  "${loginUser.userNo}"
     		},
     		beforeSend : function(xhr){
                 xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
             },
     		success : function(result){
-    			console.log("통신성공");
     			
     			if(result == "Y"){ // 즐겨찾기 한 글이라면 빨간 아이콘
     				var icon = $('<i>').addClass('fa-solid fa-bookmark').css('color', '#e91616');
@@ -399,14 +415,14 @@
     		url : "checkBookmark.no",
     		data : {
     			boardNo : "${b.boardNo}",
-    			userNo : /* "${loginUser.userNo}" */ "1"
+    			userNo : "${loginUser.userNo}"
     		},
     		beforeSend : function(xhr){
                 xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
             },
     		success : function(result){
     			if(result == 'I'){ // 즐겨찾기 추가한 경우
-    				window.alert("즐겨찾기에 추가되었습니다.");
+    				window.alert("즐겨찾기에 추가되었습니다. \n메인페이지에서 확인하세요.");
     				$('#bookmarkIcon').remove();
     			}else if(result == "D"){ // 즐겨찾기 해제한 경우
     				window.alert("즐겨찾기에서 해체되었습니다.");

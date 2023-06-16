@@ -10,7 +10,7 @@ import com.kh.final3.common.vo.PageInfo;
 
 public interface NoticeService {
 	// 총 게시글 개수
-	int selectListCount(String status);
+	int selectListCount(HashMap<String, String> map);
 	// 게시글 정보 조회
 	ArrayList<Board> selectList(PageInfo pi, HashMap<String, String> map);
 	// 조회수 증가

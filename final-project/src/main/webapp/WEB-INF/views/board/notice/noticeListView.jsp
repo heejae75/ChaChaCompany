@@ -7,58 +7,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>공지사항</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<!--  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> --> 
     
   <style>
 	.content{
         width: 1570px;
-        background-color: khaki;
     }
-	/*navibar*/
-	#board-tap-area{
-		width: 80%;
-		margin: auto;
-	}
-	
-	#board-tap-area>ul{
-		width:100%;
-		height : 42px;
-		list-style-type : none;
-	}
-	
-	#nav-tabs{
-		padding : 0;
-		display: flex;
-	}
-	
-    #board-tap-area>ul li{
-    	width :98px;
-    	margin-right: 5px;
-    	float : left;
-    }
-    
-    #board-tap-area>ul li a{
-    	text-align: center; 	
-    }
-    
-    li:hover{
-    	border-top: 1px solid #dee2e6;
-		border-left: 1px solid #dee2e6;
-		border-right: 1px solid #dee2e6;
-		border-top-left-radius:0.25rem;
-		border-top-right-radius:0.25rem; 
-    }
-	
-	#link_active{
-		border-top: 1px solid #dee2e6;
-		border-left: 1px solid #dee2e6;
-		border-right: 1px solid #dee2e6; 
-		border-bottom: none;
-		border-top-left-radius:0.25rem;
-		border-top-right-radius:0.25rem;
-	}
-	
 	/*검색영역*/
     #board-search-area>form{
         width: 80%;
@@ -82,21 +37,71 @@
         width: 30%;
         float: left;
     }
-   
-   /* 버튼영역 */
-    #board-btn-area{
-        width: 80%;
-        margin: auto;
-        margin-bottom: 20px;
+   /* 공지사항 작성버튼 */
+   #boardEnroll-btn{
+   		margin-right: 200px;
+   		text-align: right;
+   }
+   #boardEnroll-btn > button{
+   		background-color: #0E6251;
+   		color: white;
+   }
+   /*navibar*/
+	#board-tap-area{
+		width: 80%;
+		margin: auto;
+	}
+	
+	#board-tap-area>ul{
+		width:100%;
+		height : 42px;
+		list-style-type : none;
+		margin-bottom: 30px;
+	}
+	
+	#nav-tabs{
+		padding : 0;
+		display: flex;
+	}
+	
+    #board-tap-area>ul li{
+    	width :98px;
+    	margin-right: 5px;
+    	float : left;
     }
     
+    #board-tap-area a{
+    	width: 100%;
+    	height : 100%;
+    	display: inline-block;
+    	text-align: center;
+    	line-height: 40px;
+    	background-color: lightgrey;
+    	text-decoration: none;
+    	color: black;
+    }
+    
+    #board-tap-area>ul li:not(.active):hover{
+    	border-top: 1px solid #dee2e6;
+		border-left: 1px solid #dee2e6;
+		border-right: 1px solid #dee2e6;
+		border-top-left-radius:0.25rem;
+		border-top-right-radius:0.25rem; 
+    }
+	 #board-tap-area .active a{
+	 	border-botton: none;
+	 	background-color: #0E6251;
+	 	color: white;
+	 }
+	 
     /* 게시글 목록영역 */
     #board-list-area{
         width: 80%;
         margin: auto;
+        margin-top : 20px;
     }
-    
-    #board-list{
+    /* 게시글목록 테이블 */
+    #board-list th{
         text-align:center;
     }
 
@@ -104,29 +109,30 @@
         width:fit-content; 
         margin:auto;
     }
-
+   
     </style>
 </head>
 <body id="body-pd">
 <%@ include file="../../common/menubar.jsp" %>
  
     <div class="content">
+    
          <div id="board-tap-area">
-             <ul id="nav-tabs">
-                 <li class="nav-item">
-                   	<a class="nav-link active" aria-current="page" href="list.no">공지사항</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="list.dc">자료실</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="list.re">대여</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="#">자유게시판</a>
-                  </li>
-                </ul>
-           </div>
+                <ul id="nav-tabs"  class="nav-tabs nav-pills">
+					<li role="presentation" class="active">
+						<a href="list.no">공지사항</a>
+					</li>
+					<li role="presentation">
+					 	<a href="list.dc">자료실</a>
+					</li>
+					<li role="presentation">
+						<a href="list.re">대여</a>
+					</li>
+					<li role="presentation">
+						<a href="#">커뮤니티</a>
+					</li>
+				</ul>
+            </div>
 
                 <form action="list.no" id="board-search-area" method="get">
                     <div id="option-box" align="right" >
@@ -148,7 +154,11 @@
                         <input type="text" name="keyword" class="form-control" id="search-input" value="${keyword }"> 
                         <button type="submit" class="btn btn-secondary" style="background-color: #0E6251; margin-left: 2px;"><i id="search-icon" class="fa-solid fa-magnifying-glass fa-lg"></i></button><!-- icon 사이즈 변경 fa-2xs /xs / sm / lg/ xl/ 2xl -->
                     </div>
-                </form>
+                  </form>
+                    <br><br>
+                    <div id="boardEnroll-btn">
+		           		<button class="btn btn-sm" onclick="location.href='enroll.no'">공지사항 작성</button>
+		            </div>
            
             
             <!-- 검색어 select값 유지 -->
@@ -167,12 +177,9 @@
 				</script>
 			</c:if>
             
-            <!-- 관리자에게만 보이도록 조건 걸기  -->
-            <div id="board-btn-area">
-                <button class="btn btn-success" onclick="location.href='enroll.no'">공지사항 작성</button>               
-            </div>
+           
             <div id="board-list-area">
-                <table id="board-list" class="table table-hover" align="center">
+                <table id="board-list" class="table table-hover">
                     <thead>
                         <tr>
                             <th>No.</th>
@@ -193,8 +200,7 @@
 	                            	</c:if>
 	                            ${n.boardTitle }
 	                            	<c:if test="${!empty n.attachmentNo }">
-	                            		<i class="fa-solid fa-download fa-lg " style="color : #0c0d0d"></i>
-	                            		<i class="fa-sharp fa-regular fa-paperclip" style="color : #0c0d0d"></i>
+	                            	<i class="fa-solid fa-paperclip" style="color: grey;"></i>
 	                            	</c:if>
 	                            </td>      
 	                            <td>${n.deptName }</td>
@@ -202,6 +208,9 @@
 	                            <td>${n.createDate }</td>
 	                            <td>
 		                            <!-- 즐겨찾기 여부 -->
+		                            <c:if test="${loginUser.userNo eq n.refUno }">
+		                            	<i class="fa-solid fa-bookmark" style="color: #e82c2c;"></i>
+		                            </c:if>
 	                           </td>      
 	                        </tr>
                        </c:forEach>
@@ -214,10 +223,11 @@
             <!-- 검색어 조건으로 페이징처리 -->
             <div id="board-pagebar-area">
                 <div id="pagingArea">
+               		
                     <ul class="pagination">
 	                    <c:choose>
 							<c:when test="${empty status }">
-							 	<li id="previous-btn" class="page-item"><a class="page-link" href="list.no?currentPage=${pi.currentPage - 1 }">Previous</a></li>
+							 	<li id="previous-btn" class="page-item disabled"><a class="page-link" href="list.no?currentPage=${pi.currentPage - 1 }">Previous</a></li>
 							</c:when>
 							<c:otherwise>
 								<li id="previous-btn" class="page-item"><a class="page-link" href="list.no?currentPage=${pi.currentPage - 1 }&status=${status }&keyword=${keyword}">Previous</a></li>
@@ -227,10 +237,20 @@
 						<c:forEach var="p" begin="${pi.startPage }" end="${pi.endPage }" step="1">
 							<c:choose>
 								<c:when test="${empty status }">
+									<c:if test="${p eq pi.currentPage }"> <!-- 내가 보고있는 페이지의 버튼은 disabled처리 -->
+										<li class="page-item disabled"><a class="page-link" href="list.no?currentPage=${p }">${p }</a></li>
+									</c:if>
+									<c:if test="${p != pi.currentPage }">
 									<li class="page-item"><a class="page-link" href="list.no?currentPage=${p }">${p }</a></li>
+									</c:if>
 								</c:when>
 								<c:otherwise>
-									<li class="page-item"><a class="page-link" href="list.no?currentPage=${p }&status=${status }&keyword=${keyword}">${p }</a></li>
+									<c:if test="${p eq pi.currentPage }">
+										<li class="page-item disabled"><a class="page-link" href="list.no?currentPage=${p }&status=${status }&keyword=${keyword}">${p }</a></li>
+									</c:if>
+									<c:if test="${p != pi.currentPage }">
+										<li class="page-item"><a class="page-link" href="list.no?currentPage=${p }&status=${status }&keyword=${keyword}">${p }</a></li>
+									</c:if>
 								</c:otherwise>
 							</c:choose>
 						</c:forEach>
@@ -245,14 +265,19 @@
 						</c:choose>
 						
                     </ul>
+                     
+            
                 </div>
             </div>
             
-            <!-- 현재페이지에 따라 이전/다음버튼 disabled처리 -->
+            
+            
+            <!-- 현재페이지에 따라 이전/다음버튼 disabled처리 (클래스부여)-->
             <c:if test="${pi.currentPage eq 1 }">
             	<script>
             		$(function(){
             			$("#previous-btn>a").removeAttr('href');
+            			$("#previous-btn").addClass("disabled");
             		});
             	</script>
             </c:if>
@@ -261,6 +286,7 @@
             	<script>
             		$(function(){
             			$("#next-btn>a").removeAttr('href');
+            			$("#next-btn").addClass("disabled");
             		});
             	</script>
             </c:if>
