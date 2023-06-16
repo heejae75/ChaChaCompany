@@ -124,6 +124,20 @@
     	backgroundcolor: rgb(203, 235, 216);
     }
     
+    #others_team>a{
+    	text-decoration: none;
+    	color: black;
+    	margin-left: 15px;
+    	font-size: 20px;
+    }
+    
+    #others_all>a{
+    	text-decoration: none;
+    	color: black;
+    	margin-left: 26px;
+    	font-size: 20px;
+    }
+    
     /* 이름 바꿀예정 */
     .main_others{
         border: 2px solid black;
@@ -185,6 +199,18 @@
     	width: 750px;
     	margin: auto;
     	font-size: 20px;
+    }
+    
+    #mainOthersList{
+/*      	border: 1px solid black;  */
+    	width: 750px;
+    	height: 80px;
+    	margin: auto;
+    	text-align:center;
+    }
+    
+    #others_profile_table{
+    	margin: auto;
     }
 </style>
 </head>
@@ -322,6 +348,16 @@
                     <div class="main_ctn_title">
                         <span>임직원 조회 </span>
                     </div>
+                    <div id="main_user_tab_area">
+	                    <ul id="nav-tabs">
+							<li class="nav-item" id="others_team" data-tab="mainOthersTemaList">
+							    <a class="nav-link active" id="link_active" aria-current="page" href="#">Team </a>
+							</li>
+							<li class="nav-item" id="others_all" data-tab="mainOthersAllList">
+							    <a class="nav-link" href="#" id="link_active">All </a>
+							</li>
+						</ul>
+                    </div>
                     <div class="main_ctn_plus">
                         <a href="#">
                             <i class="fa-solid fa-plus fa-2xl" style="color: #0e6251;"></i>
@@ -329,11 +365,11 @@
                     </div>
                 </div>
 
-				<div>
-					<div>
-						<img src="https://i.imgur.com/hczKIze.jpg" alt="">
-					</div>
-				</div>
+				<table id="mainOthersList"  align="center">
+					<tbody>
+						
+					</tbody>
+				</table>
             </div>
         </div>
 
@@ -361,6 +397,28 @@
             </div>
         </div>
     </div>
+    
+    
+    <div class="modal fade" id="others_profile" tabindex="-1"  role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel">정보</h4>
+				</div>
+				<div class="modal-body" id="other_profile_body">
+					<table border=1 id="others_profile_table" class="table">
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">닫기 </button>
+<!-- 					<button type="button" class="btn btn-primary">변경 </button> -->
+				</div>
+			</div>
+		</div>
+	</div>
     
     <script>
 	  	//자바스크립트 실시간 시계
@@ -403,10 +461,12 @@
 	   $(function() {
 		  
 		  mainEmailList();
-		   
-// 		  $(document).on("click","#mainNoticeList>tbody>tr",function() {
-// 			  location.href="detail.no?boardNo="+$(this).children().eq(0).text();
-// 		  })
+		  
+		  $("#mainNoticeList>tbody").on("click","tr", function() {
+			  //console.log($(this).children().eq(0).children().val());
+			  var boardNo = $(this).children().eq(0).children().val();
+			  location.href="detail.no?boardNo="+boardNo;
+		  })
 	   });
 	   
 	   /* function mainNoticeBoardList() {
@@ -460,6 +520,7 @@
 	   }
 	   
 	   /* 공지사항 탭  */
+	   /* 공지사항 최신 순 탭  */
 	    $(function() {
 	    	$("#notice_new").click(function(){
 	    		var activeTab = $(this).attr("data-tab");
@@ -478,6 +539,7 @@
 	 				   
 	 				   for(var i in result) {
 	 					   str += "<tr>"
+	 					   		+ "<td><input type = 'hidden' value='"+result[i].boardNo+"'></td>"
 	 					   		+ "<td style='width:60%; '>" + result[i].boardTitle + "</td>"
 	 					   		+ "<td style='width:20%; text-align:right; '>" + result[i].boardWriter + "</td>"
 	 					   		+ "<td style='width:20%; text-align:right;'>" + result[i].createDate + "</td>"
@@ -495,6 +557,7 @@
 	    		$("#notice_new").click();
 	    });
 	   
+	   /* 공지사항 즐겨찾기한 탭  */
 	   $(function() {
 		   $("#notice_liked").click(function() {
 			   var activeTab = $(this).attr("data-tab");
@@ -513,9 +576,10 @@
 					   
 					   for(var i in result) {
 	 					   str += "<tr>"
-	 					   		+ "<td>" + result[i].boardTitle + "</td>"
-	 					   		+ "<td>" + result[i].boardWriter + "</td>"
-	 					   		+ "<td>" + result[i].createDate + "</td>"
+	 					   		+ "<td><input type = 'hidden' value='"+result[i].boardNo+"'></td>"
+	 					   		+ "<td style='width:60%; '>" + result[i].boardTitle + "</td>"
+	 					   		+ "<td style='width:20%; text-align:right; '>" + result[i].boardWriter + "</td>"
+	 					   		+ "<td style='width:20%; text-align:right;'>" + result[i].createDate + "</td>"
 	 					   		+ "</tr>"
 	 				   }
 					   
@@ -526,6 +590,150 @@
 	 			   }
 			   });
 		   });
+	   });
+	   
+	   //임직원 조회
+	   //팀원 조회 
+	   $(function() {
+		   $("#others_team").click(function() {
+			   var activeTab = $(this).attr("data-tab");
+			   $("#others_all").css("background-color", "rgb(203, 235, 216)");
+			   $(this).css({"background-color": "#0E6251", "color":"white"});
+			   $.ajax({
+				   url : "mainOthersTeamList.ma",
+				   type : "POST",
+				   beforeSend : function(xhr)
+		            {
+		                xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+		            },
+				   success : function(result){
+					    var str = "";
+				        var rowCount = 0;
+				        
+				        for (var i = 0; i < result.length; i++) {
+				          if (i % 5 === 0) { 
+				            str += "<tr id='mainTeamTr" + rowCount + "'>";
+				            rowCount++;
+				          }
+				          
+				          str += "<td>"
+				          		+ "<p data-target='#others_profile' data-toggle='modal'>" 
+				          		+ result[i].userName 
+				          		+ " " + result[i].jobName 
+				          		+ "<input type = 'hidden' value='"+result[i].deptName+"'>"
+				          		+ "<input type = 'hidden' value='"+result[i].phone+"'>"
+				          		+ "<input type = 'hidden' value='"+result[i].email+"'>"
+				          		+ "<input type = 'hidden' value='"+result[i].empolymentDate+"'>";
+				          		+ "</p></td>"
+				          		
+				          
+				          if (i % 5 === 4 || i === result.length - 1) {
+				            str += "</tr>";
+				          }
+				        }
+					   $("#mainOthersList tbody").html(str);
+					   
+					   
+					   $("p[data-target='#others_profile']").click(function(){
+							//console.log($(this).closest("td").index());
+							var index = $(this).closest("td").index(); //
+							var userData = result[index];
+							
+							var userName = userData.userName;
+							var jobName = userData.jobName;
+							var deptName = userData.deptName;
+							var phone = userData.phone;
+							var email = userData.email;
+							var empolymentDate = userData.empolymentDate;
+							
+							$("#others_profile_table tbody").html(
+								"<tr><td>이름</td><td>" + userName + "</td></tr>" +
+								"<tr><td>직급</td><td>" + jobName + "</td></tr>" +
+								"<tr><td>부서</td><td>" + deptName + "</td></tr>" +
+								"<tr><td>전화번호</td><td>" + phone + "</td></tr>" +
+								"<tr><td>이메일</td><td>" + email + "</td></tr>"
+								+"<tr><td>입사일 </td><td>" + empolymentDate + "</td></tr>" 
+							);
+					   })
+				   },
+				   error : function() {
+					   console.log("통신 실패 ");
+				   }
+			   });
+		   });
+		   
+		   $("#others_team").click();
+	   });
+	   
+	   //전직원 조회 
+	   $(function() {
+		   $("#others_all").click(function() {
+			   var activeTab = $(this).attr("data-tab");
+			   $("#others_team").css("background-color", "rgb(203, 235, 216)");
+			   $(this).css({"background-color": "#0E6251", "color":"white"});
+			   $.ajax({
+				   url : "mainOthersAllList.ma",
+				   type : "POST",
+				   beforeSend : function(xhr)
+		            {
+		                xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+		            },
+				   success : function(result){
+					   var str = "";
+				        var rowCount = 0;
+				        
+				        for (var i = 0; i < result.length; i++) {
+				          if (i % 5 === 0) {
+				            str += "<tr id='mainTeamTr" + rowCount + "'>";
+				            rowCount++;
+				          }
+				          
+				          str += "<td>"
+				          		+ "<p data-target='#others_profile' data-toggle='modal'>["
+				          		+ result[i].deptName +"]<br>"
+				          		+ result[i].userName +" "
+				          		+ result[i].jobName 
+				          		+ "<input type = 'hidden' value='"+result[i].phone+"'>"
+				          		+ "<input type = 'hidden' value='"+result[i].email+"'>"
+				          		+ "<input type = 'hidden' value='"+result[i].empolymentDate+"'>"
+				          		+ "</p></td>";
+				          
+				          if (i % 5 === 4 || i === result.length - 1) {
+				            str += "</tr>";
+				          }
+				        }
+					   $("#mainOthersList tbody").html(str);
+					   
+					   
+					   $("p[data-target='#others_profile']").click(function(){
+							console.log($(this).closest("td").index());
+							var index = $(this).closest("td").index();
+							var userData = result[index];
+							
+							var userName = userData.userName;
+							var jobName = userData.jobName;
+							var deptName = userData.deptName;
+							var phone = userData.phone;
+							var email = userData.email;
+							var empolymentDate = userData.empolymentDate;
+							
+							$("#others_profile_table tbody").html(
+								"<tr><td>이름</td><td>" + userName + "</td></tr>" +
+								"<tr><td>직급</td><td>" + jobName + "</td></tr>" +
+								"<tr><td>부서</td><td>" + deptName + "</td></tr>" +
+								"<tr><td>전화번호</td><td>" + phone + "</td></tr>" +
+								"<tr><td>이메일</td><td>" + email + "</td></tr>" 
+								+"<tr><td>입사일 </td><td>" + empolymentDate + "</td></tr>" 
+							);
+					   })
+					   
+				   },
+				   error : function() {
+					   console.log("통신 실패 ");
+				   }
+			   });
+		   });
+		   
 	   });
     </script>
 </body>

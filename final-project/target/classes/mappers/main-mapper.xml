@@ -24,6 +24,26 @@
 		<result column="STATUS" property="status"/>
 	</resultMap>
 	
+	<resultMap type="member" id="mainMemberResultset">
+		<result column="USER_NO" property="userNo"/>
+	 	<result column="USER_ID" property="userId"/>
+	 	<result column="USER_NAME" property="userName"/>
+	 	<result column="USER_PWD" property="userPwd"/>
+	 	<result column="PHONE" property="phone"/>
+	 	<result column="EMAIL" property="email"/>
+	 	<result column="ADDRESS" property="address"/>
+	 	<result column="BIRTH" property="birth"/>
+	 	<result column="DEPT_CODE" property="deptCode"/>
+	 	<result column="JOB_CODE" property="jobCode"/>
+	 	<result column="EMPOLYMENT_DATE" property="empolymentDate"/>
+	 	<result column="DEPATURE_DATE" property="depatureDate"/>
+	 	<result column="AUTH" property="auth"/>
+	 	<result column="ENABLED" property="enabled"/>
+	 	<result column="STATUS" property="status"/>
+	 	<result column="JOB_NAME" property="jobName"/>
+	 	<result column="DEPT_NAME" property="deptName"/>
+	</resultMap>
+	
 	
 	<!-- 최신 공지사항 조회  -->
 	<select id="mainNoticeList" resultMap="mainBoardResultset">
@@ -68,13 +88,13 @@
 		WHERE ROWNUM BETWEEN 1 AND 6 
 	</select>
 	
-	<!-- 출근 버 -->
+	<!-- 출근 등록  -->
 	<insert id="insertGoToWork">
 		INSERT INTO ATTENDANCE_RECORD (ATT_RECORD_NO, USER_NO, ON_TIME)
 		VALUES (SEQ_ATNO.NEXTVAL,#{userNo}, TO_DATE(TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS'))
-<!-- 		INSERT INTO ATTENDANCE_RECORD(USER_NO,ON_TIME) VALUES(#{userNo},TO_CHAR(SYSDATE, 'YYYY-MM-DD HH:MI:SS')) -->
 	</insert>
 	
+	<!-- 퇴근 등록  -->
 	<update id="updateLeaveToWork">
 		UPDATE ATTENDANCE_RECORD 
 		SET OFF_TIME = SYSDATE 
@@ -83,4 +103,28 @@
 								FROM ATTENDANCE_RECORD)
 	</update>
 	
+	<!-- 팀 임직원 조회  -->
+	<select id="mainOthersTeamList" resultMap="mainMemberResultset">
+		SELECT USER_NO, USER_NAME, JOB_NAME, DEPT_NAME, PHONE, EMAIL, EMPOLYMENT_DATE
+		FROM ( SELECT USER_NO, USER_NAME, J.JOB_NAME, M.JOB_CODE, D.DEPT_NAME, PHONE, EMAIL, TO_CHAR(EMPOLYMENT_DATE, 'YYYY-MM-DD') EMPOLYMENT_DATE
+			    FROM MEMBER M
+			    JOIN JOB J ON (M.JOB_CODE = J.JOB_CODE)
+			    JOIN DEPARTMENT D ON (M.DEPT_CODE = D.DEPT_CODE)
+			    WHERE M.DEPT_CODE = #{deptCode} 
+			    AND USER_ID != #{userId}
+			    ORDER BY JOB_CODE )  
+		WHERE ROWNUM BETWEEN 1 AND 10
+	</select>
+	
+	<!-- 전체 임직원 조회  -->
+	<select id="mainOthersAllList" resultMap="mainMemberResultset">
+		SELECT USER_NO, USER_NAME, JOB_NAME, DEPT_NAME, PHONE, EMAIL, EMPOLYMENT_DATE
+		FROM ( SELECT USER_NO, USER_NAME, M.JOB_CODE, J.JOB_NAME, D.DEPT_NAME, PHONE, EMAIL ,TO_CHAR(EMPOLYMENT_DATE, 'YYYY-MM-DD') EMPOLYMENT_DATE
+			    FROM MEMBER M
+			    JOIN JOB J ON (M.JOB_CODE = J.JOB_CODE)
+			    JOIN DEPARTMENT D ON (M.DEPT_CODE = D.DEPT_CODE)
+			    AND USER_ID != #{userId}
+			    ORDER BY JOB_CODE )  
+		WHERE ROWNUM BETWEEN 1 AND 10
+	</select>
 </mapper>

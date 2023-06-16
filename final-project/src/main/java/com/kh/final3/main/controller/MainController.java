@@ -6,7 +6,6 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -108,6 +107,28 @@ public class MainController {
 			session.setAttribute("alertMsg", "퇴근 실패! ");
 		}
 		return "redirect:/member/home.ma";
+	}
+	
+	//임직원조회(Team)
+	@ResponseBody
+	@RequestMapping(value="mainOthersTeamList.ma", produces="application/json; charset=UTF-8" )
+	public String mainOthersTeamList(HttpSession session) {
+		Member m = ((Member)session.getAttribute("loginUser"));
+
+		ArrayList<Member> mainMemberTeam = mainService.mainOthersTeamList(m);
+		
+		return new Gson().toJson(mainMemberTeam);
+	}
+	
+	//임직원조회(ALL)
+	@ResponseBody
+	@RequestMapping(value="mainOthersAllList.ma", produces="application/json; charset=UTF-8" )
+	public String mainOthersAllList(HttpSession session) {
+		Member m = ((Member)session.getAttribute("loginUser"));
+
+		ArrayList<Member> mainMemberTeam = mainService.mainOthersAllList(m);
+			
+		return new Gson().toJson(mainMemberTeam);
 	}
 	
 }
