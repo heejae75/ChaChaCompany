@@ -8,13 +8,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>예약</title>
-<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script> -->
+     
   <style>
 	.content{
         width: 1570px;
     }
-	/*navibar*/
+	
+     /*navibar*/
 	#board-tap-area{
 		width: 80%;
 		margin: auto;
@@ -24,6 +24,7 @@
 		width:100%;
 		height : 42px;
 		list-style-type : none;
+		margin-bottom: 30px;
 	}
 	
 	#nav-tabs{
@@ -37,72 +38,30 @@
     	float : left;
     }
     
-    #board-tap-area>ul li a{
-    	text-align: center; 	
+    #board-tap-area a{
+    	width: 100%;
+    	height : 100%;
+    	display: inline-block;
+    	text-align: center;
+    	line-height: 40px;
+    	background-color: lightgrey;
+    	text-decoration: none;
+    	color: black;
     }
     
-    li:hover{
+    #board-tap-area>ul li:not(.active):hover{
     	border-top: 1px solid #dee2e6;
 		border-left: 1px solid #dee2e6;
 		border-right: 1px solid #dee2e6;
 		border-top-left-radius:0.25rem;
 		border-top-right-radius:0.25rem; 
     }
-	
-	#link_active{
-		border-top: 1px solid #dee2e6;
-		border-left: 1px solid #dee2e6;
-		border-right: 1px solid #dee2e6; 
-		border-bottom: none;
-		border-top-left-radius:0.25rem;
-		border-top-right-radius:0.25rem;
-	}
-	
-	/*검색영역*/
-    #board-search-area>form{
-        width: 80%;
-        margin:auto;
-        margin-top:20px;
-    }
+	 #board-tap-area .active a{
+	 	border-botton: none;
+	 	background-color: #0E6251;
+	 	color: white;
+	 }
     
-    #option-box{
-        width: 40%;
-        float: left;
-    }
-    #dept_code{
-        margin-left: 5px;
-    }
-    #search-box{
-        width: 60%;
-        float: left;
-    }
-
-    #search-input{
-        width: 30%;
-        float: left;
-    }
-   
-   /* 버튼영역 */
-    #board-btn-area{
-        width: 80%;
-        margin: auto;
-        margin-bottom: 20px;
-    }
-    
-    /* 게시글 목록영역 */
-    #board-list-area{
-        width: 80%;
-        margin: auto;
-    }
-    
-    #board-list{
-        text-align:center;
-    }
-
-    #pagingArea {
-        width:fit-content; 
-        margin:auto;
-    }
     /* 캘린더 스타일 */
     #calendar{
     	width: 100%;
@@ -111,7 +70,7 @@
     	margin-left: 0;
     }
     .fc-agendaWeek-view .fc-time-grid .fc-slats td {
-	  	height: 50px; 
+	  	height: 80px; 
 	}
 
 	.fc-agendaMonth-view .fc-day-grid .fc-row .fc-content-skeleton td  {
@@ -119,9 +78,9 @@
 
     /* 캘린더구역 */
     #calendar-container{
-   		margin-left: 100px;
+   		margin: auto;
    		width: 80%;
-    	height: 100%
+    	height: 80%;
     }
     /* 예약폼스타일 */
     #reserve-table{
@@ -133,14 +92,19 @@
     	padding: 5px
     }
     /* 모달창 */
-    #update-btn #delete-btn{
-    	
-    	float: left;
+    #btn-table{
+    	margin: auto;
+    	text-align: center;
     }
-    #status-modal-footer{
-    	position: relative;
+    #reserve-status-table{
+    	width : 100%;
+    	height : 100%;
+    	margin : auto;
     }
-
+    #reserve-status-table td, #reserve-status-table th{
+    	padding: 5px
+    }
+	
     </style>
 </head>
 <body id="body-pd">
@@ -153,7 +117,7 @@
 			locale 					  : 'ko',    
 			timezone                  : "local", 
 			nextDayThreshold          : "09:00:00",
-			allDaySlot                : true,
+			allDaySlot                : false,
 			displayEventTime          : true,
 			displayEventEnd           : true,
 			firstDay                  : 1, //월요일이 먼저 오게 하려면 1
@@ -272,14 +236,6 @@
 			            
 		        		$('#meetingRoom-reservation-status').modal('toggle');
 		        		
-		        		 // 회원 조건에 따라 수정삭제 버튼 보이게
-		        		var updateBtn = document.getElementById('update-btn');
-		        		var deleteBtn = document.getElementById('delete-btn');
-		        		
-		        		if (userNo == ${loginUser.userNo}) {
-		        		    updateBtn.style.display = 'block';
-		        		    deleteBtn.style.display = 'block';
-		        		  }
 		        	},
 	        	  
 	        	    
@@ -308,39 +264,39 @@
 					}
 				} */
 			});
+		
+		timeConstraint(); // select박스 시간 체크하는 함수
+		
 		});
 	</script> 
 
     <div class="content" >
-        <div id="board">
-            <div id="board-tap-area">
-                <ul id="nav-tabs">
-                    <li class="nav-item">
-                      <a class="nav-link" href="list.no">공지사항</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="list.dc">자료실</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="list.re">대여</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="#">자유게시판</a>
-                    </li>
-                </ul>
+           <div id="board-tap-area">
+                <ul id="nav-tabs"  class="nav-tabs nav-pills">
+					<li role="presentation">
+						<a href="list.no">공지사항</a>
+					</li>
+					<li role="presentation">
+					 	<a href="list.dc">자료실</a>
+					</li>
+					<li role="presentation" class="active">
+						<a href="list.re">대여</a>
+					</li>
+					<li role="presentation">
+						<a href="#">커뮤니티</a>
+					</li>
+				</ul>
             </div>
-          <div>
-          
 	        <!-- 캘린더구역 -->
-	        <div class="container" id="calendar-container">
+	        <div id="calendar-container">
 				<div id="calendar"></div>
 			</div>
 			<!-- 캘린더구역 끝 -->
       </div>
+      <br><br>
     
    
 			
-            <br><br>
   <!-- 회의실 예약 현황 모달시작 -->
    	<div class="modal fade" id="meetingRoom-reservation-status" role="dialog">
 		<div class="modal-dialog">
@@ -353,13 +309,13 @@
 				       <h4 class="modal-title">회의실 예약 현황</h4>
 				    </div>
 				    <div class="modal-body">
-				      <table id=reserve-table>
+				      <table id=reserve-status-table>
 				    		<tr>
 				    			<th>신청인</th>
 				    			<td colspan="2"><input type="text" id="status-userName" class="form-control" readonly></td>
 				    		</tr>
 				    		<tr>
-				    			<th>날짜 </th><!-- 조건넣어서 날짜값 불러오기 -->
+				    			<th>날짜 </th>
 				    			<td colspan="2"><input type="date" id="status-revDate" name="revDate" class="form-control"></td>
 				    		</tr>
 				    		<tr>
@@ -406,10 +362,18 @@
 				    	<input type="text" id="status-userNo" style="display:none;">
 				    	<input type="text" id="status-reservationNo" style="display:none;">
 				    </div>
-				    <div class="modal-footer" id="status-modal-footer"  style="justify-content: flex-end;">
-					    <button type="button" class="btn btn-default" id="update-btn" data-dismiss="modal" onclick="updateReservation()" style="display:none;">예약수정</button>
-					    <button type="button" class="btn btn-default" id="delete-btn" data-dismiss="modal" onclick="deleteReservation()" style="display:none;">예약삭제</button>
-				      	<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+				    <div class="modal-footer" id="status-modal-footer">
+					   	<table id="btn-table">
+					   		<tr>
+					   			<td>
+						   			<button type="button" class="btn btn-default" data-dismiss="modal" onclick="updateReservation()">예약수정</button>
+								    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="deleteReservation()">예약삭제</button>
+					   			</td>
+					   		</tr>
+					   	</table> 
+				   
+				    
+					    
 				    </div>
 				    
 			  </div>
@@ -493,10 +457,6 @@
 	</div>
   <!-- 회의실 예약하기 모달 끝 -->
   <script>
- 
-		  
-	 
-	  
  
 	// 회의실 예약시 confirm메세지와 비동기로 DB에 데이터 넣기
 	function confirmReservation(){
@@ -584,8 +544,8 @@
 	            }
 			});
 		}
-		
 	}
+	
 	
 	
  
@@ -593,10 +553,7 @@
   </script>
           
             
-        </div>
-        <br><br><br>
-    </div>
-    
+        
    
 </body>
 </html>

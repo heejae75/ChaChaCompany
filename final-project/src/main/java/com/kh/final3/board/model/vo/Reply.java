@@ -16,7 +16,7 @@ public class Reply {
 	private int refBno;
 	private String replyWriter;
 	private String replyContent;
-	private Date createDate;
+	private String createDate;
 	private Date modifyDate;
 	private String status;
 	private String deptName;

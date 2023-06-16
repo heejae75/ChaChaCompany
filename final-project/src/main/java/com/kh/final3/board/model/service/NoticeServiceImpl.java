@@ -24,8 +24,8 @@ public class NoticeServiceImpl implements NoticeService {
 
 	// 공지사항 총 게시글 개수 조회
 	@Override
-	public int selectListCount(String status) {
-		return noticeDao.selectListCount(sqlSession, status);
+	public int selectListCount(HashMap<String, String> map) {
+		return noticeDao.selectListCount(sqlSession, map);
 	}
 	// 게시글 리스트 조회
 	@Override

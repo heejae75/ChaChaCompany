@@ -26,4 +26,5 @@ public class Board {
 	private String importanceLevel;
 	private String deptName;
 	private String attachmentNo; // 첨부파일 여부
+	private int refUno; // 즐겨찾기여부
 }
