@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="mainMapper">
+	<resultMap type="board" id="mainBoardResultset">
+		<result column="BOARD_NO" property="boardNo"/>
+		<result column="USER_NAME" property="boardWriter"/>
+		<result column="CATEGORY_CODE" property="categoryCode"/>
+		<result column="BOARD_TITLE" property="boardTitle"/>
+		<result column="BOARD_CONTENT" property="boardContent"/>
+		<result column="CREATE_DATE" property="createDate"/>
+		<result column="COUNT" property="count"/>
+		<result column="STATUS" property="status"/>
+	</resultMap>
+	
+	<resultMap type="email" id="mainEmailResultset">
+		<result column="EMAIL_NO" property="emailNo"/>
+		<result column="USER_NAME" property="sender"/>
+		<result column="RECEIVER" property="receiver"/>
+		<result column="EMAIL_TITLE" property="emailTitle"/>
+		<result column="SEND_DATE" property="sendDate"/>
+		<result column="STATUS" property="status"/>
+	</resultMap>
+	
+	<resultMap type="member" id="mainMemberResultset">
+		<result column="USER_NO" property="userNo"/>
+	 	<result column="USER_ID" property="userId"/>
+	 	<result column="USER_NAME" property="userName"/>
+	 	<result column="USER_PWD" property="userPwd"/>
+	 	<result column="PHONE" property="phone"/>
+	 	<result column="EMAIL" property="email"/>
+	 	<result column="ADDRESS" property="address"/>
+	 	<result column="BIRTH" property="birth"/>
+	 	<result column="DEPT_CODE" property="deptCode"/>
+	 	<result column="JOB_CODE" property="jobCode"/>
+	 	<result column="EMPOLYMENT_DATE" property="empolymentDate"/>
+	 	<result column="DEPATURE_DATE" property="depatureDate"/>
+	 	<result column="AUTH" property="auth"/>
+	 	<result column="ENABLED" property="enabled"/>
+	 	<result column="STATUS" property="status"/>
+	 	<result column="JOB_NAME" property="jobName"/>
+	 	<result column="DEPT_NAME" property="deptName"/>
+	</resultMap>
+	
+	
+	<!-- 최신 공지사항 조회  -->
+	<select id="mainNoticeList" resultMap="mainBoardResultset">
+		SELECT ROWNUM, B.*
+		FROM (SELECT BOARD_NO, BOARD_TITLE, USER_NAME, TO_CHAR(CREATE_DATE, 'YYYY-MM-DD') CREATE_DATE, COUNT
+				FROM BOARD B
+				JOIN MEMBER M ON (BOARD_WRITER = USER_NO)
+				WHERE B.STATUS = 'Y'
+				AND CATEGORY_CODE = 'B1'
+				ORDER BY BOARD_NO DESC) B
+		WHERE ROWNUM BETWEEN 1 AND 6
+	</select>
+	
+	<!-- 즐겨찾기 공지사항 조회  -->
+	<select id="mainNoticeLikedList" resultMap="mainBoardResultset">
+		SELECT ROWNUM, B.*
+		FROM (SELECT BOARD_NO, BOARD_TITLE, USER_NAME, TO_CHAR(CREATE_DATE, 'YYYY-MM-DD') CREATE_DATE, COUNT
+				FROM BOARD B
+				JOIN MEMBER M ON (BOARD_WRITER = USER_NO)
+				JOIN RECOMMEND R ON (BOARD_NO = REF_BNO)
+				WHERE BOARD_WRITER = (SELECT USER_NO
+					                    FROM MEMBER 
+					                    WHERE USER_ID = #{userId})
+				AND B.STATUS = 'Y'
+				AND CATEGORY_CODE = 'B1'
+				AND R.TYPE = 'B'
+				ORDER BY BOARD_NO DESC) B
+		WHERE ROWNUM BETWEEN 1 AND 6
+	</select>
+	
+	<!-- 최신 메일 조회  -->
+	<select id="mainEmailList" resultMap="mainEmailResultset">
+		SELECT ROWNUM, E.*
+		FROM (SELECT EMAIL_NO, EMAIL_TITLE, USER_NAME, TO_CHAR(SEND_DATE, 'YYYY-MM-DD') SEND_DATE
+				FROM EMAIL E
+				JOIN MEMBER M ON (SENDER = USER_NO)
+				WHERE RECEIVER = (SELECT USER_NO
+				                    FROM MEMBER 
+				                    WHERE USER_ID = #{userId})
+				AND E.STATUS = 'Y'
+				ORDER BY EMAIL_NO DESC) E
+		WHERE ROWNUM BETWEEN 1 AND 6 
+	</select>
+	
+	<!-- 출근 등록  -->
+	<insert id="insertGoToWork">
+		INSERT INTO ATTENDANCE_RECORD (ATT_RECORD_NO, USER_NO, ON_TIME)
+		VALUES (SEQ_ATNO.NEXTVAL,#{userNo}, TO_DATE(TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS'))
+	</insert>
+	
+	<!-- 퇴근 등록  -->
+	<update id="updateLeaveToWork">
+		UPDATE ATTENDANCE_RECORD 
+		SET OFF_TIME = SYSDATE 
+		WHERE USER_NO = #{userNo} 
+		AND ATT_RECORD_NO = (SELECT MAX(ATT_RECORD_NO) 
+								FROM ATTENDANCE_RECORD)
+	</update>
+	
+	<!-- 팀 임직원 조회  -->
+	<select id="mainOthersTeamList" resultMap="mainMemberResultset">
+		SELECT USER_NO, USER_NAME, JOB_NAME, DEPT_NAME, PHONE, EMAIL, EMPOLYMENT_DATE
+		FROM ( SELECT USER_NO, USER_NAME, J.JOB_NAME, M.JOB_CODE, D.DEPT_NAME, PHONE, EMAIL, TO_CHAR(EMPOLYMENT_DATE, 'YYYY-MM-DD') EMPOLYMENT_DATE
+			    FROM MEMBER M
+			    JOIN JOB J ON (M.JOB_CODE = J.JOB_CODE)
+			    JOIN DEPARTMENT D ON (M.DEPT_CODE = D.DEPT_CODE)
+			    WHERE M.DEPT_CODE = #{deptCode} 
+			    AND USER_ID != #{userId}
+			    ORDER BY JOB_CODE )  
+		WHERE ROWNUM BETWEEN 1 AND 10
+	</select>
+	
+	<!-- 전체 임직원 조회  -->
+	<select id="mainOthersAllList" resultMap="mainMemberResultset">
+		SELECT USER_NO, USER_NAME, JOB_NAME, DEPT_NAME, PHONE, EMAIL, EMPOLYMENT_DATE
+		FROM ( SELECT USER_NO, USER_NAME, M.JOB_CODE, J.JOB_NAME, D.DEPT_NAME, PHONE, EMAIL ,TO_CHAR(EMPOLYMENT_DATE, 'YYYY-MM-DD') EMPOLYMENT_DATE
+			    FROM MEMBER M
+			    JOIN JOB J ON (M.JOB_CODE = J.JOB_CODE)
+			    JOIN DEPARTMENT D ON (M.DEPT_CODE = D.DEPT_CODE)
+			    AND USER_ID != #{userId}
+			    ORDER BY JOB_CODE )  
+		WHERE ROWNUM BETWEEN 1 AND 10
+	</select>
+</mapper>

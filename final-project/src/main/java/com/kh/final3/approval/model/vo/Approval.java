@@ -13,12 +13,10 @@ public class Approval {
 	private int appNo;
 	private int DocNo;
 	private String deptCode;
-	private String firstApprover;
 	private String secondApprover;
-	private String thirdApprover;
-	private String firstDate;
+	private String lastApprover;
 	private String secondeDate;
-	private String thirdDate;
+	private String lastDate;
 	private String returnReason;
 	private String status;
 }
