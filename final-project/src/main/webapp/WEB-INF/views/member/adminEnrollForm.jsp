@@ -10,7 +10,7 @@
 	<h1>Register</h1>
 	
 <form action="${pageContext.request.contextPath}/adminInsert" method="post">
-	<div> 아이디 <input type="text" name="userId" /> </div> 
+	<div> 아이디 <input type="text" name="userId" /> </div>
 	<div> 비밀번호 <input type="password" name="userPwd" /> </div> 
 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /> 
 	<div> <input type="submit" value="회원가입"/> </div> 

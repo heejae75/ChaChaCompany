@@ -19,7 +19,7 @@ public class Member {
 	private String phone;//	PHONE	VARCHAR2(15 BYTE)
 	private String email;//	EMAIL	VARCHAR2(50 BYTE)
 	private String address;//	ADDRESS	VARCHAR2(300 BYTE)
-	private Date birth;//	BIRTH	DATE
+	private String birth;//	BIRTH	DATE
 	private String deptCode;//	DEPT_CODE	VARCHAR2(4 BYTE)
 	private String jobCode;//	JOB_CODE	VARCHAR2(4 BYTE)
 	private String empolymentDate;//	EMPOLYMENT_DATE	DATE //ajax TO_CHAR로 쓰기 위해 DATE -> STRING 으로 바

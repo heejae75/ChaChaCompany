@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+    <%@taglib prefix = "fn" uri = "http://java.sun.com/jsp/jstl/functions" %>
+    <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -444,6 +446,11 @@
         </div>
     </div>
 
+	<!-- auth 추출해서 소문자로 바꾸기 -->
+    <c:set var="lastIndex" value="${fn:length(loginUser.auth)}"/>
+    <c:set var="subString_auth" value="${fn:substring(loginUser.auth,5,lastIndex)}"/>
+    <c:set var="role" value="${fn:toLowerCase(subString_auth)}"/>
+    
     <div class="menubar" id="nav-bar">
         <nav class="nav"> <!--nav는 블럭요소, span은 인라인요소-->
             <div>
@@ -457,7 +464,7 @@
                     <ul>
                         <!--  홈  -->
                         <li>
-                            <a href="home.ma" class="nav_link active">
+                            <a href="/final3/${role}/mainPage.me" class="nav_link active">
                                 <i class="fa-sharp fa-solid fa-house fa-xl" id="menu_img" style="color: #ffffff;"></i>
                                 &nbsp;
                                 <span class="nav_name">홈</span>
@@ -493,12 +500,17 @@
                         </li>
                         
                         <!-- 인사관리  -->
-                        <li>
+                        <li class="menu2">
                             <a href="#" class="nav_link">
                                 <i class="fa-sharp fa-solid fa-users" style="color: #ffffff; font-size: 21px;"></i>
                                 &nbsp;
                                 <span class="nav_name">인사관리</span>
                             </a>
+                            <ul id="menu_submenu2" class="collapse">
+                                <li>
+                                    <a href="/final3/${role}/list.me">임직원 조회</a>
+                                </li>
+                            </ul>
                         </li>
 
 						<!-- 일정관리  -->
@@ -527,7 +539,12 @@
             <div class="nav_logout">
                 <a href="#" class="nav_link">
                     <i class="fa-sharp fa-solid fa-right-from-bracket fa-xl" style="color: #ffffff;"></i>
-                    <span class="nav_name">&nbsp;로그아웃</span>
+                    <span class="nav_name">
+					    <form action="/final3/logout" method="POST">
+					        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+					        <button type="submit">LOGOUT</button>
+					    </form>
+                    </span>
                 </a>
             </div>
         </nav>
@@ -614,6 +631,29 @@
                 submenu.slideDown();
             }
         });
+        
+        $(document).ready(function(){
+		    $("#header-toggle").click(function() {
+		        var submenu2 = $(this).parents('.header').next(".menubar").find("#menu_submenu2");
+		
+		        if(submenu2.is(":visible")) {
+		            submenu2.slideUp();
+		        }
+		    });
+		});
+
+        $(document).ready(function(){
+            $(".menu2>a").click(function() {
+                var submenu2 = $(this).next("#menu_submenu2");
+
+                if(submenu2.is(":visible")) {
+                    submenu2.slideUp();
+                }else {
+                    submenu2.slideDown();
+                }
+            });
+        });
+        
     });
     
     
@@ -642,7 +682,6 @@
     		console.log("서버와 연결과정에서 오류 발생 ");
     	}
     }
-    
     </script>
 </body>
 </html>
