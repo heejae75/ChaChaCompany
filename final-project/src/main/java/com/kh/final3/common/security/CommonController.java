@@ -1,4 +1,4 @@
-package com.kh.final3.common;
+package com.kh.final3.common.security;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

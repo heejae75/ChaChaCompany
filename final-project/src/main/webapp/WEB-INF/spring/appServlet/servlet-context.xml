@@ -3,7 +3,9 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
+	xmlns:websocket="http://www.springframework.org/schema/websocket" 
+	xsi:schemaLocation="http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket-4.3.xsd
+		http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
 
@@ -22,6 +24,23 @@
 	</beans:bean>
 
 	<context:component-scan base-package="com.kh.final3" />
+	
+	<!-- 웹소켓 설정 추가 -->
+	<!-- 웹소켓 작업을 처리하는 서버 등록 -->
+	<beans:bean id="activeServer" class="com.kh.final3.alert.websocket.WebSocketAlertServer"/>
+	
+	<!-- allowed-origins="*" => 전체 요청을 받겠다라는 의미 -->
+	<websocket:handlers allowed-origins="*">
+		<!-- 접속 주소 : ws://localhose:8888/ws/active -->
+		<websocket:mapping handler="activeServer" path="/active"/>
+
+	
+	<!-- HTTP 통신에 있는 httpSession과 연결하기 (정보 가지고 오기) -->
+		<websocket:handshake-interceptors>
+			<beans:bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor"></beans:bean>
+		</websocket:handshake-interceptors>
+		<websocket:sockjs />
+	</websocket:handlers>
 	
 	
 	

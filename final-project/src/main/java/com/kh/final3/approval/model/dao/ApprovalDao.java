@@ -6,12 +6,14 @@ import java.util.HashMap;
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.kh.final3.approval.model.vo.ApprovalDoc;
 import com.kh.final3.approval.model.vo.DocType;
 import com.kh.final3.common.vo.PageInfo;
 import com.kh.final3.member.model.vo.Member;
 
+@RequestMapping(value={"/member","/admin"})
 @Repository
 public class ApprovalDao {
 
