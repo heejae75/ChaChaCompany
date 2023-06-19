@@ -23,9 +23,8 @@ public class Board {
 	private Date modifyDate;
 	private int count;
 	private String status;
-	private String bookmark;
 	private String importanceLevel;
 	private String deptName;
-	private String attachmentNo; // 첨부파일 여부
-
+	private String attachmentNo; // 泥⑤��뙆�씪 �뿬遺�
+	private int refUno; // 利먭꺼李얘린�뿬遺�
 }

@@ -7,7 +7,7 @@
 
 	<!-- 게시글 개수 조회  -->
 	<select id="selectDocumentListCount" resultType="_int">
-		SELECT COUNT(*) COUNT 
+		SELECT COUNT(*) COUNT
 		FROM BOARD 
 		WHERE STATUS = 'Y'
 		AND CATEGORY_CODE ='B2'

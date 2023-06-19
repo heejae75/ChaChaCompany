@@ -1,5 +1,6 @@
 package com.kh.final3.board.controller;
 
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,16 +26,10 @@ import com.kh.final3.common.template.Pagination;
 import com.kh.final3.common.template.SaveFile;
 import com.kh.final3.common.vo.PageInfo;
 
+
 @Controller
+@RequestMapping(value = {"/member", "/admin"})
 public class DocumentController {
-//	@Autowired
-//	public SaveFile saveFile;
-//	
-//	@Autowired
-//	public BoardAttachment at; 
-//	
-//	@Autowired 
-//	public BoardDocService boardDocService;
 	
 	@Autowired
 	public DocumentService documentService;
@@ -166,7 +161,6 @@ public class DocumentController {
 			}
 			
 		}
-		System.out.println(atList); //확인용 
 		
 		b.setBoardWriter("3"); //로그인 가능 후 지우고 로그인 유저 번호로 바꾸기 
 		

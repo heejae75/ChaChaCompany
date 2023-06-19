@@ -37,7 +37,6 @@
             width: 100%;
             height: 100%;
         }
-
     </style>
 </head>
 <body>
@@ -46,21 +45,22 @@
         <div id="memberLogin">
             <button onclick="memberLogin()">일반사원</button>
         </div>
-
         <div id="adminLogin">
             <button onclick="adminLogin()">관리자</button>
         </div>
+	    <div>
+	    	<a href="/final3/admin/adminHome.ma">관리자 메인페이지 </a>
+	    </div>
     </div>
-
 <script>
 	function memberLogin(){
-		location.href = "member/mainPage";
+		location.href = "member/mainPage.me";
 	}
 	
 	function adminLogin(){
-		location.href = "admin/mainPage";
+		location.href = "admin/mainPage.me";
 	}
 	
-</script>    
+</script>
 </body>
 </html>

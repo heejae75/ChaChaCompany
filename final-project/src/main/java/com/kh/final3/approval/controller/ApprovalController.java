@@ -11,12 +11,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+<<<<<<< HEAD
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+=======
+import org.springframework.web.bind.annotation.PostMapping;
+>>>>>>> refs/remotes/origin/main
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -102,18 +105,16 @@ public class ApprovalController {
 		return mv;
 	}
 	
-//	//¸â¹ö ºÒ·¯¿À±â
+//	//å ì™ì˜™å ï¿½ å ìŒ€ë¤„ì˜™å ì™ì˜™å ì™ì˜™
 	@ResponseBody
 	@PostMapping(value="selectApproverList.ap",produces = "application/json; charset=UTF-8")
-//	@RequestMapping(value="selectApproverList.ap", method = {RequestMethod.GET,RequestMethod.POST}, produces = "application/json; charset=UTF-8")
 	public String selectApproverList(String deptCode) {
 		ArrayList<Member> list = as.selectApproverList(deptCode);
 		return new Gson().toJson(list);
 	}
-	//°Ë»ö
+	//å ì‹¯ì‚¼ì˜™
 	@ResponseBody
 	@PostMapping(value="searchApprover.ap",produces = "application/json; charset=UTF-8")
-//	@RequestMapping(value="searchApprover.ap",method = {RequestMethod.GET,RequestMethod.POST},produces="application/json; charset=UTF-8")
 	public String searchApprover(String status, String keyword){
 		HashMap<String, String> map = new HashMap<>();
 		
@@ -125,7 +126,7 @@ public class ApprovalController {
 		return new Gson().toJson(list);
 	}
 	
-	//±¸¸ÅÇ°ÀÇ¼­ ÀÛ¼º
+	//å ì™ì˜™å ì™ì˜™í’ˆå ì‹¤ì‡½ì˜™ å ìŒœì‡½ì˜™
 	@RequestMapping("item.ap")
 	public ModelAndView insertItem(Item i, ApprovalDoc ad, Approval a,ModelAndView mv,HttpSession session, ArrayList<MultipartFile> upfile){
 		ArrayList<ApprovalAttachment> atList = new ArrayList<>();
@@ -152,18 +153,18 @@ public class ApprovalController {
 		}
 		int result = as.insertItem(i,atList,ad,a);
 		if(result>0) {
-			session.setAttribute("alertMsg", "°áÀç¹®¼­°¡ µî·ÏµÇ¾ú½À´Ï´Ù.");
+			session.setAttribute("alertMsg", "å ì™ì˜™å ì¹ë¬¸å ì™ì˜™å ì™ì˜™ å ì™ì˜™æºí“¸å ì™ì˜™å ì™ì˜™æ±‚å ï¿½.");
 			mv.setViewName("redirect:list.ap");
 		}else {
 			for(ApprovalAttachment aa : atList) {
 				new File(session.getServletContext().getRealPath(aa.getFilePath())).delete();
 			}
-			session.setAttribute("alertMsg", "°áÀç¹®¼­°¡ µî·ÏÀÌ ½ÇÆĞÇÏ¿´½À´Ï´Ù.");
+			session.setAttribute("alertMsg", "å ì™ì˜™å ì¹ë¬¸å ì™ì˜™å ì™ì˜™ å ì™ì˜™å ì™ì˜™å ï¿½ å ì™ì˜™å ì™ì˜™å ì‹¹ìš¸ì˜™å ì™ì˜™å ì‹¹ëŒì˜™.");
 			mv.setViewName("redirect:list.ap");
 		}
 		return mv;
 	}
-	//ÈŞ°¡°è ÀÛ¼º
+	//íœ´ê°€ê³„ ì‘ì„±
 		@RequestMapping("leave.ap")
 		public ModelAndView insertItem(Leave l, ApprovalDoc ad, Approval a,ModelAndView mv,HttpSession session, ArrayList<MultipartFile> upfile){
 			ArrayList<ApprovalAttachment> atList = new ArrayList<>();
@@ -192,13 +193,13 @@ public class ApprovalController {
 			int result = as.insertLeave(l,atList,ad,a);
 			
 			if(result>0) {
-				session.setAttribute("alertMsg", "°áÀç¹®¼­°¡ µî·ÏµÇ¾ú½À´Ï´Ù.");
+				session.setAttribute("alertMsg", "ê²°ì¬ë¬¸ì„œê°€ ë“±ë¡ë˜ì—ˆìŠµë‹ˆë‹¤.");
 				mv.setViewName("redirect:list.ap");
 			}else {
 				for(ApprovalAttachment aa : atList) {
 					new File(session.getServletContext().getRealPath(aa.getFilePath())).delete();
 				}
-				session.setAttribute("alertMsg", "°áÀç¹®¼­°¡ µî·ÏÀÌ ½ÇÆĞÇÏ¿´½À´Ï´Ù.");
+				session.setAttribute("alertMsg", "ê²°ì¬ë¬¸ì„œê°€ ë“±ë¡ì´ ì‹¤íŒ¨í•˜ì˜€ìŠµë‹ˆë‹¤.");
 				mv.setViewName("redirect:list.ap");
 			}
 			
@@ -212,7 +213,7 @@ public class ApprovalController {
 			Item i = new Item();
 			Leave l = new Leave();
 			
-			if(docType.equals("±¸¸ÅÇ°ÀÇ¼­")) {
+			if(docType.equals("êµ¬ë§¤í’ˆì˜ì„œ")) {
 				i = as.selectItem(docNo);
 				String[] arrSupplyName = i.getSupplyName().split(",");
 				String[] arrSupplySize = i.getSupplySize().split(",");
@@ -226,7 +227,7 @@ public class ApprovalController {
 				.addObject("i", i)
 				.setViewName("approval/itemDetailView");
 				
-			}else if(docType.equals("ÈŞ°¡°è")) {
+			}else if(docType.equals("íœ´ê°€ê³„")) {
 				l = as.selectLeave(docNo);
 				String[] arrStartDate = l.getStartDate().split(",");
 				String[] arrEndDate = l.getEndDate().split(",");
@@ -240,7 +241,7 @@ public class ApprovalController {
 			return mv;
 			
 		}
-		//Áß°£°áÀçÀÚ ¹İ·Á
+		//ì¤‘ê°„ê²°ì¬ì ë°˜ë ¤
 		@ResponseBody
 		@PostMapping("updateSecondReturnReason.ap")
 		public int updateSecondReturnReason(Approval a) {
@@ -248,7 +249,7 @@ public class ApprovalController {
 			return result;
 		}
 		
-		//ÃÖÁ¾°áÀçÀÚ ¹İ·Á
+		//ìµœì¢…ê²°ì¬ì ë°˜ë ¤
 		@ResponseBody
 		@PostMapping("updateLastReturnReason.ap")
 		public int updateLastReturnReason(Approval a, ApprovalDoc ad) {
@@ -256,7 +257,7 @@ public class ApprovalController {
 			return result;
 		}
 		
-		//Áß°£°áÀçÀÚ ½ÂÀÎ
+		//ì¤‘ê°„ê²°ì¬ì ìŠ¹ì¸
 		@ResponseBody
 		@PostMapping("updateSecondApprover.ap")
 		public int updateSecondApprover(Approval a) {
@@ -264,7 +265,7 @@ public class ApprovalController {
 			return result;
 		}
 		
-		//ÃÖÁ¾°áÀçÀÚ ½ÂÀÎ
+		//ìµœì¢…ê²°ì¬ì ìŠ¹ì¸
 		@ResponseBody
 		@PostMapping("updateLastApprover.ap")
 		public int updateLastApprover(Approval a, ApprovalDoc ad) {
@@ -272,7 +273,7 @@ public class ApprovalController {
 			return result;
 		}
 		
-		//°áÀç È¨ ±×·¡ÇÁ
+		//ê²°ì¬ í™ˆ ê·¸ë˜í”„
 		@ResponseBody
 		@GetMapping(value="monthData.ap",produces="application/json; charset=UTF-8")
 		public String monthData(ModelAndView mv, ApprovalDoc ad) {
