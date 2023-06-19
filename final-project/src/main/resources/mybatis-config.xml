@@ -11,7 +11,11 @@
   			<typeAlias type="com.kh.final3.board.model.vo.Board" alias="board"/>
   			<typeAlias type="com.kh.final3.board.model.vo.BoardAttachment" alias="attachment"/>
   			<typeAlias type="com.kh.final3.member.model.vo.Member" alias="member"/>
+  			<typeAlias type="com.kh.final3.approval.model.vo.Approval" alias="approval"/>
+  			<typeAlias type="com.kh.final3.approval.model.vo.ApprovalAttachment" alias="approvalAttachment"/>
   			<typeAlias type="com.kh.final3.approval.model.vo.ApprovalDoc" alias="approvalDoc"/>
+  			<typeAlias type="com.kh.final3.approval.model.vo.Item" alias="item"/>
+  			<typeAlias type="com.kh.final3.approval.model.vo.Leave" alias="leave"/>
   			<typeAlias type="com.kh.final3.approval.model.vo.DocType" alias="docType"/>
   			<typeAlias type="com.kh.final3.member.model.vo.Member" alias="member"/>
   		</typeAliases>
