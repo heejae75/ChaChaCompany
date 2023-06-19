@@ -7,7 +7,6 @@ import java.util.List;
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.kh.final3.approval.model.vo.Approval;
 import com.kh.final3.approval.model.vo.ApprovalAttachment;
@@ -18,7 +17,6 @@ import com.kh.final3.approval.model.vo.Leave;
 import com.kh.final3.common.vo.PageInfo;
 import com.kh.final3.member.model.vo.Member;
 
-@RequestMapping(value={"/member","/admin"})
 @Repository
 public class ApprovalDao {
 

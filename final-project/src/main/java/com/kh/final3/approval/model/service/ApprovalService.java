@@ -16,61 +16,61 @@ import com.kh.final3.member.model.vo.Member;
 
 public interface ApprovalService {
 	
-	//ê° statusì˜ ê°¯ìˆ˜ ê°€ì ¸ì˜¤ê¸°
-	int selectListCount(String status);
-	
-	//ê²°ì¬í•¨ ë¦¬ìŠ¤íŠ¸ ë¶ˆëŸ¬ì˜¤ê¸°
-	ArrayList<ApprovalDoc> selectApprovalDocList(PageInfo pi, String status);
-	//ë¦¬ìŠ¤íŠ¸ ë¶ˆëŸ¬ì˜¤ê¸°ìš© approvalë¶ˆëŸ¬ì˜¤ê¸°
-	ArrayList<Approval> selectApprovalList();
-	
-	//ê²°ì¬ í™ˆ ë¦¬ìŠ¤íŠ¸ ë¶ˆëŸ¬ì˜¤ê¸°
-	ArrayList<ApprovalDoc> approvalMainList(String status);
-	
-	//ì–‘ì‹ë¦¬ìŠ¤íŠ¸ ê°€ì ¸ì˜¤ê¸°
-	ArrayList<DocType> selectEnrollList();
-	
-	//ê²°ì¬ë¼ì¸ ì‚¬ì›ì¡°íšŒ
-	ArrayList<Member> selectApproverList(String deptCode);
-	
-	//ê²°ì¬ë¼ì¸ ì‚¬ì› ê²€ìƒ‰
-	ArrayList<Member> searchApproverList(HashMap<String, String> map);
-	
-	//êµ¬ë§¤í’ˆì˜ì„œ ì‘ì„±
-	int insertItem(Item i, ArrayList<ApprovalAttachment> atList, ApprovalDoc ad, Approval a);
-	
-	//íœ´ê°€ê³„ ì‘ì„±
-	int insertLeave(Leave l, ArrayList<ApprovalAttachment> atList, ApprovalDoc ad, Approval a);
-	
-	//ê²°ì¬ì ì¡°íšŒ
-	Approval selectApproval(int docNo);
-	
-	//ê²°ì¬ë¬¸ì„œ ì²¨ë¶€íŒŒì¼ ì¡°íšŒ
-	ArrayList<ApprovalAttachment> selectApprovalAttachment(int docNo);
-	
-	//ê²°ì¬ë¬¸ì„œ ì¡°íšŒ
-	ApprovalDoc selectApprovalDoc(int docNo);
-	
-	//êµ¬ë§¤í’ˆì˜ì„œ ë‚´ìš© ì¡°íšŒ
-	Item selectItem(int docNo);
-	
-	//íœ´ê°€ê³„ ë‚´ìš©ì¡°íšŒ
-	Leave selectLeave(int docNo);
+	//°¢ statusÀÇ °¹¼ö °¡Á®¿À±â
+		int selectListCount(String status);
+		
+		//°áÀçÇÔ ¸®½ºÆ® ºÒ·¯¿À±â
+		ArrayList<ApprovalDoc> selectApprovalDocList(PageInfo pi, String status);
+		//¸®½ºÆ® ºÒ·¯¿À±â¿ë approvalºÒ·¯¿À±â
+		ArrayList<Approval> selectApprovalList();
+		
+		//°áÀç È¨ ¸®½ºÆ® ºÒ·¯¿À±â
+		ArrayList<ApprovalDoc> approvalMainList(String status);
+		
+		//¾ç½Ä¸®½ºÆ® °¡Á®¿À±â
+		ArrayList<DocType> selectEnrollList();
+		
+		//°áÀç¶óÀÎ »ç¿øÁ¶È¸
+		ArrayList<Member> selectApproverList(String deptCode);
+		
+		//°áÀç¶óÀÎ »ç¿ø °Ë»ö
+		ArrayList<Member> searchApproverList(HashMap<String, String> map);
+		
+		//±¸¸ÅÇ°ÀÇ¼­ ÀÛ¼º
+		int insertItem(Item i, ArrayList<ApprovalAttachment> atList, ApprovalDoc ad, Approval a);
+		
+		//ÈŞ°¡°è ÀÛ¼º
+		int insertLeave(Leave l, ArrayList<ApprovalAttachment> atList, ApprovalDoc ad, Approval a);
+		
+		//°áÀçÀÚ Á¶È¸
+		Approval selectApproval(int docNo);
+		
+		//°áÀç¹®¼­ Ã·ºÎÆÄÀÏ Á¶È¸
+		ArrayList<ApprovalAttachment> selectApprovalAttachment(int docNo);
+		
+		//°áÀç¹®¼­ Á¶È¸
+		ApprovalDoc selectApprovalDoc(int docNo);
+		
+		//±¸¸ÅÇ°ÀÇ¼­ ³»¿ë Á¶È¸
+		Item selectItem(int docNo);
+		
+		//ÈŞ°¡°è ³»¿ëÁ¶È¸
+		Leave selectLeave(int docNo);
 
-	//ì¤‘ê°„ê²°ì¬ì ë°˜ë ¤
-	int updateSecondReturnReason(Approval a);
-	
-	//ìµœì¢…ê²°ì¬ì ë°˜ë ¤
-	int updateLastReturnReason(Approval a, ApprovalDoc ad);
-	
-	//ì¤‘ê°„ê²°ì¬ì ìŠ¹ì¸
-	int updateSecondApprover(Approval a);
-	
-	//ìµœì¢…ê²°ì¬ì ìŠ¹ì¸
-	int updateLastApprover(Approval a,ApprovalDoc ad);
-	
-	//ê²°ì¬ í™ˆ ê·¸ë˜í”„
-	List<ApprovalDoc> monthData(ApprovalDoc ad);
+		//Áß°£°áÀçÀÚ ¹İ·Á
+		int updateSecondReturnReason(Approval a);
+		
+		//ÃÖÁ¾°áÀçÀÚ ¹İ·Á
+		int updateLastReturnReason(Approval a, ApprovalDoc ad);
+		
+		//Áß°£°áÀçÀÚ ½ÂÀÎ
+		int updateSecondApprover(Approval a);
+		
+		//ÃÖÁ¾°áÀçÀÚ ½ÂÀÎ
+		int updateLastApprover(Approval a,ApprovalDoc ad);
+		
+		//°áÀç È¨ ±×·¡ÇÁ
+		List<ApprovalDoc> monthData(ApprovalDoc ad);
 
 	
 	

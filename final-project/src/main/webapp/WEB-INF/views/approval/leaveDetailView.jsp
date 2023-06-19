@@ -302,7 +302,10 @@
     				success : function(result){
     					console.log(result)
     					if(result>0){
-    						$("#lastSignature").attr("value",loginUserName);			
+    						$("#lastSignature").attr("value",loginUserName);
+    						$("#approval-btn").attr("disabled",true);
+    						$("#reject-btn").attr("disabled",true);
+    						$("#emergency-btn").attr("checked",false);
     						alert("승인이 완료되었습니다.");
     					}
     				},
@@ -367,6 +370,8 @@
 							$("#emergency-btn").attr("checked",false);
 							$("#lastSignature").attr("value","반려");	
 							$("#returnReason").attr("readonly",true);
+							$("#approval-btn").attr("disabled",true);
+							$("#reject-btn").attr("disabled",true);
 						}else{
 							console.log("실패");
 						}

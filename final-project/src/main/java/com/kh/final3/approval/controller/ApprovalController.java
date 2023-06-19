@@ -11,15 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-<<<<<<< HEAD
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-=======
-import org.springframework.web.bind.annotation.PostMapping;
->>>>>>> refs/remotes/origin/main
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -105,16 +102,18 @@ public class ApprovalController {
 		return mv;
 	}
 	
-//	//占쏙옙占� 占쌀뤄옙占쏙옙占쏙옙
+//	결재자 조회
 	@ResponseBody
 	@PostMapping(value="selectApproverList.ap",produces = "application/json; charset=UTF-8")
+//	@RequestMapping(value="selectApproverList.ap", method = {RequestMethod.GET,RequestMethod.POST}, produces = "application/json; charset=UTF-8")
 	public String selectApproverList(String deptCode) {
 		ArrayList<Member> list = as.selectApproverList(deptCode);
 		return new Gson().toJson(list);
 	}
-	//占싯삼옙
+	//결재자 검색
 	@ResponseBody
 	@PostMapping(value="searchApprover.ap",produces = "application/json; charset=UTF-8")
+//	@RequestMapping(value="searchApprover.ap",method = {RequestMethod.GET,RequestMethod.POST},produces="application/json; charset=UTF-8")
 	public String searchApprover(String status, String keyword){
 		HashMap<String, String> map = new HashMap<>();
 		
@@ -126,7 +125,7 @@ public class ApprovalController {
 		return new Gson().toJson(list);
 	}
 	
-	//占쏙옙占쏙옙품占실쇽옙 占쌜쇽옙
+	//구매품의서
 	@RequestMapping("item.ap")
 	public ModelAndView insertItem(Item i, ApprovalDoc ad, Approval a,ModelAndView mv,HttpSession session, ArrayList<MultipartFile> upfile){
 		ArrayList<ApprovalAttachment> atList = new ArrayList<>();
@@ -153,18 +152,18 @@ public class ApprovalController {
 		}
 		int result = as.insertItem(i,atList,ad,a);
 		if(result>0) {
-			session.setAttribute("alertMsg", "占쏙옙占썹문占쏙옙占쏙옙 占쏙옙溝퓸占쏙옙占쏙옙求占�.");
+			session.setAttribute("alertMsg", "결재등록이 완료되었습니다.");
 			mv.setViewName("redirect:list.ap");
 		}else {
 			for(ApprovalAttachment aa : atList) {
 				new File(session.getServletContext().getRealPath(aa.getFilePath())).delete();
 			}
-			session.setAttribute("alertMsg", "占쏙옙占썹문占쏙옙占쏙옙 占쏙옙占쏙옙占� 占쏙옙占쏙옙占싹울옙占쏙옙占싹댐옙.");
+			session.setAttribute("alertMsg", "결재등록에 실패하였습니다.");
 			mv.setViewName("redirect:list.ap");
 		}
 		return mv;
 	}
-	//휴가계 작성
+	//휴가계
 		@RequestMapping("leave.ap")
 		public ModelAndView insertItem(Leave l, ApprovalDoc ad, Approval a,ModelAndView mv,HttpSession session, ArrayList<MultipartFile> upfile){
 			ArrayList<ApprovalAttachment> atList = new ArrayList<>();
@@ -193,13 +192,13 @@ public class ApprovalController {
 			int result = as.insertLeave(l,atList,ad,a);
 			
 			if(result>0) {
-				session.setAttribute("alertMsg", "결재문서가 등록되었습니다.");
+				session.setAttribute("alertMsg", "결재등록이 완료되었습니다.");
 				mv.setViewName("redirect:list.ap");
 			}else {
 				for(ApprovalAttachment aa : atList) {
 					new File(session.getServletContext().getRealPath(aa.getFilePath())).delete();
 				}
-				session.setAttribute("alertMsg", "결재문서가 등록이 실패하였습니다.");
+				session.setAttribute("alertMsg", "결재등록에 실패하였습니다.");
 				mv.setViewName("redirect:list.ap");
 			}
 			
@@ -273,7 +272,7 @@ public class ApprovalController {
 			return result;
 		}
 		
-		//결재 홈 그래프
+		//그래프
 		@ResponseBody
 		@GetMapping(value="monthData.ap",produces="application/json; charset=UTF-8")
 		public String monthData(ModelAndView mv, ApprovalDoc ad) {

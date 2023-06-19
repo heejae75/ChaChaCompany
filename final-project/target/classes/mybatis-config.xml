@@ -19,10 +19,10 @@
   			<typeAlias type="com.kh.final3.approval.model.vo.Leave" alias="leave"/>
   			<typeAlias type="com.kh.final3.approval.model.vo.DocType" alias="docType"/>
   			<typeAlias type="com.kh.final3.member.model.vo.Member" alias="member"/>
+  			<typeAlias type="com.kh.final3.email.model.vo.Email" alias="email"/>
   		</typeAliases>
   		
   		<mappers>
-  			<mapper resource="/mappers/main-mapper.xml"/>
   			<mapper resource="/mappers/boardMappers/notice-mapper.xml"/>
   			<mapper resource="/mappers/boardMappers/document-mapper.xml"/>
   			<mapper resource="/mappers/boardMappers/reservation-mapper.xml"/>
