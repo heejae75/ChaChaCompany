@@ -7,7 +7,6 @@
   			<setting name="jdbcTypeForNull" value="NULL"/>
   		</settings>
   		<typeAliases>
-
   			<typeAlias type="com.kh.final3.board.model.vo.Board" alias="board"/>
   			<typeAlias type="com.kh.final3.board.model.vo.BoardAttachment" alias="attachment"/>
   			<typeAlias type="com.kh.final3.member.model.vo.Member" alias="member"/>
