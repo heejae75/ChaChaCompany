@@ -1,0 +1,23 @@
+@charset "UTF-8";
+
+/* 버튼영역 */
+    #board-btn-area{
+        width: 80%;
+        margin: auto;
+        margin-bottom: 20px;
+    }
+    
+    /* 게시글 목록영역 */
+    #board-list-area{
+        width: 80%;
+        margin: auto;
+    }
+    
+    #board-list{
+        text-align:center;
+    }
+
+    #pagingArea {
+        width:fit-content; 
+        margin:auto;
+    }
