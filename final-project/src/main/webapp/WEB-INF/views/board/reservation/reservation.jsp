@@ -113,8 +113,8 @@
  <script>
    $(document).ready(function() {
 	   
-		$('#calendar').fullCalendar({
-			locale 					  : 'ko',    
+		$("#calendar").fullCalendar({
+			locale 					  : "ko",    
 			timezone                  : "local", 
 			nextDayThreshold          : "09:00:00",
 			allDaySlot                : false,
@@ -128,64 +128,60 @@
 			views                     : { 
 			                              month : { eventLimit : 12 } // 한 날짜에 최대 이벤트 12개, 나머지는 + 처리됨
 				                              },
-			eventLimitClick           : 'week', //popover
 			navLinks                  : true,
-			timeFormat                : 'HH:mm',
-			defaultTimedEventDuration : '01:00:00', // 한시간단위
-			minTime                   : '09:00:00',
-			maxTime                   : '19:00:00',
-			slotLabelFormat           : 'HH:mm',
-			slotDuration			  : '1:00:00', // 시간 슬롯 단위를 1시간으로 설정
+			timeFormat                : "HH:mm",
+			defaultTimedEventDuration : "01:00:00", // 한시간단위
+			minTime                   : "09:00:00",
+			maxTime                   : "19:00:00",
+			slotLabelFormat           : "HH:mm",
+			slotDuration			  : "1:00:00", // 시간 슬롯 단위를 1시간으로 설정
 			weekends                  : false, // 주말 안보이게
 			nowIndicator              : true,
-			dayPopoverFormat          : 'MM/DD dddd',
+			dayPopoverFormat          : "MM/DD dddd",
 			header                    : {
-			                              left   : 'today, prevYear, nextYear',
-			                              center : 'prev, title, next',
-			                              right  : 'month, agendaWeek, listWeek'
+			                              left   : "todays",
+			                              center : "prev, title, next",
+			                              right  : "agendaWeek, listWeek"
 			                            },
-			defaultView				  : 'agendaWeek',
+			defaultView				  : "agendaWeek",
 			views                     : {
-			                              month : {
-			                                columnFormat : 'dddd'
-			                              },
 			                              agendaWeek : {
-				  	                          columnFormat : 'M/D ddd',
-					                          titleFormat  : 'YYYY년 M월 D일',
-					                          eventLimit   : false
-				                          },
-				                          agendaDay : {
-					                          columnFormat : 'dddd',
+				  	                          columnFormat : "M/D ddd",
+					                          titleFormat  : "YYYY / MM / D",
 					                          eventLimit   : false
 				                          },
 				                          listWeek : {
-				                          columnFormat : ''
+				                          columnFormat : ""
 				                          }
 				                              },
 			customButtons             : { 
 			                             
 				                         },
 			selectHelper : true,
-			select : 
-				 function(start, end, jsEvent) { // 화면에서 날짜 선택하면
-	                // 시간
-	                var starttime = $.fullCalendar.moment(start).format('HH:mm');
-	                var endtime = $.fullCalendar.moment(end).format('HH:mm');
-					// 날짜 
-	                var start = moment(start).format('YYYY-MM-DD');
-	                var end = moment(end).format('YYYY-MM-DD');
-	                
-	                //console.log(jsEvent.target); // 클릭한 div를 가리킴
-	                
-	                $('#meetingRoom-reservation #startTime').val(starttime);
-	                $('#meetingRoom-reservation #endTime').val(endtime);
-	                $('#meetingRoom-reservation #revDate').val(start);
-	                $('#meetingRoom-reservation').modal('toggle');
-	                
+			select : function(start, end, jsEvent) { // 화면에서 날짜 선택하면
+				
+					if(checkReservationAvailability(start, end)){ // 예약시간 유효한지 체크하는 함수
+						// 시간
+		                var starttime = $.fullCalendar.moment(start).format("HH:mm");
+		                var endtime = $.fullCalendar.moment(end).format("HH:mm");
+						// 날짜 
+		                var start = moment(start).format("YYYY-MM-DD");
+		                var end = moment(end).format("YYYY-MM-DD");
+		                
+		                $("#meetingRoom-reservation #startTime").val(starttime);
+		                $("#meetingRoom-reservation #endTime").val(endtime);
+		                $("#meetingRoom-reservation #revDate").val(start);
+		                $("#meetingRoom-reservation").modal("toggle");
+					}else{
+						$("#calendar").fullCalendar("unselect");
+					}
+				 
 	           },
+	           
 	           events: function(start, end, timezone, callback) { // 화면에 이벤트 출력
+	        	   
 	        	      $.ajax({
-	        	        url: 'mrrevList.re', // 예약 정보를 가져올 컨트롤러 URL
+	        	        url: "mrrevList.re", // 예약 정보를 가져올 컨트롤러 URL
 	        	        beforeSend : function(xhr){
 	                        xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
 	                    },
@@ -197,9 +193,9 @@
 	        	                id: reservation.reservationNo,
 	        	                userNo : reservation.userNo,
 	        	                userName: reservation.userName,
-	        	                title: reservation.roomCode + '회의실(' + reservation.userName + ')',
-	        	                start: reservation.revDate + 'T' + reservation.startTime,
-	        	                end: reservation.revDate + 'T' + reservation.endTime,
+	        	                title: reservation.roomCode + "회의실(" + reservation.userName + ")",
+	        	                start: reservation.revDate + "T" + reservation.startTime,
+	        	                end: reservation.revDate + "T" + reservation.endTime,
 	        	                roomCode : reservation.roomCode
 	        	                
 	        	              };
@@ -211,7 +207,7 @@
 	        	          
 	        	        },
 	        	        error: function() {
-	        	        	console.log('예약 정보를 가져오는 데 실패했습니다.');
+	        	        	console.log("예약 정보를 가져오는 데 실패했습니다.");
 	        	        }
 	        	      });
 	        	    },
@@ -219,54 +215,53 @@
 	        	eventClick: 
 	        		
 	        		function(arg){ // 화면에서 일정 선택하면
-		        		//console.log(arg.userNo);
-		        		var reservationNo = arg.id;
+
+	        			var reservationNo = arg.id;
 		        		var userNo = arg.userNo;
-		        		var revDate = arg.start.format('YYYY-MM-DD');
-		        		var starttime = arg.start.format('HH:mm');
-			            var endtime = arg.end.format('HH:mm');
+		        		var revDate = arg.start.format("YYYY-MM-DD");
+		        		var startTime = arg.start.format("HH:mm");
+			            var endTime = arg.end.format("HH:mm");
 		        		
-		        		$('#meetingRoom-reservation-status #status-userName').val(arg.userName);
-		        		$('#meetingRoom-reservation-status #status-startTime').val(starttime);
-			            $('#meetingRoom-reservation-status #status-endTime').val(endtime);
-			            $('#meetingRoom-reservation-status #status-revDate').val(revDate);
-			            $('#meetingRoom-reservation-status #status-roomCode').val(arg.roomCode);
-			            $('#meetingRoom-reservation-status #status-userNo').val(userNo);
-			            $('#meetingRoom-reservation-status #status-reservationNo').val(reservationNo);
+		        		$("#meetingRoom-reservation-status #status-userName").val(arg.userName);
+		        		$("#meetingRoom-reservation-status #status-startTime").val(startTime);
+			            $("#meetingRoom-reservation-status #status-endTime").val(endTime);
+			            $("#meetingRoom-reservation-status #status-revDate").val(revDate);
+			            $("#meetingRoom-reservation-status #status-roomCode").val(arg.roomCode);
+			            $("#meetingRoom-reservation-status #status-userNo").val(userNo);
+			            $("#meetingRoom-reservation-status #status-reservationNo").val(reservationNo);
 			            
-		        		$('#meetingRoom-reservation-status').modal('toggle');
+		        		$("#meetingRoom-reservation-status").modal("toggle");
+		        		
+	        			checkUpdateAvailability(arg.start); // 현재시간 이전의 예약은 수정하지 못하게 하는 함수
+	        			//eventContraint(arg); // 회의실 중복예약 불가 함수
 		        		
 		        	},
-	        	  
 	        	    
 	        	eventRender: function(event, element) {
 	        	   // 회의실 코드에 따라 예약 창의 색상 설정
 	        	      switch (event.roomCode) {
-	        	        case 'A':
-	        	          	element.css('background-color', 'green'); break;
-	        	        case 'B':
-	        	          	element.css('background-color', 'lightblue'); break;
-	        	        case 'C':
-	        				element.css('background-color', 'red'); break;
-	        	        case 'D':
-		        	        element.css('background-color', 'pink'); break;
-	        	        case 'E':
-		        	        element.css('background-color', 'gray'); break;
+	        	        case "A":
+	        	          	element.css("background-color", "green"); break;
+	        	        case "B":
+	        	          	element.css("background-color", "lightblue"); break;
+	        	        case "C":
+	        				element.css("background-color", "red"); break;
+	        	        case "D":
+		        	        element.css("background-color", "pink"); break;
+	        	        case "E":
+		        	        element.css("background-color", "gray"); break;
 	        	        default:
-	        	            element.css('background-color', 'gray');
+	        	            element.css("background-color", "gray");
 	        	       }
 	        	 	},
 
 				/* dayRender : function(date, cell) {
 					var today = $.fullCalendar.moment(); // 오늘날짜
-					if (date.get('date') == today.get('date')) {
+					if (date.get("date") == today.get("date")) {
 						cell.css("background", "pink");
 					}
 				} */
 			});
-		
-		timeConstraint(); // select박스 시간 체크하는 함수
-		
 		});
 	</script> 
 
@@ -320,7 +315,7 @@
 				    		</tr>
 				    		<tr>
 				    			<th>이용시간</th>
-				    			<td><select id="status-startTime" name="startTime" class="form-control">
+				    			<td><select id="status-startTime" name="startTime" class="startTime selectbox form-control">
 							    		<option value="09:00">09:00</option>
 							    		<option value="10:00">10:00</option>
 							    		<option value="11:00">11:00</option>
@@ -333,7 +328,7 @@
 							    		<option value="18:00">18:00</option>
 						    		</select>
 				    			</td>
-				    			<td><select id="status-endTime" name="endTime" class="form-control">
+				    			<td><select id="status-endTime" name="endTime" class="endTime selectbox form-control">
 							    		<option value="10:00">10:00</option>
 							    		<option value="11:00">11:00</option>
 							    		<option value="12:00">12:00</option>
@@ -349,7 +344,7 @@
 				    		</tr>
 				    		<tr>
 				    			<th>회의실</th>
-				    			<td colspan="2"><select name="roomCode" id="status-roomCode" class="form-control">
+				    			<td colspan="2"><select name="roomCode" id="status-roomCode" class="roomCode form-control">
 							    		<option value="A">A</option>
 							    		<option value="B">B</option>
 							    		<option value="C">C</option>
@@ -366,8 +361,10 @@
 					   	<table id="btn-table">
 					   		<tr>
 					   			<td>
+					   			<!-- 로그인유저가 일치하는지 조건 추가 -->
 						   			<button type="button" class="btn btn-default" data-dismiss="modal" onclick="updateReservation()">예약수정</button>
 								    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="deleteReservation()">예약삭제</button>
+								    <p id="alertDisable"></p>
 					   			</td>
 					   		</tr>
 					   	</table> 
@@ -407,7 +404,7 @@
 				    		</tr>
 				    		<tr>
 				    			<th>이용시간</th>
-				    			<td><select id="startTime" name="startTime" class="form-control" readonly>
+				    			<td><select name="startTime" class="startTime selectbox form-control" disabled>
 							    		<option value="09:00">09:00</option>
 							    		<option value="10:00">10:00</option>
 							    		<option value="11:00">11:00</option>
@@ -420,7 +417,7 @@
 							    		<option value="18:00">18:00</option>
 						    		</select>
 				    			</td>
-				    			<td><select id="endTime" name="endTime" class="form-control" readonly>
+				    			<td><select name="endTime" class="endTime selectbox form-control" disabled>
 							    		<option value="10:00">10:00</option>
 							    		<option value="11:00">11:00</option>
 							    		<option value="12:00">12:00</option>
@@ -436,7 +433,7 @@
 				    		</tr>
 				    		<tr>
 				    			<th>회의실</th>
-				    			<td colspan="2"><select name="roomCode" id="roomCode" class="form-control">
+				    			<td colspan="2"><select name="roomCode" id="roomCode" class="roomCode form-control">
 							    		<option value="A">A</option>
 							    		<option value="B">B</option>
 							    		<option value="C">C</option>
@@ -449,8 +446,10 @@
 				    
 				    </div>
 				    <div class="modal-footer">
-				      <button type="button" class="btn btn-default" onclick="confirmReservation()">예약</button>
-				      <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+				    	<input type="text" id="startTime" style="display:none">
+				    	<input type="text" id="endTime" style="display:none">
+					      <button type="button" class="btn btn-default" onclick="confirmReservation()">예약</button>
+					      <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
 				    </div>
 			  </div>
 		</div>
@@ -470,7 +469,7 @@
 					revDate : $("#revDate").val(),
 					startTime : $("#startTime").val(),
 					endTime : $("#endTime").val(),
-					reserveCategory : 'M',
+					reserveCategory : "M",
 					roomCode : $("#roomCode").val()
 				},
 				beforeSend : function(xhr){
@@ -546,17 +545,122 @@
 		}
 	}
 	
+	/*--------------------------------예약시간 체크해주는 함수들--------------------------------*/
 	
-	
- 
-  
-  </script>
-          
-            
+	// 예약시간 유효한지 체크하는 함수
+    function checkReservationAvailability(start, end) {
+    	
+		// 현재시간과 예약시간을 비교해주는 함수
+        var now = moment(); // 현재 시간
         
+        if (moment(start).isBefore(now)) {
+            alert("예약이 불가능한 시간입니다.");
+            return false;
+        }
+        
+     	// 하루 이상은 예약하지 못하게 하는 함수
+     	var startDay = new Date(start).getDate();
+     	var endDay = new Date(end).getDate();
+     	
+     	if(startDay < endDay){
+     		alert("하루이상의 예약은 불가능합니다.");
+     		return false;
+     	}
+        return true;
+    }
+	
+	// 현재시간 이전의 예약은 수정하지 못하게 하는 함수 : input박스를 disabled 처리
+	 function checkUpdateAvailability(time){
+		var currentTime = new Date(); // Fri Jun 16 2023 15:49:43 GMT+0900
+		var startTime = new Date(time); //Thu Jun 15 2023 10:00:00 GMT+0900
+		
+		if(startTime <= currentTime){
+			$("#meetingRoom-reservation-status input, #meetingRoom-reservation-status select").attr("disabled", true);
+			$("#alertDisable").html("이미 지난 시간의 예약은 수정 및 삭제가 불가능합니다.").css("color","red");
+			$("#status-modal-footer button[type=button]").css("display", "none");
+		}
+	} 
+		// 모달을 닫을 때 disabled처리 된 모달을 다시 reset
+	$("#meetingRoom-reservation-status").on("hidden.bs.modal", function () {
+	 	 $("#meetingRoom-reservation-status input, #meetingRoom-reservation-status select").attr("disabled", false);
+		 $("#alertDisable").html(""); // 경고 메시지 초기화
+		 $("#status-modal-footer button[type=button]").css("display", "inline-block"); // 버튼 보이기
+	});
+		
+	// 예약 시작시간, 종료시간, 현재시간을 비교해주는 함수
+	$(".selectbox").change(function() { 
+		
+        var start = $(".startTime").val(); // 시작 시간
+        var end = $(".endTime").val(); // 종료 시간
+        
+        if(start > end) {
+            alert("종료 시간이 시작 시간보다 이전일 수 없습니다.");
+            $(this).val("");
+        }
+        if(start == end) {
+            alert("시작 시간과 종료 시간이 동일합니다. 다른 시간을 선택해주세요.");
+            $(this).val("");
+        }
+        if(start.substring(0,2) <= new Date().getHours()){
+        	alert("현재 시간보다 이전 시간은 예약할 수 없습니다. 다른 시간을 선택해주세요.")
+        	$(this).val("");
+        }
+    });
+		
+	// 예약 수정시 날짜와 현재날짜 비교하는 함수
+	$("#meetingRoom-reservation-status #status-revDate").change(function(){
+		
+		var currentDate = new Date();
+		
+		var year = currentDate.getFullYear(); // 년도 추출
+		var month = String(currentDate.getMonth() + 1).padStart(2, "0"); // 월 추출 
+		var day = String(currentDate.getDate()).padStart(2, "0"); // 일 추출
+
+		var formattedDate = year + "-" + month + "-" + day; // 원하는 포맷으로 조합
+		var selectedDate = $("#status-revDate").val();
+		
+		if(selectedDate < formattedDate){
+			alert("현재 날짜보다 이전 날짜를 선택할 수 없습니다. 다른 날짜를 선택해주세요.");
+			$(this).val(formattedDate);
+		}
+	});
+	
+		
+	// 회의실예약이 겹치지 못하게 하는 함수
+	$(".roomCode").change(function(e){
+		eventContraint(e);
+	});
+	
+	function eventContraint(event){ // 날짜를 클릭했을 때 발동 -> 예약 현황에서 수정할때도 발생하는 동시에 필요한 정보를 가져와야 함
+		
+		  // 이미 예약된 이벤트와 겹치는 예약을 방지하기 위한 로직
+		  var existingEvents = $('#calendar').fullCalendar('clientEvents'); // 이미 추가된 이벤트들을 가져옴
+		  var roomCode = event.roomCode; // 예약하려는 회의실 ID
+		  var startTime = event.start; // 예약하려는 시작 시간
+		  var endTime = event.end; // 예약하려는 종료 시간
+		  // 이미 예약된 이벤트들과 비교하여 중복 예약 체크
+		  for (var i = 0; i < existingEvents.length; i++) {
+		    var existingEvent = existingEvents[i];
+console.log(roomCode)
+		    // 같은 회의실에서 같은 시간대에 예약된 이벤트가 있는 경우
+		    if (existingEvent.roomCode == roomCode && existingEvent != event) {
+		      if (
+		        (existingEvent.start >= startTime && existingEvent.start < endTime) || // 시작 시간이 겹치는 경우
+		        (existingEvent.end > startTime && existingEvent.end <= endTime) || // 종료 시간이 겹치는 경우
+		        (existingEvent.start <= startTime && existingEvent.end >= endTime) // 이벤트가 예약하려는 시간대를 포함하는 경우
+		      ) {
+		        console.log('중복 예약입니다.'); // 콘솔 출력
+		        return false; // 예약 불가능
+		      }
+		    }
+		  }
+
+		  return true; // 예약 가능
+		
+	};
+	
+  </script>
    
 </body>
 </html>
-
-
 
