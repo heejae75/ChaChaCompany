@@ -2,36 +2,76 @@ package com.kh.final3.approval.model.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import com.kh.final3.approval.model.vo.Approval;
 import com.kh.final3.approval.model.vo.ApprovalAttachment;
 import com.kh.final3.approval.model.vo.ApprovalDoc;
 import com.kh.final3.approval.model.vo.DocType;
-import com.kh.final3.approval.model.vo.item;
+import com.kh.final3.approval.model.vo.Item;
+import com.kh.final3.approval.model.vo.Leave;
 import com.kh.final3.common.vo.PageInfo;
 import com.kh.final3.member.model.vo.Member;
 
 
 public interface ApprovalService {
 	
-	//ï¿½Ô½Ã±ï¿½ ï¿½ï¿½ ï¿½ï¿½È¸
-	int selectListCount(String status);
+	//ï¿½ï¿½ statusï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		int selectListCount(String status);
+		
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ò·ï¿½ï¿½ï¿½ï¿½ï¿½
+		ArrayList<ApprovalDoc> selectApprovalDocList(PageInfo pi, String status);
+		//ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ò·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ approvalï¿½Ò·ï¿½ï¿½ï¿½ï¿½ï¿½
+		ArrayList<Approval> selectApprovalList();
+		
+		//ï¿½ï¿½ï¿½ï¿½ È¨ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ò·ï¿½ï¿½ï¿½ï¿½ï¿½
+		ArrayList<ApprovalDoc> approvalMainList(String status);
+		
+		//ï¿½ï¿½Ä¸ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		ArrayList<DocType> selectEnrollList();
+		
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½È¸
+		ArrayList<Member> selectApproverList(String deptCode);
+		
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ë»ï¿½
+		ArrayList<Member> searchApproverList(HashMap<String, String> map);
+		
+		//ï¿½ï¿½ï¿½ï¿½Ç°ï¿½Ç¼ï¿½ ï¿½Û¼ï¿½
+		int insertItem(Item i, ArrayList<ApprovalAttachment> atList, ApprovalDoc ad, Approval a);
+		
+		//ï¿½Þ°ï¿½ï¿½ï¿½ ï¿½Û¼ï¿½
+		int insertLeave(Leave l, ArrayList<ApprovalAttachment> atList, ApprovalDoc ad, Approval a);
+		
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¸
+		Approval selectApproval(int docNo);
+		
+		//ï¿½ï¿½ï¿½ç¹®ï¿½ï¿½ Ã·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¸
+		ArrayList<ApprovalAttachment> selectApprovalAttachment(int docNo);
+		
+		//ï¿½ï¿½ï¿½ç¹®ï¿½ï¿½ ï¿½ï¿½È¸
+		ApprovalDoc selectApprovalDoc(int docNo);
+		
+		//ï¿½ï¿½ï¿½ï¿½Ç°ï¿½Ç¼ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¸
+		Item selectItem(int docNo);
+		
+		//ï¿½Þ°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¸
+		Leave selectLeave(int docNo);
+
+		//ï¿½ß°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ý·ï¿½
+		int updateSecondReturnReason(Approval a);
+		
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ý·ï¿½
+		int updateLastReturnReason(Approval a, ApprovalDoc ad);
+		
+		//ï¿½ß°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+		int updateSecondApprover(Approval a);
+		
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+		int updateLastApprover(Approval a,ApprovalDoc ad);
+		
+		//ï¿½ï¿½ï¿½ï¿½ È¨ ï¿½×·ï¿½ï¿½ï¿½
+		List<ApprovalDoc> monthData(ApprovalDoc ad);
+
 	
-	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½È¸
-	ArrayList<ApprovalDoc> selectApprovalList(PageInfo pi, String status);
 	
-	//ï¿½ï¿½ï¿½ï¿½ ï¿½Ö±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½È¸
-	ArrayList<ApprovalDoc> approvalMainList(String status);
-	
-	//¾ç½Ä¸®½ºÆ® °¡Á®¿À±â
-	ArrayList<DocType> selectEnrollList();
-	
-	//°áÀç¶óÀÎ »ç¿øÁ¶È¸
-	ArrayList<Member> selectApproverList(String deptCode);
-	
-	//°áÀç¶óÀÎ »ç¿ø °Ë»ö
-	ArrayList<Member> searchApproverList(HashMap<String, String> map);
-	
-	//±¸¸ÅÇ°ÀÇ¼­ ÀÛ¼º
-	int insertItem(item i, ArrayList<ApprovalAttachment> atList, ApprovalDoc ad, Approval a);
 }

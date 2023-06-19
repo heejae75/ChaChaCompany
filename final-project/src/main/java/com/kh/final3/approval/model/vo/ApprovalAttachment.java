@@ -17,5 +17,4 @@ public class ApprovalAttachment {
 	private String changeName;
 	private String uploadDate;
 	private String filePath;
-	private String status;
 }

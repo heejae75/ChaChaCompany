@@ -9,13 +9,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class item {
+public class Item {
 	private int docNo;
 	private String deptCode;
 	private String supplyName;
-	private double supplySize;
-	private int amount;
-	private int price;
+	private String supplySize;
+	private String amount;
+	private String price;
 	private String createDate;
-	private String status;
+	private String[] arrSupplyName;
+	private String[] arrSupplySize;
+	private String[] arrAmount;
+	private String[] arrPrice;
+	
 }
