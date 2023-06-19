@@ -20,8 +20,6 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-	
-    
     
 <!-- 	<link href="/final3/resources/css/menubar.css" rel="stylesheet"> -->
 	<style>
@@ -398,9 +396,18 @@
         	<!-- 쪽지  -->
             <div class="header_letter">
             	<a href="#">
-                	<i class="fa-sharp fa-solid fa-paper-plane fa-lg" style="color: #0E6251;"></i>
+                	<i id="messenger" class="fa-sharp fa-solid fa-paper-plane fa-lg" style="color: #0E6251;"></i>
             	</a>
             </div>
+            <script>
+				/* 쪽지 아이콘 클릭시 새창 띄우기 */
+				$(function(){
+					$("#messenger").on("click",function(){
+						window.open("list.mg","메신저","width = 1100 , height = 600");
+					})
+				})	
+			
+			</script>
 
 			<!-- 메일  -->
             <div class="header_mail">
@@ -515,7 +522,7 @@
 
 						<!-- 일정관리  -->
                         <li>
-                            <a href="#" class="nav_link">
+                            <a href="schedule.sc" class="nav_link">
                                 <i class="fa-sharp fa-solid fa-calendar-day" style="color: #ffffff; font-size: 28px;"></i>
                                 &nbsp;
                                 <span class="nav_name">&nbsp;일정관리</span>

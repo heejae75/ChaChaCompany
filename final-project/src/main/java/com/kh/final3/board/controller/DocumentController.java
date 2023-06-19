@@ -25,10 +25,10 @@ import com.kh.final3.board.model.vo.BoardAttachment;
 import com.kh.final3.common.template.Pagination;
 import com.kh.final3.common.template.SaveFile;
 import com.kh.final3.common.vo.PageInfo;
+import com.kh.final3.member.model.vo.Member;
 
-
-@Controller
 @RequestMapping(value = {"/member", "/admin"})
+@Controller
 public class DocumentController {
 	
 	@Autowired
@@ -44,7 +44,7 @@ public class DocumentController {
 		
 		//게시글 목록 조회해오기
 		int listCount = documentService.selectDocumentListCount();
-		
+
 		int pageLimit = 5;
 		int boardLimit = 10;
 		
@@ -117,8 +117,8 @@ public class DocumentController {
 		return "board/board_document/board_DocumentEnrollForm";
 	}
 
-	//寃뚯떆湲� �옉�꽦 硫붿냼�뱶 
-	@RequestMapping("insertDoc.dc")
+	//게시글 작성 메소드 
+	@RequestMapping(value="/insert.dc", method= RequestMethod.POST)
 	public ModelAndView insertDocument(Board b,  ArrayList<MultipartFile> upfile, ModelAndView mv, HttpSession session) {
 		
 		//첨부파일이 한개일수도 여러개일 수도 있기 때문에 첨부파일을 담아줄 list생성 
@@ -162,13 +162,15 @@ public class DocumentController {
 			
 		}
 		
-		b.setBoardWriter("3"); //로그인 가능 후 지우고 로그인 유저 번호로 바꾸기 
+		String userNo = String.valueOf(((Member)session.getAttribute("loginUser")).getUserNo());
+		
+		b.setBoardWriter(userNo); //로그인 가능 후 지우고 로그인 유저 번호로 바꾸기 
 		
 		int result = documentService.insertDocument(b,atList);
 		
 		if(result>0) { //게시글 작성 성공 
 			session.setAttribute("alertMsg", "게시글 작성이 완료되었습니다.");
-			mv.setViewName("redirect:list.dc");
+			mv.setViewName("redirect:/member/list.dc");
 			
 		}else { //게시글 작성 실패 
 			
@@ -178,7 +180,7 @@ public class DocumentController {
 			}
 			
 			session.setAttribute("errorMsg", "게시글 작성에 실패하였습니다.");
-			mv.setViewName("redirect:list.dc");
+			mv.setViewName("redirect:/member/list.dc");
 			
 		}
 		
@@ -197,7 +199,7 @@ public class DocumentController {
 			mv.addObject("b", b).addObject("atList", atList).setViewName("board/board_document/board_DocumentUpdateForm");
 		}else {
 			session.setAttribute("errorMsg", "수정페이지로 이동이 실패하였습니다.");
-			mv.setViewName("redrect:list.dc");
+			mv.setViewName("redrect:/member/list.dc");
 		}
 		
 		return mv;
@@ -266,9 +268,9 @@ public class DocumentController {
 		
 		if(result1*result2>0) {
 			session.setAttribute("alertMsg","게시글 수정 완료");
-			mv.setViewName("redirect:detail.dc?bno="+b.getBoardNo());
+			mv.setViewName("redirect:/member/detail.dc?bno="+b.getBoardNo());
 		}else {
-			mv.addObject("errorMsg","게시글 수정 실패").setViewName("redirect:list.dc");
+			mv.addObject("errorMsg","게시글 수정 실패").setViewName("redirect:/member/list.dc");
 		}
 		
 		return mv;
