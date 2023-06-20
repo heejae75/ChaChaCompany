@@ -4,32 +4,30 @@
 <html>
 <head>
 <meta charset="UTF-8">
-   <title>자료실 수정페이지 </title>
-   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+   <title>자료실 수정페이지</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <style>
-	
-	 .board-content{
-	  	width : 1400px;
+	  
+	.content{
+	  	width: 1570px;
+		margin-top:-105px;
 	}
+	
+   #boardList-btn > button{
+   		background-color: #0E6251;
+   		color: white;
+   }
   	
-  	/* navi */
-  	#board-tap-area{
-  		width: 100%;	
-  		margin:auto;
-  	}
-  
-  
-	#board-tap-area>ul{
-		padding-top : 50px;
-		height : 120px;
-		list-style-type : none;
+  	/*navibar*/
+	#board-tap-area{
+		width: 80%;
+		height : 50px;
+		margin: auto;
 	}
 	
-	#board-tap-area>h1{
-		padding-top : 50px;
-		width : 10%;
-		float : left;
-		
+	#board-tap-area>ul{
+		width:100%;
+		list-style-type : none;
 	}
 	
 	#nav-tabs{
@@ -44,10 +42,17 @@
     }
     
     #board-tap-area>ul li a{
-    	text-align: center; 	
+    	width: 100%;
+    	height : 100%;
+    	display: inline-block;
+    	text-align: center;
+    	line-height: 40px;
+    	background-color: lightgrey;
+    	text-decoration: none;
+    	color: black;	
     }
     
-    li:hover{
+   #board-tap-area>ul li:not(.active):hover{
     	border-top: 1px solid #dee2e6;
 		border-left: 1px solid #dee2e6;
 		border-right: 1px solid #dee2e6;
@@ -55,33 +60,34 @@
 		border-top-right-radius:0.25rem; 
     }
 	
-	#link_active{
-		border-top: 1px solid #dee2e6;
-		border-left: 1px solid #dee2e6;
-		border-right: 1px solid #dee2e6;
-		border-bottom: none;
-		border-top-left-radius:0.25rem;
-		border-top-right-radius:0.25rem;
-	}  
+	#board-tap-area .active a{
+	 	border-botton: none;
+	 	background-color: #0E6251;
+	 	color: white;
+	} 	    
 	
-	#document-detail{
-		width : 100%;
-		margin-top:40px;
-    }
-    
-    #document-detail div{ /* => document-table-area */
+	/* 게시글 영역  */
+	#board-detail-area{
         width: 80%;
         margin: auto;
+        margin-top : 10px;
     }
     
+    /* 게시글 테이블 영역 */
     #document-table{
-    	width : 100%;
+    	width : 80%;
 		
     }
     
-    #document-table td{
-    	height : 50px;
-    	border : 2px solid black;
+    #document-table th,  #document-table td{
+        text-align:center;
+        vertical-align: middle;
+        font-size: 15px;
+    }
+    
+   	#document-table select{
+    	font-size: 15px !important;
+    	border: 1px solid #c0c0c0;
     }
     
     /* btn-area */
@@ -97,108 +103,110 @@
 		padding: 0;
 		border: 0;
 	}
-
     </style>
     
 </head>
 <%@ include file="../../common/menubar.jsp" %>
-<body id="body-pd">
-    <div class="content">
-    	<div class="board-content">
- 
-            <div id="board-tap-area">
-            	<h1>자료실</h1>
-                <ul id="nav-tabs">
-				  	<li class="nav-item">
-				    	<a class="nav-link" aria-current="page" href="#">공지사항</a>
-				 	</li>
-				  	<li class="nav-item">
-				    	<a class="nav-link active" id="link_active" href="list.dc">자료실</a>
-				  	</li>	
-				  	<li class="nav-item">
-				    	<a class="nav-link" href="#">대여</a>
-				  	</li>
-				  	<li class="nav-item">
-				    	<a class="nav-link">커뮤니티</a>
-				  	</li>
-				</ul>
+<div class="content">
+	<div id="board-tap-area">
+		<ul id="nav-tabs"  class="nav-tabs nav-pills">
+			<li role="presentation">
+				<a href="list.no">공지사항</a>
+			</li>
+			<li role="presentation">
+	 			<a href="list.dc" class="active" >자료실</a>
+			</li>
+			<li role="presentation">
+				<a href="list.re">대여</a>
+			</li>
+			<li role="presentation">
+				<a href="#">커뮤니티</a>
+			</li>
+		</ul>
+	</div>
+	<br>
+	
+	<div id="document-detail-area">
+		<form action="update.dc" method="post" enctype="multipart/form-data">
+	   		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+	   		<input type="hidden" name="boardNo" value="${b.boardNo}">
+		<table id="document-table" class="table table-hover" align="center">
+			<thead>
+				<tr>
+					<td width="10%" style="font-weight: 800;">제목</td>  
+					<td colspan="5"><input value="${b.boardTitle}" name="boardTitle" type="text" class="form-control" style="width :100%; height:100%; font-size: 17px;"></td>      
+				</tr>
+				<tr>
+					<td width="10%" style="font-weight: 800;" >작성자</td>
+					<td width="40%" style="text-align: left;">${b.boardWriter}</td>
+					<td width="10%" style="font-weight: 800;">중요도</td>
+					<td width="10%">
+						<select name="importanceLevel" class="form-control" style=" width :100%; height:100%; font-size: 20px; ">
+	               		<c:choose>
+                        	<c:when test="${b.importanceLevel eq 'R'}">
+                      			<option value="R">일반</option>
+   	                    		<option value="I">중요</option>
+							</c:when>
+                    		<c:otherwise>
+	       	                    <option value="I">중요</option>	                            			
+								<option value="R">일반</option>
+                           	</c:otherwise>
+                     	</c:choose>
+                     	</select>
+					</td>
+					<td width="10%" style="font-weight: 800;">카테고리</td> 
+					<td width="10%">
+						<select name="categoryCode" class="form-control" style=" width :100%; height:100%; font-size: 20px; ">
+                   			<c:choose>
+                       			<c:when test="${b.categoryCode eq 'B1'}">
+  	                        		<option value="B1">공지사항</option>
+      	                    		<option value="B2">자료실</option>
+      	                    		<option value="B3">커뮤니티</option>
+                       			</c:when>
+                       			<c:when test="${b.categoryCode eq 'B2'}">
+      	                    		<option value="B2">자료실</option>
+  	                        		<option value="B1">공지사항</option>
+      	                    		<option value="B3">커뮤니티</option>
+                       			</c:when>
+                       			<c:otherwise>
+      	                    		<option value="B3">커뮤니티</option>
+  	                        		<option value="B1">공지사항</option>
+      	                    		<option value="B2">자료실</option>
+                       			</c:otherwise>
+                      		</c:choose>
+						</select>
+					</td> 
+				</tr>
+			</thead>
+      		<tbody>
+				<tr>
+					<td style="font-weight: 800;" >업로드된 파일</td>
+                  	<td colspan="5" style="text-align:left;">
+                   		<c:forEach var="at" items="${atList}">
+							<ul>
+	                           <li>${at.originName}</li>
+	                   		</ul>		
+                     	</c:forEach>	
+                   	</td>
+				</tr>
+				<tr>
+					<td style="font-weight: 800;" >첨부파일</td>
+                  	<td colspan="5">
+                   		<input type="file" name="upfile" multiple required>
+                   	</td>
+               </tr>
+               <tr>
+                   <td colspan="6"><textarea name ="boardContent" style="resize: none; width: 100%; height: 300px; padding: 0;" required></textarea></td>
+               </tr>
+           </tbody>
+		</table>
+		<hr style="width:80%;">
+			<div id="board-btn-area">
+				<button class="btn btn-secondary" onclick="location.href=list.dc">취소</button> <button type="submit" class="btn btn-success">확인</button>               
 			</div>
-            
-	       	<div id="document-detail">
-				<div id="document-table-area">
-	            	<form action="update.dc" method="post" enctype="multipart/form-data">
-	            	<input type="hidden" name="boardNo" value="${b.boardNo}">
-	                <table id="document-table">
-	                    <thead>
-	                        <tr>
-	                            <td width="10%" style="text-align: center;">
-	                            	<select name="importanceLevel" style=" width :100%; height:100%; font-size: 20px; ">
-	                            		<c:choose>
-	                            			<c:when test="${b.importanceLevel eq 'R'}">
-			   	                        		<option value="R">일반</option>
-			       	                    		<option value="I">중요</option>
-	                            			</c:when>
-	                            			<c:otherwise>
-			       	                    		<option value="I">중요</option>	                            			
-												<option value="R">일반</option>
-	                            			</c:otherwise>
-	                            		</c:choose>
-	           	                	</select>
-	                            </td> 
-	                            <td width="10%" style="text-align: center;">
-	                            	<select name="categoryCode" style=" width :100%; height:100%; font-size: 20px; ">
-	       	                    		<c:choose>
-	                            			<c:when test="${b.categoryCode eq 'B1'}">
-			   	                        		<option value="B1">공지사항</option>
-			       	                    		<option value="B2">자료실</option>
-			       	                    		<option value="B3">커뮤니티</option>
-	                            			</c:when>
-	                            			<c:when test="${b.categoryCode eq 'B2'}">
-			       	                    		<option value="B2">자료실</option>
-			   	                        		<option value="B1">공지사항</option>
-			       	                    		<option value="B3">커뮤니티</option>
-	                            			</c:when>
-	                            			<c:otherwise>
-			       	                    		<option value="B3">커뮤니티</option>
-			   	                        		<option value="B1">공지사항</option>
-			       	                    		<option value="B2">자료실</option>
-	                            			</c:otherwise>
-	                            		</c:choose>
-	           	                	</select>
-	                            </td>  
-	                            <td style="text-align: center; font-size:20px; font-weight: 800;">제목</td>  
-	                            <td><input id="title" name="boardTitle" type="text" style="width :100%; height:100%; font-size: 20px;" value="${b.boardTitle}"></td>      
-                        	</tr>
-	                    </thead>
-	                    <tbody>
-	                        <tr>
-	                        	<td align="center">업로드 파일</td>
-	                        	
-	                            <td colspan="3">
-                       	 		<c:forEach var="at" items="${atList}">
-	                           		${at.originName} <br>
-                     			</c:forEach>		
-                           		</td>
-	                        </tr>
-	                        <tr>
-		                        <td colspan="4">
-		                        	<input type="file" name="upfile" multiple>
-		                        </td>
-	                        </tr>
-	                        <tr>
-	                            <td colspan="4"><textarea name ="boardContent" style="resize: none; width: 100%; height: 300px; padding: 0;" required>${b.boardContent}</textarea></td>
-	                        </tr>
-	                    </tbody>
-	                </table>
-	                <!-- 임시저장 기능 한번 확인 -->
-		            <div id="board-btn-area">
-		                <button class="btn btn-secondary" onclick="location.href=list.dc">취소</button> <button type="submit" class="btn btn-success">확인</button>               
-		            </div>
-		       		</form>
-	            </div>
-			</div>
-        </div>
-    </div>
+		</form>
+	</div>
+</div>
 </body>
 </html>
 

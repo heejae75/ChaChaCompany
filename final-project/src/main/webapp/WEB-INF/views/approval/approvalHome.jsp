@@ -7,152 +7,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/final3/resources/css/Approval_Main.css" >
     <title>Document</title>
-    <style>
-        div{
-            box-sizing: border-box;
-        }
-        .approval-home{
-            width: 1000px;
-            height: 800px;
-            margin: auto;
-        }
-        .approval-home>div{
-            width: 100%;
-        }
-        #approval-home_1{
-            height: 30%;
-        }
-        #approval-home_2{
-            height: 40%;
-        }
-        #approval-home_3{
-            height: 30%;
-        }
-        #approval-home_1>div{
-            height: 100%;
-            float: left;
-        }
-        #lately-area{
-            float: right;
-            font-size: 20px;
-            padding-top: 25px;
-            padding-right: 100px;
-        }
-        #approval_short_list{
-        	width: 100%;
-        	text-align : center;
-        }
-        #approval_short_list>tbody>tr:hover{
-		    background-color: rgb(209, 207, 207);
-		    cursor: pointer;
-		}
-       
-
-    </style>
 </head>
-<style>
-	div{
-	    box-sizing: border-box;
-	}
-	.approval-home{
-	    width: 1000px;
-	    height: 1000px;
-	    margin: auto;
-	}
-	.approval-home>div{
-	    width: 100%;
-	}
-	#approval-home_1{
-	    height: 30%;
-	}
-	#approval-home_2{
-	    height: 40%;
-	}
-	#approval-home_3{
-	    height: 30%;
-	}
-	#approval-home_1>div{
-	    height: 100%;
-	    float: left;
-	}
-	#lately-area{
-	    float: right;
-	    font-size: 20px;
-	    padding-top: 25px;
-	    padding-right: 100px;
-	}
-	.table{
-		table-layout: fixed;
-        
-	}
-	.table>thead{
-		text-align : center;
-	}
-	.table>tbody>tr>td {
-		text-align: center;
-		word-break:break-all;
-	}
-    .table>tbody>tr:hover{
-	    background-color: rgb(209, 207, 207);
-	    cursor: pointer;
-	}
- 	#board-tap-area{
-		width: 80%;
-		margin: auto;
-	}
-		
-	#board-tap-area>ul{
-		width:100%;
-		height : 42px;
-		list-style-type : none;
-	}
-		
-	#nav-tabs{
-		padding : 0;
-		display: flex;
-	}
-	#board-tap-area>ul li{
-	    width :98px;
-	    margin-right: 5px;
-	    float : left;
-	}
-	#board-tap-area>ul li a{
-	    text-align: center; 	
-	}
-    li button:hover{
-	    border-top: 1px solid #dee2e6;
-		border-left: 1px solid #dee2e6;
-		border-right: 1px solid #dee2e6;
-		border-top-left-radius:0.25rem;
-		border-top-right-radius:0.25rem; 
-	}
-</style>
 <body>
 	<%@ include file="../common/menubar.jsp" %>
     <div class="approval-home">
         <div id="approval-home_1">
-        <br><br><br><br>
-                <table id="lately-area">
-                <tr>
-                    <th>최근사용내역</th>
-                </tr>
-                <tr>
-                    <td><a href="">양식1</a></td>
-                </tr>
-                <tr>
-                    <td><a href="">양식1</a></td>
-                </tr>
-                <tr>
-                    <td><a href="">양식1</a></td>
-                </tr>
-                <tr>
-                    <td><a href="">양식1</a></td>
-                </tr>
-            </table>
+        
+              
         </div>
         <div id="approval-home_2">
-            <div id="board-tap-area">
+            <div id="approval-tap-area">
                 <ul class="nav-tabs">
                 	<li class="nav-item">
                       <button class="nav-link" onclick="approvalList();">전체</button>
@@ -169,13 +35,10 @@
                     <li class="nav-item">
                       <button class="nav-link" onclick="approvalList('R');">반려함</button>
                     </li>
-                    <li class="nav-item">
-                      <button class="nav-link" onclick="approvalList('T');">임시함</button>
-                    </li>
                 </ul>
 
             </div>
-            <table class="table table-hover" align="center">
+            <table id="approval-main-list" class="table table-hover" align="center">
                 <thead>
                     <tr>
                         <th width="100px">문서번호</th>
@@ -191,48 +54,119 @@
             </table>
         </div>
         <div id="approval-home_3">
-<<<<<<< HEAD
-
-            
-=======
-			<h1>그래프 넣기</h1>
->>>>>>> refs/remotes/origin/main
+			<h1>승인/반려 통계 그래프</h1>
+			<canvas id="graph-area"></canvas>
         </div>
     </div>
-<<<<<<< HEAD
-=======
+    
     <script>
-    	$(function(){
-        	approvalList();
-
-        });
-    	function approvalList(status){
-    		$.ajax({
-    			url :"approvalMainList.ap",
-    			data : {
-    				status : status
-    			},
-    			success : function(list){
-    				var str ="";
-    				for(var i=0; i<list.length; i++){
-    					str += "<tr>"
-    						 + "<td width='100px'>"+list[i].docNo+"</td>"
-    						 + "<td width='110px'>"+list[i].deptCode+"</td>"
-    						 + "<td>"+list[i].docType+"</td>"
-    						 + "<td colspan='2'>"+list[i].docTitle+"</td>"
-    						 + "<td>"+list[i].createDate+"</td>"
-    						 + "</tr>"
-    				}
-    				
-    				$(".table>tbody").html(str);
-    			},
-    			error : function(){
-    				console.log("통신오류");
-    			}
-    		});
-    	}
+    $(function(){
+    	approvalList();
+    	monthData();
+    });
+	function approvalList(status){
+		$.ajax({
+			url :"approvalMainList.ap",
+			data : {
+				status : status
+			},
+			success : function(list){
+				var str ="";
+				for(var i=0; i<list.length; i++){
+					str += "<tr>"
+						 + "<td width='100px'>"+list[i].docNo+"</td>"
+						 + "<td width='110px'>"+list[i].deptCode+"</td>"
+						 + "<td>"+list[i].docType+"</td>"
+						 + "<td colspan='2'>"
+						 if(list[i].emergency == 'Y' && list[i].status == 'P'){
+					str	+= "<button type='button' class='btn btn-danger btn-sm' disabled style='background-color: #c42d2d'>긴급</button>"
+						 }	 
+					str	+= list[i].docTitle
+						 + "</td>"
+						 + "<td>"+list[i].createDate+"</td>"
+						 + "</tr>"
+				}
+				
+				$("#approval-main-list>tbody").html(str);
+				
+				$("#approval-main-list>tbody>tr").click(function(){
+					var docNo = $(this).children().eq(0).text();
+					var docType = $(this).children().eq(2).text();
+					location.href = "detail.ap?docNo="+docNo+"&docType="+docType;
+				});
+			},
+			error : function(){
+				console.log("통신오류");
+			}
+		});
+	}
+	function monthData(){
+		docWriter = "${loginUser.userNo}"
+		console.log(docWriter);
+		$.ajax({
+			url : "monthData.ap",
+			type : "POST",
+			data : {docWriter : docWriter},
+			beforeSend : function(xhr)
+            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+                xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+            },
+			success : function(list){
+				var jsonData = list
+				var jsonObject = JSON.stringify(jsonData);
+				var jData = JSON.parse(jsonObject);
+				var dateList = new Array(); 
+				var approvalList = new Array();
+				var rejectList = new Array();
+				
+				for(var i = 0; i<list.length;i++){
+					var d = list[i];
+					dateList.push(d.createDate);
+					approvalList.push(d.approval);
+					rejectList.push(d.reject);
+				}
+				console.log(dateList);
+				console.log(approvalList);
+				console.log(rejectList);
+				
+				const data = {
+					labels: dateList,
+					datasets:[{
+						type : 'bar',
+						label : '승인',
+						data:approvalList,
+						backgroundColor : '#cdf8cd',
+						order : 1
+					},{
+						type : 'bar',
+						label : '반려',
+						data:rejectList,
+						backgroundColor : '#fad2d2',
+						order : 2
+					}],	
+				};
+				var ctx1 = document.getElementById('graph-area').getContext('2d');
+				const myChart = new Chart(ctx1,{
+					type:'bar',
+					data: data,
+					options: {
+					    scales: {
+					      yAxes: [{
+					    	  ticks:{
+					    		  beginAtZero : true, // 0부터 시작하게 합니다.
+									stepSize: 1   // 1 씩 증가하도록 설정합니다.
+					    	  }
+					      }]
+					    }
+					  }
+				});
+			},
+			error : function(){
+				console.log("통신오류")
+			}
+		});
+	}
+	
     </script>
-   
->>>>>>> refs/remotes/origin/main
 </body>
 </html>
