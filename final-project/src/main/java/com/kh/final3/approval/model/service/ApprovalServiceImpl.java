@@ -134,7 +134,6 @@ public class ApprovalServiceImpl implements ApprovalService {
 	public int updateLastReturnReason(Approval a, ApprovalDoc ad) {
 		int result = ss.update("approvalMapper.updateLastReturnReason",a);
 		int result2 = ss.update("approvalMapper.updateStatus",ad);
-		//업데이트는 되는데 0이 반환됨
 		return result*result2;
 	}
 	

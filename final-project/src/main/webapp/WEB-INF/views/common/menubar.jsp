@@ -13,17 +13,22 @@
     
 	<!--아이콘 cdn-->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- <link rel="stylesheet" href="/css/chat.css"> --> 
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+	<!-- 풀캘린더 -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.css" />
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 	
-    
-    
-<!-- 	<link href="/final3/resources/css/menubar.css" rel="stylesheet"> -->
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script> <!-- 동현님 -->
+
+    <!-- <link rel="stylesheet" href="/css/chat.css"> --> 
+	<!-- <link href="/final3/resources/css/menubar.css" rel="stylesheet"> -->
+	<!--
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+	-->	
 	<style>
 		        :root{
             --header-height: 5.4rem;
@@ -417,9 +422,18 @@
         	<!-- 쪽지  -->
             <div class="header_letter">
             	<a href="#">
-                	<i class="fa-sharp fa-solid fa-paper-plane fa-lg" style="color: #0E6251;"></i>
+                	<i id="messenger" class="fa-sharp fa-solid fa-paper-plane fa-lg" style="color: #0E6251;"></i>
             	</a>
             </div>
+            <script>
+				/* 쪽지 아이콘 클릭시 새창 띄우기 */
+				$(function(){
+					$("#messenger").on("click",function(){
+						window.open("list.mg","메신저","width = 1100 , height = 600");
+					})
+				})	
+			
+			</script>
 
 			<!-- 메일  -->
             <div class="header_mail">
@@ -536,7 +550,7 @@
 
 						<!-- 일정관리  -->
                         <li>
-                            <a href="#" class="nav_link">
+                            <a href="schedule.sc" class="nav_link">
                                 <i class="fa-sharp fa-solid fa-calendar-day" style="color: #ffffff; font-size: 28px;"></i>
                                 &nbsp;
                                 <span class="nav_name">&nbsp;일정관리</span>

@@ -99,3 +99,17 @@
 	    margin-left: 10px;
 	
 	}
+	
+	.body-contentbox a{
+		text-decoration: none;
+		color:black;
+	
+	}
+	
+	.body-contentbox a:hover{
+		text-decoration: none;
+		color:black;
+		cursor:pointer;  
+		font-size:20px;
+		font-weight:500;
+	}
