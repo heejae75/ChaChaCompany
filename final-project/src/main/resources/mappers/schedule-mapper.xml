@@ -20,7 +20,14 @@
 	<!-- 부서 스케줄 등록 메소드 -->
 	<insert id="addSchedule">
 		INSERT INTO DEPT_SCHEDULE (DEPT_SCHEDULE_NO,DEPT_CODE,JOB_CODE,SCHEDULE_TITLE,SCHEDULE_CONTENT,START_DATE,END_DATE)
-          VALUES(SEQ_DEPT_SE.NEXTVAL,#{deptCode},#{jobCode},#{scheduleTitle},#{scheduleContent},#{startDate},#{endDate});
+          VALUES(SEQ_DEPT_SE.NEXTVAL,#{deptCode},#{jobCode},#{scheduleTitle},#{scheduleContent},#{startDate},#{endDate})
 	</insert>
 	
+	<!-- 부서 스케줄 조회 메소드 -->
+	<select id="getSchedule" resultMap="deptScheduleResultSet">
+		SELECT DEPT_SCHEDULE_NO,DEPT_CODE,JOB_CODE,SCHEDULE_TITLE,SCHEDULE_CONTENT,START_DATE,END_DATE,STATUS
+		FROM DEPT_SCHEDULE
+		WHERE DEPT_CODE = #{deptCode}
+		AND STATUS = 'Y'
+	</select>	
 </mapper>

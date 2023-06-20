@@ -69,7 +69,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-warning" id="addSchedule">추가</button>
+                    <button type="button" class="btn btn-warning" id="addSchedule" data-dismiss="modal"
+                        id="sprintSettingModalClose" >추가</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal"
                         id="sprintSettingModalClose">취소</button>
                 </div>
@@ -81,51 +82,26 @@
 <script>
 		
 	$(function(){
-		deptSchedule(); //부서 스케줄 함수
-		
-		function getSchedule(){
-			
-			var event = [];
-			
-			$.ajax({
-				url : "getSchedule.sc",
-				
-				type : "post",
-				
-				data : {deptCode : '${loginUser.deptCode}'},
-				
-				beforeSend : function(xhr)
-	            {
-	                xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
-	            },
-	            
-	            success : function(result){
-	            	event = result;
-	            }
-			
-			});
-			
-			return event;
-		}
+		deptSchedule(); //부서 스케줄 함수 호출 
 
 		function deptSchedule(){
-			
 			
 			$("#calendar").fullCalendar({
 				
 				plugins : ['interaction','dayGrid'],
 				
 				locale: 'ko',
-		        firstDay : 1, 
+				defaultDate : new Date(),
+		        firstDay : 1, // 월요일이 먼저 오게 하기  
+				fixedWeekCount : false, // 해당 월만 보이도록 하기 
 		      	navLinks: true,
 		      	selectable: true,
 		      	selectMirror: true,
 		        dayMaxEvents: true, 
 				editable: true,
-				fixedWeekCount : false,
 		      	height : 800,
-		        header : {
-		        	
+						        
+		      	header : {
 		        	left : "",
 		        	center : "prev, title ,next ",
 		        	right : "addEventButton, today, prevYear, nextYear "
@@ -136,15 +112,52 @@
 		        		titleFormat: "YYYY년 MM월"
 		        	}
 		        },
-					
-		        //날짜 클릭 이벤트 
-		        dayClick : function(){
-		        	
-		        	$("#schedule-modal").modal("show");
-		        		var moment = $(this).data().date; //클릭한 날짜의 date값
-		        		
-		        		var $startDate = $("#startDate").val(moment); //선택한 날짜를 시작 날짜로 잡아주기
+				
+		        //등록된 일정 조회 
+		        events: function(start, end, timezone, callback){
+
+		        	$.ajax({
+						url : "getSchedule.sc",
 						
+						data : {deptCode : '${loginUser.deptCode}'},
+						
+			            success : function(schedule){
+			            	var events = [];
+			            	
+			            	for(var i = 0 ; i<schedule.length ; i++){
+			            		
+			            		var event ={
+			            			no: schedule[i].deptSchedule_No,
+			            			title : schedule[i].scheduleTitle,
+			            			content : schedule[i].scheduleContent,
+			            			start : schedule[i].startDate,
+			            			end : schedule[i].endDate,
+			            			
+			            		};
+			            		events.push(event);
+			            		console.log(events)
+;							}
+			            	
+			            	callback(events);
+			            },
+			            
+			            error : function(){
+			            	alert("이벤트 조회 실패 ");
+			            }
+					
+					});
+		        	
+		        },
+		        	
+		        //날짜 클릭 이벤트 
+		        dayClick : function(start, end, jsEvent){
+		        	$("#schedule-modal").modal("show");
+		        		var startDate = moment(start).format('YYYY-MM-DD');
+		        		console.log(startDate);	
+		        		
+		        		var endDate = moment(end).format('YYYY-MM-DD');
+		        		
+		        		$startDate = $("#startDate").val(startDate); // 선택한 날짜 value에 담아서 보여주기 
 						$("#addSchedule").on("click", function(){
 							//날짜 포맷 바꿔주기 
 	
@@ -183,19 +196,15 @@
 										deptCode : deptCode
 									},
 									
-									/* beforeSend : function(xhr)
-						            {
-						                xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
-						            }, */
-						            
-									success : function(result){
-										
+						            success : function(result){
+										console.log(result);
 										if(result == "YYYY"){
 											alert("일정 등록 완료 ")
-											
-											getSchedule(); // 스케줄 조회 함수
-											
+
+										}else{
+											alert("일정 등록에 실패하였습니다. ")
 										}
+										
 									},
 									
 									error : function(){
@@ -208,7 +217,6 @@
 						}); // 추가 버튼 클릭 이벤트 
 							
 					},
-		        	
 		        
 		        //상단에 위치한 일정 추가 버튼 클릭시 발생할 이벤트 
 				customButtons:{
