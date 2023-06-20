@@ -508,7 +508,7 @@
                         
                         <!-- 근태관리  -->
                         <li>
-                            <a href="#" class="nav_link">
+                            <a href="userAtt.at" class="nav_link">
                                 <i class="fa-sharp fa-solid fa-business-time" style="color: #ffffff; font-size: 22px;"></i>
                                 &nbsp;
                                 <span class="nav_name">근태관리</span>
