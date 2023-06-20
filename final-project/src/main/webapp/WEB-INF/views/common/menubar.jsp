@@ -14,20 +14,21 @@
 	<!--아이콘 cdn-->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+	<!-- 풀캘린더 -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.css" />
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    
-<!-- 	<link href="/final3/resources/css/menubar.css" rel="stylesheet"> -->
+	
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script> <!-- 동현님 -->
 
-	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <!-- <link rel="stylesheet" href="/css/chat.css"> --> 
+	<!-- <link href="/final3/resources/css/menubar.css" rel="stylesheet"> -->
 	<!--
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
-    
- 	<link href="/final3/resources/css/menubar.css" rel="stylesheet"> -->
+	-->	
 	<style>
 		        :root{
             --header-height: 5.4rem;
@@ -371,6 +372,25 @@
 	    border-radius: 10px;
 	}
     
+    //======================================chat
+    .header_chat{
+  
+	}
+	#alarm{
+	  margin-left:20px;
+	  position:absolute;
+	  text-align:center;
+	  background-color:red;
+	  color:#fff;
+	  border-radius:200px;
+	  width:18px;
+	  height:17px;
+	  font-size:12px;
+	  font-weight:400;
+	  line-height:15px;
+	  
+	}
+    
     
 	</style>
 </head>
@@ -424,10 +444,12 @@
 
 			<!-- 실시간 채팅  -->
             <div class="header_chat">
-            	<a href="#">
+            <div id="alarm">7</div>
+            	<a href="${pageContext.request.contextPath}/talk.do" onclick="chatList();">
                 	<i class="fa-sharp fa-solid fa-comments fa-lg" style="color: #0E6251;"></i>
                 </a>
             </div>
+       
 
 			<!-- 알림  -->
             <div class="header_alert">
@@ -668,32 +690,59 @@
         });
         
     });
-    
-    
+
+</script>
+
+
+
+<script>    
+function chatList(){
+    connect();
+	$("#header_chat").click(function(){
+	 var pop = $(this).siblings('#plz');
+
+	    $(pop)
+	        .css('opacity',0)
+	        .slideToggle(380 , 'swing')
+	        .animate(
+	        { opacity : 1 }
+	        ,{ queue : false , duration : 700}
+	        ,'swing');
+	    });
+	};
+
+    //웹소켓 = 전역변수 설정 -> 다른 곳에서도 알림기능 채팅기능 이용가능
     var socket;
+    //연결 함수
     function connect() {
     	console.log(socket);
     	
     	if(!socket) { //접속을 아무리 반복해도 접속자 수 안 늘어남(중복접속 막음 )
-    		var url = "ws://localhost:8080/ws/active";
+    		var url = "ws://${pageContext.request.serverName}:"
+        		+"${pageContext.request.serverPort}${pageContext.request.contextPath}/websocket/echo.do";
+
+        	//소켓 객체 생성	
     		socket = new WebSocket(url);
+
+        	//웹 소켓에 이벤트 발생시 호출될 함수 선언
+    	    socket.onopen = onOpen;
+    	    socket.onmessage = onMessage;
     	}
     	
-    	socket.onopen = function() {
-    		console.log("서버와 연결됨 ");
-    	}
-    	
-    	socket.onmessage = function() {
-    		console.log("메세지 도착 ");
-    	}
-    	
-    	socket.onclose = function() {
-    		console.log("서버와 연결 종료 ");
-    	}
-    	
-    	socket.onerror = function(e) {
-    		console.log("서버와 연결과정에서 오류 발생 ");
-    	}
+    	 //웹 소켓에 연결되었을 때 호출될 함수
+        function onOpen() {
+            console.log("서버와 연결됨 ");
+        }
+        
+       // * 1 메시지 전송
+       function sendMessage(message){
+       }
+       
+        // * 2 메세지 수신
+        function onMessage(evt) {
+        	console.log("메세지 도착  : "+evt);
+       }
+
     }
     </script>
 </body>

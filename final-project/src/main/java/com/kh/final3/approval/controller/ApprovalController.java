@@ -127,7 +127,7 @@ public class ApprovalController {
 	
 	//구매품의서
 	@RequestMapping("item.ap")
-	public ModelAndView insertItem(Item i, ApprovalDoc ad, Approval a,ModelAndView mv,HttpSession session, ArrayList<MultipartFile> upfile){
+	public ModelAndView insertItem(Item i, ApprovalDoc ad,ApprovalAttachment at, Approval a,ModelAndView mv,HttpSession session, ArrayList<MultipartFile> upfile){
 		ArrayList<ApprovalAttachment> atList = new ArrayList<>();
 		for(MultipartFile file : upfile) {
 			if(!file.getOriginalFilename().equals("")) {
@@ -141,12 +141,14 @@ public class ApprovalController {
 					e.printStackTrace();
 				}
 				
-				ApprovalAttachment at = ApprovalAttachment.builder().originName(file.getOriginalFilename())
+				at = ApprovalAttachment.builder().originName(file.getOriginalFilename())
 																	.changeName(changeName)
 																	.filePath(filePath+changeName)
 																	.deptCode(ad.getDeptCode()).build();
 				
 				atList.add(at);
+			}else {
+				at = null;
 			}
 			
 		}
@@ -165,7 +167,7 @@ public class ApprovalController {
 	}
 	//휴가계
 		@RequestMapping("leave.ap")
-		public ModelAndView insertItem(Leave l, ApprovalDoc ad, Approval a,ModelAndView mv,HttpSession session, ArrayList<MultipartFile> upfile){
+		public ModelAndView insertItem(Leave l, ApprovalDoc ad,ApprovalAttachment at, Approval a,ModelAndView mv,HttpSession session, ArrayList<MultipartFile> upfile){
 			ArrayList<ApprovalAttachment> atList = new ArrayList<>();
 			
 			for(MultipartFile file : upfile) {
@@ -180,12 +182,14 @@ public class ApprovalController {
 						e.printStackTrace();
 					}
 					
-					ApprovalAttachment at = ApprovalAttachment.builder().originName(file.getOriginalFilename())
+					at = ApprovalAttachment.builder().originName(file.getOriginalFilename())
 																		.changeName(changeName)
 																		.filePath(filePath+changeName)
 																		.deptCode(ad.getDeptCode()).build();
 					
 					atList.add(at);
+				}else {
+					at = null;
 				}
 				
 			}

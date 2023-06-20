@@ -124,6 +124,8 @@ public class DocumentController {
 		//첨부파일이 한개일수도 여러개일 수도 있기 때문에 첨부파일을 담아줄 list생성 
 		ArrayList<BoardAttachment> atList = new ArrayList<>();
 		
+		if(upfile != null) {
+			
 		for(MultipartFile file : upfile) {
 			
 			if(!file.getOriginalFilename().equals("")) {
@@ -160,6 +162,7 @@ public class DocumentController {
 				
 			}
 			
+		}
 		}
 		
 		String userNo = String.valueOf(((Member)session.getAttribute("loginUser")).getUserNo());
