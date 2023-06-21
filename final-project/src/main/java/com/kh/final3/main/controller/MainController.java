@@ -1,6 +1,8 @@
 package com.kh.final3.main.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -18,6 +21,7 @@ import com.kh.final3.board.model.vo.Board;
 import com.kh.final3.email.model.vo.Email;
 import com.kh.final3.main.model.service.MainService;
 import com.kh.final3.member.model.vo.Member;
+import com.kh.final3.schedule.model.vo.Schedule;
 
 @RequestMapping(value={"/member","/admin"})
 @Controller
@@ -26,18 +30,6 @@ public class MainController {
 	@Autowired
 	private MainService mainService;
 
-	//사용자 메인페이지 이동 
-	@RequestMapping("home.ma")
-	public String MainHome() {
-		return "main/userMain";
-	}
-	
-	//관리자 메인페이지 이동 
-	@RequestMapping("adminHome.ma")
-	public String adminMain() {
-		return "main/adminMain";
-	}
-	
 	//최근 공지 불러오기 
 	@ResponseBody
 	@RequestMapping(value="mainNoticeList.ma", produces="application/json; charset=UTF-8")
@@ -87,7 +79,7 @@ public class MainController {
 		}else {
 			session.setAttribute("alertMsg", "출근 실패! ");
 		}
-		return "redirect:/member/home.ma";
+		return "redirect:/member/mainPage.me";
 	}
 	
 	//퇴근 등록 
@@ -106,7 +98,7 @@ public class MainController {
 		}else {
 			session.setAttribute("alertMsg", "퇴근 실패! ");
 		}
-		return "redirect:/member/home.ma";
+		return "redirect:/member/mainPage.me";
 	}
 	
 	//임직원조회(Team)
@@ -130,5 +122,29 @@ public class MainController {
 			
 		return new Gson().toJson(mainMemberTeam);
 	}
+	
+	//풀 캘린더에서 일정조회 
+	@ResponseBody
+	@RequestMapping(value="mainCalendar.ma", produces="application/json; charset=UTF-8")
+	public String mainCalendarList(HttpSession session) {
+		String deptCode = ((Member)session.getAttribute("loginUser")).getDeptCode();
+		
+		ArrayList<Schedule> list = mainService.mainCalendarList(deptCode);
+		return new Gson().toJson(list);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="mainDailyEvents.ma", method = RequestMethod.POST)
+	public ArrayList<Schedule> mainDailyEvents(@RequestParam("year") int year, @RequestParam("month") int month, @RequestParam("date") int date) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("year", year);
+		params.put("month", month);
+		params.put("date", date);
+		
+		ArrayList<Schedule> events = mainService.mainDailyEvents(params);
+		//System.out.println(events);
+		return events;
+	}
+	
 	
 }

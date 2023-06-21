@@ -15,6 +15,7 @@
   			<typeAlias type="com.kh.final3.approval.model.vo.DocType" alias="docType"/>
   			<typeAlias type="com.kh.final3.member.model.vo.Member" alias="member"/>
   			<typeAlias type="com.kh.final3.email.model.vo.Email" alias="email"/>
+  			<typeAlias type="com.kh.final3.schedule.model.vo.Schedule" alias="schedule"/>
   		</typeAliases>
   		
   		<mappers>

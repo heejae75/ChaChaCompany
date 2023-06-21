@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+	<%@ include file="../common/menubar.jsp" %>
     <script src="https://cdn.tiny.cloud/1/omjcnn5e647lx0jwm8neb7k3o37nkkx0hrgiaxjo1oc1bnvd/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     <script>
         tinymce.init({
@@ -15,149 +16,23 @@
           toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
         });
      </script>
-    <style>
-        div{
-            box-sizing: border-box;
-        }
-        input[type="text"] {
-        	border : 0;
-        	width : 100%;
-        	height : 100%;
-        }
-        .item-area{
-            width: 800px;
-            height: 1500px;
-            margin: auto;
-        }
-        .item-area>div{
-            width: 100%;
-        }
-        #item-btn-area{
-            height: 4%;
-            border: 1px solid rgb(202, 200, 200);
-            border-radius: 20px;
-        }
-        #item-header{
-            height: 10%;
-        }
-        #item-content{
-            height: 91%;
-        }
-        #item-btn-area button{
-            padding: 5px;
-            margin-top: 13px;
-            margin-left: 7px;
-        }
-        #item-content1{
-            height: 15%;
-        }
-        #item-content2{
-            height: 70%;
-        }
-        #item-content2 textarea{
-            box-sizing: border-box;
-            height: 100%;
-        }
-        #item-content3{
-            height: 15%;
-        }
-        #approver-signature {
-            border-collapse: collapse;
-            width: 15%;
-            text-align: center;
-            margin-top: 10px;
-            float: right;
-            line-height:20px;
-            vertical-align: middle;
-    
-        }
-        #approver-signature>tr, td{
-            border-collapse: collapse;
-            padding: 8px;
-        }
-        #id-table input{
-            box-sizing: border-box;
-            width: 100%;
-            height: 100%;
-            margin:0;
-            border: 0;
-        }
-        #file-area{
-            height: 100%;
-        }
-		.modal-body>div{
-            float: left;
-            height: 100%;
-        }
-        #search-area{
-        	width:40%
-        }
-        #search-area>input{
-           width: 200px;
-           margin: 0px;
-        }
-        #search-area>*{
-           display: inline-block;
-        }
-        /* 모달 부서리스트 */
-        #organization-area{
-           width : 30%;
-           border: 1px solid rgb(177, 175, 175);
-           border-radius: 20px;
-           width: 200px;
-           text-align: center;
-           margin:0px;
-           
-        }
-        #organization-btn {
-            background-color: transparent;
-            border: 0;
-            cursor: pointer;
-            color: green;
-            font-size: 15px;
-            font-weight: bolder;
-            display: block;
-            width: 100%;
-            height: 100%;
-            line-height: 40px;
-        }
-
-        #selectApprover{
-        	width:30%
-        }
-        #approver1,#approver2{
-            width: 200px;
-            height: 100px;
-            border:0;
-        }
-        #approver-btn{
-            margin-top: 50px;
-        }
-        #ApproverList{
-        	table-layout : fixed;
-        }
-        #ApproverList th,td{
-        	text-align : center;
-        	word-break:break-all;
-            height: auto;
-        }
-    </style>
-</head>
+     <link rel="stylesheet" href="/final3/resources/css/Approval_ItemForm.css" >
+</head>        
 <body>
-	<%@ include file="../common/menubar.jsp" %>
     <br><br><br><br>
-    <form action="item.ap" method="post" enctype="multipart/form-data" onsubmit="return chkApprover();">
+    <form action="item.ap" method="post" enctype="multipart/form-data" id="item-form" onsubmit="return chkApprover();">
     <h1 align="center">구매 품의서</h1>
+    <br><br>
         <div class="item-area">
-        	<input type="hidden" name="deptCode" value="D1">
+        	<input type="hidden" name="deptCode" value="${loginUser.deptCode }">
         	<input type="hidden" name="docType" value="2">
+        	<input type="hidden" name="docWriter" value="${loginUser.userNo}">
         	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
             <div id="item-btn-area">
                 <button type="submit" class="btn btn-primary">기안</button>
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
                 	결재선
                 </button>
-                <button type="button" class="btn btn-primary">미리보기</button>
                 <input type="checkbox" name="emergency" id="emergency-btn" onclick="emergencyChk();"><label for="긴급">긴급문서</label>
             </div>
             <div id="item-header">
@@ -168,9 +43,9 @@
                     <table class="table table-bordered" width="100%" height="100%" style="border-collapse: collapse;vertical-align: middle">
                         <tr>
                             <th width="15%">작성자</th>
-                            <td><input type="text" id="docWriter" name="docWriter" value="이동현" readonly></td>
+                            <td><input type="text" id="docWriter"  value="${loginUser.userName}" readonly></td>
                             <th width="15%">전화번호</th>
-                            <td><input type="text" id="phone" value="010-7664-5543" readonly></td>
+                            <td><input type="text" id="phone" name="phone" value="${loginUser.phone}" readonly></td>
                             <th width="15%">문서번호</th>
                             <td><input type="text" id="docNo" readonly></td>
                         </tr>
@@ -206,10 +81,10 @@
 	                        <tr>
 	                        	<td><input type="checkbox" name="checkBox" onclick="isCheckAll();"></td>
 	                            <td><input type="date"></td>
-	                            <td><input type="text" name="supplyName"></td>
+	                            <td><input type="text" name="supplyName" ></td>
 	                            <td><input type="text" name="supplySize" value="0"></td>
-	                            <td><input type="number" name="amount" value="0"></td>
-	                            <td><input type="number" name="price" value="0"></td>
+	                            <td><input type="text" name="amount" value="0"></td>
+	                            <td><input type="text" name="price" value="0"></td>
 	                        </tr>
                         </tbody>
                     </table>
@@ -242,13 +117,14 @@
             </div>
         </div>
         <br><br><br><br><br><br><br><br><br><br>
+    </form>
         <!-- 결재라인 선택 -->
 		<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		  <div class="modal-dialog modal-xl">
+		  <div class="modal-dialog" style="width: 50%;">
 		    <div class="modal-content">
 		      <div class="modal-header">
 		        <h1 class="modal-title fs-5" id="exampleModalLabel">결재라인 선택</h1>
-		        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 		      </div>
 		      <div class="modal-body">
 		       	 <div id="organization-area">
@@ -271,7 +147,7 @@
 		                         <option value="2">이름</option>
 		                    </select>
 		                         <input class="form-control me-2" id="keyword" type="text" placeholder="Search" aria-label="Search">
-		                         <button class="btn btn-outline-success" type="button" onclick="searchApprover();">Search</button>
+		                         <button class="btn btn-outline-success" type="submit" onclick="searchApprover();">Search</button>
 			        <table id="ApproverList" class="table table-bordered">
                             <thead>
                                 <tr>
@@ -316,43 +192,14 @@
                     </div>
 		      </div>
 		      <div class="modal-footer">
-		        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-		        <button type="button" class="btn btn-primary" onclick="selectApprover();">완료</button>
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+		        <button type="submit" class="btn btn-primary" onclick="selectApprover();">완료</button>
 		      </div>
 		    </div>
 		  </div>
 		</div>
-    </form>
-    <script>
-    //행추가
-    	function addRow(){
-    		var insertTr = "";
-    		
-    		insertTr += "<tr>";
-    		insertTr += "<td><input type='checkbox' name='checkBox'onclick='isCheckAll();''></td>";
-    		insertTr += "<td><input type='date'></td>";
-    		insertTr += "<td><input type='text' name='supplyName'></td>";
-    		insertTr += "<td><input type='text' name='supplySize' value='0'></td>";
-    		insertTr += "<td><input type='number' name='amount' value='0'></td>";
-    		insertTr += "<td><input type='number' name='price' value='0'></td>";
-    		insertTr += "</tr>";
-    		
-    		$("#id-table tbody").append(insertTr);
-
-    		}
-    	//행삭제
-    	function deleteRow(){
-    		var idTable = document.getElementById("id-Table");
-    		var lastRow=document.querySelectorAll("#id-table>tbody>tr").length;
-    		if(confirm("정말로 삭제하시겠습니까?")){
-	    		for(var i=lastRow-1;i>-1;i--){
-	    			if(document.querySelectorAll("#id-table>tbody>tr")[i].cells[0].firstChild.checked){
-	    				document.querySelectorAll("#id-table>tbody>tr")[i].remove();
-    				}
-	    		}
-    		}
-    	}
-    	//전체선택, 전체 해제
+		<script>
+		//전체선택, 전체 해제
     	function checkAll(){
     		if($("#checkBoxAll").is(":checked")){
     			$("input[name=checkBox]").prop("checked",true);
@@ -383,12 +230,14 @@
     	function deleteFile(){
     		var fileTable = document.getElementById("file-table");
     		var lastRow=document.querySelectorAll("#file-table>tbody>tr").length;
-    		if(confirm("정말로 삭제하시겠습니까?")){
-	    		for(var i=lastRow-1;i>-1;i--){
-	    			if(document.querySelectorAll("#file-table>tbody>tr")[i].cells[0].firstChild.checked){
-	    				document.querySelectorAll("#file-table>tbody>tr")[i].remove();
-    				}
-	    		}
+    		if(lastRow>2){
+    			if(confirm("정말로 삭제하시겠습니까?")){
+    	    		for(var i=lastRow-1;i>-1;i--){
+    	    			if(document.querySelectorAll("#file-table>tbody>tr")[i].cells[0].firstChild.checked){
+    	    				document.querySelectorAll("#file-table>tbody>tr")[i].remove();
+        				}
+    	    		}
+        		}
     		}
     	}
     	//파일 테이블 전체 선택/해제
@@ -411,10 +260,14 @@
     	function selectApproverList(deptCode){
     		$.ajax({
     			url:"selectApproverList.ap",
-    			type : "post",
+    			type : "POST",
     			data:{
     				deptCode : deptCode
     			},
+    			beforeSend : function(xhr)
+                {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+                    xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+                },
     			success : function(list){
     				str ="";
     				for(var i=0;i<list.length;i++){
@@ -437,13 +290,17 @@
     	function searchApprover(){
 			var status = $("#search-select").val();
 			var keyword = $("#keyword").val();
-			console.log(status);
     		$.ajax({
     			url : "searchApprover.ap",
+    			type : "POST",
     			data :{
     				status : status,
     				keyword : keyword
     			},
+    			beforeSend : function(xhr)
+                {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+                    xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+                },
     			success : function(list){
     				str ="";
     				for(var i=0;i<list.length;i++){
@@ -464,36 +321,29 @@
     	}
     	//결재선 추가
     	function addApprover1(){
-    		var tdArr = new Array();
+    		var tdArr1 = new Array();
     		var checkbox1 = $("#chkMember:checked");
-    		
-    		
     		checkbox1.each(function(i){
     			var tr = checkbox1.parent().parent().eq(i);
     			var td = tr.children();
-    			
     			
     			var username = td.eq(1).text();
     			var jobname = td.eq(2).text();
     			var deptname = td.eq(3).text();
     			var userno = td.eq(4).text();
     			
-    			tdArr.push(username);
-    			tdArr.push(jobname);
-    			tdArr.push(deptname);
-    			tdArr.push(userno);
-    			
-    			$("#approver1").attr("value",tdArr);
-    			$("#chkMember").attr("checked",false);
+    			tdArr1.push(username);
+    			tdArr1.push(jobname);
+    			tdArr1.push(deptname);
+    			tdArr1.push(userno);
     			
     		});
-    			if($("#approver2").val()!=null && $("#approver1").val()==$("#approver2").val()){
-        			alert("결재자가 동일합니다. 다시확인해주세요");
-        			$("#approver1").attr("value","");
-    			}
+    			$("#approver1").attr("value",tdArr1);
+    			$("#ApproverList>tbody input[type='checkbox']").attr("checked",false);
+    			
     	}
     	function addApprover2(){
-    		var tdArr = new Array();
+    		var tdArr2 = new Array();
     		var checkbox2 = $("#chkMember:checked");
     		
     		checkbox2.each(function(i){
@@ -506,18 +356,15 @@
     			var deptname = td.eq(3).text();
     			var userno = td.eq(4).text();
     			
-    			tdArr.push(username);
-    			tdArr.push(jobname);
-    			tdArr.push(deptname);
-    			tdArr.push(userno);
+    			tdArr2.push(username);
+    			tdArr2.push(jobname);
+    			tdArr2.push(deptname);
+    			tdArr2.push(userno);
     			
-    			$("#approver2").attr("value",tdArr);
-    			$("#chkMember").attr("checked",false);
+    			
     			});
-    		if($("#approver1").val()!=null && $("#approver1").val()==$("#approver2").val()){
-    			alert("결재자가 동일합니다. 다시확인해주세요");
-    			$("#approver2").attr("value","");
-    		}
+	    		$("#approver2").attr("value",tdArr2);
+	    		$("#ApproverList>tbody input[type='checkbox']").attr("checked",false);
     	}
     	
     	//결재선 삭제
@@ -531,47 +378,62 @@
  		
     	//결재 테이블생성
     	function selectApprover(){
-    		if($("#approver2").val()=='' && $("#approver1").val()==''){
-    			alert("결재자를 선택해주세요.")
-    		}else if($("#approver2").val()==''){
-    			alert("최종결재자를 선택해주세요.")
-    		}
     		var approver1 = $("#approver1").val().split(',');
     		var approver2 = $("#approver2").val().split(',');
     		
     		var username1 = approver1[0];
 			var jobname1 = approver1[1];
+			var userNo1 = approver1[3];
 			var username2 = approver2[0];
 			var jobname2 = approver2[1];
+			var userNo2 = approver2[3];
     		
 
     		var insertTB = "";
     		
     		if(approver1==''){
+    			insertTB += "<input type='hidden' name='lastApproverNo' value='"+userNo2+"'></td></tr>";
 	    		insertTB += "<table class='table table-bordered' id='approver-signature'>";
     			insertTB += "<tbody>";
-    			insertTB += "<tr><th width='20px' rowspan='3'>결재</th></tr>";
-    			insertTB += "<tr><td><input type='text' value='"+jobname2+"'></td></tr>";
-    			insertTB += "<tr height='100px'><td><input type='text' name='lastApprover' value='"+username2+"'></td></tr>";
+    			insertTB += "<tr><th width='20px' rowspan='4'>결재</th></tr>";
+    			insertTB += "<tr><td><input type='text' name='lastJobName' value='"+jobname2+"'></td></tr>";
+    			insertTB += "<tr height='70px'><td><input type='text' name='lastApprover' value='"+username2+"'></td></tr>";
+    			insertTB += "<tr><td>&nbsp;</td></tr>";
+    			insertTB += "</tbody>";
     			insertTB += "</table>";
     		}else{
+    			insertTB += "<input type='hidden' name='secondApproverNo' value='"+userNo1+"'></td></tr>";
+    			insertTB += "<input type='hidden' name='lastApproverNo' value='"+userNo2+"'></td></tr>";
     			insertTB += "<table class='table table-bordered' id='approver-signature'>";
     			insertTB += "<tbody>";
-    			insertTB += "<tr><th width='20px' rowspan='3'>결재</th></tr>";
-    			insertTB += "<tr><td><input type='text' id='a' value='"+jobname2+"'></td></tr>";
-    			insertTB += "<tr height='100px'><td><input type='text' name='secondApprover' value='"+username2+"'></td></tr>";
+    			insertTB += "<tr><th width='20px' rowspan='4'>결재</th></tr>";
+    			insertTB += "<tr><td><input type='text' name='lastJobName' value='"+jobname2+"'></td></tr>";
+    			insertTB += "<tr height='70px'><td><input type='text' name='lastApprover' value='"+username2+"'></td></tr>";
+    			insertTB += "<tr><td>&nbsp;</td></tr>";
+    			insertTB += "</tbody>";
     			insertTB += "</table>";
     			insertTB += "<table class='table table-bordered' id='approver-signature'>";
     			insertTB += "<tbody>";
-    			insertTB += "<tr><th width='20px' rowspan='3'>결재</th></tr>";
-    			insertTB += "<tr><td><input type='text' id='b' value='"+jobname1+"'></td></tr>";
-    			insertTB += "<tr height='100px'><td><input type='text' name='lastApprover' value='"+username1+"'></td></tr>";
+    			insertTB += "<tr><th width='20px' rowspan='4'>결재</th></tr>";
+    			insertTB += "<tr><td><input type='text' name='secondJobName' value='"+jobname1+"'></td></tr>";
+    			insertTB += "<tr height='70px'><td><input type='text' name='secondApprover' value='"+username1+"'></td></tr>";
+    			insertTB += "<tr><td>&nbsp;</td></tr>";
+    			insertTB += "</tbody>";
     			insertTB += "</table>";
     		}
-    		
-    		$("#item-header").html(insertTB);
-    		$("#exampleModal").modal('hide');
+    		if($("#approver2").val()=='' && $("#approver1").val()==''){
+    			alert("결재자를 선택해주세요.")
+    		}else if($("#approver2").val()==''){
+    			alert("최종결재자를 선택해주세요.")
+    		}else if(($("#approver1").val()!='' || $("#approver2").val()!='')&&
+   	        	 ($("#approver1").val() == $("#approver2").val())){
+    			alert("결재자가 동일합니다. 다시 선택해주세요");
+    		}else{
+	    		$("#item-header").html(insertTB);
+	    		$("#exampleModal").modal('hide');
+    		}
     	}
+    	//긴급문서
     	function emergencyChk(){
     		if($("#emergency-btn").is(":checked")){
     			$("#emergency-btn").attr("value","Y");
@@ -579,6 +441,7 @@
     			$("#emergency-btn").attr("value","N");
     		}
     	}
+    	//결재자 확인
     	function chkApprover(){
     		var flag = "";
     		
@@ -590,6 +453,7 @@
     		}
     		return flag;
     	}
-      </script>
+		
+		</script>
 </body>
 </html>

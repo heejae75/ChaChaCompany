@@ -45,7 +45,7 @@ public class MemberController {
 		String username = userDetails.getUsername();
 		String password = userDetails.getPassword();
 
-		mv.setViewName("main/mainPage");
+		mv.setViewName("main/userMain");
 		
 		return mv;
 	}

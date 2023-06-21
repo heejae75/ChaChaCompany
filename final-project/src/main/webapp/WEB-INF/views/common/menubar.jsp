@@ -20,8 +20,6 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-	
-    
     
 <!-- 	<link href="/final3/resources/css/menubar.css" rel="stylesheet"> -->
 	<style>
@@ -136,13 +134,26 @@
 
         .nav_link:hover{
             color: var(--white-color);
+      		text-decoration: none;
         }
 
 
+		/*로그아웃 영역 */
         .nav_logout{
             margin-left: 15px;
             margin-top: auto;
-      		margin-bottom: 10px;
+      		margin-bottom: 40px;
+        }
+        
+        /* 로그아웃 버튼이 이상해서 따로 설정함 */
+        #menubar_logout {
+        	background-color: #0E6251;
+        	border: 0px;
+        	color: #999999;
+    	}
+    	
+    	#menubar_logout:hover{
+            color: white;
         }
         
 	    @media (max-width: 768px) {
@@ -538,12 +549,12 @@
 			<!-- 로그아웃  -->
             <div class="nav_logout">
                 <a href="#" class="nav_link">
-                    <i class="fa-sharp fa-solid fa-right-from-bracket fa-xl" style="color: #ffffff;"></i>
-                    <span class="nav_name">
-					    <form action="/final3/logout" method="POST">
+                    <i class="fa-sharp fa-solid fa-right-from-bracket fa-xl" style="color: #ffffff; "></i>
+                    <span class="nav_n">
+						<form action="/final3/logout" method="post">
 					        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-					        <button type="submit">LOGOUT</button>
-					    </form>
+					        <button type="submit" id="menubar_logout">LOGOUT</button>
+						</form>
                     </span>
                 </a>
             </div>
