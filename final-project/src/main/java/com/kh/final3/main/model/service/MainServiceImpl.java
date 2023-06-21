@@ -7,7 +7,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.kh.final3.attendance.model.vo.AttendanceRecord;
+import com.kh.final3.attendance.model.vo.Attendance;
 import com.kh.final3.board.model.vo.Board;
 import com.kh.final3.email.model.vo.Email;
 import com.kh.final3.main.model.dao.MainDao;
@@ -43,13 +43,13 @@ public class MainServiceImpl implements MainService {
 
 	//출근 등록 
 	@Override
-	public int insertGoToWork(AttendanceRecord at) {
+	public int insertGoToWork(Attendance at) {
 		return mainDao.insertGoToWork(sqlSession, at);
 	}
 
 	//퇴근 등록 
 	@Override
-	public int updateLeaveToWork(AttendanceRecord at) {
+	public int updateLeaveToWork(Attendance at) {
 		return mainDao.updateLeaveToWork(sqlSession, at);
 	}
 

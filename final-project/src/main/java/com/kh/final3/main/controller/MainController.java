@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
-import com.kh.final3.attendance.model.vo.AttendanceRecord;
+import com.kh.final3.attendance.model.vo.Attendance;
 import com.kh.final3.board.model.vo.Board;
 import com.kh.final3.email.model.vo.Email;
 import com.kh.final3.main.model.service.MainService;
@@ -66,7 +66,7 @@ public class MainController {
 	@PostMapping("insertGo.ma")
 	//@RequestMapping("insertGo.ma")
 	//@RequestMapping(value="insertGo.ma", method=RequestMethod.POST)
-	public String insertGoToWork(AttendanceRecord at, HttpSession session, RedirectAttributes rttr) {
+	public String insertGoToWork(Attendance at, HttpSession session, RedirectAttributes rttr) {
 		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
 		
 		at.setUserNo(userNo);
@@ -85,7 +85,7 @@ public class MainController {
 	//퇴근 등록 
 	//@RequestMapping("insertLeave.ma")
 	@RequestMapping(value="insertLeave.ma", method=RequestMethod.POST)
-	public String updateLeaveToWork(AttendanceRecord at, HttpSession session, RedirectAttributes rttr) {
+	public String updateLeaveToWork(Attendance at, HttpSession session, RedirectAttributes rttr) {
 		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
 		
 		at.setUserNo(userNo);

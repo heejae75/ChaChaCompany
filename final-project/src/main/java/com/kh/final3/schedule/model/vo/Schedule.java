@@ -24,4 +24,5 @@ public class Schedule {
      private String status;					//STATUS VARCHAR2(1) DEFAULT 'N' CHECK(STATUS IN('N','Y')),
      
      private String userName;
+
 }
