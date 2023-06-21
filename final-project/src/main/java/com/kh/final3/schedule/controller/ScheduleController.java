@@ -1,5 +1,6 @@
 package com.kh.final3.schedule.controller;
 
+
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpSession;
@@ -55,6 +56,5 @@ public class ScheduleController {
 		
 		return new Gson().toJson(deptList);
 	}
-	
 	
 }

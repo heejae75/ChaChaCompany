@@ -44,6 +44,18 @@
 	 	<result column="DEPT_NAME" property="deptName"/>
 	</resultMap>
 	
+	<resultMap type="schedule" id="mainScheduleResultset">
+		<result column="DEPT_SCHEDULE_NO" property="deptSchedule_No"/>
+		<result column="DEPT_CODE" property="deptCode"/>
+		<result column="JOB_CODE" property="jobCode"/>
+		<result column="SCHEDULE_TITLE" property="scheduleTitle"/>
+		<result column="SCHEDULE_CONTENT" property="scheduleContent"/>
+		<result column="ENROLL_DATE" property="enrollDate"/>
+		<result column="START_DATE" property="startDate"/>
+		<result column="END_DATE" property="endDate"/>
+		<result column="STATUS" property="status"/>
+	</resultMap>
+	
 	
 	<!-- 최신 공지사항 조회  -->
 	<select id="mainNoticeList" resultMap="mainBoardResultset">
@@ -126,5 +138,23 @@
 			    AND USER_ID != #{userId}
 			    ORDER BY JOB_CODE )  
 		WHERE ROWNUM BETWEEN 1 AND 10
+	</select>
+	
+	<!-- 일정 조회  -->
+	<select id="mainCalendarList" resultMap="mainScheduleResultset">
+		SELECT DISTINCT DEPT_SCHEDULE_NO, DS.DEPT_CODE, SCHEDULE_TITLE, SCHEDULE_CONTENT, START_DATE, END_DATE
+		FROM DEPT_SCHEDULE DS
+		JOIN MEMBER M ON (DS.DEPT_CODE = M.DEPT_CODE)
+		WHERE DS.STATUS = 'N'
+		AND DS.DEPT_CODE = #{deptCode}
+	</select>
+	
+	<select id="mainDailyEvents" resultMap="mainScheduleResultset">
+		<![CDATA[
+			SELECT DEPT_SCHEDULE_NO, SCHEDULE_TITLE
+			FROM DEPT_SCHEDULE
+			WHERE TRUNC(START_DATE) <= TO_DATE(#{year} || '-' || #{month} || '-' || #{date}, 'YYYY-MM-DD')
+			AND TRUNC(END_DATE) >= TO_DATE(#{year} || '-' || #{month} || '-' || #{date}, 'YYYY-MM-DD')
+		]]>
 	</select>
 </mapper>

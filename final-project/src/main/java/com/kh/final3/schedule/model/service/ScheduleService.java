@@ -12,6 +12,4 @@ public interface ScheduleService {
 	//부서 스케줄 조회 메소드 
 	ArrayList<Schedule> getSchedule(String deptCode);
 	
-	
-
 }

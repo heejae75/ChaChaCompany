@@ -1,11 +1,14 @@
 package com.kh.final3.main.model.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Map;
 
 import com.kh.final3.attendance.model.vo.Attendance;
 import com.kh.final3.board.model.vo.Board;
 import com.kh.final3.email.model.vo.Email;
 import com.kh.final3.member.model.vo.Member;
+import com.kh.final3.schedule.model.vo.Schedule;
 
 
 
@@ -31,5 +34,9 @@ public interface MainService {
 
 	//임직원 조회 (전체) 
 	ArrayList<Member> mainOthersAllList(Member m);
+
+	ArrayList<Schedule> mainCalendarList(String deptCode);
+
+	ArrayList<Schedule> mainDailyEvents(Map<String, Object> params);
 
 }
