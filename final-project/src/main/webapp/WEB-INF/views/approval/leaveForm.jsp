@@ -12,6 +12,7 @@
     <title>Document</title>
 	<%@ include file="../common/menubar.jsp" %>
 	<link rel="stylesheet" href="/final3/resources/css/Approval_LeaveForm.css" >
+	
 </head>
 <body>
 	<br><br><br><br>
@@ -26,7 +27,7 @@
             
             <div id="leave-btn-area">
                 <button type="submit" class="btn btn-primary">기안</button>
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#approverModal">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#approverModal">
                    	결재선
                 </button>
                 <input type="checkbox" name="emergency" id="emergency-btn" onclick="emergencyChk();"><label for="긴급">긴급문서</label>
@@ -50,7 +51,7 @@
                         </tr>
                     </table>
                 </div>
-                <br>
+                <br><br>
                 <div id="leave-content2">
                     <table class="table table-bordered" style="text-align: center;">
                             <th width="15%">연차현황</th>
@@ -70,8 +71,8 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th width="5%"><input type="checkbox" id="checkBoxAll" onclick="checkAll();"></th>
-                                <th width="16%">휴가신청구분</th>
+                                <th width="4%"><input type="checkbox" id="checkBoxAll" onclick="checkAll();"></th>
+                                <th width="17%">휴가신청구분</th>
                                 <th width="15%">휴가구분</th>
                                 <th width="15%">시작일</th>
                                 <th width="15%">종료일</th>
@@ -82,14 +83,14 @@
                             <tr>
                                 <td><input type="checkbox" name="checkBox" onclick="isCheckAll();"></td>
                                 <td>
-                                    <select name=leaveStatus id="select-option" >
+                                    <select name=arrLeaveStatus id="select-option" >
                                         <option>선택</option>
                                         <option>신청</option>
                                         <option>취소</option>
                                     </select>
                                 </td>
                                 <td>
-                                    <select name="leaveCode" id="select-leave-option" >
+                                    <select name="arrLeaveCode" id="select-leave-option" >
                                         <option value="">선택</option>
                                         <option value="L1">정상근무</option>
                                         <option value="L2">연차</option>
@@ -103,10 +104,10 @@
                                     </select>
                                 </td>
                                 <td>
-                                    <input type="date" name="startDate" id="start-date">
+                                    <input type="date" name="arrStartDate" id="start-date">
                                 </td>
                                 <td>
-                                    <input type="date" name="endDate" id="end-date">
+                                    <input type="date" name="arrEndDate" id="end-date">
                                 </td>
                                 <td>
                                     <input type="text" value="" id="total-date">
@@ -126,7 +127,7 @@
                                 <th colspan="3" style="vertical-align: middle;" >업무인수자</th>
                                 <td colspan="3">
                                     <input type="text" name="workReceiver" value="" style="width: 80%;vertical-align: middle;" >
-                                    <input type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#workReceiverModal" value="검색" style="float: right;height: 35px;vertical-align: middle;">
+                                    <input type="button" class="btn btn-primary" data-toggle="modal" data-target="#workReceiverModal" value="검색" style="float: right;height: 35px;vertical-align: middle;">
                                 </td>
                             </tr>
                             <tr>
@@ -172,15 +173,16 @@
             </div>
         </div>
     </form>
-<!-- 업무 인수자 선택-->
+    
+<!-- 업무 인수자 선택 -->
         <div class="modal fade" id="workReceiverModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl">
+            <div class="modal-dialog modal-lg" style="width:1100px">
             <div class="modal-content">
                 <div class="modal-header">
-                <h1 class="modal-title fs-5" id="workReceiverModalLabel">결재라인 선택</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h2 class="modal-title" id="workReceiverModalLabel">결재라인 선택</h2>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" style="height:500px;">
                     <div id="organization-area">
                         <div id="organization-list">
                             <button type="button" id="organization-btn" onclick="selectReceiverList();">조직도</button>
@@ -238,7 +240,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
                 <button type="button" class="btn btn-primary" onclick="selectReceiver();">완료</button>
                 </div>
             </div>
@@ -248,14 +250,14 @@
 
 <!-- 결재라인 선택 -->
 		<div class="modal fade" id="approverModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		  <div class="modal-dialog modal-xl">
+		  <div class="modal-dialog modal-lg" style="width:1000px">
 		    <div class="modal-content">
 		      <div class="modal-header">
-		        <h1 class="modal-title fs-5" id="exampleModalLabel">결재라인 선택</h1>
-		        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        <h2 class="modal-title" id="exampleModalLabel">결재라인 선택</h2>
 		      </div>
-		      <div class="modal-body">
-		       	 <div id="organization-area">
+		      <div class="modal-body" style="height:500px;">
+                   <div id="organization-area">
                         <div id="organization-list">
                             <button type="button" id="organization-btn" onclick="selectApproverList();">조직도</button>
                             <button type="button" id="organization-btn" onclick="selectApproverList('D1');">기타</button>
@@ -317,10 +319,10 @@
                                 <tr><td><input type="text" id="approver2" readonly required></td></tr>
                             </tbody>
                         </table>
-                    </div>
-		      </div>
+		      		</div>
+		      	</div>
 		      <div class="modal-footer">
-		        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
 		        <button type="button" class="btn btn-primary" id="select-approver-btn" onclick="selectApprover();">완료</button>
 		      </div>
 		    </div>
@@ -429,7 +431,7 @@
     		var tdReceiver = new Array();
     		var checkbox1 = $("#chkMember:checked");
     		var loginUserNo = "${loginUser.userNo}"
-    		
+
     		checkbox1.each(function(i){
     			var tr = checkbox1.parent().parent().eq(i);
     			var td = tr.children();
@@ -445,12 +447,15 @@
     			tdReceiver.push(deptname);
     			tdReceiver.push(userno);
     			
-    			if(userno == loginUserNo){
-    				alert("인수자와 작성자가 동일합니다. 다시확인해주세요.")
-    			}
     		});
-    			$("#workReceiver").attr("value", tdReceiver[0]+"("+tdReceiver[1]+","+tdReceiver[2]+")");
-    			$("#receiverList>tbody input[type=checkbox]").attr("checked",false);
+    			if(tdReceiver[3] == loginUserNo){
+    				alert("인수자와 작성자가 동일합니다. 다시확인해주세요.");
+    				$("#receiverList>tbody input[type=checkbox]").prop("checked",false);
+    				$("#workReceiver").attr("value",'');
+    			}else{
+	    			$("#workReceiver").attr("value", tdReceiver[0]+"("+tdReceiver[1]+","+tdReceiver[2]+")");
+	    			$("#receiverList>tbody input[type=checkbox]").prop("checked",false);
+    			}
     	}
     	//인수자 삭제
     	function deleteReceiver(){
@@ -471,7 +476,7 @@
     	}
         //행추가
     	function addRow(){
-    		var trCount = $("#id-table>tbody>tr").length;
+    		var trCount = $("#leave-table>tbody>tr").length;
     		var insertTr = "";
     		
     		if(trCount<5){
@@ -518,15 +523,16 @@
     	function deleteRow(){
     		var idTable = document.getElementById("leave-table");
     		var lastRow=document.querySelectorAll("#leave-table>tbody>tr").length;
-    		if(lastRow>2){
+    		if(lastRow>1){
     			if(confirm("정말로 삭제하시겠습니까?")){
     	    		for(var i=lastRow-1;i>-1;i--){
     	    			if(document.querySelectorAll("#leave-table>tbody>tr")[i].cells[0].firstChild.checked){
     	    				document.querySelectorAll("#leave-table>tbody>tr")[i].remove();
         				}
-    	    		}
+      	    		}
         		}
     		}
+    		console.log(lastRow)
     	}
 		//전체선택, 전체 해제
     	function checkAll(){
@@ -557,9 +563,8 @@
     	}
     	//파일 행 삭제
     	function deleteFile(){
-    		var fileTable = document.getElementById("file-table");
     		var lastRow=document.querySelectorAll("#file-table>tbody>tr").length;
-    		if(lastRow>2){
+    		if(lastRow>1){
     			if(confirm("정말로 삭제하시겠습니까?")){
     	    		for(var i=lastRow-1;i>-1;i--){
     	    			if(document.querySelectorAll("#file-table>tbody>tr")[i].cells[0].firstChild.checked){
@@ -668,7 +673,7 @@
     			
     		});
     			$("#approver1").attr("value",tdArr1);
-    			$("#ApproverList>tbody input[type='checkbox']").attr("checked",false);
+    			$("#ApproverList>tbody input[type='checkbox']").prop("checked",false);
     			
     	}
     	function addApprover2(){
@@ -693,7 +698,7 @@
     			
     			});
 	    		$("#approver2").attr("value",tdArr2);
-	    		$("#ApproverList>tbody input[type='checkbox']").attr("checked",false);
+	    		$("#ApproverList>tbody input[type='checkbox']").prop("checked",false);
     	}
     	
     	//결재선 삭제

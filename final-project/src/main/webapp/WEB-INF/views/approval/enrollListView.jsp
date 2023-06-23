@@ -8,7 +8,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>결재함</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="/final3/resources/css/Approval_EnrollList.css" >
 </head>
 <body id="body-pd">
@@ -19,7 +18,6 @@
             <br><br><br><br><br><br>
                          
             <div id="board-list-area">
-            
                 <table id="board-list" class="table table-hover" align="center">
                     <thead>
                         <tr>

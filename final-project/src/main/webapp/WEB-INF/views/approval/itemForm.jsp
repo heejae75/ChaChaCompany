@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+     <link rel="stylesheet" href="/final3/resources/css/Approval_ItemForm.css" >
 	<%@ include file="../common/menubar.jsp" %>
     <script src="https://cdn.tiny.cloud/1/omjcnn5e647lx0jwm8neb7k3o37nkkx0hrgiaxjo1oc1bnvd/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     <script>
@@ -16,7 +17,6 @@
           toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
         });
      </script>
-     <link rel="stylesheet" href="/final3/resources/css/Approval_ItemForm.css" >
 </head>        
 <body>
     <br><br><br><br>
@@ -30,7 +30,7 @@
         	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
             <div id="item-btn-area">
                 <button type="submit" class="btn btn-primary">기안</button>
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
                 	결재선
                 </button>
                 <input type="checkbox" name="emergency" id="emergency-btn" onclick="emergencyChk();"><label for="긴급">긴급문서</label>
@@ -60,7 +60,7 @@
                      </textarea>
                 </div>
                 <div id="item-content3">
-                    <table class="table table-bordered" id="id-table" style="border-collapse: collapse;">
+                    <table class="table table-bordered" id="item-table" style="border-collapse: collapse;">
                     	<thead>
 	                    	<tr>
 	                            <td colspan="6" align="right">
@@ -81,10 +81,10 @@
 	                        <tr>
 	                        	<td><input type="checkbox" name="checkBox" onclick="isCheckAll();"></td>
 	                            <td><input type="date"></td>
-	                            <td><input type="text" name="supplyName" ></td>
-	                            <td><input type="text" name="supplySize" value="0"></td>
-	                            <td><input type="text" name="amount" value="0"></td>
-	                            <td><input type="text" name="price" value="0"></td>
+	                            <td><input type="text" name="arrSupplyName" ></td>
+	                            <td><input type="text" name="arrSupplySize" value="0"></td>
+	                            <td><input type="text" name="arrAmount" value="0"></td>
+	                            <td><input type="text" name="arrPrice" value="0"></td>
 	                        </tr>
                         </tbody>
                     </table>
@@ -120,13 +120,13 @@
     </form>
         <!-- 결재라인 선택 -->
 		<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		  <div class="modal-dialog modal-xl">
+		  <div class="modal-dialog" style="width:1000px">
 		    <div class="modal-content">
 		      <div class="modal-header">
 		        <h1 class="modal-title fs-5" id="exampleModalLabel">결재라인 선택</h1>
-		        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 		      </div>
-		      <div class="modal-body">
+		      <div class="modal-body" style="height:500px;">
 		       	 <div id="organization-area">
                         <div id="organization-list">
                             <button type="button" id="organization-btn" onclick="selectApproverList();">조직도</button>
@@ -192,13 +192,48 @@
                     </div>
 		      </div>
 		      <div class="modal-footer">
-		        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
 		        <button type="submit" class="btn btn-primary" onclick="selectApprover();">완료</button>
 		      </div>
 		    </div>
 		  </div>
 		</div>
 		<script>
+		//행추가
+		function addRow(){
+    		var trCount = $("#item-table>tbody>tr").length;
+    		var insertTr = "";
+    		
+    		if(trCount<10){
+    			insertTr += "<tr>";
+    			insertTr += "<td><input type='checkbox' name='checkBox' onclick='isCheckAll();'></td>";
+    			insertTr += "<td><input type='date'></td>";
+    			insertTr += "<td><input type='text' name='supplyName' ></td>";
+    			insertTr += "<td><input type='text' name='supplySize' value='0'></td>";
+    			insertTr += "<td><input type='text' name='amount' value='0'></td>";
+    			insertTr += "<td><input type='text' name='price' value='0'></td>";
+    			insertTr += "</tr>";
+	    		
+	    		$("#item-table tbody").append(insertTr);
+    		}else{
+    			alert("최대 10개까지만 가능합니다.")
+    		}
+		}
+    	//행삭제
+    	function deleteRow(){
+    		var idTable = document.getElementById("item-table");
+    		var lastRow=document.querySelectorAll("#item-table>tbody>tr").length;
+    		if(lastRow>1){
+    			if(confirm("정말로 삭제하시겠습니까?")){
+    	    		for(var i=lastRow-1;i>-1;i--){
+    	    			if(document.querySelectorAll("#item-table>tbody>tr")[i].cells[0].firstChild.checked){
+    	    				document.querySelectorAll("#item-table>tbody>tr")[i].remove();
+        				}
+      	    		}
+        		}
+    		}
+    	}
+    		
 		//전체선택, 전체 해제
     	function checkAll(){
     		if($("#checkBoxAll").is(":checked")){
@@ -230,7 +265,7 @@
     	function deleteFile(){
     		var fileTable = document.getElementById("file-table");
     		var lastRow=document.querySelectorAll("#file-table>tbody>tr").length;
-    		if(lastRow>2){
+    		if(lastRow>1){
     			if(confirm("정말로 삭제하시겠습니까?")){
     	    		for(var i=lastRow-1;i>-1;i--){
     	    			if(document.querySelectorAll("#file-table>tbody>tr")[i].cells[0].firstChild.checked){
@@ -339,7 +374,7 @@
     			
     		});
     			$("#approver1").attr("value",tdArr1);
-    			$("#ApproverList>tbody input[type='checkbox']").attr("checked",false);
+    			$("#ApproverList>tbody input[type='checkbox']").prop("checked",false);
     			
     	}
     	function addApprover2(){
@@ -364,7 +399,7 @@
     			
     			});
 	    		$("#approver2").attr("value",tdArr2);
-	    		$("#ApproverList>tbody input[type='checkbox']").attr("checked",false);
+	    		$("#ApproverList>tbody input[type='checkbox']").prop("checked",false);
     	}
     	
     	//결재선 삭제

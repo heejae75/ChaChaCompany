@@ -154,7 +154,7 @@
 		    <version>1.18.24</version>
 		    <scope>provided</scope>
 		</dependency>
-<!-- Spring Security 사용을 위한 dependency -->
+		<!-- Spring Security 사용을 위한 dependency -->
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
@@ -211,7 +211,19 @@
 			<artifactId>spring-websocket</artifactId>
 			<version>${org.springframework-version}</version>
 		</dependency>   
-		 
+		
+		<!-- 이메일 관련 -->
+		<dependency>
+		    <groupId>javax.mail</groupId>
+		    <artifactId>mail</artifactId>
+		    <version>1.4.7</version>
+		</dependency>
+		<!--spring-context-support -->
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-context-support</artifactId>
+		    <version>${org.springframework-version}</version>
+		</dependency>
 	</dependencies>
     <build>
         <plugins>

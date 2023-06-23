@@ -21,8 +21,6 @@ public interface ApprovalService {
 		
 		//결재함 리스트 불러오기
 		ArrayList<ApprovalDoc> selectApprovalDocList(PageInfo pi, String status);
-		//리스트 불러오기용 approval불러오기
-		ArrayList<Approval> selectApprovalList();
 		
 		//결재 홈 리스트 불러오기
 		ArrayList<ApprovalDoc> approvalMainList(String status);
@@ -37,10 +35,10 @@ public interface ApprovalService {
 		ArrayList<Member> searchApproverList(HashMap<String, String> map);
 		
 		//구매품의서 작성
-		int insertItem(Item i, ArrayList<ApprovalAttachment> atList, ApprovalDoc ad, Approval a);
+		int insertItem(ArrayList<Item> iList, ArrayList<ApprovalAttachment> atList, ApprovalDoc ad, Approval a);
 		
 		//휴가계 작성
-		int insertLeave(Leave l, ArrayList<ApprovalAttachment> atList, ApprovalDoc ad, Approval a);
+		int insertLeave(ArrayList<Leave> leaveList, ArrayList<ApprovalAttachment> atList, ApprovalDoc ad, Approval a);
 		
 		//결재자 조회
 		Approval selectApproval(int docNo);
@@ -52,10 +50,10 @@ public interface ApprovalService {
 		ApprovalDoc selectApprovalDoc(int docNo);
 		
 		//구매품의서 내용 조회
-		Item selectItem(int docNo);
+		ArrayList<Item> selectItem(int docNo);
 		
 		//휴가계 내용조회
-		Leave selectLeave(int docNo);
+		ArrayList<Leave> selectLeave(int docNo);
 
 		//중간결재자 반려
 		int updateSecondReturnReason(Approval a);

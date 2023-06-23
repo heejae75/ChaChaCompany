@@ -45,7 +45,7 @@ public class MemberController {
 		String username = userDetails.getUsername();
 		String password = userDetails.getPassword();
 
-		mv.setViewName("main/mainPage");
+		mv.setViewName("main/userMain");
 		
 		return mv;
 	}
@@ -61,9 +61,9 @@ public class MemberController {
 		map.put("category", category);
 		map.put("searchWord", searchWord);
 		
-		int listCount = memberService.selectListCount(map); //현재 재직중인 회원의 수
-		int pageLimit = 10; //몇페이지씩 - 1~10페이지씩 보여줌
-		int boardLimit = 20; //몇명씩 보여줄지 - 20명씩 보여줌(Pagination의 변수명과 맞추기 위해 boardLimit으로 정의함)
+		int listCount = memberService.selectListCount(map); //�쁽�옱 �옱吏곸쨷�씤 �쉶�썝�쓽 �닔
+		int pageLimit = 10; //紐뉙럹�씠吏��뵫 - 1~10�럹�씠吏��뵫 蹂댁뿬以�
+		int boardLimit = 20; //紐뉖챸�뵫 蹂댁뿬以꾩� - 20紐낆뵫 蹂댁뿬以�(Pagination�쓽 蹂��닔紐낃낵 留욎텛湲� �쐞�빐 boardLimit�쑝濡� �젙�쓽�븿)
 		
 		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
 		ArrayList<Member> list = memberService.selectList(pi, map);

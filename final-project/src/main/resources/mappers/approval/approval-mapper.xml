@@ -18,6 +18,8 @@
  		<result column ="LAST_DATE" property ="lastDate"/>
  		<result column ="APPROVAL" property ="approval"/>
  		<result column ="REJECT" property="reject"/>
+ 		<result column ="SECOND_APPROVER_NO" property ="secondApproverNo"/>
+ 		<result column ="LAST_APPROVER_NO" property ="lastApproverNo"/>
  	</resultMap>
  	
  	<resultMap type="docType" id="docTypeResultSet">
@@ -74,7 +76,7 @@
  		<result column ="DOC_NO" property="docNo"/>
  		<result column ="DEPT_CODE" property ="deptCode"/>
  		<result column="WORK_RECEIVER" property="workReceiver"/>
- 		<result column="LEAVE_CODE" property="leaveCode"/>
+ 		<result column="LEAVE_TYPE" property="leaveCode"/>
  		<result column="START_DATE" property="startDate"/>
  		<result column="END_DATE" property="endDate"/>
  		<result column="LEAVE_CONTENT" property="leaveContent"/>
@@ -100,6 +102,8 @@
 			  ,A.EMERGENCY
 			  ,TO_CHAR(B.SECOND_DATE, 'YYYY-MM-DD') "SECOND_DATE"
  			  ,TO_CHAR(B.LAST_DATE, 'YYYY-MM-DD') "LAST_DATE"
+ 			  ,B.SECOND_APPROVER_NO
+ 			  ,B.LAST_APPROVER_NO
  		FROM APPROVAL_DOC A
  		JOIN DEPARTMENT D ON (A.DEPT_CODE = D.DEPT_CODE)
  		JOIN DOC_TYPE T ON (A.DOC_TYPE = T.DOC_TYPE)
@@ -112,16 +116,20 @@
  	<select id="approvalMainList" parameterType="approvalDoc" resultMap="approvalDocResultSet">
  		SELECT *
 		FROM (SELECT ROWNUM, A.*
-        FROM (SELECT DOC_NO
+        FROM (SELECT P.DOC_NO
  				     ,D.DEPT_NAME
  				     ,T.DOC_NAME
- 				     ,DOC_TITLE
+ 				     ,P.DOC_TITLE
+ 				     ,P.DOC_WRITER
+ 				     ,A.SECOND_APPROVER_NO
+ 				     ,A.LAST_APPROVER_NO
  				     ,P.EMERGENCY
  				     ,P.STATUS
  				     ,TO_CHAR(P.CREATE_DATE,'YYYY-MM-DD')"CREATE_DATE"
  			  FROM APPROVAL_DOC P
  			  JOIN DEPARTMENT D ON (P.DEPT_CODE = D.DEPT_CODE)
  			  JOIN DOC_TYPE T ON (P.DOC_TYPE = T.DOC_TYPE)
+ 			  JOIN APPROVAL A ON (A.DOC_NO = P.DOC_NO)
  			  <if test="status !=null">
 				WHERE P.STATUS = #{status}
 			  </if>
@@ -151,10 +159,10 @@
 		WHERE STATUS = 'Y'
 		<choose>
 			<when test="status==1 and keyword !=null">
-				AND DEPT_NAME = #{keyword}
+				AND DEPT_NAME LIKE '%'||#{keyword}||'%'
 			</when>
 			<when test="status==2 and keyword != null">
-				AND USER_NAME = #{keyword}
+				AND USER_NAME LIKE '%'||#{keyword}||'%'
 			</when>
 		</choose>
  	</select>
@@ -232,29 +240,18 @@
  		WHERE DOC_NO = #{docNo}
  	</select>
  	<select id="selectLeave" parameterType="leave" resultMap="leaveResultSet">
- 		SELECT DOC_NO
- 			  ,DEPT_CODE
- 			  ,WORK_RECEIVER
- 			  ,LEAVE_CODE
- 			  ,START_DATE
- 			  ,END_DATE
- 			  ,LEAVE_CONTENT
- 			  ,TO_CHAR(CREATE_DATE, 'YYYY-MM-DD') "CREATE_DATE"
- 			  ,LEAVE_STATUS
- 		FROM LEAVE
- 		WHERE DOC_NO = #{docNo}
- 	</select>
- 	<select id="selectApprovalList" parameterType="approval" resultMap="approvalResultSet">
- 		SELECT APP_NO
- 			  ,DOC_NO,DEPT_CODE
- 			  ,SECOND_JOB_NAME
- 			  ,SECOND_APPROVER
- 			  ,LAST_JOB_NAME
- 			  ,LAST_APPROVER
- 			  ,TO_CHAR(SECOND_DATE, 'YYYY-MM-DD') AS SECOND_DATE
- 			  ,TO_CHAR(LAST_DATE, 'YYYY-MM-DD') AS LAST_DATE
- 			  ,RETURN_REASON
- 		FROM APPROVAL
+ 		SELECT L.DOC_NO
+ 			  ,L.DEPT_CODE
+ 			  ,L.WORK_RECEIVER
+ 			  ,W.LEAVE_TYPE
+ 			  ,L.START_DATE
+ 			  ,L.END_DATE
+ 			  ,L.LEAVE_CONTENT
+ 			  ,TO_CHAR(L.CREATE_DATE, 'YYYY-MM-DD') "CREATE_DATE"
+ 			  ,L.LEAVE_STATUS
+ 		FROM LEAVE L
+ 		JOIN WORK_TYPE W ON (W.LEAVE_CODE = L.LEAVE_CODE)
+ 		WHERE L.DOC_NO = #{docNo}
  	</select>
  	<update id="updateSecondReturnReason">
  		UPDATE APPROVAL

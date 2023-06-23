@@ -59,16 +59,19 @@ public class ApprovalServiceImpl implements ApprovalService {
 
 	@Override
 	@Transactional
-	public int insertItem(Item i, ArrayList<ApprovalAttachment> atList, ApprovalDoc ad, Approval a) {
+	public int insertItem(ArrayList<Item> iList, ArrayList<ApprovalAttachment> atList, ApprovalDoc ad, Approval a) {
 		int ApprovalDocResult = ss.insert("approvalMapper.insertApprovalDoc",ad);
 		int ApprovalResult = ss.insert("approvalMapper.insertApproval",a);
 		int ApprovalAttachmentResult =1;
+		int itemResult = 1;
 		
 		for(ApprovalAttachment aa : atList) {
 			ApprovalAttachmentResult *= ss.insert("approvalMapper.insertApprovalAttachment",aa);
 		}
 		
-		int itemResult = ss.insert("approvalMapper.insertItem",i);
+		for(Item i : iList) {
+			itemResult = ss.insert("approvalMapper.insertItem",i);
+		}
 		
 		int result = ApprovalDocResult*ApprovalResult*ApprovalAttachmentResult*itemResult;
 		
@@ -77,16 +80,19 @@ public class ApprovalServiceImpl implements ApprovalService {
 
 	@Override
 	@Transactional
-	public int insertLeave(Leave l, ArrayList<ApprovalAttachment> atList, ApprovalDoc ad, Approval a) {
+	public int insertLeave(ArrayList<Leave> leaveList, ArrayList<ApprovalAttachment> atList, ApprovalDoc ad, Approval a) {
 		int ApprovalDocResult = ss.insert("approvalMapper.insertApprovalDoc",ad);
 		int ApprovalResult = ss.insert("approvalMapper.insertApproval",a);
 		int ApprovalAttachmentResult =1;
+		int leaveResult = 1;
 		
 		for(ApprovalAttachment aa : atList) {
 			ApprovalAttachmentResult *= ss.insert("approvalMapper.insertApprovalAttachment",aa);
 		}
 		
-		int leaveResult = ss.insert("approvalMapper.insertLeave",l);
+		for(Leave l : leaveList) {
+			leaveResult *= ss.insert("approvalMapper.insertLeave",l);
+		}
 		
 		int result = ApprovalDocResult*ApprovalResult*ApprovalAttachmentResult*leaveResult;
 		
@@ -109,19 +115,15 @@ public class ApprovalServiceImpl implements ApprovalService {
 	}
 
 	@Override
-	public Item selectItem(int docNo) {
+	public ArrayList<Item> selectItem(int docNo) {
 		return ad.selectItem(ss,docNo);
 	}
 	
 	@Override
-	public Leave selectLeave(int docNo) {
+	public ArrayList<Leave> selectLeave(int docNo) {
 		return ad.selectLeave(ss,docNo);
 	}
 	
-	@Override
-	public ArrayList<Approval> selectApprovalList() {
-		return ad.selectApprovalList(ss);
-	}
 
 	@Override
 	public int updateSecondReturnReason(Approval a) {
@@ -134,7 +136,6 @@ public class ApprovalServiceImpl implements ApprovalService {
 	public int updateLastReturnReason(Approval a, ApprovalDoc ad) {
 		int result = ss.update("approvalMapper.updateLastReturnReason",a);
 		int result2 = ss.update("approvalMapper.updateStatus",ad);
-		//업데이트는 되는데 0이 반환됨
 		return result*result2;
 	}
 	
