@@ -42,8 +42,4 @@ public interface ScheduleService {
 	int deleteUserSchedule(Schedule schedule);
 
 
-	
-	
-	
-
 }

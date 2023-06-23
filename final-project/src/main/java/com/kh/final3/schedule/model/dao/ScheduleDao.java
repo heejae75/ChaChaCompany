@@ -1,5 +1,6 @@
 package com.kh.final3.schedule.model.dao;
 
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -77,7 +78,4 @@ public class ScheduleDao {
 
 		return sqlSession.update("scheduleMapper.deleteUserSchedule", schedule);
 	}
-	
-	
-
 }

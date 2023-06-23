@@ -1,5 +1,6 @@
 package com.kh.final3.schedule.controller;
 
+
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -171,4 +172,5 @@ public class ScheduleController {
 		
 		return (result > 0) ? "YYYY" : "NNNN";
 	}
+
 }

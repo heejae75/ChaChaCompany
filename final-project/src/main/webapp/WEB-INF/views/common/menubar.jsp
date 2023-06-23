@@ -20,11 +20,11 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-	
 	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script> <!-- 동현님 -->
-
-    <!-- <link rel="stylesheet" href="/css/chat.css"> --> 
+    
 	<!-- <link href="/final3/resources/css/menubar.css" rel="stylesheet"> -->
+    <!-- <link rel="stylesheet" href="/css/chat.css"> --> 
+
 	<!--
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
@@ -141,13 +141,26 @@
 
         .nav_link:hover{
             color: var(--white-color);
+      		text-decoration: none;
         }
 
 
+		/*로그아웃 영역 */
         .nav_logout{
             margin-left: 15px;
             margin-top: auto;
-      		margin-bottom: 10px;
+      		margin-bottom: 40px;
+        }
+        
+        /* 로그아웃 버튼이 이상해서 따로 설정함 */
+        #menubar_logout {
+        	background-color: #0E6251;
+        	border: 0px;
+        	color: #999999;
+    	}
+    	
+    	#menubar_logout:hover{
+            color: white;
         }
         
 	    @media (max-width: 768px) {
@@ -207,7 +220,7 @@
 	    	width: calc(var(--nav-width) + 156px);
 	    }
 	    .body-pd{
-	    	padding-left: calc(var(--nav-width) + 188px)
+	    	padding-left: calc(var(--nav-width) + 188px);
 	    }
 	    }
 	
@@ -508,7 +521,7 @@
                         
                         <!-- 근태관리  -->
                         <li>
-                            <a href="#" class="nav_link">
+                            <a href="userAtt.at" class="nav_link">
                                 <i class="fa-sharp fa-solid fa-business-time" style="color: #ffffff; font-size: 22px;"></i>
                                 &nbsp;
                                 <span class="nav_name">근태관리</span>
@@ -573,12 +586,12 @@
 			<!-- 로그아웃  -->
             <div class="nav_logout">
                 <a href="#" class="nav_link">
-                    <i class="fa-sharp fa-solid fa-right-from-bracket fa-xl" style="color: #ffffff;"></i>
-                    <span class="nav_name">
-					    <form action="/final3/logout" method="POST">
+                    <i class="fa-sharp fa-solid fa-right-from-bracket fa-xl" style="color: #ffffff; "></i>
+                    <span class="nav_n">
+						<form action="/final3/logout" method="post">
 					        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-					        <button type="submit">LOGOUT</button>
-					    </form>
+					        <button type="submit" id="menubar_logout">LOGOUT</button>
+						</form>
                     </span>
                 </a>
             </div>
