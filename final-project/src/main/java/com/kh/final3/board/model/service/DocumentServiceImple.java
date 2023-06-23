@@ -159,6 +159,13 @@ public class DocumentServiceImple implements DocumentService{
 
 		return documentDao.deleteAttachment(sqlSession, boardNo);
 	}
+	
+	//삭제된 첨부파일 조회 메소드 
+	@Override
+	public ArrayList<BoardAttachment> selectDeleteAttachList(int bno) {
+
+		return documentDao.selectDeleteAttachList(sqlSession,bno);
+	}
 
 
 	

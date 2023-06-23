@@ -113,8 +113,8 @@
 				<li role="presentation">
 					<a href="list.no">공지사항</a>
 				</li>
-				<li role="presentation">
-	 				<a href="list.dc" class="active" >자료실</a>
+				<li role="presentation" class="active">
+	 				<a href="list.dc">자료실</a>
 				</li>
 				<li role="presentation">
 					<a href="list.re">대여</a>
@@ -170,18 +170,16 @@
                    		</td>
            			</tr>
                  	<tr>
-                 		<td colspan="4" style="padding-left: 40px;"><p style="height:300px;"> ${b.boardTitle} </p></td>
+                 		<td colspan="4" style="padding-left: 40px;"><p style="height:300px;"> ${b.boardContent} </p></td>
                  	</tr>
                  </tbody>
         	</table>
 	    <hr>   
        	</div>
-	 	<c:if test="${(loginUser.jobCode == 'J1' || loginUser.jobCode == 'J2' || loginUser.jobCode == 'J3') || loginUser.userNo == b.boardWriter}">
 		<div id="board-btn-area">
 		    	<button class="btn btn-danger" onclick="documentDelete();">삭제</button> 
 		    	<button type="submit" class="btn btn-success" onclick="location.href='update.dc?bno='+${b.boardNo}">수정</button>               
 		</div>
-		</c:if>
 		<script>
 		/* 게시글 삭제 이벤트  */
 		    function documentDelete(){
@@ -203,7 +201,7 @@
 								alert("삭제에 실패하였습니다 다시 시도해주세요")
 
 							}
-								location.href="/final3/list.dc";
+								location.href="/final3/member/list.dc";
 								
 						},
 						
