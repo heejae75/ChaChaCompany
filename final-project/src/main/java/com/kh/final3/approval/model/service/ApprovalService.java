@@ -16,58 +16,58 @@ import com.kh.final3.member.model.vo.Member;
 
 public interface ApprovalService {
 	
-	//°¢ statusÀÇ °¹¼ö °¡Á®¿À±â
+	//ê° statusì˜ ê°¯ìˆ˜ ê°€ì ¸ì˜¤ê¸°
 		int selectListCount(String status);
 		
-		//°áÀçÇÔ ¸®½ºÆ® ºÒ·¯¿À±â
+		//ê²°ì¬í•¨ ë¦¬ìŠ¤íŠ¸ ë¶ˆëŸ¬ì˜¤ê¸°
 		ArrayList<ApprovalDoc> selectApprovalDocList(PageInfo pi, String status);
 		
-		//°áÀç È¨ ¸®½ºÆ® ºÒ·¯¿À±â
+		//ê²°ì¬ í™ˆ ë¦¬ìŠ¤íŠ¸ ë¶ˆëŸ¬ì˜¤ê¸°
 		ArrayList<ApprovalDoc> approvalMainList(String status);
 		
-		//¾ç½Ä¸®½ºÆ® °¡Á®¿À±â
+		//ì–‘ì‹ë¦¬ìŠ¤íŠ¸ ê°€ì ¸ì˜¤ê¸°
 		ArrayList<DocType> selectEnrollList();
 		
-		//°áÀç¶óÀÎ »ç¿øÁ¶È¸
+		//ê²°ì¬ë¼ì¸ ì‚¬ì›ì¡°íšŒ
 		ArrayList<Member> selectApproverList(String deptCode);
 		
-		//°áÀç¶óÀÎ »ç¿ø °Ë»ö
+		//ê²°ì¬ë¼ì¸ ì‚¬ì› ê²€ìƒ‰
 		ArrayList<Member> searchApproverList(HashMap<String, String> map);
 		
-		//±¸¸ÅÇ°ÀÇ¼­ ÀÛ¼º
+		//êµ¬ë§¤í’ˆì˜ì„œ ì‘ì„±
 		int insertItem(ArrayList<Item> iList, ArrayList<ApprovalAttachment> atList, ApprovalDoc ad, Approval a);
 		
-		//ÈŞ°¡°è ÀÛ¼º
+		//íœ´ê°€ê³„ ì‘ì„±
 		int insertLeave(ArrayList<Leave> leaveList, ArrayList<ApprovalAttachment> atList, ApprovalDoc ad, Approval a);
 		
-		//°áÀçÀÚ Á¶È¸
+		//ê²°ì¬ì ì¡°íšŒ
 		Approval selectApproval(int docNo);
 		
-		//°áÀç¹®¼­ Ã·ºÎÆÄÀÏ Á¶È¸
+		//ê²°ì¬ë¬¸ì„œ ì²¨ë¶€íŒŒì¼ ì¡°íšŒ
 		ArrayList<ApprovalAttachment> selectApprovalAttachment(int docNo);
 		
-		//°áÀç¹®¼­ Á¶È¸
+		//ê²°ì¬ë¬¸ì„œ ì¡°íšŒ
 		ApprovalDoc selectApprovalDoc(int docNo);
 		
-		//±¸¸ÅÇ°ÀÇ¼­ ³»¿ë Á¶È¸
+		//êµ¬ë§¤í’ˆì˜ì„œ ë‚´ìš© ì¡°íšŒ
 		ArrayList<Item> selectItem(int docNo);
 		
-		//ÈŞ°¡°è ³»¿ëÁ¶È¸
+		//íœ´ê°€ê³„ ë‚´ìš©ì¡°íšŒ
 		ArrayList<Leave> selectLeave(int docNo);
 
-		//Áß°£°áÀçÀÚ ¹İ·Á
+		//ì¤‘ê°„ê²°ì¬ì ë°˜ë ¤
 		int updateSecondReturnReason(Approval a);
 		
-		//ÃÖÁ¾°áÀçÀÚ ¹İ·Á
+		//ìµœì¢…ê²°ì¬ì ë°˜ë ¤
 		int updateLastReturnReason(Approval a, ApprovalDoc ad);
 		
-		//Áß°£°áÀçÀÚ ½ÂÀÎ
+		//ì¤‘ê°„ê²°ì¬ì ìŠ¹ì¸
 		int updateSecondApprover(Approval a);
 		
-		//ÃÖÁ¾°áÀçÀÚ ½ÂÀÎ
+		//ìµœì¢…ê²°ì¬ì ìŠ¹ì¸
 		int updateLastApprover(Approval a,ApprovalDoc ad);
 		
-		//°áÀç È¨ ±×·¡ÇÁ
+		//ê²°ì¬ í™ˆ ê·¸ë˜í”„
 		List<ApprovalDoc> monthData(ApprovalDoc ad);
 
 	

@@ -18,7 +18,7 @@ public class Leave {
 	private String createDate;
 	private String[] arrLeaveStatus;
 	
-	//¸®½ºÆ® Çü½ÄÀ¸·Î ¹Ş±âÀ§ÇÑ VO
+	//ë¦¬ìŠ¤íŠ¸ ë¶ˆëŸ¬ì˜¤ëŠ” VO
 	private String leaveCode;
 	private String startDate;
 	private String endDate;
