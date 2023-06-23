@@ -11,7 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 	<%@ include file="../common/menubar.jsp" %>
-	<link rel="stylesheet" href="/final3/resources/css/Approval_LeaveForm.css" >
+<!-- 	<link rel="stylesheet" href="/final3/resources/css/Approval_LeaveForm.css" > -->
 </head>
 <body>
 	<br><br><br><br>
@@ -26,7 +26,7 @@
             
             <div id="leave-btn-area">
                 <button type="submit" class="btn btn-primary">기안</button>
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#approverModal">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#approverModal">
                    	결재선
                 </button>
                 <input type="checkbox" name="emergency" id="emergency-btn" onclick="emergencyChk();"><label for="긴급">긴급문서</label>
@@ -126,7 +126,7 @@
                                 <th colspan="3" style="vertical-align: middle;" >업무인수자</th>
                                 <td colspan="3">
                                     <input type="text" name="workReceiver" value="" style="width: 80%;vertical-align: middle;" >
-                                    <input type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#workReceiverModal" value="검색" style="float: right;height: 35px;vertical-align: middle;">
+                                    <input type="button" class="btn btn-primary" data-toggle="modal" data-target="#workReceiverModal" value="검색" style="float: right;height: 35px;vertical-align: middle;">
                                 </td>
                             </tr>
                             <tr>
@@ -172,13 +172,14 @@
             </div>
         </div>
     </form>
-<!-- 업무 인수자 선택-->
+    
+<!-- 업무 인수자 선택 -->
         <div class="modal fade" id="workReceiverModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl">
+            <div class="modal-dialog" style="width: 50%;">
             <div class="modal-content">
                 <div class="modal-header">
-                <h1 class="modal-title fs-5" id="workReceiverModalLabel">결재라인 선택</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h2 class="modal-title" id="workReceiverModalLabel">결재라인 선택</h2>
                 </div>
                 <div class="modal-body">
                     <div id="organization-area">
@@ -238,7 +239,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
                 <button type="button" class="btn btn-primary" onclick="selectReceiver();">완료</button>
                 </div>
             </div>
@@ -248,11 +249,11 @@
 
 <!-- 결재라인 선택 -->
 		<div class="modal fade" id="approverModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		  <div class="modal-dialog modal-xl">
+		  <div class="modal-dialog" style="width: 50%;">
 		    <div class="modal-content">
 		      <div class="modal-header">
-		        <h1 class="modal-title fs-5" id="exampleModalLabel">결재라인 선택</h1>
-		        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        <h2 class="modal-title" id="exampleModalLabel">결재라인 선택</h2>
 		      </div>
 		      <div class="modal-body">
 		       	 <div id="organization-area">
@@ -320,7 +321,7 @@
                     </div>
 		      </div>
 		      <div class="modal-footer">
-		        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
 		        <button type="button" class="btn btn-primary" id="select-approver-btn" onclick="selectApprover();">완료</button>
 		      </div>
 		    </div>

@@ -1,6 +1,7 @@
 package com.kh.final3.main.model.service;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import com.kh.final3.board.model.vo.Board;
 import com.kh.final3.email.model.vo.Email;
 import com.kh.final3.main.model.dao.MainDao;
 import com.kh.final3.member.model.vo.Member;
+import com.kh.final3.schedule.model.vo.Schedule;
 
 @Service
 public class MainServiceImpl implements MainService {
@@ -61,6 +63,17 @@ public class MainServiceImpl implements MainService {
 	@Override
 	public ArrayList<Member> mainOthersAllList(Member m) {
 		return mainDao.mainOthersAllList(sqlSession, m);
+	}
+
+	@Override
+	public ArrayList<Schedule> mainCalendarList(String deptCode) {
+		return mainDao.mainCalendarList(sqlSession, deptCode);
+	}
+
+
+	@Override
+	public ArrayList<Schedule> mainDailyEvents(Map<String, Object> params) {
+		return mainDao.mainDailyEvents(sqlSession, params);
 	}
 
 }

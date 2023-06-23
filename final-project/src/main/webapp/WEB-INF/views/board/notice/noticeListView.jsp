@@ -137,7 +137,7 @@
                 <form action="list.no" id="board-search-area" method="get">
                     <div id="option-box" align="right" >
                     <input type="hidden" name="currentPage" value="1">
-                        <select name="status" id="dept_code" class="btn btn-secondary dropdown-toggle" style="background-color: white; color:#0c0d0d; height: 38px; margin-right: 3px;">
+                        <select name="status" id="dept_code" class="btn btn-secondary dropdown-toggle" style="background-color: white; color:#0c0d0d; height: 34px; margin-right: 3px; border:1px solid #ccc;">
                             <option>부서선택</option>
                             <option value="D1">기타</option>
                             <option value="D2">회계관리부</option>

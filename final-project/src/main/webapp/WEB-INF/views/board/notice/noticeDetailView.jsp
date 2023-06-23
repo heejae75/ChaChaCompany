@@ -6,10 +6,10 @@
     <meta charset="UTF-8">
     <title>Document</title>
   <style>
-	.content{
-        width: 1570px;
-		margin-top:-105px;
-    }
+	.content2{ 
+         width: 1570px; 
+  		 margin-top:-8px;
+   }
 	
    /* 이전으로버튼 */
    #boardList-btn{
@@ -93,7 +93,7 @@
         
 <%@ include file="../../common/menubar.jsp" %>
 ​
- <div class="content">
+ <div class="content2">
     
          <div id="board-tap-area">
                 <ul id="nav-tabs"  class="nav-tabs nav-pills">

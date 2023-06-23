@@ -1,5 +1,6 @@
 package com.kh.final3.schedule.model.dao;
 
+
 import java.util.ArrayList;
 
 import org.apache.ibatis.session.SqlSession;
@@ -21,5 +22,4 @@ public class ScheduleDao {
 
 		return (ArrayList)sqlSession.selectList("scheduleMapper.getSchedule", deptCode);
 	}
-
 }
