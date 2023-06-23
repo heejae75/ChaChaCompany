@@ -113,7 +113,6 @@ public class NoticeController {
 	// 글작성 insert
 	@RequestMapping("insert.no")
 	public ModelAndView insertBoard(ModelAndView mv, Board b, BoardAttachment at, MultipartFile upfile, HttpSession session) throws IllegalStateException, IOException {
-
 		String savePath = session.getServletContext().getRealPath("/resources/uploadFiles/boardDocument/");
 		
 		if(!upfile.getOriginalFilename().equals("")) { // 첨부파일이 있는 경우
@@ -147,7 +146,6 @@ public class NoticeController {
 	@ResponseBody
 	@RequestMapping(value = "replyList.no", produces = "application/json; charset=UTF-8")
 	public String selectReplyList(int boardNo) {
-
 		ArrayList<Reply> list = noticeService.selectReplyList(boardNo);
 		return new Gson().toJson(list);
 	}

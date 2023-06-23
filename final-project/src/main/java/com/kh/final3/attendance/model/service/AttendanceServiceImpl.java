@@ -19,8 +19,29 @@ public class AttendanceServiceImpl implements AttendanceService {
 	private SqlSessionTemplate sqlSession;
 
 	@Override
-	public ArrayList<Attendance> attendanceList() {
-		return attendanceDao.attendanceList(sqlSession);
+	public ArrayList<Attendance> attendanceList(int userNo) {
+		return attendanceDao.attendanceList(sqlSession, userNo);
+	}
+
+	// 오늘의 근무계획 불러오기
+	@Override
+	public Attendance attendanceMain(int userNo) {
+		return attendanceDao.attendanceMain(sqlSession, userNo);
+	}
+
+	@Override
+	public int insertTodo(Attendance att) {
+		return attendanceDao.insertTodo(sqlSession, att);
+	}
+
+	@Override
+	public int updateTodo(Attendance att) {
+		return attendanceDao.updateTodo(sqlSession, att);
+	}
+
+	@Override
+	public Attendance selectTodo(int userNo) {
+		return attendanceDao.selectTodo(sqlSession, userNo);
 	}
 
 }

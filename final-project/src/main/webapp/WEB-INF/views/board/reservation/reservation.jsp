@@ -404,7 +404,6 @@
 	        	                roomCode : reservation.roomCode
 	        	                
 	        	              };
-
 	        	              events.push(event);
 	        	            });
 
