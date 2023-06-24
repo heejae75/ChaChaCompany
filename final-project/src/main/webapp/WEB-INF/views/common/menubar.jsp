@@ -558,7 +558,16 @@
                                 <li>
                                     <a href="/final3/${role}/list.me">임직원 조회</a>
                                 </li>
+                                 <li>
+                                    <a href="payment.me?userNo=${loginUser.userNo}">급여명세서 조회</a>
+                                </li>
+                                <c:if test="${(loginUser.auth eq 'ROLE_ADIM' and loginUser.deptCode eq 'D9') or (loginUser.deptCode eq 'D9') }">
+                                <li>
+                                    <a href="payment.ad">급여명세서 작성</a>
+                                </li>
+                                </c:if>
                             </ul>
+                            
                         </li>
 
 						<!-- 일정관리  -->

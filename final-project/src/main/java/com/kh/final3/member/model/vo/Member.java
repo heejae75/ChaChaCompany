@@ -30,4 +30,8 @@ public class Member {
 	
 	private String jobName;
 	private String deptName;
+	
+	//급여 작성시 회원 기본정보에 필요 
+	private String bank; 
+	private String accountNumber;
 }

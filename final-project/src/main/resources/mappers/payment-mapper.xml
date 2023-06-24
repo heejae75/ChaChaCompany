@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="paymentMapper">
+	
+	<resultMap type="member" id="paymentMemberResultSet">
+		<result column="USER_NO" property="userNo"/>
+	 	<result column="USER_ID" property="userId"/>
+	 	<result column="USER_NAME" property="userName"/>
+	 	<result column="USER_PWD" property="userPwd"/>
+	 	<result column="PHONE" property="phone"/>
+	 	<result column="EMAIL" property="email"/>
+	 	<result column="ADDRESS" property="address"/>
+	 	<result column="BIRTH" property="birth"/>
+	 	<result column="DEPT_CODE" property="deptCode"/>
+	 	<result column="JOB_CODE" property="jobCode"/>
+	 	<result column="EMPOLYMENT_DATE" property="empolymentDate"/>
+	 	<result column="DEPATURE_DATE" property="depatureDate"/>
+	 	<result column="AUTH" property="auth"/>
+	 	<result column="ENABLED" property="enabled"/>
+	 	<result column="STATUS" property="status"/>
+	 	<result column="DEPT_NAME" property="deptName"/>
+	 	<result column="JOB_NAME" property="jobName"/>
+	 	<result column="BANK" property="banke"/>
+	 	<result column="ACCOUNT_NUMBER" property="accountNumber"/>
+	</resultMap>
+	
+	<resultMap type="payment" id="paymentResultSet">
+		<result column="PAY_NO" property="payNo"/>
+		<result column="USER_NO" property="userNo"/>
+		<result column="ACCOUNT_NUMBER" property="accountNumber"/>
+		<result column="BANK" property="bank"/>
+		<result column="MONTHLY" property="monthly"/>
+		<result column="SALARY" property="salary"/>
+		<result column="MEALS" property="meals"/>
+		<result column="OVERTIME_PAY" property="overtimePay"/>
+		<result column="HOLIDAY_PAY" property="holidayPay"/>
+		<result column="ANNUAL_LEAVE_PAY" property="annualLeavePay"/>
+		<result column="OTHER_PAY" property="otherPay"/>
+		<result column="NATIONAL_PENSION" property="nationalPension"/>
+		<result column="HEALTH_INSURANCE" property="healthInsurance"/>
+		<result column="EMP_INSURANCE" property="empInsurance"/>
+		<result column="LNG_INSURANCE" property="lngInsurance"/>
+		<result column="ACCOUNT_STATUS" property="accountStatus"/>
+	</resultMap> 
+	
+	<!-- 전체 회원수 조회 -->
+	<select id="selectMemberCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM MEMBER
+		WHERE STATUS ='Y'
+	</select>
+	
+	<!-- 회원 목록 조회  -->
+	<select id="selectMemberList" resultMap="paymentMemberResultSet">
+		SELECT USER_NO, USER_NAME, USER_ID, EMAIL, TO_CHAR(BIRTH, 'YYYY-MM-DD')AS BIRTH, JOB_NAME, DEPT_NAME, TO_CHAR(EMPOLYMENT_DATE,'YYYY-MM-DD') AS EMPOLYMENT_DATE
+		FROM MEMBER
+		JOIN DEPARTMENT USING(DEPT_CODE)
+		JOIN JOB USING(JOB_CODE)
+		WHERE STATUS = 'Y'
+	</select>
+	
+	<!-- 회원 기본 정보 조회 -->
+	<select id="selectMemberInfo" resultMap="paymentMemberResultSet">
+		SELECT USER_NO, USER_NAME, DEPT_NAME, JOB_NAME, TO_CHAR(EMPOLYMENT_DATE,'YYYY-MM-DD') AS EMPOLYMENT_DATE, BANK, ACCOUNT_NUMBER
+		FROM MEMBER
+		LEFT JOIN DEPARTMENT USING(DEPT_CODE)
+		LEFT JOIN JOB USING(JOB_CODE)
+		LEFT JOIN PAYMENT USING(USER_NO)
+		WHERE USER_NO = #{userNo}
+	</select>
+	
+	<!-- 급여 입력 -->
+	<insert id="insertPayment">
+		INSERT INTO PAYMENT VALUES(SEQ_PAY.NEXTVAL, #{userNo},#{accountNumber},#{bank},#{monthly},#{salary},#{meals},
+								   #{overtimePay},#{holidayPay},#{annualLeavePay},#{otherPay})
+	</insert>
+</mapper>
