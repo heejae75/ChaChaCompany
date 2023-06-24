@@ -65,14 +65,17 @@
     	monthData();
     });
 	function approvalList(status){
+		userNo = "${loginUser.userNo}";
 		$.ajax({
 			url :"approvalMainList.ap",
 			data : {
 				status : status
 			},
 			success : function(list){
+				console.log(list);
 				var str ="";
 				for(var i=0; i<list.length; i++){
+					if((userNo == list[i].docWriter)||(userNo == list[i].lastApproverNo)||(userNo == list[i].secondApproverNo)){
 					str += "<tr>"
 						 + "<td width='100px'>"+list[i].docNo+"</td>"
 						 + "<td width='110px'>"+list[i].deptCode+"</td>"
@@ -85,6 +88,7 @@
 						 + "</td>"
 						 + "<td>"+list[i].createDate+"</td>"
 						 + "</tr>"
+					}
 				}
 				
 				$("#approval-main-list>tbody").html(str);
@@ -102,7 +106,6 @@
 	}
 	function monthData(){
 		docWriter = "${loginUser.userNo}"
-		console.log(docWriter);
 		$.ajax({
 			url : "monthData.ap",
 			type : "POST",

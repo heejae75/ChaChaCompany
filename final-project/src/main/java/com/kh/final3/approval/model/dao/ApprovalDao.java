@@ -60,16 +60,12 @@ public class ApprovalDao {
 		return ss.selectOne("approvalMapper.selectApprovalDoc", docNo);
 	}
 
-	public Item selectItem(SqlSessionTemplate ss, int docNo) {
-		return ss.selectOne("approvalMapper.selectItem", docNo);
+	public ArrayList<Item> selectItem(SqlSessionTemplate ss, int docNo) {
+		return (ArrayList)ss.selectList("approvalMapper.selectItem", docNo);
 	}
 
-	public Leave selectLeave(SqlSessionTemplate ss, int docNo) {
-		return ss.selectOne("approvalMapper.selectLeave", docNo);
-	}
-	
-	public ArrayList<Approval> selectApprovalList(SqlSessionTemplate ss) {
-		return (ArrayList)ss.selectList("approvalMapper.selectApprovalList");
+	public ArrayList<Leave> selectLeave(SqlSessionTemplate ss, int docNo) {
+		return (ArrayList)ss.selectList("approvalMapper.selectLeave", docNo);
 	}
 
 	public int updateSecondApprover(SqlSessionTemplate ss, Approval a) {
