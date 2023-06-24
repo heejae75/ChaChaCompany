@@ -6,6 +6,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kh.final3.approval.model.vo.Leave;
 import com.kh.final3.attendance.model.dao.AttendanceDao;
 import com.kh.final3.attendance.model.vo.Attendance;
 
@@ -42,6 +43,11 @@ public class AttendanceServiceImpl implements AttendanceService {
 	@Override
 	public Attendance selectTodo(int userNo) {
 		return attendanceDao.selectTodo(sqlSession, userNo);
+	}
+	// 휴가리스트 불러오기
+	@Override
+	public ArrayList<Leave> selectLeaveList(int userNo) {
+		return attendanceDao.selectLeaveList(sqlSession, userNo);
 	}
 
 }

@@ -331,7 +331,7 @@
 			views                     : { 
 			                              month : { eventLimit : 12 } // 한 날짜에 최대 이벤트 12개, 나머지는 + 처리됨
 				                              },
-			navLinks                  : true,
+			navLinks                  : false,
 			timeFormat                : "HH:mm",
 			defaultTimedEventDuration : "01:00:00", // 한시간단위
 			minTime                   : "09:00:00",

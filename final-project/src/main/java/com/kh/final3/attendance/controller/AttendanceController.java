@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
+import com.kh.final3.approval.model.vo.Leave;
 import com.kh.final3.attendance.model.service.AttendanceService;
 import com.kh.final3.attendance.model.vo.Attendance;
 import com.kh.final3.member.model.vo.Member;
@@ -57,6 +58,13 @@ public class AttendanceController {
 	public String selectTodo(int userNo) {
 		Attendance att = attendanceService.selectTodo(userNo);
 		return att.getTodoContent();
+	}
+	// 휴가리스트 불러오기
+	@ResponseBody
+	@RequestMapping(value = "leaveList.at", produces  = "application/json; charset=UTF-8")
+	public String selectLeaveList(int userNo) {
+		ArrayList<Leave> list = attendanceService.selectLeaveList(userNo);
+		return new Gson().toJson(list);
 	}
 
 	

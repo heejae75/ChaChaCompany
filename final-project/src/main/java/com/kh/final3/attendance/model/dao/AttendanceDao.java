@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.kh.final3.approval.model.vo.Leave;
 import com.kh.final3.attendance.model.vo.Attendance;
 
 @Repository
@@ -25,6 +26,9 @@ public class AttendanceDao {
 	}
 	public Attendance selectTodo(SqlSessionTemplate sqlSession, int userNo) {
 		return sqlSession.selectOne("attendanceMapper.selectTodo", userNo);
+	}
+	public ArrayList<Leave> selectLeaveList(SqlSessionTemplate sqlSession, int userNo) {
+		return (ArrayList)sqlSession.selectList("attendanceMapper.selectLeaveList", userNo);
 	}
 
 }
