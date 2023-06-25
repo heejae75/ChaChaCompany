@@ -1,8 +1,7 @@
 package com.kh.final3.payment.controller;
 
 import java.util.ArrayList;
-
-import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
 import com.kh.final3.common.template.Pagination;
 import com.kh.final3.common.vo.PageInfo;
 import com.kh.final3.member.model.vo.Member;
@@ -68,10 +68,86 @@ public class PaymentController {
 	@RequestMapping("insertPayment.ad")
 	public String insertPayment(Payment pay) {
 		
-		System.out.println(pay);
+		//해당 회원의 급여 명세서 이미 등록되었는지 확인 -> 등록하려고 하는 급여 명세서의 날짜와 기존 등록 날짜 비교 
+		int userNo = pay.getUserNo();
+		String month = pay.getMonthly().substring(0, 6);
 		
-		int result = paymentService.insertPayment(pay);
+		HashMap <String, Object> key = new HashMap <>();
+		key.put("userNo", userNo);
+		key.put("month", month);
 		
-		return (result>0)? "YYYY":"NNNN";
+		int count = paymentService.compareMonthly(key); 
+		
+		if(count<0) { //등록된 명세서 없음 
+			
+			int result = paymentService.insertPayment(pay);
+			return (result>0)? "YYYY":"NNNN";
+			
+		}else {// 등록된 명세서 있음 
+			
+			return "duplicate";
+		}
+		
+	}
+	
+	//관리자 - 해당 회원의 급여 명세서 목록 조회 
+	@ResponseBody
+	@RequestMapping(value="list.pa", produces = "application/json; UTF-8")
+	public String selectPaymentList (int userNo) {
+		
+		ArrayList <Payment> pList = paymentService.selectPaymentList(userNo);
+		
+		return new Gson().toJson(pList);
+	}
+	
+	//관리자 - 급여 계좌 관리 페이지 이동 
+	@RequestMapping("account.ad")
+	public ModelAndView accountList(@RequestParam(value="currentPage", defaultValue="1") int currentPage, ModelAndView mv) {
+		
+		//계좌 미등록, 계좌 변경 신청 회원 숫자 조회 
+		int listCount = paymentService.selectAccount();
+		int boardLimit =10;
+		int pageLimit = 5;
+		
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
+		
+		//계좌 미등록, 계좌 변경 신청 회원 목록 조회 
+		ArrayList <Member> mList = paymentService.selectAccountList(pi);
+		
+		mv.addObject("mList", mList).addObject("pi", pi).setViewName("payment/accountList");
+		
+		return mv;
+	}
+	
+	//관리자 - 급여 관리 검색 필터 
+	@ResponseBody
+	@RequestMapping("search.pa")
+	public ModelAndView searchPayment(@RequestParam(value="currentPage", defaultValue="1") int currentPage,String deptCode, String keyword ,ModelAndView mv) {
+		
+		HashMap <String, String> key = new HashMap<>();
+		
+		key.put("deptCode", deptCode);
+		key.put("keyword", keyword);
+		
+		//필터에 해당하는 회원수 조회 
+		int listCount = paymentService.selectSearchMemberCount(key);
+		int boardLimit = 10;
+		int pageLimit =5;
+		
+		System.out.println(listCount);
+		
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
+		
+		ArrayList <Member> mList = paymentService.selectSearchMemberList(key,pi);
+		
+		System.out.println(mList);
+		
+		mv.addObject("mList", mList)
+		  .addObject("pi", pi)
+		  .addObject("keyword", keyword)
+		  .addObject("deptCode", deptCode)
+		  .setViewName("payment/paymentList");
+		
+		return mv;
 	}
 }

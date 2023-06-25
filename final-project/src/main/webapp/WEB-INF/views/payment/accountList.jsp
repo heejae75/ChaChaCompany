@@ -89,23 +89,27 @@
         float: left;
     }
 
-    
+    /* 버튼 영역 */
+    #account-btn-area{
+    	width:90%;
+    	margin:auto;
+    }
     /* 게시글 목록영역 */
-    #payment-list-area{
+    #account-list-area{
         width: 90%;
         margin: auto;
     }
     
-    #payment-list th, #payment-list td{
+    #account-list th, #account-list td{
         text-align:center;
     }
 	
-	#payment-list-area>#payment-list{
+	#account-list-area>#account-list{
 		width:100%;
 		
 	}
 	
-	#payment-list-area i:hover{
+	#account-list-area i:hover{
     	font-size: 25px;
     	cursor: pointer;
     }
@@ -122,10 +126,10 @@
     	<h1>급여 관리</h1>
     	  <div id="payment-tap-area">
    			<ul id="nav-tabs"  class="nav-tabs nav-pills">
-				<li role="presentation"  class="active" >
+				<li role="presentation" >
 					<a href="payment.ad">급여관리</a>
 				</li>
-				<li role="presentation">
+				<li role="presentation" class="active">
 				 	<a href="account.ad">급여계좌 관리 </a>
 				</li>
 			</ul>
@@ -134,17 +138,11 @@
 		<div id="board-search-area">
 			<form action="#" method="get">
 				<div id="option-box" align="right" >
-                	<select id="dept_code" name="deptCode" class="btn btn-secondary dropdown-toggle" style=" border: 1px solid #ccc; background-color: white; color:#0c0d0d; height: 34px; margin-right: 3px;">
+                	<select id="accountStatus" name="accountStatus" class="btn btn-secondary dropdown-toggle" style=" border: 1px solid #ccc; background-color: white; color:#0c0d0d; height: 34px; margin-right: 3px;">
 	                    <option value="전체">전체</option>
-	                    <option value="D1">기타</option>
-	                    <option value="D2">회계관리부</option>
-	                    <option value="D3">마케팅부</option>
-	                    <option value="D4">국내영업부</option>
-	                    <option value="D5">해외영업부</option>
-	                    <option value="D6">기술지원부</option>
-	                    <option value="D7">총무부</option>
-	                    <option value="D8">회계부</option>
-	                    <option value="D9">인사관리부</option>
+	                    <option value="N">미등록</option>
+	                    <option value="Y">등록완료</option>
+	                    <option value="p">등록/변경신청</option>
                 	</select>
 				</div>
 				<div id="search-box">
@@ -155,47 +153,65 @@
 			</form>
 		</div>
 		<!-- 검색한 부서 고정 script -->
-		<c:if test="${not empty deptCode }">
+		<c:if test="${not empty accountStatus }">
 		<script>
 			$(function(){
-				$("#option-box option[value = ${deptCode}]").attr("selected",true);
+				$("#option-box option[value = ${accountStatus}]").attr("selected",true);
 				
 			});
 		</script>
 		</c:if>
+		<!-- 버튼 영역 -->
+		<div id="account-btn-area">
+			<button type="button" class="btn btn-success" style="margin-bottom : 20px;">등록하기</button>
+		</div>
      	<!-- 게시글 리스트 영역 -->
-     	<div id="payment-list-area">
-         	<table id="payment-list" class="table table-hover">
+     	<div id="account-list-area">
+         	<table id="account-list" class="table table-hover">
              	<thead>
 	                 <tr>
-	                     <th width="10%">No.</th>
-	                     <th width="15%">이름</th>
-	                     <th width="15%">부서</th>
+	                 	 <th width="5%">선택</th>
+	                     <th width="5%">사번</th>
+	                     <th width="10%">이름</th>
+	                     <th width="10%">부서</th>
 	                     <th width="10%">직급</th>
-	                     <th width="15%">아이디</th>
+	                     <th width="10%">아이디</th>
 	                     <th width="15%">이메일</th>
-	                     <th width="10%">생년월일</th>
-	                     <th width="10%">입사일</th>
+	                     <th width="10%">은행</th>
+	                     <th width="15%">계좌번호</th>
+	                     <th width="10%">상태</th>
 	                 </tr>
            		</thead>
             	<tbody>
               		<c:choose>
               		<c:when test="${empty mList}">
               			<tr>
-              				<td colspan="7">조회된 회원이 없습니다.</td>
+              				<td colspan="10">조회 결과가  없습니다.</td>
               			</tr>
               		</c:when>
               		<c:otherwise>
               			<c:forEach var="m" items="${mList}">
               			<tr>
+              				<td><input type="checkbox" style="width:15px;height:15px;"></td>
                				<td>${m.userNo}</td>
                				<td>${m.userName}</td>
                   			<td>${m.deptName}</td>
                   			<td>${m.jobName}</td>
                       		<td>${m.userId}</td>      
                        		<td>${m.email}</td>
-                       		<td>${m.birth}</td>
-                  			<td>${m.empolymentDate}</td>
+                  			<td>${m.bank}</td>
+                  			<td>${m.accountNumber}</td>
+                  			<c:choose>
+                  				<c:when test="${m.accountStatus eq 'N' }">
+                  					<td style="font-weight:700;"> 계좌 미등록 </td>
+                  				</c:when>
+                  				<c:when test="${m.accountStatus eq 'P' }">
+                  					<td style="font-weight:700; color: darkblue;"> 등록/변경신청 </td>
+                  				</c:when>
+                  				<c:otherwise>
+                  					<td style="font-weight:700; color: #0E6251;"> 등록 완료 </td>
+                  				</c:otherwise>
+                  			</c:choose>
               			</tr>
               			</c:forEach>
               		</c:otherwise>
@@ -203,17 +219,8 @@
          		</tbody>
       		</table>
    			<br>
-   			<script>
-   				//작성페이지 이동 
-   				$(function(){
-   					$("#payment-list>tbody").on("click","tr",function(){
-   						var userNo = $(this).children().eq(0).text();
-   						
-   						location.href="enrollPayment.ad?userNo="+userNo;
-   					});
-   				});
-   			</script>
-	     	<div id="board-pagebar-area">
+   			
+	     	<div id="account-pagebar-area">
 				<div id="pagingArea">
 					<ul class="pagination">
 	                   	<c:choose>
@@ -221,18 +228,18 @@
 		                        <li class="page-item disabled"><a class="page-link">이전</a></li>
 	                   		</c:when>
 	                   		<c:otherwise>
-		                        <li class="page-item"><a class="page-link" href="payment.ad?currentPage=${pi.currentPage-1}">이전</a></li>
+		                        <li class="page-item"><a class="page-link" href="account.ad?currentPage=${pi.currentPage-1}">이전</a></li>
 	                   		</c:otherwise>
 	                   	</c:choose>
 	                   	<c:forEach var="p" begin="${pi.startPage}" end="${pi.endPage}">
-	                        <li class="page-item"><a class="page-link" href="payment.ad?currentPage=${p}">${p}</a></li>
+	                        <li class="page-item"><a class="page-link" href="account.ad?currentPage=${p}">${p}</a></li>
 	                   	</c:forEach>
 	                   	<c:choose>
 	                   		<c:when test="${pi.maxPage eq pi.currentPage}">
 		                        <li class="page-item disabled"><a class="page-link">다음</a></li>
 	                   		</c:when>
 	                   		<c:otherwise>
-		                        <li class="page-item"><a class="page-link" href="payment.ad?currentPage=${pi.currentPage+1}">다음</a></li>
+		                        <li class="page-item"><a class="page-link" href="account.ad?currentPage=${pi.currentPage+1}">다음</a></li>
 	                   		</c:otherwise>
 	                   	</c:choose>
 					</ul>

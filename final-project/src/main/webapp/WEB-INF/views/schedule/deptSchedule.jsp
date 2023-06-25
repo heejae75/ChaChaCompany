@@ -187,7 +187,9 @@
 				        				$.each(list, function(index,leave){
 					        				var leave ={
 				        						id: leave.docNo, //휴가 번호  
-						            			title : leave.workReceiver +" "+ leave.leaveContent+ "님 휴가", //휴가 대상자 이름 + 직급 
+						            			title : leave.userName +" "+ leave.jobName+ "님 " + leave.leaveType, //휴가 대상자 이름 + 직급 
+						            			content : "업무 인수자 : "+leave.workReciver,
+						            			code : leave.leaveCode,
 						            			start : leave.startDate, 
 						            			end : leave.endDate	
 					        				}
@@ -480,12 +482,14 @@
 					});
 					
 					//이벤트 특성에 따른 색상 설정 
-					if ((eventObj.title).match("휴가")){
+					if (eventObj.code != ""){
 						$el.css('background-color','#0B614B');
-					}else if((eventObj.type) == 'DS'){
+					}
+					if((eventObj.type) == 'DS'){
 						//스케줄 타입이 부서 스케줄일 경우 색상  
 						$el.css('background-color','#483D8B');
-					}else if((eventObj.type) == 'AS'){
+					}
+					if((eventObj.type) == 'AS'){
 						$el.css("background-color", "#5F9EA0" );
 					}
 					

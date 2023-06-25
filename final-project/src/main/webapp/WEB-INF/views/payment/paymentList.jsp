@@ -132,7 +132,7 @@
   		</div>
 		<!-- 검색창 영역  -->
 		<div id="board-search-area">
-			<form action="#" method="get">
+			<form action="search.pa" method="get">
 				<div id="option-box" align="right" >
                 	<select id="dept_code" name="deptCode" class="btn btn-secondary dropdown-toggle" style=" border: 1px solid #ccc; background-color: white; color:#0c0d0d; height: 34px; margin-right: 3px;">
 	                    <option value="전체">전체</option>

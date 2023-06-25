@@ -11,6 +11,11 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="/final3/resources/css/Approval_List.css" >
 </head>
+<script type="text/javascript">
+	console.log("${list}")
+	console.log("${loginUser.userNo}")
+	console.log("${fn:length(list)}")
+</script>
 <body id="body-pd">
 	<%@ include file="../common/menubar.jsp" %>
 
@@ -65,7 +70,7 @@
                         <c:forEach var="i" begin="1" end="${length}" >
 	                    	<c:choose>
 	                    		<c:when test="${loginUser.auth eq 'ROLE_MEMBER'}">
-	                    			<c:if test="${(loginUser.userNo eq list[i-1].docWriter)||(loginUser.userNo eq a[i-1].secondApproverNo)||(loginUser.userName eq a[i-1].lastApproverNo) }">
+	                    			<c:if test="${(loginUser.userNo eq list[i-1].docWriter)||(loginUser.userNo eq list[i-1].secondApproverNo)||(loginUser.userNo eq list[i-1].lastApproverNo) }">
 				                        <tr>
 				                        	<td width="10%">${list[i-1].docNo}</td>
 				                        	<td width="10%">${list[i-1].deptCode}</td>

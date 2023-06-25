@@ -85,7 +85,7 @@
                 <br><br><br>
                 <div id="leave-content2">
                     <table class="table table-bordered" style="text-align: center;">
-                    	<thead>
+                    	<tbody>
                             <th width="15%">연차현황</th>
                             <th width="15%">발생현황</th>
                             <td><input type="text" value="" id="total-leave" readonly></td>
@@ -93,7 +93,7 @@
                             <td><input type="text" value="" id="use-leave" readonly></td>
                             <th width="15%">잔여현황</th>
                             <td><input type="text" value="" id="remain-leave" readonly></td>
-                        </thead>
+                        </tbody>
                     </table>
                     <table class="table table-bordered" style="text-align: center;" id="leave-table">
                         <thead>
@@ -106,58 +106,41 @@
                             </tr>
                         </thead>
                         <tbody>
-                        	<c:set var="l" value="${l}"/>
-                        	<c:set var="arrayLength" value='${fn:length(l.arrStartDate)}' />
-                        	<c:forEach var="i" begin="0" end="${arrayLength-1}">
+                        	<c:set var="arrayLength" value='${fn:length(lList)}' />
+                        	<c:forEach var="l" items="${lList }">
 	                            <tr>
 	                                <td>
-	                                    <select id="select-option${i}" >
-	                                        <option value="">선택</option>
-	                                        <option value="신청">신청</option>
-	                                        <option value="취소">취소</option>
-	                                    </select>
+	                                     ${l.leaveStatus}
 	                                </td>
 	                                <td>
-	                                    <select name="leaveCode" id="select-leave-option${i}" >
-	                                        <option value="">선택</option>
-	                                        <option value="L1">정상근무</option>
-	                                        <option value="L2">연차</option>
-	                                        <option value="L3">병가</option>
-	                                        <option value="L4">오전반차</option>
-	                                        <option value="L5">오후반차</option>
-	                                        <option value="L6">휴직</option>
-	                                        <option value="L7">육아휴직</option>
-	                                        <option value="L8">재택근무</option>
-	                                        <option value="L9">복직</option>
-	                                    </select>
+	                                     ${l.leaveCode}
 	                                </td>
 	                                <td>
-	                                    <input type="date" name="startDate" id="start-date${i}" value="${l.arrStartDate[i]}" readonly>
+	                                	<input type="text" id="start-date" value="${l.startDate}" readonly>
 	                                </td>
 	                                <td>
-	                                    <input type="date" name="endDate" id="end-date${i}" value="${l.arrEndDate[i]}" readonly>
-	                                </td>
+	                                    <input type="text" id="end-date" value="${l.endDate}" readonly>
 	                                <td>
-	                                    <input type="text" id="total-date${i}" value="" readonly>
+	                                    <input type="text" id="total-date" value="" readonly>
+	                                </td>
+	                            </tr>
+	                            <tr>
+	                            <th colspan="6">사유</th>
+	                            </tr>
+	                            <tr>
+	                                <td colspan="6">
+	                                    <textarea>${l.leaveContent}</textarea>
+	                                </td>
+	                            </tr>
+	                            <tr>
+	                                <th colspan="3" style="vertical-align: middle;" >업무인수자</th>
+	                                <td colspan="3">
+	                                    <input type="text" name="workReceiver" value="${l.workReceiver }" style="width: 80%;vertical-align: middle;" >
 	                                </td>
 	                            </tr>
                         	</c:forEach>
                         </tbody>
                         <tfoot>
-                            <tr>
-                            <th colspan="6">사유</th>
-                            </tr>
-                            <tr>
-                                <td colspan="6">
-                                    <textarea>${l.leaveContent}</textarea>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th colspan="3" style="vertical-align: middle;" >업무인수자</th>
-                                <td colspan="3">
-                                    <input type="text" name="workReceiver" value="${l.workReceiver }" style="width: 80%;vertical-align: middle;" >
-                                </td>
-                            </tr>
                             <tr>
                                 <td colspan="6">
                                     <pre name="leave-notice" id="leave-notice" readonly>
@@ -217,32 +200,18 @@
 	<script>
 	//시간 계산
 	$(function(){
-		
 		for(var i=0;i<"${arrayLength}";i++){
-		var startDate = new Date($("#start-date"+i).val());
-		var endDate = new Date($("#end-date"+i).val());
+		var startDate = new Date($("#start-date").val());
+		var endDate = new Date($("#end-date").val());
 		
 		var timeDiff = endDate.getTime()-startDate.getTime();
 		
 		var dayDiff = Math.floor(timeDiff/(1000*60*60*24));
 		
-		$("#total-date"+i).attr("value",dayDiff);
+		$("#total-date").attr("value",dayDiff);
 		}
 	});
-	
-	//select값 넣기
-	$(function(){
-			var leaveStatus = "${l.leaveStatus}"
-			var leaveCode = "${l.leaveCode}"
-			
-			var arrLeaveStatus = leaveStatus.split(",");
-			var arrLeaveCode = leaveCode.split(",");
-			
-			for(var i=0;i<arrLeaveStatus.length;i++){
-				$("#select-option"+i).val(arrLeaveStatus[i]).attr("selected",true);
-				$("#select-leave-option"+i).val(arrLeaveCode[i]).attr("selected",true);
-			}
-	});
+		
 	//긴급문서 체크
 	$(function(){
 		var result = $("#emergency-btn").val();

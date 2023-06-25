@@ -30,4 +30,9 @@ public class Payment {
 	private int empInsurance;			//EMP_INSURANCE	NUMBER
 	private int lngInsurance;			//LNG_INSURANCE	NUMBER
 	private String accountStatus;		//ACCOUNT_STATUS      
+	
+	
+	private String userName;
+	private String deptName;
+	private String jobName;
 }
