@@ -45,6 +45,9 @@ public interface DocumentService {
 	//게시글 선택 삭제 메소드 
 	int selectDelete(int[] bnoArr);
 	
+	//삭제된 첨부파일 조회 메소드(업로드 파일삭제용도)
+	ArrayList<BoardAttachment> selectDeleteAttachList(int bno);
+	
 
 
 

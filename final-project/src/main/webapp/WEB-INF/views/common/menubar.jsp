@@ -558,18 +558,27 @@
                                 <li>
                                     <a href="/final3/${role}/list.me">임직원 조회</a>
                                 </li>
+                                 <li>
+                                    <a href="payment.me?userNo=${loginUser.userNo}">급여명세서 조회</a>
+                                </li>
+                                <c:if test="${(loginUser.auth eq 'ROLE_ADIM' and loginUser.deptCode eq 'D9') or (loginUser.deptCode eq 'D9') }">
+                                <li>
+                                    <a href="payment.ad">급여명세서 작성</a>
+                                </li>
+                                </c:if>
                             </ul>
+                            
                         </li>
 
 						<!-- 일정관리  -->
                         <li>
-                            <a href="schedule.sc" class="nav_link">
+                            <a href="schedule.sc" id="scheduleIcon"  class="nav_link">
                                 <i class="fa-sharp fa-solid fa-calendar-day" style="color: #ffffff; font-size: 28px;"></i>
                                 &nbsp;
                                 <span class="nav_name">&nbsp;일정관리</span>
                             </a>
                         </li>
-                        
+                       
                         <!--커뮤니티  -->
                         <li>
                             <a href="list.no" class="nav_link">

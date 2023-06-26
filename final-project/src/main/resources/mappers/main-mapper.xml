@@ -45,9 +45,10 @@
 	</resultMap>
 	
 	<resultMap type="schedule" id="mainScheduleResultset">
-		<result column="DEPT_SCHEDULE_NO" property="deptSchedule_No"/>
+		<result column="SCHEDULE_NO" property="scheduleNo"/>
 		<result column="DEPT_CODE" property="deptCode"/>
-		<result column="JOB_CODE" property="jobCode"/>
+		<result column="USER_NO" property="userNo"/>
+		<result column="SCHEDULE_TYPE" property="scheduleType"/>
 		<result column="SCHEDULE_TITLE" property="scheduleTitle"/>
 		<result column="SCHEDULE_CONTENT" property="scheduleContent"/>
 		<result column="ENROLL_DATE" property="enrollDate"/>
@@ -142,17 +143,17 @@
 	
 	<!-- 일정 조회  -->
 	<select id="mainCalendarList" resultMap="mainScheduleResultset">
-		SELECT DISTINCT DEPT_SCHEDULE_NO, DS.DEPT_CODE, SCHEDULE_TITLE, SCHEDULE_CONTENT, START_DATE, END_DATE
-		FROM DEPT_SCHEDULE DS
-		JOIN MEMBER M ON (DS.DEPT_CODE = M.DEPT_CODE)
-		WHERE DS.STATUS = 'N'
-		AND DS.DEPT_CODE = #{deptCode}
+		SELECT DISTINCT SCHEDULE_NO, S.DEPT_CODE, SCHEDULE_TITLE, SCHEDULE_CONTENT, START_DATE, END_DATE
+		FROM SCHEDULE S
+		JOIN MEMBER M ON (S.DEPT_CODE = M.DEPT_CODE)
+		WHERE S.STATUS = 'Y'
+		AND S.DEPT_CODE = #{deptCode}
 	</select>
 	
 	<select id="mainDailyEvents" resultMap="mainScheduleResultset">
 		<![CDATA[
-			SELECT DEPT_SCHEDULE_NO, SCHEDULE_TITLE
-			FROM DEPT_SCHEDULE
+			SELECT SCHEDULE_NO, SCHEDULE_TITLE
+			FROM SCHEDULE
 			WHERE TRUNC(START_DATE) <= TO_DATE(#{year} || '-' || #{month} || '-' || #{date}, 'YYYY-MM-DD')
 			AND TRUNC(END_DATE) >= TO_DATE(#{year} || '-' || #{month} || '-' || #{date}, 'YYYY-MM-DD')
 		]]>
