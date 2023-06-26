@@ -191,7 +191,7 @@
 }
 
 /* 이메일 테이블  */
-#mainEmailList {
+#mainMessengerList {
 	width: 750px;
 	margin: auto;
 	font-size: 20px;
@@ -203,6 +203,12 @@
 	height: 80px;
 	margin: auto;
 	text-align: center;
+}
+
+#mainApprovalList {
+	width: 750px;
+	margin: auto;
+	font-size: 20px;
 }
 
 #others_profile_table {
@@ -225,6 +231,63 @@
 .main_calendar_info {
 	margin: auto;
 }
+
+/* 투두리스트 css 시작 */
+.main_todo_input_box{
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#main_todo_value{
+    width: 300px;
+    height: 50px;
+    font-size: 18px;
+}
+#main_todo_add {
+    width: 50px;
+    height: 50px;
+    background-color: #0e6251;
+}
+
+.mainToDoList{
+    list-style: none;
+    font-size: 20px;
+}
+
+#mainAddTodo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.mainToDoList li {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+/* 한개씩 지우는 삭제버튼 */
+.mainToDoList li .delete_btn {
+    font-size: 20px;
+    border: none;
+    background-color: white;
+    color: lightgray;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+/* 할일 체크박스 */
+.todoCheck{
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    accent-color: green;
+}
+
+/*  */
+#todoLabelId{
+    margin-left: 10px;
+}
 </style>
 </head>
 <body>
@@ -242,16 +305,20 @@
 			</div>
 
 			<div id="main_profile_card" align="center">
+				<c:choose>
+					<c:when test="${loginUser.auth eq 'ROLE_ADMIN' }">
 				<div style="float: left; margin: 0 0 0 65px;">
 					<a href="#"> <i class="fa-sharp fa-solid fa-address-card"
 						style="color: #000000; font-size: 70px;"></i>
-						<p style="margin: 0 0 0 0;">명함 보기</p>
+						<p style="margin: 0 0 0 0;">회원 등록 </p>
 					</a>
 				</div>
+					</c:when>
+				</c:choose>
 				<div>
-					<a href="#"> <i class="fa-sharp fa-regular fa-address-card"
-						style="color: #000000; font-size: 70px;"></i>
-						<p style="margin: 0 0 0 0;">명함 신청</p>
+					<a href="#" data-target='#main_toDoList' data-toggle='modal'> <i class="fa-sharp fa-regular fa-address-card"
+						style="color: #000000; font-size: 70px;" ></i>
+						<p style="margin: 0 0 0 0;">TO DO</p>
 					</a>
 				</div>
 			</div>
@@ -267,12 +334,12 @@
 				<div id="mp_work_output">
 					<div id="begin_time" style="margin-bottom: 4px;">
 						<div>출근 시간</div>
-						<div>${onTime }</div>
+						<div>${att.onTime }</div>
 					</div>
 					<div style="border: 1px solid black; width: 280px;"></div>
 					<div id="end_time" style="margin: 6px 0 12px 0;">
 						<div>퇴근 시간</div>
-						<div>${offTime}</div>
+						<div>${att.offTime}</div>
 					</div>
 				</div>
 				<div id="mp_work_input">
@@ -304,7 +371,7 @@
 			<div class="main_mail">
 				<div>
 					<div class="main_ctn_title">
-						<span>최근 온 메일</span>
+						<span>최근 온 쪽지</span>
 					</div>
 					<div class="main_ctn_plus">
 						<a href="#"> <i class="fa-solid fa-plus fa-2xl" style="color: #0e6251;"></i>
@@ -312,7 +379,7 @@
 					</div>
 				</div>
 
-				<table id="mainEmailList" align="center">
+				<table id="mainMessengerList" align="center">
 					<tbody>
 
 					</tbody>
@@ -386,16 +453,6 @@
 							<div class="main_ctn_title">
 								<span>전자 결재 </span>
 							</div>
-							<div id="main_user_tab_area">
-								<ul id="nav-tabs">
-									<li class="nav-item" id="others_team"
-										data-tab="mainOthersTemaList"><a class="nav-link active"
-										id="link_active" aria-current="page" href="#">Team </a></li>
-									<li class="nav-item" id="others_all"
-										data-tab="mainOthersAllList"><a class="nav-link" href="#"
-										id="link_active">All </a></li>
-								</ul>
-							</div>
 							<div class="main_ctn_plus">
 								<a href="#">
 									<i class="fa-solid fa-plus fa-2xl"style="color: #0e6251;"></i>
@@ -403,7 +460,7 @@
 							</div>
 						</div>
 
-						<table id="mainOthersList" align="center">
+						<table id="mainApprovalList" align="center">
 							<tbody>
 
 							</tbody>
@@ -441,7 +498,49 @@
 		</div>
 	</div>
 
+	<!-- 투두 리스트 모달 -->
+	<div class="modal fade" id="main_toDoList" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h2 class="modal-title" id="myModalLabel">TO DO LIST</h2>
+				</div>
+				<div class="modal-body" id="toDo_body">
+                    <div class="main_todo_wrap">
+                        <div class="main_todo_input_box">
+                            <input type="text" id="main_todo_value" placeholder="할 일을 입력해주세요!" autofocus> <!--autofocus : 자동 포커스-->
+                            <button type="button" id="main_todo_add" onclick="mainAddTodo();">
+                                <i class="fa-solid fa-plus fa-2xl" style="color: white;"></i>
+                            </button>
+                        </div>
+                        <div id="mainAddTodo">
+                            <ul class="mainToDoList">
+                               <!--  <li>
+                                    <div id="main_result_div">
+                                    	<input type="checkbox" class="todoCheck" style="float:left;">
+                                        <div id="main_todo_result" class="changeDiv" style="float:left;">ddddd</div>
+                                        <button class="delete_btn"> x</button>
+                                    </div>
+                                </li> -->
+                            </ul>
+                        </div>
+                    </div>
+				</div>
+				<div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="main_todo_all" onclick="allDeleteTodoList();">모두 삭제</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">닫기
+					</button>
+					<!-- <button type="button" class="btn btn-primary">변경</button> -->
+				</div>
+			</div>
+		</div>
+	</div>
 
+	<!-- 임직원 조회 이름 클릭시 모달  -->
 	<div class="modal fade" id="others_profile" tabindex="-1" role="dialog"
 		aria-labelledby="myModalLabel">
 		<div class="modal-dialog modal-dialog-centered" role="document">
@@ -507,17 +606,37 @@
 		getTime();
 
 		
-		//최근 온 메일 조회 
+		//최근 온 쪽지 조회 
 		$(function() {
 
-			mainEmailList();
+			mainMessengerList(); //이메일 호출 
+			mainApprovalStatusList(); //전자결재 호출 
+			selectTodoList(); //투두리스트 호출 
 
+			//공지사항 상세보기 가기 
 			$("#mainNoticeList>tbody").on("click", "tr", function() {
 				//console.log($(this).children().eq(0).children().val());
 				var boardNo = $(this).children().eq(0).children().val();
 				location.href = "detail.no?boardNo=" + boardNo;
 			})
+			
+			//전자결재 상세보기 가기 
+			$("#mainApprovalList>tbody").on("click", "tr", function() {
+				//console.log($(this).children().eq(0).children().val());
+				//console.log($(this).children().eq(1).children().val());
+				var docNo = $(this).children().eq(0).children().val();
+				var docType = $(this).children().eq(1).children().val();
+				location.href = "detail.ap?docNo="+docNo+"&docType="+docType;
+			})
+			
+			//최근 온 쪽지 상세보기 가기
+			$("#mainMessengerList>tbody").on("click", "tr", function() {
+				//console.log($(this).children().eq(0).children().val());
+				var msgNo = $(this).children().eq(0).children().val();
+				window.open("recvMessage.mg?msgNo="+msgNo,"메신저","width = 1100 , height = 600");
+			})
 		});
+		
 
 		/* function mainNoticeBoardList() {
 		   $.ajax({
@@ -542,9 +661,9 @@
 		} */
 
 		//메일 최신순으로 조회
-		function mainEmailList() {
+		function mainMessengerList() {
 			$.ajax({
-				url : "mainEmailList.ma",
+				url : "mainMessengerList.ma",
 				type : "POST",
 				beforeSend : function(xhr) {
 					xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
@@ -553,9 +672,10 @@
 					var str = ""
 
 					for ( var i in result) {
-						str += "<tr>" 
+						str += "<tr>"
+								+ "<td><input type = 'hidden' value='"+result[i].messengerNo+"'></td>"
 								+ "<td style='width:60%; '>"
-								+ result[i].emailTitle + "</td>"
+								+ result[i].msgTitle + "</td>"
 								+ "<td style='width:20%; text-align:right; '>"
 								+ result[i].sender + "</td>"
 								+ "<td style='width:20%; text-align:right;'>"
@@ -563,7 +683,7 @@
 								+ "</tr>"
 					}
 
-					$("#mainEmailList tbody").html(str);
+					$("#mainMessengerList tbody").html(str);
 				},
 				error : function() {
 					console.log("통신 실패 ");
@@ -779,7 +899,7 @@
 						$("#mainOthersList tbody").html(str);
 
 						$("p[data-target='#others_profile']").click(function() {
-							console.log($(this).closest("td").index());
+							//console.log($(this).closest("td").index());
 							var index = $(this).closest("td").index();
 							var userData = result[index];
 
@@ -819,13 +939,16 @@
 
 		});
 
+		
 		function onchangeDay(yy, mm, dd, ss) {
 			$("#mainDay").html(yy + "년" + mm + "월" + dd + "일(" + ss + "요일)");
 		}
+		
 
 		//풀캘린더 API 시작 
 		//$(function() { }) <- 이렇게 해도된다.
 		$(document).ready(function() {
+			
 			//오늘날짜 가져오는 함수 
 			function getToday() {
 				var today = moment(); // 현재 날짜와 시간
@@ -833,10 +956,10 @@
 				var selectedMonth = today.month() + 1;
 				var selectedDate = today.date();
 
-				if (selectedMonth < 10) {
+				if (selectedMonth < 10) { //달 앞에 0 붙이기 
 					selectedMonth = '0' + selectedMonth;
 				}
-				if (selectedDate < 10) {
+				if (selectedDate < 10) { //일 앞에 0 붙이기 
 					selectedDate = '0' + selectedDate;
 				}
 
@@ -912,7 +1035,7 @@
 								//list.forEach(function(schedule) { <- 이렇게 해도됨 
 
 								var event = {
-									id : schedule.deptSchedule_No,
+									id : schedule.scheduleNo,
 									deptCode : schedule.deptCode,
 									title : schedule.scheduleTitle,
 									content : schedule.scheduleContent,
@@ -940,6 +1063,7 @@
 			}
 
 			mainDailyEvents(selectedDate.year, selectedDate.month, selectedDate.date);
+			
 			function mainDailyEvents(year, month, date) {
 				$.ajax({
 					url : "mainDailyEvents.ma",
@@ -976,6 +1100,235 @@
 				});
 			}
 		});
+			
+		//전자결재 상태
+		function mainApprovalStatusList() {
+			$.ajax({
+				url : "mainApprovalStatus.ma",
+				type : "POST",
+				beforeSend : function(xhr) {
+					xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+				},
+				success : function(result){
+					var str = "";
+					
+					for(var i in result) {
+						if(result[i].lastSignature.includes("대기")){
+							str += "<tr>"
+								+ "<td><input type = 'hidden' value='"+result[i].DocNo+"'></td>"
+								+ "<td><input type = 'hidden' value='"+result[i].docName+"'></td>"
+								+"<td style='width:60%;'>"+result[i].docTitle+"</td>"
+								+"<td style='width:20%; text-align:right;'>"+result[i].createDate+"<td>"
+								+"<td style='width:20%; text-align:right; color:gold; font-weight:bold;'>"+result[i].lastSignature+"</td>"
+								+"</tr>";
+						}else if (result[i].lastSignature.includes("반려")) {
+							str += "<tr>"
+								+ "<td><input type = 'hidden' value='"+result[i].DocNo+"'></td>"
+								+ "<td><input type = 'hidden' value='"+result[i].docName+"'></td>"
+								+"<td style='width:60%;'>"+result[i].docTitle+"</td>"
+								+"<td style='width:20%; text-align:right;'>"+result[i].createDate+"<td>"
+								+"<td style='width:20%; text-align:right; color:red; font-weight:bold;'>"+result[i].lastSignature+"</td>"
+								+"</tr>";
+						}else if (result[i].lastSignature.includes("승인")) {
+							str += "<tr>"
+								+ "<td><input type = 'hidden' value='"+result[i].DocNo+"'></td>"
+								+ "<td><input type = 'hidden' value='"+result[i].docName+"'></td>"
+								+"<td style='width:60%;'>"+result[i].docTitle+"</td>"
+								+"<td style='width:20%; text-align:right;'>"+result[i].createDate+"<td>"
+								+"<td style='width:20%; text-align:right; color:lightgreen; font-weight:bold;'>"+result[i].lastSignature+"</td>"
+								+"</tr>";
+						}
+					}
+					
+					$("#mainApprovalList tbody").html(str);
+				},
+				error : function() {
+					console.log("전자결재 조회 통신오류 ");
+				}
+			});
+		}
+		
+		//투두리스트 등록 
+        function mainAddTodo() {
+        	$.ajax({
+        		url : "mainInsertTodo.ma",
+        		data : {
+        			todoContent : $("#main_todo_value").val(),
+        		},
+        		type : "POST",
+				beforeSend : function(xhr) {
+					xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+				},
+        		success: function(result) {
+        			//console.log(result);
+        			selectTodoList(); //리스트 갱신 -> append로 하는게 더 효율적(시도 해봤는데 undefined 뜸.. 나중에 ..)
+        			$("#main_todo_value").val(""); //비워주기
+        			$("#main_todo_value").focus();
+        		},
+        		error: function() {
+        			console.log("투두리스트 입력 통신 오류 ");
+        		}
+        	});
+        }
+		
+		//투두리스트 조회 및 체크박스 클릭 이벤트 
+		function selectTodoList() {
+			$.ajax({
+				url: "selectTodoList.ma",
+				data: {
+					userNo : "${loginUser.userNo}"
+				},
+				type : "POST",
+				beforeSend : function(xhr) {
+					xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+				},
+				success: function(result) {
+					var str = "";
+					for(var i in result) {
+						str += "<li>"
+							+ "<div id='main_result_div'>"
+							+ "<input type='hidden' id='mainTodoNo' value='" + result[i].todoNo + "'>"
+							+ "<input type='hidden' id='mainUserNo' value='" + result[i].userNo + "'>"
+							+ "<input type='hidden' id='mainTodoStatus' value='" + result[i].status + "'>"
+							+ "<input type='checkbox' id='todoLabel"+i+"' class='todoCheck' style='float:left;' value='"+result[i].todoContent + "'>"
+							+ "<label id='todoLabelId' for='todoLabel"+i+"'>" + result[i].todoContent + "</label>"
+							+ "<button class='delete_btn' onclick='deleteTodoList();'> x</button>"
+							+ "</div>"
+							+ "</li>";
+					}
+					$("#mainAddTodo ul").html(str);
+					
+					//조회할 때 디비에 클릭된 것 체크되어있게 하기 
+					$("input[type = checkbox]").each(function(){
+						//console.log($(this).val());
+						var status = $(this).parent().find('#mainTodoStatus').val();
+						//console.log($(this).parent().find('#mainTodoStatus').val());
+						var label = $(this).next("label")
+						console.log(label);
+						if(status == "C") {
+							$(this).attr("checked", true);
+							label.css("color", "lightgray");
+		                    label.css("textDecoration","line-through");
+						}
+					});
+					
+					//체크시 디비 바뀌고 css 효과 주는 것 
+					$("input[type = checkbox]").click(function() {
+						var todoNo = $(this).parent().find('#mainTodoNo').val();
+						var status = $(this).parent().find('#mainTodoStatus').val();
+						var content = $(this).val();
+						
+						updateTodoList(todoNo, status, content, $(this).is(":checked"));
+					});
+					
+				},
+				error: function() {
+					console.log("투두 조회 오류 ");
+				}
+			});
+		}
+		
+		//투두리스트 수정 
+		function updateTodoList(todoNo, status, content, isChecked) {
+			var label = $("input[type=checkbox][value='" + content + "']").next("label");
+			//console.log(label);
+			if (isChecked) {
+		        label.css("color", "lightgray");
+		        label.css("textDecoration", "line-through");
+		        status = "N";
+		        $.ajax({
+	 				url: "updateTodoList.ma",
+	 				data: {
+	 					todoNo : todoNo,
+	 					status : status
+	 				},
+	 				type: "POST",
+	 			    beforeSend: function(xhr) {
+	 			      xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+	 			    },
+	 			    success: function(result) {
+				    	//console.log(result);
+	 			    },
+	 			    error: function() {
+	 					console.log("투두 수정 오류 ");
+	 				}
+	 			});
+		    } else {
+		        label.css("color", "black");
+		        label.css("textDecoration", "none");
+		        status = "C";
+				$.ajax({
+	 				url: "updateTodoList.ma",
+	 				data: {
+	 					todoNo : todoNo,
+	 					status : status
+	 				},
+	 				type: "POST",
+	 			    beforeSend: function(xhr) {
+	 			      xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+	 			    },
+	 			    success: function(result) {
+				    	//console.log(result);
+	 			    },
+	 			    error: function() {
+	 					console.log("투두 수정 오류 ");
+	 				}
+	 			});
+		    }
+			
+		}
+		
+		//투두리스트 한개만 삭제 
+		function deleteTodoList() {
+			$.ajax({
+				url : "deleteTodoList.ma",
+				data : {
+					todoNo : $("#mainTodoNo").val()
+				},
+				type : "POST",
+				beforeSend : function(xhr) {
+					xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+				},
+				success : function(result) {
+					//console.log(result);
+					if(result == "success") {
+						selectTodoList();
+					}
+				},
+				error : function() {
+					console.log("투두 삭제 오류 ");
+				}
+			})
+		}
+		
+		//투두리스트 전체 삭제 
+		function allDeleteTodoList() {
+			var ans = confirm("리스트를 모두 삭제하시겠습니까?");
+	        if(!ans) return false;
+			
+			$.ajax({
+				url : "allDeleteTodoList.ma",
+				data : {
+					userNo : $("#mainUserNo").val()
+				},
+				type : "POST",
+				beforeSend : function(xhr) {
+					xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+				},
+				success : function(result) {
+					//console.log(result);
+					
+					if(result == "success") {
+						alert("모두 삭제했습니다.");
+						selectTodoList();
+					}
+				},
+				error : function() {
+					console.log("투두 삭제 오류 ");
+				}
+			})
+		}
+		
 	</script>
 </body>
 </html>

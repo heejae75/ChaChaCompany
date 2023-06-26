@@ -196,7 +196,7 @@
                    	</td>
                </tr>
                <tr>
-                   <td colspan="6"><textarea name ="boardContent" style="resize: none; width: 100%; height: 300px; padding: 0;" required></textarea></td>
+                   <td colspan="6"><textarea name ="boardContent" style="resize: none; width: 100%; height: 300px; padding: 0;" required>${b.boardContent}</textarea></td>
                </tr>
            </tbody>
 		</table>
