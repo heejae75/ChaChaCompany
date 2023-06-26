@@ -27,8 +27,8 @@
     #approval-tap-area>ul li a{
     	text-align: center; 	
     }
-    
-    li:hover{
+    /*
+     li:hover{
     	border-top: 1px solid #dee2e6;
 		border-left: 1px solid #dee2e6;
 		border-right: 1px solid #dee2e6;
@@ -44,6 +44,7 @@
 		border-top-left-radius:0.25rem;
 		border-top-right-radius:0.25rem;
 	}
+    */
 	
     /* 게시글 목록영역 */
     #approval-list-area{

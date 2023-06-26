@@ -16,12 +16,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
+import com.kh.final3.approval.model.vo.Approval;
 import com.kh.final3.attendance.model.vo.Attendance;
 import com.kh.final3.board.model.vo.Board;
-import com.kh.final3.email.model.vo.Email;
 import com.kh.final3.main.model.service.MainService;
 import com.kh.final3.member.model.vo.Member;
+import com.kh.final3.messenger.model.vo.Messenger;
 import com.kh.final3.schedule.model.vo.Schedule;
+import com.kh.final3.todo.model.vo.Todo;
 
 @RequestMapping(value={"/member","/admin"})
 @Controller
@@ -29,6 +31,9 @@ public class MainController {
 	
 	@Autowired
 	private MainService mainService;
+	
+	@Autowired
+	private Todo td;
 
 	//최근 공지 불러오기 
 	@ResponseBody
@@ -43,23 +48,23 @@ public class MainController {
 	@RequestMapping(value="mainNoticeLiked.ma", produces="application/json; charset=UTF-8")
 	public String mainNoticeLikedList(HttpSession session) {
 		String userId = ((Member)session.getAttribute("loginUser")).getUserId();
-		System.out.println(userId);
+		//System.out.println(userId);
 		ArrayList<Board> mainNoticeLiked = mainService.mainNoticeLikedList(userId);
-		System.out.println(mainNoticeLiked);
+		//System.out.println(mainNoticeLiked);
 		return new Gson().toJson(mainNoticeLiked);
 	}
 	
 	
-	//메일 불러오기
+	//쪽지 불러오기
 	@ResponseBody
-	@RequestMapping(value="mainEmailList.ma", produces="application/json; charseet=UTF-8")
-	public String mainEmailList(HttpSession session) {
+	@RequestMapping(value="mainMessengerList.ma", produces="application/json; charseet=UTF-8")
+	public String mainMessengerList(HttpSession session) {
 		String userId = ((Member)session.getAttribute("loginUser")).getUserId();
 //		System.out.println(userId);
-		ArrayList<Email> mainEmail = mainService.mainEmailList(userId);
+		ArrayList<Messenger> mainMessenger = mainService.mainMessengerList(userId);
 //		System.out.println(mainEmail);
 		
-		return new Gson().toJson(mainEmail);
+		return new Gson().toJson(mainMessenger);
 	}
 	
 	//출근등록 
@@ -133,6 +138,7 @@ public class MainController {
 		return new Gson().toJson(list);
 	}
 	
+	//선택한 날짜 일정 조회 
 	@ResponseBody
 	@RequestMapping(value="mainDailyEvents.ma", method = RequestMethod.POST)
 	public ArrayList<Schedule> mainDailyEvents(@RequestParam("year") int year, @RequestParam("month") int month, @RequestParam("date") int date) {
@@ -146,5 +152,85 @@ public class MainController {
 		return events;
 	}
 	
+	//전자결재 리스트 조회 
+	@ResponseBody
+	@RequestMapping(value="mainApprovalStatus.ma", produces="application/json; charset=UTF-8")
+	public String mainApprovalStatus(HttpSession session) {
+		Member m = ((Member)session.getAttribute("loginUser"));
+		
+		ArrayList<Approval> aList = mainService.mainApprovalStatus(m);
+		//System.out.println(aList);
+		return new Gson().toJson(aList);
+	}
+	
+	//투두리스트 입력
+	@ResponseBody
+	@RequestMapping(value="mainInsertTodo.ma", method = RequestMethod.POST)
+	public String mainInsertTodo(HttpSession session, String todoContent) {
+		Member m = ((Member)session.getAttribute("loginUser"));
+		int userNo = m.getUserNo();
+		
+		//Todo td = new Todo();
+		td.setUserNo(userNo);
+		td.setTodoContent(todoContent);
+		
+		int result = mainService.mainInsertTodo(td);
+		//System.out.println(result);
+		
+		if(result > 0) {
+			return "success";
+		}else {
+			return "fail";
+		}
+	}
+	
+	//투두 리스트 조회 
+	@ResponseBody
+	@RequestMapping(value = "selectTodoList.ma", produces = "application/json; charset=UTF-8")
+	public String mainSelectTodoList(HttpSession session, int userNo) {
+		Member m = ((Member)session.getAttribute("loginUser"));
+		m.setUserNo(userNo);
+		
+		ArrayList<Todo> list = mainService.mainSelectTodoList(m);
+		//System.out.println(list);
+		return new Gson().toJson(list);
+	}
+	
+	//투두 수정 
+	@ResponseBody
+	@RequestMapping(value = "updateTodoList.ma", method = RequestMethod.POST)
+	public String updateTodoList(int todoNo, String status) {
+		td.setTodoNo(todoNo);
+		td.setStatus(status);
+		
+		int result = mainService.updateTodoList(td);
+		System.out.println(result);
+		if(result > 0) {
+			return "success";
+		}else {
+			return "fail";
+		}
+	}
+	
+	//투두 리스트 한개 삭제 
+	@ResponseBody
+	@RequestMapping(value = "deleteTodoList.ma", method = RequestMethod.POST)
+	public String deleteTodoList(int todoNo) {
+		int result = mainService.deleteTodoList(todoNo);
+		
+		return (result > 0) ? "success" : "fail";
+	}
+	
+	//투두 리스트 모두 삭제 
+	@ResponseBody
+	@RequestMapping(value = "allDeleteTodoList.ma", method = RequestMethod.POST)
+	public String allDeleteTodoList(HttpSession session, int userNo) {
+		Member m = ((Member)session.getAttribute("loginUser"));
+		m.setUserNo(userNo);
+		
+		int result = mainService.allDeleteTodoList(m);
+		
+		return (result > 0) ? "success" : "fail";
+	}
 	
 }
