@@ -64,4 +64,13 @@ public class MemberServiceImpl implements MemberService{
 		return memberDao.updateMember(sqlSession, member);
 	}
 
+	@Override
+	public int insertMember(Member member) {
+		
+		String encodedPwd = bcryptPasswordEncoder.encode(member.getUserPwd());
+		member.setUserPwd(encodedPwd);
+		
+		return memberDao.insertMember(sqlSession, member);
+	}
+
 }

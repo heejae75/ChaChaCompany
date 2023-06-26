@@ -58,6 +58,7 @@
 	 	<websocket:sockjs /> 
 	</websocket:handlers> -->
 	
-	
+<!-- 	<resources mapping="/ckUpload/**" location="/resources/uploadFiles/freeForum"/> -->
+	<resources mapping="/ckUpload/**" location="/resources/ckUpload/" />
 	
 </beans:beans>

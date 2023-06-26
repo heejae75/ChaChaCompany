@@ -31,10 +31,15 @@ public class MainController {
 	
 	@Autowired
 	private MainService mainService;
-	
-	@Autowired
+
 	private Todo td;
 
+	//사용자 메인페이지 이동 
+	@RequestMapping("home.ma")
+	public String MainHome() {
+		return "main/userMain";
+	}
+	
 	//최근 공지 불러오기 
 	@ResponseBody
 	@RequestMapping(value="mainNoticeList.ma", produces="application/json; charset=UTF-8")

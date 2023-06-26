@@ -16,7 +16,7 @@ public class MemberDao{
 
 	public int adminInsert(SqlSession sqlSession, Member member) {
 		
-		return sqlSession.insert("memberMapper.insertMember", member);
+		return sqlSession.insert("memberMapper.insertAdmin", member);
 	}
 
 	public Member selectMemberById(SqlSession sqlSession, String userId) {
@@ -52,6 +52,11 @@ public class MemberDao{
 	public int updateMember(SqlSession sqlSession, Member member) {
 		
 		return sqlSession.update("memberMapper.updateMember", member);
+	}
+
+	public int insertMember(SqlSession sqlSession, Member member) {
+		
+		return sqlSession.insert("memberMapper.insertMember", member);
 	}
 
 }
