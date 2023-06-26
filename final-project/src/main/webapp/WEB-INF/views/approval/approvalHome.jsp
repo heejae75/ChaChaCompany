@@ -35,17 +35,19 @@
                     <li class="nav-item">
                       <button class="nav-link" onclick="approvalList('R');">반려함</button>
                     </li>
+                    <li class="nav-item" style="float:right;margin:0">
+                      <button class="nav-link" onclick="approvalListView();">+</button>
+                    </li>
                 </ul>
-
             </div>
             <table id="approval-main-list" class="table table-hover" align="center">
                 <thead>
                     <tr>
-                        <th width="100px">문서번호</th>
-                        <th width="110px">부서</th>
-                        <th>문서종류</th>
-                        <th colspan="2">제목</th>
-                        <th>작성일</th>
+                        <td width="100px">문서번호</td>
+                        <td width="110px">부서</td>
+                        <td>문서종류</td>
+                        <td colspan="2">제목</td>
+                        <td>작성일</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -72,7 +74,6 @@
 				status : status
 			},
 			success : function(list){
-				console.log(list);
 				var str ="";
 				for(var i=0; i<list.length; i++){
 					if((userNo == list[i].docWriter)||(userNo == list[i].lastApproverNo)||(userNo == list[i].secondApproverNo)){
@@ -104,6 +105,9 @@
 			}
 		});
 	}
+	function approvalListView(){
+		location.href = "list.ap"
+	}
 	function monthData(){
 		docWriter = "${loginUser.userNo}"
 		$.ajax({
@@ -127,10 +131,6 @@
 					dateList.push(d.createDate);
 					approvalList.push(d.approval);
 					rejectList.push(d.reject);
-				}
-				console.log(dateList);
-				console.log(approvalList);
-				console.log(rejectList);
 				
 				const data = {
 					labels: dateList,
@@ -157,12 +157,19 @@
 					      yAxes: [{
 					    	  ticks:{
 					    		  beginAtZero : true, // 0부터 시작하게 합니다.
-									stepSize: 1   // 1 씩 증가하도록 설정합니다.
-					    	  }
+									stepSize: 1,   // 1 씩 증가하도록 설정합니다.
+									max : 20 //
+					    	  },
+					    	  gridLines :{
+					    		  borderDash : [2,2],
+					    		  borderDashOffset : 0.2
+					    	  },
+						      maxBarThickness : 6
 					      }]
-					    }
+					    },
 					  }
-				});
+					});
+				}
 			},
 			error : function(){
 				console.log("통신오류")
