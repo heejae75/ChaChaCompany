@@ -169,29 +169,30 @@ public class ApprovalController {
 		@RequestMapping("leave.ap")
 		public ModelAndView insertItem(Leave l, ApprovalDoc ad,ApprovalAttachment at, Approval a,ModelAndView mv,HttpSession session, ArrayList<MultipartFile> upfile){
 			ArrayList<ApprovalAttachment> atList = new ArrayList<>();
-			
-			for(MultipartFile file : upfile) {
-				if(!file.getOriginalFilename().equals("")) {
-					String changeName = new SaveFile().getSaveFile(file, session);
-					
-					String filePath = session.getServletContext().getRealPath("/resources/uploadFiles/approvalDoc/");
-					
-					try {
-						file.transferTo(new File(filePath+changeName));
-					} catch (IllegalStateException | IOException e) {
-						e.printStackTrace();
+			if(upfile != null) {
+				for(MultipartFile file : upfile) {
+					if(!file.getOriginalFilename().equals("")) {
+						String changeName = new SaveFile().getSaveFile(file, session);
+						
+						String filePath = session.getServletContext().getRealPath("/resources/uploadFiles/approvalDoc/");
+						
+						try {
+							file.transferTo(new File(filePath+changeName));
+						} catch (IllegalStateException | IOException e) {
+							e.printStackTrace();
+						}
+						
+						at = ApprovalAttachment.builder().originName(file.getOriginalFilename())
+																			.changeName(changeName)
+																			.filePath(filePath+changeName)
+																			.deptCode(ad.getDeptCode()).build();
+						
+						atList.add(at);
+					}else {
+						at = null;
 					}
 					
-					at = ApprovalAttachment.builder().originName(file.getOriginalFilename())
-																		.changeName(changeName)
-																		.filePath(filePath+changeName)
-																		.deptCode(ad.getDeptCode()).build();
-					
-					atList.add(at);
-				}else {
-					at = null;
 				}
-				
 			}
 			int result = as.insertLeave(l,atList,ad,a);
 			

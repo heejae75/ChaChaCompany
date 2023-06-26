@@ -1,17 +1,18 @@
 package com.kh.final3.main.model.dao;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.kh.final3.approval.model.vo.Approval;
 import com.kh.final3.attendance.model.vo.Attendance;
 import com.kh.final3.board.model.vo.Board;
-import com.kh.final3.email.model.vo.Email;
 import com.kh.final3.member.model.vo.Member;
+import com.kh.final3.messenger.model.vo.Messenger;
 import com.kh.final3.schedule.model.vo.Schedule;
+import com.kh.final3.todo.model.vo.Todo;
 
 
 @Repository
@@ -27,9 +28,9 @@ public class MainDao {
 		return (ArrayList)sqlSession.selectList("mainMapper.mainNoticeLikedList", userId);
 	}
 	
-	//최신 메일 조회 
-	public ArrayList<Email> mainEmailList(SqlSessionTemplate sqlSession, String userId) {
-		return (ArrayList)sqlSession.selectList("mainMapper.mainEmailList", userId);
+	//최신 쪽지 조회 
+	public ArrayList<Messenger> mainMessengerList(SqlSessionTemplate sqlSession, String userId) {
+		return (ArrayList)sqlSession.selectList("mainMapper.mainMessengerList", userId);
 	}
 
 	//출근 등록 
@@ -52,13 +53,47 @@ public class MainDao {
 		return (ArrayList)sqlSession.selectList("mainMapper.mainOthersAllList",m);
 	}
 
+	//풀캘린더 안에 일정 조회
 	public ArrayList<Schedule> mainCalendarList(SqlSessionTemplate sqlSession, String deptCode) {
 		return (ArrayList)sqlSession.selectList("mainMapper.mainCalendarList", deptCode);
 	}
 
+	//풀캘린더 아래 해달 날짜 일정 조회
 	public ArrayList<Schedule> mainDailyEvents(SqlSessionTemplate sqlSession, Map<String, Object> params) {
 		return (ArrayList)sqlSession.selectList("mainMapper.mainDailyEvents", params);
 	}
+
+	//전자결재 승인 여부 조회 
+	public ArrayList<Approval> mainApprovalStatus(SqlSessionTemplate sqlSession, Member m) {
+		return (ArrayList)sqlSession.selectList("mainMapper.mainApprovalStatus", m);
+	}
+
+	//투두리스트 등록
+	public int mainInsertTodo(SqlSessionTemplate sqlSession, Todo td) {
+		return sqlSession.insert("mainMapper.mainInsertTodo", td);
+	}
+
+	//투두리스트 조회
+	public ArrayList<Todo> mainSelectTodoList(SqlSessionTemplate sqlSession, Member m) {
+		return (ArrayList)sqlSession.selectList("mainMapper.mainSelectTodoList", m);
+	}
+	
+	//투두리스트 수정
+	public int updateTodoList(SqlSessionTemplate sqlSession, Todo td) {
+		//System.out.println(sqlSession.update("mainMapper.updateTodoList", td));
+		return sqlSession.update("mainMapper.updateTodoList", td);
+	}
+
+	//투두리스트 한개 삭제
+	public int deleteTodoList(SqlSessionTemplate sqlSession, int todoNo) {
+		return sqlSession.update("mainMapper.deleteTodoList", todoNo);
+	}
+
+	//투두리스트 전체 삭제
+	public int allDeleteTodoList(SqlSessionTemplate sqlSession, Member m) {
+		return sqlSession.update("mainMapper.allDeleteTodoList", m);
+	}
+
 
 
 }
