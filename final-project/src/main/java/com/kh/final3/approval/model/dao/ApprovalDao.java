@@ -31,6 +31,17 @@ public class ApprovalDao {
 		RowBounds rowBounds = new RowBounds(offset, limit);
 		return (ArrayList)ss.selectList("approvalMapper.selectApprovalDocList",status,rowBounds);
 	}
+	public int searchApprovalCount(SqlSessionTemplate ss, HashMap<String, String> map) {
+		return ss.selectOne("approvalMapper.searchApprovalCount", map);
+	}
+
+	public ArrayList<ApprovalDoc> searchApprovalDocList(SqlSessionTemplate ss, HashMap<String, String> map,PageInfo pi) {
+		int limit = pi.getBoardLimit();
+		int offset = (pi.getCurrentPage()-1)*limit;
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return (ArrayList)ss.selectList("approvalMapper.searchApprovalDocList",map,rowBounds);
+	}
 
 	public ArrayList<ApprovalDoc> approvalMainList(SqlSessionTemplate ss, String status) {
 		return (ArrayList)ss.selectList("approvalMapper.approvalMainList",status);
@@ -79,8 +90,4 @@ public class ApprovalDao {
 	public List<ApprovalDoc> monthData(SqlSessionTemplate ss, ApprovalDoc ad) {
 		return ss.selectList("approvalMapper.monthData",ad);
 	}
-
-
-	
-
 }

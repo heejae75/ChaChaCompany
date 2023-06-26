@@ -483,14 +483,14 @@
 	    		insertTr += "<tr>";
 	    		insertTr += "<td><input type='checkbox' name='checkBox'onclick='isCheckAll();''></td>";
 	    		insertTr += "<td>";
-	            insertTr += "<select name='leaveStatus' id='select-option'>";
+	            insertTr += "<select name='arrLeaveStatus' id='select-option'>";
 	            insertTr += "<option>선택</option>";
 	            insertTr += "<option>신청</option>";
 	            insertTr += "<option>취소</option>";
 	            insertTr += "</select>";
 	            insertTr += "</td>";
 	            insertTr += "<td>";
-	            insertTr += "<select name='leaveCode' id='select-leave-option'>";
+	            insertTr += "<select name='arrLeaveCode' id='select-leave-option'>";
 	            insertTr += "<option value=''>선택</option>";
 	            insertTr += "<option value='L1'>정상근무</option>";
 	            insertTr += "<option value='L2'>연차</option>";
@@ -504,10 +504,10 @@
 	            insertTr += "</select>";
 	            insertTr += "</td>";
 	            insertTr += "<td>";
-	            insertTr += "<input type='date' name='startDate' id='start-date'>"
+	            insertTr += "<input type='date' name='arrStartDate' id='start-date'>"
 	            insertTr += "</td>";
 	            insertTr += "<td>";
-	            insertTr += "<input type='date' name='endDate' id='end-date'>"
+	            insertTr += "<input type='date' name='arrEndDate' id='end-date'>"
 	            insertTr += "</td>";
 	            insertTr += "<td>";
 	            insertTr += "<input type='text' value='' id='total-date'>"

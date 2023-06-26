@@ -450,7 +450,7 @@
 
 			<!-- 메일  -->
             <div class="header_mail">
-            	<a href="list.em">
+            	<a href="email.em">
                 	<i class="fa-sharp fa-solid fa-envelope fa-lg" style="color: #0E6251;"></i>
                 </a>
             </div>
