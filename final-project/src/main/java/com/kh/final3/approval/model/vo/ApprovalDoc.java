@@ -27,5 +27,7 @@ public class ApprovalDoc {
 	
 	private int approval;
 	private int reject;
+	private String secondApproverNo;
+	private String lastApproverNo;
 	
 }

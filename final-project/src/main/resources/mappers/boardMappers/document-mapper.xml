@@ -106,9 +106,10 @@
 		WHERE BOARD_NO = #{bno}
 		AND B.STATUS = 'Y'
 	</select>
+	
 	<!-- 다운로드 파일 목록 조회 -->
 	<select id="selectBoardAttachmentList" resultMap="AttachmentResultSet">
-		SELECT ATTACHMENT_NO, REF_BNO, ORIGIN_NAME, FILE_PATH
+		SELECT ATTACHMENT_NO, REF_BNO, ORIGIN_NAME,CHANGE_NAME, FILE_PATH
 		FROM BOARD_ATTACHMENT
 		WHERE REF_BNO = #{bno}
 		AND STATUS='Y'
@@ -161,5 +162,12 @@
 			SET STATUS = 'N'
 			WHERE BOARD_NO = #{boardNo}
 	</update>
+	<!-- 삭제된 첨부파일 목록의 경로 조회 메소드  -->
+	<select id="selectDeleteAttachList" resultMap="AttachmentResultSet">
+		SELECT FILE_PATH
+		FROM BOARD_ATTACHMENT
+		WHERE REF_BNO = #{bno}
+		AND STATUS='N'
+	</select>
 	
 </mapper>

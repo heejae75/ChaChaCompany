@@ -1,5 +1,5 @@
 @charset "UTF-8";
-div{
+		div{
             box-sizing: border-box;
         }
         input[type="text"] {
@@ -70,7 +70,6 @@ div{
         }
 		.modal-body>div{
             float: left;
-            height: 100%;
         }
         #search-area{
         	width:40%

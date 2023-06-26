@@ -34,7 +34,7 @@
            	<c:if test="${(a.secondApproverNo == loginUser.userNo) || (a.lastApproverNo == loginUser.userNo) }">
 	            <div id="item-btn-area">
 	                <button type="button" class="btn btn-primary" id="approval-btn" onclick="approval();">승인</button>
-    	            <button type="button" class="btn btn-danger" id="reject-btn" data-bs-toggle="modal" data-bs-target="#rejectModal">반려</button>
+    	            <button type="button" class="btn btn-danger" id="reject-btn" data-toggle="modal" data-target="#rejectModal">반려</button>
     	            <button type="button" class="btn btn-success" onclick="saveApproval();">나가기</button>
         	        <input type="checkbox" id="emergency-btn" value="${ad.emergency }"><label for="긴급">긴급문서</label>
 	            </div>
@@ -105,16 +105,14 @@
 	                        </tr>
                         </thead>
                         <tbody>
-                        	<c:set var="item" value="${i}"/>
-                        	<c:set var="arrayLength" value='${fn:length(item.arrSupplyName)}' />
-                        	<c:forEach var="index" begin="0" end="${arrayLength-1}">
+                        	<c:forEach var="i" items="${iList }">
 				                <tr>
 				                   <td></td>
-				                   <td><input type="text" value="${item.createDate}" readonly></td>
-					               <td><input type="text" value="${item.arrSupplyName[index]}" readonly></td>
-					               <td><input type="text" value="${item.arrSupplySize[index]}" readonly></td>
-					               <td><input type="text" value="${item.arrAmount[index]}" readonly></td>
-				                   <td><input type="text" value="${item.arrPrice[index]}" readonly></td>
+				                   <td><input type="text" value="${i.createDate}" readonly></td>
+					               <td><input type="text" value="${i.supplyName}" readonly></td>
+					               <td><input type="text" value="${i.supplySize}" readonly></td>
+					               <td><input type="text" value="${i.amount}" readonly></td>
+				                   <td><input type="text" value="${i.price}" readonly></td>
 		                        </tr>
                         	</c:forEach>
                         </tbody>
@@ -151,13 +149,13 @@
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <h1 class="modal-title fs-5" id="exampleModalLabel">반려사유</h1>
-	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
 	      </div>
 	      <div class="modal-body">
 		      <textarea name="returnReason" id="returnReason">${a.returnReason}</textarea>	      
 		  </div>
 	      <div class="modal-footer">
-	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
 	        <button type="button" class="btn btn-primary" onclick="updateReject();">완료</button>
 	      </div>
 	    </div>

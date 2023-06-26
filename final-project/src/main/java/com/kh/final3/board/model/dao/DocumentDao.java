@@ -75,6 +75,12 @@ public class DocumentDao {
 		return sqlSession.update("documentMapper.updateAttachment", boardNo);
 	}
 	
+	//삭제된 첨부파일 목록 조회 메소드 
+	public ArrayList<BoardAttachment> selectDeleteAttachList(SqlSessionTemplate sqlSession, int bno) {
+
+		return (ArrayList)sqlSession.selectList("documentMapper.selectDeleteAttachList", bno);
+	}
+	
 
 	
 	

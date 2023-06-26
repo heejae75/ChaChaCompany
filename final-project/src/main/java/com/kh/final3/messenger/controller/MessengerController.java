@@ -351,4 +351,5 @@ public class MessengerController {
 		  .setViewName("messenger/trashListView");
 		return mv;
 	}
+	
 }

@@ -63,11 +63,9 @@ public class ApprovalController {
 		
 		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
 		ArrayList<ApprovalDoc> list = as.selectApprovalDocList(pi,status);
-		ArrayList<Approval> a = as.selectApprovalList();
 		m.addAttribute("list",list);
 		m.addAttribute("pi",pi);
 		m.addAttribute("status", status);
-		m.addAttribute("a", a);
 		return "approval/approvalListView";
 	}
 	
@@ -129,30 +127,48 @@ public class ApprovalController {
 	@RequestMapping("item.ap")
 	public ModelAndView insertItem(Item i, ApprovalDoc ad,ApprovalAttachment at, Approval a,ModelAndView mv,HttpSession session, ArrayList<MultipartFile> upfile){
 		ArrayList<ApprovalAttachment> atList = new ArrayList<>();
-		for(MultipartFile file : upfile) {
-			if(!file.getOriginalFilename().equals("")) {
-				String changeName = new SaveFile().getSaveFile(file, session);
-				
-				String filePath = session.getServletContext().getRealPath("/resources/uploadFiles/approvalDoc/");
-				
-				try {
-					file.transferTo(new File(filePath+changeName));
-				} catch (IllegalStateException | IOException e) {
-					e.printStackTrace();
+		ArrayList<Item> iList = new ArrayList<>();
+		
+		//파일 첨부
+		if(upfile!=null) {
+			for(MultipartFile file : upfile) {
+				if(!file.getOriginalFilename().equals(" ")) {
+					String changeName = new SaveFile().getSaveFile(file, session);
+					
+					String filePath = session.getServletContext().getRealPath("/resources/uploadFiles/approvalDoc/");
+					
+					try {
+						file.transferTo(new File(filePath+changeName));
+					} catch (IllegalStateException | IOException e) {
+						e.printStackTrace();
+					}
+					
+					at = ApprovalAttachment.builder().originName(file.getOriginalFilename())
+																		.changeName(changeName)
+																		.deptCode(ad.getDeptCode()).build();
+					
+					atList.add(at);
 				}
-				
-				at = ApprovalAttachment.builder().originName(file.getOriginalFilename())
-																	.changeName(changeName)
-																	.filePath(filePath+changeName)
-																	.deptCode(ad.getDeptCode()).build();
-				
-				atList.add(at);
-			}else {
-				at = null;
 			}
-			
 		}
-		int result = as.insertItem(i,atList,ad,a);
+		//item 리스트
+		for(int j=0;j<i.getArrSupplyName().length;j++) {
+			Item i2 = new Item();
+			
+			String supplyName = i.getArrSupplyName()[j];
+			String supplySize = i.getArrSupplySize()[j];
+			String amount = i.getArrAmount()[j];
+			String price = i.getArrPrice()[j];
+			
+			i2.setDeptCode(i.getDeptCode());
+			i2.setSupplyName(supplyName);
+			i2.setSupplySize(supplySize);
+			i2.setAmount(amount);
+			i2.setPrice(price);
+			
+			iList.add(j, i2);
+		}
+		int result = as.insertItem(iList,atList,ad,a);
 		if(result>0) {
 			session.setAttribute("alertMsg", "결재등록이 완료되었습니다.");
 			mv.setViewName("redirect:list.ap");
@@ -169,9 +185,12 @@ public class ApprovalController {
 		@RequestMapping("leave.ap")
 		public ModelAndView insertItem(Leave l, ApprovalDoc ad,ApprovalAttachment at, Approval a,ModelAndView mv,HttpSession session, ArrayList<MultipartFile> upfile){
 			ArrayList<ApprovalAttachment> atList = new ArrayList<>();
-			if(upfile != null) {
+			ArrayList<Leave> leaveList = new ArrayList<>();
+			
+			//파일
+			if(upfile!=null) {
 				for(MultipartFile file : upfile) {
-					if(!file.getOriginalFilename().equals("")) {
+					if(!file.getOriginalFilename().equals(" ")) {
 						String changeName = new SaveFile().getSaveFile(file, session);
 						
 						String filePath = session.getServletContext().getRealPath("/resources/uploadFiles/approvalDoc/");
@@ -188,13 +207,31 @@ public class ApprovalController {
 																			.deptCode(ad.getDeptCode()).build();
 						
 						atList.add(at);
-					}else {
-						at = null;
 					}
-					
 				}
 			}
-			int result = as.insertLeave(l,atList,ad,a);
+			
+			//leave 리스트
+			for(int i=0;i<l.getArrLeaveStatus().length;i++) {
+				Leave l2 = new Leave();
+				
+				String leaveCode = l.getArrLeaveCode()[i];
+				String startDate = l.getArrStartDate()[i];
+				String endDate = l.getArrEndDate()[i];
+				String leaveStatus = l.getArrLeaveStatus()[i];
+				
+				l2.setDeptCode(l.getDeptCode());
+				l2.setWorkReceiver(l.getWorkReceiver());
+				l2.setLeaveCode(leaveCode);
+				l2.setStartDate(startDate);
+				l2.setEndDate(endDate);
+				l2.setLeaveContent(l.getLeaveContent());
+				l2.setLeaveStatus(leaveStatus);
+				
+				leaveList.add(i, l2);
+			}
+			
+			int result = as.insertLeave(leaveList,atList,ad,a);
 			
 			if(result>0) {
 				session.setAttribute("alertMsg", "결재등록이 완료되었습니다.");
@@ -214,31 +251,19 @@ public class ApprovalController {
 			Approval a = as.selectApproval(docNo);
 			ArrayList<ApprovalAttachment> at = as.selectApprovalAttachment(docNo);
 			ApprovalDoc ad = as.selectApprovalDoc(docNo);
-			Item i = new Item();
-			Leave l = new Leave();
+			ArrayList<Item> iList = new ArrayList<>();
+			ArrayList<Leave> lList = new ArrayList<>();
 			
 			if(docType.equals("구매품의서")) {
-				i = as.selectItem(docNo);
-				String[] arrSupplyName = i.getSupplyName().split(",");
-				String[] arrSupplySize = i.getSupplySize().split(",");
-				String[] arrAmount = i.getAmount().split(",");
-				String[] arrPrice = i.getPrice().split(",");
-				i.setArrSupplyName(arrSupplyName);
-				i.setArrSupplySize(arrSupplySize);
-				i.setArrPrice(arrPrice);
-				i.setArrAmount(arrAmount);
+				iList = as.selectItem(docNo);
 				mv.addObject("a",a).addObject("at",at).addObject("ad", ad)
-				.addObject("i", i)
+				.addObject("iList", iList)
 				.setViewName("approval/itemDetailView");
 				
 			}else if(docType.equals("휴가계")) {
-				l = as.selectLeave(docNo);
-				String[] arrStartDate = l.getStartDate().split(",");
-				String[] arrEndDate = l.getEndDate().split(",");
-				l.setArrStartDate(arrStartDate);
-				l.setArrEndDate(arrEndDate);
+				lList = as.selectLeave(docNo);
 				mv.addObject("a",a).addObject("at",at).addObject("ad", ad)
-				.addObject("l", l)
+				.addObject("lList", lList)
 				.setViewName("approval/leaveDetailView");
 			}
 			
