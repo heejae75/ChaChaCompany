@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.kh.final3.approval.model.vo.Leave;
 import com.kh.final3.attendance.model.dao.AttendanceDao;
 import com.kh.final3.attendance.model.vo.Attendance;
+import com.kh.final3.attendance.model.vo.Record;
 
 @Service
 public class AttendanceServiceImpl implements AttendanceService {
@@ -48,6 +49,16 @@ public class AttendanceServiceImpl implements AttendanceService {
 	@Override
 	public ArrayList<Leave> selectLeaveList(int userNo) {
 		return attendanceDao.selectLeaveList(sqlSession, userNo);
+	}
+
+	@Override
+	public Record selectAtt(Attendance att) {
+		return attendanceDao.selectAtt(sqlSession, att);
+	}
+
+	@Override
+	public Attendance selectLeave(Attendance att) {
+		return attendanceDao.selectLeave(sqlSession, att);
 	}
 
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.final3.approval.model.vo.Leave;
 import com.kh.final3.attendance.model.vo.Attendance;
+import com.kh.final3.attendance.model.vo.Record;
 
 @Repository
 public class AttendanceDao {
@@ -29,6 +30,14 @@ public class AttendanceDao {
 	}
 	public ArrayList<Leave> selectLeaveList(SqlSessionTemplate sqlSession, int userNo) {
 		return (ArrayList)sqlSession.selectList("attendanceMapper.selectLeaveList", userNo);
+	}
+	// 실적조회
+	public Record selectAtt(SqlSessionTemplate sqlSession, Attendance att) {
+		return sqlSession.selectOne("attendanceMapper.selectAtt", att);
+	}
+	// 근태유형조회
+	public Attendance selectLeave(SqlSessionTemplate sqlSession, Attendance att) {
+		return sqlSession.selectOne("attendanceMapper.selectLeave", att);
 	}
 
 }

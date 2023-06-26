@@ -193,8 +193,25 @@
 									<td colspan="4" id="formattedDate"></td>
 								</tr>
 								<tr style="height:15%;">
-									<td width="300px">09:00 - 18:00</td>
-									<td align="right"><button id="work-type-btn" class="btn btn-sm btn-default">${att.leaveType}</button></td>
+									<td width="300px" colspan="2">
+									<c:choose>
+										<c:when test="${att.leaveType eq '정상근무' }">
+											${att.leaveType } (09:00 - 18:00)
+										</c:when>
+										<c:when test="${att.leaveType eq '오전반차' }">
+											${att.leaveType } (13:00 - 18:00)
+										</c:when>
+										<c:when test="${att.leaveType eq '오후반차' }">
+											${att.leaveType } (09:00 - 12:00)
+										</c:when>
+										<c:otherwise>
+											${att.leaveType }
+										</c:otherwise>
+									
+									</c:choose>
+										
+									
+									</td>
 									<td align="right" style="width:10px"><button id="status-btn" class="btn btn-sm btn-default">부재중</button></td>
 								</tr>
 							</thead>
@@ -248,7 +265,7 @@
 								</tr>
 								<tr class="title">
 									<td class="date" colspan="2">근태</td>
-									<td class="date" align="right">${att.leaveType }</td>
+									<td class="date" align="right" id="leaveType">${att.leaveType }</td>
 								</tr>
 								<tr class="title">
 									<td colspan="2">출근</td>
@@ -287,17 +304,20 @@
 								</tr>
 								<tr>
 									<td class="date" colspan="3">
-									<div class="progress">
-									  <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
-									    <span class="sr-only">60% Complete</span>
-									  </div>
-									</div>
+										<div class="progress">
+										  <div id="work-record-progress" class="progress-bar progress-bar-striped progress-bar-info" style="width: 35%">
+										    <span class="sr-only"></span>
+										  </div>
+										  <div id="extra-work-progress" class="progress-bar progress-bar-striped progress-bar-danger" style="width: 20%">
+										    <span class="sr-only"></span>
+										  </div>
+										</div>
 									</td>
 								</tr>
-								<tr style="font-size:13px;">
-									<td id="work-plan">계획 40:00</td>
-									<td id="work-record">실적 52:00</td>
-									<td id="extra-work">연장 12:00</td>
+								<tr id="progress" style="font-size:13px;">
+									<td id="work-plan"></td>
+									<td id="work-record"></td>
+									<td id="extra-work"></td>
 								</tr>
 							</tbody>		
 						</table>
@@ -320,8 +340,6 @@
 			locale 					  : "ko",    
 			timezone                  : "local", 
 			nextDayThreshold          : "09:00:00",
-			allDay					  : true,
-			allDaySlot                : false,
 			displayEventTime          : false,
 			displayEventEnd           : true,
 			firstDay                  : 1, //월요일이 먼저 오게 하려면 1
@@ -335,44 +353,26 @@
 			                              month : { eventLimit : 12 } // 한 날짜에 최대 이벤트 12개, 나머지는 + 처리됨
 				                              },
 			timeFormat                : "HH:mm",
-			defaultTimedEventDuration : "01:00:00", // 한시간단위
-			minTime                   : "09:00:00",
-			maxTime                   : "21:00:00",
-			slotLabelFormat           : "HH:mm",
-			slotDuration			  : "1:00:00", // 시간 슬롯 단위를 1시간으로 설정
 			weekends                  : true, // 주말 안보이게
 			header                    : {
 										center : "prev, title ,next ",
 							        	right : "prevYear, today, nextYear ",
-							        	left : "agendaWeek, month"
+							        	left : ""
 			                            },
 			defaultView				  : "month",
 			views                     : {
 										 month : {
 								        		titleFormat: "YYYY년 MM월"
-								        	},
-			                              agendaWeek : {
-				  	                          columnFormat : "M/D ddd",
-					                          titleFormat  : "YYYY/MM/D",
-					                          eventLimit   : false
-				                          },
-				                          listWeek : {
-				                          columnFormat : ""
-				                          }
+								        	}
 				                       },
 			buttonText				  : {
 										today: '오늘',
-										week: '주간',
-										month: '월간',
-										list: '목록'},
-			select : function(start, end) { 
-				
-				
-	           },
-	           
+										month: '월간'
+										},
+			
 	         eventClick: function(arg, event){ // 화면에서 일정 선택하면
 	        	 /*나의 근무에서 선택일과 출퇴근시간 변경*/
-	        	 if(arg.start != null){
+	        	 if(arg.start.format("HH:mm") != "00:00"){
 		        	 $("#startTime").text(arg.start.format("HH:mm"));
 	        	 }else{
 	        		 $("#startTime").text("미타각");
@@ -390,25 +390,40 @@
 	        		 $("#startTime").text("휴가");
 	        		 $("#endTime").text("휴가");
 	        	 }
+	        	 if(arg.title == '오전반차' || arg.title == '오후반차'){
+	        		 $("#formattedDate2").text(arg.start.format("YYYY-MM-DD"));
+	        		 $("#startTime").text("반차");
+	        		 $("#endTime").text("반차");
+	        	 }
 	         	 
 		        $("#formattedDate2").text(arg.day);
+		        $("#leaveType").text(arg.leaveType);
 		        
 				/* 주간실적 progress bar 함수 호출 */
-				weekWorkRecord(arg);
+				
+				// 선택한 날짜의 주의 첫 번째 날짜인 월요일
+				var startDate = arg.start.clone().startOf('week').format('YYYY-MM-DD');
+				// 선택한 날짜의 주의 마지막 날짜인 일요일
+				var endDate = arg.start.clone().endOf('week').format('YYYY-MM-DD');
+				// 주간실적 함수 호출
+				weekWorkRecord(startDate, endDate);
 		        
 		       },
 	           
 	        events: function(start, end, timezone, callback) {
+	        	
+	        	/* 주간실적 progress bar 함수 호출 */
+				
 	        	// 선택한 날짜의 주의 첫 번째 날짜인 월요일
 	        	var curr = moment();
 				var startDate = curr.clone().startOf('isoWeek').format('YYYY-MM-DD');
 				// 선택한 날짜의 주의 마지막 날짜인 일요일
 				var endDate = curr.clone().endOf('isoWeek').format('YYYY-MM-DD');
-				$("#weekStart").text(startDate);
-				$("#weekEnd").text(endDate);
+				// 주간실적 함수 호출
+				weekWorkRecord(startDate, endDate);
 				
 				
-				$.ajax({
+				$.ajax({ // 휴가계획 가져오기
       			  url : "leaveList.at",
 		        	   type : "POST",
 		        	   async : false,
@@ -428,7 +443,7 @@
 		        			  events.push(event);
 		        		  }); 
 		        		  
-			        		   $.ajax({
+			        		   $.ajax({ // 근태기록 가져오기
 					        	   url : "attList.at",
 					        	   type : "POST",
 					        	   async : false,
@@ -443,12 +458,13 @@
 					        			  var event =  {
 					        					  id: attendance.attRecordNo,
 					        					  userNo : attendance.userNo,
-					        					  title : attendance.leaveType,
+					        					  title : "실적 : " + attendance.leaveType,
 					        					  start : attendance.currDate + "T" + attendance.onTime,
 					        					  end : attendance.currDate + "T" + attendance.offTime,
 					        					  day : attendance.currDate,
 					        					  onTime : attendance.onTime,
-					        					  offTime : attendance.offTime
+					        					  offTime : attendance.offTime,
+					        					  leaveType : attendance.leaveType
 					        			  }
 					        			  events.push(event);
 					        		});
@@ -463,29 +479,27 @@
 		        	   		console.log('통신 오류');
 		        	   }
 		        	 });
-      		  
-				
-				
-				
-				
-				
-	        
-				
-		        	 
 	        },
         	   
 	           eventRender: function(event, element) {
+	        	   console.log(event.title)
 		        	 element.css({
 		        		 "border": "1px solid #E0E0E0",
 		        		 "color": "#616161",
 		        		 "margin":"0px"
 		        		});
-		           if(event.onTime==null && event.offTime==null){
-		        	   element.css("background-color", "#FBDEA2");
+	        	   
+	        	   // 근무실적 색상변경
+		           if(event.onTime==null && event.offTime==null){ // 출퇴근등록 안하면
+		        	   element.css("background-color", "#C3E2DF");
 		           }else if(event.onTime!=null && event.offTime==null){ // 출근이나 퇴근 등록을 하지 않으면 색 변경
-	        		   element.css("background-color", "#FCCCD4");
-	        	   }else{
-	        		   element.css("background-color", "#8EB695");
+	        		   element.css("background-color", "#F6A88A");
+	        	   }else{ // 출퇴근등록하면
+	        		   element.css("background-color", "#F9DD7C");
+	        	   }
+	        	   // 근무계획 색상변경
+	        	   if(event.title == '오전반차' || event.title == '오후반차'){
+	        		   element.css("background-color", "#D3AFD5");
 	        	   }
 	        	}
 			});
@@ -564,51 +578,123 @@
 			}
 		});
 		
-		function weekWorkRecord(arg){
+		function weekWorkRecord(startDate, endDate){
 			/*주간실적 날짜 바꾸기*/
-	     	// 선택한 날짜의 주의 첫 번째 날짜인 월요일
-			var startDate = arg.start.clone().startOf('week').format('YYYY-MM-DD');
-			
-			// 선택한 날짜의 주의 마지막 날짜인 일요일
-			var endDate = arg.start.clone().endOf('week').format('YYYY-MM-DD');
 			$("#weekStart").text(startDate);
 			$("#weekEnd").text(endDate);
 			
 			/* 주간실적 progress bar */
-			var workPlan; // 근무 계획 = 정상근무 외근 출장 8시간 + 반차 4시간 
-			var workRecord; // 근무 실적 = 출근 - 퇴근
-			var extraWork = workRecord - workPlan; // 연장 근무 = 실적 - 계획
-			var totalWorkHours = 0; // 일주일 동안의 근무시간을 모두 더하는 변수
+			var workPlan = 0; // 근무 계획 = 정상근무 외근 출장 8시간 + 반차 4시간 
+			var workRecord = 0; // 근무 실적 = 출근 - 퇴근
+			var extraWork = 0; // 연장 근무 = 실적 - 계획
+			
 			
 			var existingEvents = $('#calendar').fullCalendar('clientEvents'); // 이미 추가된 이벤트들을 가져옴
-			console.log(existingEvents[0].start)
 			
-			
-			
-			
-			
+			var currentDate = startDate;
 		
-		  // startDate부터 endDate까지 하루씩 증가하면서 근무시간을 더함
-		  var currentDate = startDate;
-		  while (startDate <= endDate) {
-		    // TODO: currentDate에 해당하는 근무시간을 계산하고 totalWorkHours에 더하는 로직을 작성
-		    // 예시로 현재는 무작위로 8시간을 더하는 코드 써야함  정상근무 외근 출장은 8시간, 반차는 4시간
-		
-		    totalWorkHours += 8;
-		
-		    // 다음 날짜로 이동
-		    currentDate++;
-		  }
-		  console.log(totalWorkHours)
-			
+			existingEvents.forEach(function(e){
+				if(e.day != null && e.day >= startDate && e.day <= endDate){ // 실적이 있으면
+					while(currentDate <= endDate){
+						// currentDate : 클릭한 날 짜 첫 월요일
+						// endDate 
 						
+						// 날짜 순회하면서 계획/실적 가져오기 (db에서 att가져오면 됨)
+						/* workPlan += getWorkPlan(currentDate);
+						workRecord += getWorkRecord(currentDate) */
+						console.log(currentDate);
+						
+						var result = getWork(currentDate);
+						
+						if(result.length != 0){
+							workPlan += result[0];
+							workRecord += result[1];
+							console.log("계획 : " + getWork(currentDate)[0])
+							console.log("실적 : " + getWork(currentDate)[1])
+						}
+						currentDate = moment(currentDate).add(1, 'day').format('YYYY-MM-DD');
+					}
+				}
+			});
+			workPlan = workPlan - 8*60*2; // 주말제외
+			if(workPlan < 0){
+				workPlan = 0;
+			}
+			extraWork = workRecord - workPlan;
+			console.log("총계획 : " + workPlan)
+			console.log("총실적 : " + workRecord)
+			console.log("초과근무  : " + extraWork)
 			
-		}
+			// 현재 진행중인 주간은 주간계획 조회 불가 TEST필요
+			/* var today = new Date();
+
+			var year = today.getFullYear();
+			var month = String(today.getMonth() + 1).padStart(2, '0');
+			var day = String(today.getDate()).padStart(2, '0');
+			
+			var formattedDate = year + '-' + month + '-' + day; // 오늘날짜
+			var friday = moment(endDate).add(-2, 'day').format('YYYY-MM-DD');
+			console.log(friday)
+			console.log(formattedDate)
+			console.log(startDate)
+			if(formattedDate<=friday && formattedDate>=startDate){
+				$("#progress").html("<td colspan='3'>주간실적은 지난 주간부터 조회가능합니다.</td>")
+			}else{
+				$("#work-plan").text("계획 : " + workPlan);
+				$("#work-record").text("실적 : " + workRecord);
+				$("#extra-work").text("초과 : " + extraWork);
+				
+				var fulltime = 52*60; // 주 52시간제
+				var workRecordProgress = workRecord/fulltime*100;
+				var extraWorkProgress = extraWork/fulltime*100;
+				//console.log(workRecordProgress)
+				//console.log(extraWorkProgress)
+				$("#work-record-progress").css("width",workRecordProgress+"%");
+				$("#extra-work-progress").css("width",extraWorkProgress+"%");
+			} */
+			
+			$("#work-plan").text("계획 : " + workPlan);
+			$("#work-record").text("실적 : " + workRecord);
+			$("#extra-work").text("초과 : " + extraWork);
+			
+			var fulltime = 52*60; // 주 52시간제
+			var workRecordProgress = workRecord/fulltime*100;
+			var extraWorkProgress = extraWork/fulltime*100;
+			//console.log(workRecordProgress)
+			//console.log(extraWorkProgress)
+			$("#work-record-progress").css("width",workRecordProgress+"%");
+			$("#extra-work-progress").css("width",extraWorkProgress+"%");
+				
+			};
+	
+	function getWork(currentDate){ // attendanceRecord 먼저 조회해오고, 결과가 만약 null(출퇴근등록 안함)이면 휴가계에서 근무계획 불러오기, 배열로 계획과 실적 return		 
+		var result = [];
+		$.ajax({
+			url : "selectAtt.at",
+			data : {
+				userNo : "${loginUser.userNo}",
+				currDate : currentDate
+			},
+			beforeSend : function(xhr){
+                xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+            },
+            async: false,
+            success : function(r){
+            	if(r!=null){
+            	 var workPlan = r.workPlan;
+                 var workRecord = r.workRecord;
+
+                 result = [workPlan, workRecord]; // 배열로 결과값 묶기
+            	}
+    		},
+            error : function(){
+            	console.log("통신오류");
+            }
+		});
 		
-		
-		
-		
-		
+		return result;
+	};
+
 			
  	
   </script>

@@ -39,4 +39,7 @@ public interface MainService {
 
 	ArrayList<Schedule> mainDailyEvents(Map<String, Object> params);
 
+	// 근무계획 조회
+	Attendance selectLeaveType(int userNo);
+
 }

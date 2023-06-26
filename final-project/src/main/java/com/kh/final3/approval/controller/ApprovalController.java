@@ -187,10 +187,12 @@ public class ApprovalController {
 			ArrayList<ApprovalAttachment> atList = new ArrayList<>();
 			ArrayList<Leave> leaveList = new ArrayList<>();
 			
+			log.info(upfile.get(0).getOriginalFilename());
+			
 			//파일
 			if(upfile!=null) {
 				for(MultipartFile file : upfile) {
-					if(!file.getOriginalFilename().equals(" ")) {
+					if(!file.getOriginalFilename().equals("")) {
 						String changeName = new SaveFile().getSaveFile(file, session);
 						
 						String filePath = session.getServletContext().getRealPath("/resources/uploadFiles/approvalDoc/");

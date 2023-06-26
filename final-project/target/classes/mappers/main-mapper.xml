@@ -56,6 +56,10 @@
 		<result column="STATUS" property="status"/>
 	</resultMap>
 	
+	<resultMap type="attendance" id="attendanceResultSet">
+		<result column="LEAVE_CODE" property="leaveType"/>
+	</resultMap>
+	
 	
 	<!-- 최신 공지사항 조회  -->
 	<select id="mainNoticeList" resultMap="mainBoardResultset">
@@ -102,8 +106,16 @@
 	
 	<!-- 출근 등록  -->
 	<insert id="insertGoToWork">
-		INSERT INTO ATTENDANCE_RECORD (ATT_RECORD_NO, USER_NO, ON_TIME)
-		VALUES (SEQ_ATNO.NEXTVAL,#{userNo}, TO_DATE(TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS'))
+		<choose>
+			<when test="leaveType != null">
+			INSERT INTO ATTENDANCE_RECORD (ATT_RECORD_NO, USER_NO, ON_TIME, LEAVE_CODE)
+			VALUES (SEQ_ATNO.NEXTVAL,#{userNo}, TO_DATE(TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS'), #{leaveType})
+			</when>
+			<otherwise>
+			INSERT INTO ATTENDANCE_RECORD (ATT_RECORD_NO, USER_NO, ON_TIME, LEAVE_CODE)
+			VALUES (SEQ_ATNO.NEXTVAL,#{userNo}, TO_DATE(TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS'), 'L1')
+			</otherwise>
+		</choose>
 	</insert>
 	
 	<!-- 퇴근 등록  -->
@@ -157,4 +169,22 @@
 			AND TRUNC(END_DATE) >= TO_DATE(#{year} || '-' || #{month} || '-' || #{date}, 'YYYY-MM-DD')
 		]]>
 	</select>
+	
+	<select id="selectLeaveType" resultMap="attendanceResultSet">
+	<![CDATA[
+		  SELECT LEAVE_CODE
+			FROM (
+			  SELECT DOC_WRITER, LEAVE_TYPE, LEAVE_CODE, START_DATE, END_DATE, LEAVE_STATUS, L.CREATE_DATE
+			  FROM LEAVE L
+			  JOIN APPROVAL_DOC A USING(DOC_NO)
+			  JOIN WORK_TYPE USING(LEAVE_CODE)
+			  WHERE A.STATUS = 'Y'
+			  AND LEAVE_STATUS = '신청'
+			  AND TO_CHAR(SYSDATE,'YYYY-MM-DD') >= START_DATE
+			  AND TO_CHAR(SYSDATE,'YYYY-MM-DD') <= END_DATE
+			  AND A.DOC_WRITER = #{userNo}
+			  ORDER BY CREATE_DATE DESC) 
+			WHERE ROWNUM = 1
+		]]>
+  </select>
 </mapper>
