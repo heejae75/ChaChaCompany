@@ -8,37 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>결재함</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    
-  <style>
-
- 
-   
-   /* 버튼영역 */
-    #board-btn-area{
-        width: 80%;
-        margin: auto;
-        margin-bottom: 20px;
-    }
-    
-    /* 게시글 목록영역 */
-    #board-list-area{
-        width: 80%;
-        margin: auto;
-    }
-    
-    #board-list{
-        text-align:center;
-    }
-
-    #pagingArea {
-        width:fit-content; 
-        margin:auto;
-    }
-
-    </style>
-
-
+    <link rel="stylesheet" href="/final3/resources/css/Approval_EnrollList.css" >
 </head>
 <body id="body-pd">
 	<%@ include file="../common/menubar.jsp" %>
@@ -48,7 +18,6 @@
             <br><br><br><br><br><br>
                          
             <div id="board-list-area">
-            
                 <table id="board-list" class="table table-hover" align="center">
                     <thead>
                         <tr>

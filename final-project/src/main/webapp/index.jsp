@@ -51,9 +51,6 @@
 	    <div>
 	    	<a href="/final3/admin/adminHome.ma">관리자 메인페이지 </a>
 	    </div>
-<!-- 		<div> -->
-<!-- 			<a href="/final3/manager/managerPage.me">매니저 페이지(임시) </a> -->
-<!-- 		</div> -->
     </div>
 <script>
 	function memberLogin(){

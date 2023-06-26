@@ -15,13 +15,13 @@
 		<result column="STATUS" property="status"/>
 	</resultMap>
 	
-	<resultMap type="email" id="mainEmailResultset">
-		<result column="EMAIL_NO" property="emailNo"/>
+	<resultMap type="messenger" id="mainMessengerResultset">
+		<result column="MESSENGER_NO" property="messengerNo"/>
 		<result column="USER_NAME" property="sender"/>
 		<result column="RECEIVER" property="receiver"/>
-		<result column="EMAIL_TITLE" property="emailTitle"/>
+		<result column="MSG_TITLE" property="msgTitle"/>
 		<result column="SEND_DATE" property="sendDate"/>
-		<result column="STATUS" property="status"/>
+		<result column="RECV_DELETE" property="recvDelete"/>
 	</resultMap>
 	
 	<resultMap type="member" id="mainMemberResultset">
@@ -44,6 +44,46 @@
 	 	<result column="DEPT_NAME" property="deptName"/>
 	</resultMap>
 	
+	<resultMap type="schedule" id="mainScheduleResultset">
+		<result column="SCHEDULE_NO" property="scheduleNo"/>
+		<result column="DEPT_CODE" property="deptCode"/>
+		<result column="USER_NO" property="userNo"/>
+		<result column="SCHEDULE_TYPE" property="scheduleType"/>
+		<result column="SCHEDULE_TITLE" property="scheduleTitle"/>
+		<result column="SCHEDULE_CONTENT" property="scheduleContent"/>
+		<result column="ENROLL_DATE" property="enrollDate"/>
+		<result column="START_DATE" property="startDate"/>
+		<result column="END_DATE" property="endDate"/>
+		<result column="STATUS" property="status"/>
+	</resultMap>
+	
+	<resultMap type="approval" id="mainApprovalResultSet">
+ 		<result column ="APP_NO" property="appNo"/>
+ 		<result column ="DOC_NO" property ="docNo"/>
+ 		<result column ="DEPT_CODE" property ="deptCode"/>
+ 		<result column ="SECOND_APPROVER_NO" property ="secondApproverNo"/>
+ 		<result column ="SECOND_JOB_NAME" property ="secondJobName"/>
+ 		<result column ="SECOND_APPROVER" property ="secondApprover"/>
+ 		<result column ="SECOND_SIGNATURE" property ="secondSignature"/>
+ 		<result column ="LAST_APPROVER_NO" property ="lastApproverNo"/>
+ 		<result column ="LAST_JOB_NAME" property = "lastJobName"/>
+ 		<result column ="LAST_APPROVER" property ="lastApprover"/>
+ 		<result column ="LAST_SIGNATURE" property ="lastSignature"/>
+ 		<result column ="SECOND_DATE" property ="secondDate"/>
+ 		<result column ="LAST_DATE" property ="lastDate"/>
+ 		<result column ="RETURN_REASON" property ="returnReason"/>
+ 		<result column ="STATUS" property ="status"/>
+ 		<result column ="DOC_TITLE" property="docTitle"/>
+ 		<result column ="CREATE_DATE" property="createDate"/>
+ 		<result column ="DOC_NAME" property="docName"/>
+ 	</resultMap>
+	
+	<resultMap type="todo" id="mainTodoResultSet">
+		<result column ="TODO_NO" property="todoNo"/>
+		<result column ="USER_NO" property="userNo"/>
+		<result column ="TODO_CONTENT" property="todoContent"/>
+		<result column ="STATUS" property="status"/>
+	</resultMap>
 	
 	<!-- 최신 공지사항 조회  -->
 	<select id="mainNoticeList" resultMap="mainBoardResultset">
@@ -74,17 +114,17 @@
 		WHERE ROWNUM BETWEEN 1 AND 6
 	</select>
 	
-	<!-- 최신 메일 조회  -->
-	<select id="mainEmailList" resultMap="mainEmailResultset">
-		SELECT ROWNUM, E.*
-		FROM (SELECT EMAIL_NO, EMAIL_TITLE, USER_NAME, TO_CHAR(SEND_DATE, 'YYYY-MM-DD') SEND_DATE
-				FROM EMAIL E
+	<!-- 최신 쪽지 조회  -->
+	<select id="mainMessengerList" resultMap="mainMessengerResultset">
+		SELECT ROWNUM, ME.*
+		FROM (SELECT MESSENGER_NO, MSG_TITLE, USER_NAME, TO_CHAR(SEND_DATE, 'YYYY-MM-DD') SEND_DATE
+				FROM MESSENGER ME
 				JOIN MEMBER M ON (SENDER = USER_NO)
 				WHERE RECEIVER = (SELECT USER_NO
 				                    FROM MEMBER 
 				                    WHERE USER_ID = #{userId})
-				AND E.STATUS = 'Y'
-				ORDER BY EMAIL_NO DESC) E
+				AND ME.RECV_DELETE = 'N'
+				ORDER BY MESSENGER_NO DESC) ME
 		WHERE ROWNUM BETWEEN 1 AND 6 
 	</select>
 	
@@ -127,4 +167,119 @@
 			    ORDER BY JOB_CODE )  
 		WHERE ROWNUM BETWEEN 1 AND 10
 	</select>
+	
+	<!-- 일정 조회  -->
+	<select id="mainCalendarList" resultMap="mainScheduleResultset">
+		SELECT DISTINCT SCHEDULE_NO, S.DEPT_CODE, SCHEDULE_TITLE, SCHEDULE_CONTENT, START_DATE, END_DATE
+		FROM SCHEDULE S
+		JOIN MEMBER M ON (S.DEPT_CODE = M.DEPT_CODE)
+		WHERE S.STATUS = 'Y'
+		AND S.DEPT_CODE = #{deptCode}
+		AND S.SCHEDULE_TYPE = 'DS'
+	</select>
+	
+	<!-- 해당 날짜 선택시 일정 조회 -->
+	<select id="mainDailyEvents" resultMap="mainScheduleResultset">
+		<![CDATA[
+			SELECT SCHEDULE_NO, SCHEDULE_TITLE
+			FROM SCHEDULE
+			WHERE TRUNC(START_DATE) <= TO_DATE(#{year} || '-' || #{month} || '-' || #{date}, 'YYYY-MM-DD')
+			AND TRUNC(END_DATE) >= TO_DATE(#{year} || '-' || #{month} || '-' || #{date}, 'YYYY-MM-DD')
+		]]>
+	</select>
+	
+	<!-- 전자결재 승인여부 리스트 조회 -->
+	<select id="mainApprovalStatus" resultMap="mainApprovalResultSet">
+		SELECT ROWNUM, A.*
+		FROM ( SELECT APP_NO, A.DOC_NO, D.DOC_NAME, AD.DOC_TITLE, TO_CHAR(AD.CREATE_DATE,'YYYY-MM-DD') CREATE_DATE,
+				  CASE
+			   		 WHEN A.SECOND_SIGNATURE = '반려' THEN
+				      CASE
+				        WHEN A.LAST_SIGNATURE = '반려' THEN '반려'
+				        WHEN A.LAST_SIGNATURE = '어문경' THEN '승인'
+				        WHEN A.LAST_SIGNATURE IS NULL THEN '2차 대기'
+				      END
+			      
+			   		 WHEN A.SECOND_APPROVER = A.SECOND_SIGNATURE THEN 
+				      CASE
+				        WHEN A.LAST_SIGNATURE = '반려' THEN '반려'
+				        WHEN A.LAST_SIGNATURE = '어문경' THEN '승인'
+				        WHEN A.LAST_SIGNATURE IS NULL THEN '2차 대기'
+				      END
+			      
+			    	WHEN A.SECOND_SIGNATURE IS NULL THEN '대기'
+			    
+				    WHEN A.LAST_SIGNATURE = '반려' THEN '반려'
+				    WHEN A.LAST_SIGNATURE = '어문경' THEN '승인'
+				    WHEN A.LAST_SIGNATURE IS NULL THEN '2차 대기'
+			 	 END AS LAST_SIGNATURE
+				FROM APPROVAL A
+				JOIN APPROVAL_DOC AD ON (A.DOC_NO = AD.DOC_NO)
+				JOIN DOC_TYPE D ON (AD.DOC_TYPE = D.DOC_TYPE)
+				ORDER BY APP_NO DESC ) A
+		WHERE ROWNUM BETWEEN 1 AND 6 		
+	</select>
+	
+	<!-- 투두리스트 등록 -->
+	<insert id="mainInsertTodo">
+		INSERT INTO TODO VALUES (SEQ_TNO.NEXTVAL, #{userNo}, #{todoContent}, 'N')
+	</insert>
+	
+	<!-- 투두리스트 조회 -->
+	<select id="mainSelectTodoList" resultMap="mainTodoResultSet">
+	 	SELECT TODO_NO, USER_NO, TODO_CONTENT, STATUS
+	 	FROM TODO
+	 	WHERE USER_NO = #{userNo}
+	 	AND STATUS IN ('N' ,'C')
+	</select>
+	
+	<!-- 투두리스트 수정 -->
+	<update id="updateTodoList">
+ 		<!-- UPDATE TODO
+		SET STATUS = CASE
+					    WHEN STATUS = #{status} THEN 'N'
+					    WHEN STATUS = #{status} THEN 'C'
+					 END
+		WHERE TODO_NO = #{todoNo} --> <!-- 얘 안됨. 값이 null로 바뀜 -->
+		
+		<!-- UPDATE TODO
+		<choose>
+			<when test='status == "C"'>
+			SET STATUS = 'N'
+			WHERE TODO_NO = #{todoNo}
+			</when>
+			<when test='status == "N"'>
+			SET STATUS = 'C'
+			WHERE TODO_NO = #{todoNo}
+			</when>
+		</choose> -->
+		
+	  UPDATE TODO
+	  SET STATUS =
+	  <choose>
+	    <when test='status == "C"'>
+	      'N'
+	      WHERE TODO_NO = #{todoNo}
+	    </when>
+	    <when test='status == "N"'>
+	      'C'
+	      WHERE TODO_NO = #{todoNo}
+	    </when>
+	  </choose>
+		
+	</update>
+	
+	<!-- 투두리스트 한개 삭제 -->
+	<update id="deleteTodoList">
+		UPDATE TODO
+		SET STATUS = 'Y'
+		WHERE TODO_NO = #{todoNo}
+	</update>
+	
+	<!-- 투두리스트 전체 삭제 -->
+	<update id="allDeleteTodoList">
+		UPDATE TODO
+		SET STATUS = 'Y'
+		WHERE USER_NO = #{userNo}
+	</update>
 </mapper>

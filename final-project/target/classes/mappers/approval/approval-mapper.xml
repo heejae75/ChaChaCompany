@@ -2,29 +2,89 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
  <mapper namespace="approvalMapper">
- 	<resultMap type="approvalDoc" id="approvalResultSet">
+ 	<resultMap type="approvalDoc" id="approvalDocResultSet">
  		<result column ="DOC_NO" property="docNo"/>
  		<result column ="DEPT_NAME" property="deptCode"/>
  		<result column ="DOC_NAME" property="docType"/>
+ 		<result column ="USER_NAME" property="userName"/>
  		<result column ="DOC_WRITER" property="docWriter"/>
+ 		<result column ="PHONE" property="phone"/>
  		<result column ="DOC_TITLE" property="docTitle"/>
+ 		<result column ="DOC_CONTENT" property="docContent"/>
  		<result column ="CREATE_DATE" property="createDate"/>
- 		<result column ="STATUS" property="status"/>
+ 		<result column ="STATUS" property ="status"/>
  		<result column ="EMERGENCY" property="emergency"/>
+ 		<result column ="SECOND_DATE" property ="secondDate"/>
+ 		<result column ="LAST_DATE" property ="lastDate"/>
+ 		<result column ="APPROVAL" property ="approval"/>
+ 		<result column ="REJECT" property="reject"/>
+ 		<result column ="SECOND_APPROVER_NO" property ="secondApproverNo"/>
+ 		<result column ="LAST_APPROVER_NO" property ="lastApproverNo"/>
  	</resultMap>
  	
  	<resultMap type="docType" id="docTypeResultSet">
  		<result column="DOC_TYPE" property="docType"/>
  		<result column="DOC_NAME" property="docName"/>
  	</resultMap>
+ 	
  	<resultMap type="member" id="memberResultSet">
     	<result column="USER_NAME" property="userName"/>
     	<result column="DEPT_NAME" property="deptCode"/>
     	<result column="JOB_NAME" property="jobCode"/>
     	<result column="USER_NO" property="userNo"/>
+    	<result column="EMAIL" property ="email"/>
     </resultMap>
     
-    
+    <resultMap type="approval" id="approvalResultSet">
+ 		<result column ="APP_NO" property="appNo"/>
+ 		<result column ="DOC_NO" property ="docNo"/>
+ 		<result column ="DEPT_CODE" property ="deptCode"/>
+ 		<result column ="SECOND_APPROVER_NO" property ="secondApproverNo"/>
+ 		<result column ="SECOND_JOB_NAME" property ="secondJobName"/>
+ 		<result column ="SECOND_APPROVER" property ="secondApprover"/>
+ 		<result column ="SECOND_SIGNATURE" property ="secondSignature"/>
+ 		<result column ="LAST_APPROVER_NO" property ="lastApproverNo"/>
+ 		<result column ="LAST_JOB_NAME" property = "lastJobName"/>
+ 		<result column ="LAST_APPROVER" property ="lastApprover"/>
+ 		<result column ="LAST_SIGNATURE" property ="lastSignature"/>
+ 		<result column ="SECOND_DATE" property ="secondDate"/>
+ 		<result column ="LAST_DATE" property ="lastDate"/>
+ 		<result column ="RETURN_REASON" property ="returnReason"/>
+ 		<result column ="STATUS" property ="status"/>
+ 	</resultMap>
+ 	
+ 	<resultMap type="approvalAttachment" id="approvalAttachmentResultSet">
+ 		<result column ="APP_FILE_NO" property ="appFileNo"/>
+ 		<result column ="DOC_NO" property="docNo"/>
+ 		<result column ="DEPT_CODE" property ="deptCode"/>
+ 		<result column ="ORIGIN_NAME" property ="originName"/>
+ 		<result column ="CHANGE_NAME" property ="changeName"/>
+ 		<result column ="UPLOAD_DATE" property ="uploadDate"/>
+ 		<result column ="FILE_PATH" property ="filePath"/>
+ 	</resultMap>
+ 	
+ 	<resultMap type="item" id="itemResultSet">
+ 		<result column ="DOC_NO" property="docNo"/>
+ 		<result column ="DEPT_CODE" property ="deptCode"/>
+ 		<result column ="SUPPLY_NAME" property ="supplyName"/>
+ 		<result column ="SUPPLY_SIZE" property ="supplySize"/>
+ 		<result column ="AMOUNT" property ="amount"/>
+ 		<result column ="PRICE" property ="price"/>
+ 		<result column ="CREATE_DATE" property ="createDate"/>
+ 	</resultMap>
+ 	
+ 	<resultMap type="leave" id="leaveResultSet">
+ 		<result column ="DOC_NO" property="docNo"/>
+ 		<result column ="DEPT_CODE" property ="deptCode"/>
+ 		<result column="WORK_RECEIVER" property="workReceiver"/>
+ 		<result column="LEAVE_TYPE" property="leaveCode"/>
+ 		<result column="START_DATE" property="startDate"/>
+ 		<result column="END_DATE" property="endDate"/>
+ 		<result column="LEAVE_CONTENT" property="leaveContent"/>
+ 		<result column="CREATE_DATE" property="createDate"/>
+ 		<result column="LEAVE_STATUS" property="leaveStatus"/>
+ 	</resultMap>
+ 	
  	<select id="selectListCount" resultType="_int">
  		SELECT COUNT(*)
 		FROM APPROVAL_DOC
@@ -32,31 +92,143 @@
 			WHERE STATUS = #{status}
 		</if>
  	</select>
- 	<select id="selectApprovalList" parameterType="approvalDoc" resultMap="approvalResultSet">
-		SELECT A.DOC_NO, D.DEPT_NAME,T.DOC_NAME, A.DOC_TITLE, TO_CHAR(A.CREATE_DATE,'YYYY-MM-DD')"CREATE_DATE", A.STATUS, A.EMERGENCY
+ 	<select id="selectApprovalDocList" parameterType="approvalDoc" resultMap="approvalDocResultSet">
+		SELECT A.DOC_NO
+			  ,D.DEPT_NAME
+			  ,T.DOC_NAME
+			  ,A.DOC_WRITER
+			  ,A.DOC_TITLE
+			  ,TO_CHAR(A.CREATE_DATE,'YYYY-MM-DD')"CREATE_DATE"
+			  ,A.STATUS
+			  ,A.EMERGENCY
+			  ,TO_CHAR(B.SECOND_DATE, 'YYYY-MM-DD') "SECOND_DATE"
+ 			  ,TO_CHAR(B.LAST_DATE, 'YYYY-MM-DD') "LAST_DATE"
+ 			  ,B.SECOND_APPROVER_NO
+ 			  ,B.LAST_APPROVER_NO
  		FROM APPROVAL_DOC A
  		JOIN DEPARTMENT D ON (A.DEPT_CODE = D.DEPT_CODE)
  		JOIN DOC_TYPE T ON (A.DOC_TYPE = T.DOC_TYPE)
+ 		JOIN APPROVAL B ON (A.DOC_NO=B.DOC_NO)
  		<if test="status !=null">
-			WHERE STATUS = #{status}
+			WHERE A.STATUS = #{status}
 		</if>
 		ORDER BY DECODE(EMERGENCY,'Y',2), A.CREATE_DATE DESC
  	</select>
- 	<select id="approvalMainList" parameterType="approvalDoc" resultMap="approvalResultSet">
+ 	<select id="searchApprovalCount" resultType="_int">
+ 		SELECT COUNT(*)
+ 		FROM APPROVAL_DOC A
+ 		<choose>
+ 		<when test="status!=null and option ==1">
+ 			JOIN DEPARTMENT USING (DEPT_CODE)
+			WHERE STATUS = #{status}
+			AND DEPT_NAME LIKE '%'||#{keyword}||'%'
+		</when>
+		<when test="status!=null and option ==2">
+			JOIN DOC_TYPE USING (DOC_TYPE)
+			WHERE STATUS = #{status}
+			AND DOC_NAME LIKE '%'||#{keyword}||'%'
+		</when> 
+		<when test="status!=null and option ==3">
+			WHERE STATUS = #{status}
+			AND DOC_TITLE LIKE '%'||#{keyword}||'%'
+		</when>
+		<when test="status!=null and option==null">
+			JOIN DEPARTMENT D ON (A.DEPT_CODE = D.DEPT_CODE)
+			JOIN DOC_TYPE T ON (A.DOC_TYPE=T.DOC_TYPE)
+			WHERE (D.DEPT_NAME LIKE '%'||#{keyword}||'%' OR T.DOC_NAME LIKE '%'||#{keyword}||'%' OR A.DOC_TITLE LIKE '%'||#{keyword}||'%')
+			AND STATUS = #{status}
+		</when>
+		<when test="status==null and option ==1">
+ 			JOIN DEPARTMENT USING (DEPT_CODE)
+			WHERE DEPT_NAME LIKE '%'||#{keyword}||'%'
+		</when>
+		<when test="status ==null and option ==2">
+			JOIN DOC_TYPE USING (DOC_TYPE)
+			WHERE DOC_NAME LIKE '%'||#{keyword}||'%'
+		</when> 
+		<when test="status ==null and option ==3">
+			WHERE DOC_TITLE LIKE '%'||#{keyword}||'%'
+		</when>
+		<when test="status ==null and option==null">
+			JOIN DEPARTMENT D ON (A.DEPT_CODE = D.DEPT_CODE)
+			JOIN DOC_TYPE T ON (A.DOC_TYPE=T.DOC_TYPE)
+			WHERE (D.DEPT_NAME LIKE '%'||#{keyword}||'%' OR T.DOC_NAME LIKE '%'||#{keyword}||'%' OR A.DOC_TITLE LIKE '%'||#{keyword}||'%')
+		</when>
+ 		</choose>
+ 	</select>
+ 	<select id="searchApprovalDocList" parameterType="approvalDoc" resultMap="approvalDocResultSet">
+		SELECT A.DOC_NO
+			  ,D.DEPT_NAME
+			  ,T.DOC_NAME
+			  ,A.DOC_WRITER
+			  ,A.DOC_TITLE
+			  ,TO_CHAR(A.CREATE_DATE,'YYYY-MM-DD')"CREATE_DATE"
+			  ,A.STATUS
+			  ,A.EMERGENCY
+			  ,TO_CHAR(B.SECOND_DATE, 'YYYY-MM-DD') "SECOND_DATE"
+ 			  ,TO_CHAR(B.LAST_DATE, 'YYYY-MM-DD') "LAST_DATE"
+ 			  ,B.SECOND_APPROVER_NO
+ 			  ,B.LAST_APPROVER_NO
+ 		FROM APPROVAL_DOC A
+ 		JOIN DEPARTMENT D ON (A.DEPT_CODE = D.DEPT_CODE)
+ 		JOIN DOC_TYPE T ON (A.DOC_TYPE = T.DOC_TYPE)
+ 		JOIN APPROVAL B ON (A.DOC_NO=B.DOC_NO)
+	 	<choose>
+	 		<when test="status!=null and option==1">
+				WHERE A.STATUS = #{status}
+				AND D.DEPT_NAME = '%'||#{keyword}||'%'
+			</when>
+			<when test="status!=null and option==2">
+				WHERE A.STATUS = #{status}
+				AND T.DOC_NAME LIKE '%'||#{keyword}||'%'
+			</when>
+			<when test="status!=null and option==3">
+				WHERE A.STATUS = #{status}
+				AND A.DOC_TITLE LIKE '%'||#{keyword}||'%'
+			</when>
+			<when test="status !=null and option==null">
+				WHERE (D.DEPT_NAME LIKE '%'||#{keyword}||'%' OR T.DOC_NAME LIKE '%'||#{keyword}||'%' OR A.DOC_TITLE LIKE '%'||#{keyword}||'%')
+				AND A.STATUS = #{status}
+			</when>
+			<when test="status==null and option==1">
+				WHERE D.DEPT_NAME = '%'||#{keyword}||'%'
+			</when>
+			<when test="status==null and option==2">
+				WHERE T.DOC_NAME LIKE '%'||#{keyword}||'%'
+			</when>
+			<when test="status==null and option==3">
+				WHERE A.DOC_TITLE LIKE '%'||#{keyword}||'%'
+			</when>
+			<when test="status ==null  and option==null">
+				WHERE (D.DEPT_NAME LIKE '%'||#{keyword}||'%' OR T.DOC_NAME LIKE '%'||#{keyword}||'%' OR A.DOC_TITLE LIKE '%'||#{keyword}||'%')
+			</when>
+		</choose>
+		ORDER BY DECODE(EMERGENCY,'Y',2), A.CREATE_DATE DESC
+ 	</select>
+ 	
+ 	
+ 	
+ 	<select id="approvalMainList" parameterType="approvalDoc" resultMap="approvalDocResultSet">
  		SELECT *
 		FROM (SELECT ROWNUM, A.*
-        FROM (SELECT DOC_NO
+        FROM (SELECT P.DOC_NO
  				     ,D.DEPT_NAME
  				     ,T.DOC_NAME
- 				     ,DOC_TITLE
+ 				     ,P.DOC_TITLE
+ 				     ,P.DOC_WRITER
+ 				     ,A.SECOND_APPROVER_NO
+ 				     ,A.LAST_APPROVER_NO
+ 				     ,P.EMERGENCY
+ 				     ,P.STATUS
  				     ,TO_CHAR(P.CREATE_DATE,'YYYY-MM-DD')"CREATE_DATE"
  			  FROM APPROVAL_DOC P
  			  JOIN DEPARTMENT D ON (P.DEPT_CODE = D.DEPT_CODE)
  			  JOIN DOC_TYPE T ON (P.DOC_TYPE = T.DOC_TYPE)
+ 			  JOIN APPROVAL A ON (A.DOC_NO = P.DOC_NO)
  			  <if test="status !=null">
 				WHERE P.STATUS = #{status}
 			  </if>
-              ORDER BY P.CREATE_DATE DESC
+              ORDER BY DECODE(EMERGENCY,'Y',2), P.CREATE_DATE DESC
               ) A)
     	WHERE ROWNUM BETWEEN 1 AND 5
  	</select>
@@ -65,13 +237,13 @@
  		FROM DOC_TYPE
  	</select>
  	<select id="selectApproverList" parameterType="member" resultMap="memberResultSet">
- 		SELECT USER_NAME, DEPT_NAME, JOB_NAME,USER_NO
+ 		SELECT USER_NAME,DEPT_NAME,JOB_NAME,USER_NO,EMAIL
 		FROM MEMBER
 		JOIN DEPARTMENT USING(DEPT_CODE)
 		JOIN JOB USING(JOB_CODE)
 		WHERE STATUS = 'Y'
-		<if test="status !=null">
-		AND DEPT_CODE = #{status}
+		<if test="deptCode !=null">
+		AND DEPT_CODE = #{deptCode}
 		</if>
  	</select>
  	<select id="searchApproverList" parameterType="member" resultMap="memberResultSet">
@@ -82,20 +254,20 @@
 		WHERE STATUS = 'Y'
 		<choose>
 			<when test="status==1 and keyword !=null">
-				AND DEPT_NAME = #{keyword}
+				AND DEPT_NAME LIKE '%'||#{keyword}||'%'
 			</when>
 			<when test="status==2 and keyword != null">
-				AND USER_NAME = #{keyword}
+				AND USER_NAME LIKE '%'||#{keyword}||'%'
 			</when>
 		</choose>
  	</select>
  	<insert id="insertApprovalDoc">
- 		INSERT INTO APPROVAL_DOC(DOC_NO,DEPT_CODE,DOC_TYPE,DOC_WRITER,DOC_TITLE,DOC_CONTENT,EMERGENCY) VALUES
-		(SEQ_ADNO.NEXTVAL,#{deptCode},#{docType},#{docWriter},#{docTitle},#{docContent},#{emergency})
+ 		INSERT INTO APPROVAL_DOC(DOC_NO,DEPT_CODE,DOC_TYPE,DOC_WRITER,PHONE,DOC_TITLE,DOC_CONTENT,EMERGENCY) VALUES
+		(SEQ_ADNO.NEXTVAL,#{deptCode},#{docType},#{docWriter},#{phone},#{docTitle},#{docContent},#{emergency})
  	</insert>
  	<insert id="insertApproval">
- 		INSERT INTO APPROVAL (APP_NO, DOC_NO, DEPT_CODE,SECOND_APPROVER,LAST_APPROVER) VALUES
-		(SEQ_ANO.NEXTVAL,SEQ_ADNO.CURRVAL,#{deptCode},#{secondApprover},#{lastApprover})
+ 		INSERT INTO APPROVAL (APP_NO, DOC_NO, DEPT_CODE,SECOND_APPROVER_NO,SECOND_JOB_NAME,SECOND_APPROVER,LAST_APPROVER_NO,LAST_JOB_NAME,LAST_APPROVER) VALUES
+		(SEQ_ANO.NEXTVAL,SEQ_ADNO.CURRVAL,#{deptCode},#{secondApproverNo},#{secondJobName},#{secondApprover},#{lastApproverNo},#{lastJobName},#{lastApprover})
  	</insert>
  	<insert id="insertApprovalAttachment">
  		INSERT INTO APPROVAL_ATTACHMENT (APP_FILE_NO, DOC_NO, DEPT_CODE,ORIGIN_NAME,CHANGE_NAME,FILE_PATH) VALUES
@@ -105,4 +277,114 @@
  		INSERT INTO ITEM(DOC_NO,DEPT_CODE,SUPPLY_NAME,SUPPLY_SIZE,AMOUNT,PRICE) VALUES
 		(SEQ_ADNO.CURRVAL,#{deptCode},#{supplyName},#{supplySize},#{amount},#{price})
  	</insert>
+ 	<insert id="insertLeave">
+ 		INSERT INTO LEAVE(DOC_NO,DEPT_CODE,WORK_RECEIVER,LEAVE_STATUS, LEAVE_CODE,START_DATE,END_DATE,LEAVE_CONTENT) VALUES
+ 		(SEQ_ADNO.CURRVAL,#{deptCode},#{workReceiver},#{leaveStatus},#{leaveCode},#{startDate},#{endDate},#{leaveContent})
+ 	</insert>
+ 	
+ 	<select id="selectApproval" parameterType="approval" resultMap="approvalResultSet">
+ 		SELECT APP_NO
+ 			  ,DOC_NO,DEPT_CODE
+ 			  ,SECOND_JOB_NAME
+ 			  ,SECOND_APPROVER_NO
+ 			  ,SECOND_APPROVER
+ 			  ,SECOND_SIGNATURE
+ 			  ,LAST_APPROVER_NO
+ 			  ,LAST_JOB_NAME
+ 			  ,LAST_APPROVER
+ 			  ,LAST_SIGNATURE
+ 			  ,RETURN_REASON
+ 		FROM APPROVAL
+	 	WHERE DOC_NO = #{docNo}
+ 	</select>
+ 	<select id="selectApprovalAttachment" parameterType="approvalAttachment" resultMap="approvalAttachmentResultSet">
+ 		SELECT APP_FILE_NO
+			   ,DOC_NO
+			   ,DEPT_CODE
+			   ,ORIGIN_NAME
+			   ,CHANGE_NAME
+			   ,UPLOAD_DATE
+			   ,FILE_PATH
+ 		FROM APPROVAL_ATTACHMENT
+ 		WHERE DOC_NO = #{docNo}
+ 	</select>
+ 	<select id="selectApprovalDoc" parameterType="approvalDoc" resultMap="approvalDocResultSet">
+ 		SELECT A.DOC_NO
+			  ,A.DEPT_CODE
+			  ,A.DOC_TYPE
+			  ,A.DOC_WRITER
+			  ,M.USER_NAME
+			  ,A.PHONE
+			  ,A.DOC_TITLE
+			  ,A.DOC_CONTENT
+			  ,TO_CHAR(A.CREATE_DATE, 'YYYY-MM-DD')"CREATE_DATE"
+			  ,A.STATUS
+			  ,A.EMERGENCY
+ 		FROM APPROVAL_DOC A
+ 		JOIN MEMBER M ON (M.USER_NO = A.DOC_WRITER)
+ 		WHERE DOC_NO = #{docNo}
+ 	</select>
+ 	<select id="selectItem" parameterType="item" resultMap="itemResultSet" >
+ 		SELECT DOC_NO
+ 			  ,DEPT_CODE
+ 			  ,SUPPLY_NAME
+ 			  ,SUPPLY_SIZE
+ 			  ,AMOUNT, PRICE
+ 			  ,TO_CHAR(CREATE_DATE, 'YYYY-MM-DD')"CREATE_DATE"
+ 		FROM ITEM
+ 		WHERE DOC_NO = #{docNo}
+ 	</select>
+ 	<select id="selectLeave" parameterType="leave" resultMap="leaveResultSet">
+ 		SELECT L.DOC_NO
+ 			  ,L.DEPT_CODE
+ 			  ,L.WORK_RECEIVER
+ 			  ,W.LEAVE_TYPE
+ 			  ,L.START_DATE
+ 			  ,L.END_DATE
+ 			  ,L.LEAVE_CONTENT
+ 			  ,TO_CHAR(L.CREATE_DATE, 'YYYY-MM-DD') "CREATE_DATE"
+ 			  ,L.LEAVE_STATUS
+ 		FROM LEAVE L
+ 		JOIN WORK_TYPE W ON (W.LEAVE_CODE = L.LEAVE_CODE)
+ 		WHERE L.DOC_NO = #{docNo}
+ 	</select>
+ 	<update id="updateSecondReturnReason">
+ 		UPDATE APPROVAL
+ 		SET RETURN_REASON = #{returnReason}
+ 		   ,SECOND_SIGNATURE = '반려'
+ 		   ,SECOND_DATE = SYSDATE
+ 		WHERE DOC_NO = #{docNo} 
+ 	</update>
+ 	<update id="updateLastReturnReason">
+		UPDATE APPROVAL
+ 		SET RETURN_REASON = #{returnReason}
+ 		   ,LAST_SIGNATURE = '반려'
+ 		   ,LAST_DATE = SYSDATE
+ 		WHERE DOC_NO = #{docNo}
+ 	</update>
+ 	<update id="updateStatus">
+ 		UPDATE APPROVAL_DOC
+ 		SET STATUS = #{status}
+ 		   ,EMERGENCY = 'N'
+ 		WHERE DOC_NO = #{docNo}
+ 	</update>
+ 	<update id="updateSecondApprover">
+ 		UPDATE APPROVAL
+ 		SET SECOND_SIGNATURE = #{secondSignature}
+ 		   ,SECOND_DATE = SYSDATE
+ 		WHERE DOC_NO = #{docNo}
+ 	</update>
+ 	<update id="updateLastApprover">
+		UPDATE APPROVAL
+ 		SET LAST_SIGNATURE = #{lastSignature}
+ 		   ,LAST_DATE = SYSDATE
+ 		WHERE DOC_NO = #{docNo}
+ 	</update>
+ 	<select id="monthData" parameterType="approvalDoc" resultMap="approvalDocResultSet">
+ 		SELECT TO_CHAR(CREATE_DATE, 'MON') "CREATE_DATE", NVL(COUNT(CASE WHEN STATUS ='Y' THEN 1 END),0) "APPROVAL",NVL(COUNT(CASE WHEN STATUS ='R' THEN 1 END),0) "REJECT"
+		FROM APPROVAL_DOC
+		WHERE TO_CHAR(CREATE_DATE, 'YYYY') = TO_CHAR(SYSDATE, 'YYYY')
+		AND DOC_WRITER = #{docWriter}
+		GROUP BY TO_CHAR(CREATE_DATE, 'MON')
+ 	</select>
  </mapper>

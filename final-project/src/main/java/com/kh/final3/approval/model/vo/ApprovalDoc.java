@@ -14,9 +14,20 @@ public class ApprovalDoc {
 	private String deptCode;
 	private String docType;
 	private String docWriter;
+	private String userName;
+	private String phone;
 	private String docTitle;
 	private String docContent;
 	private String createDate;
 	private String status;
 	private String emergency;
+	private String secondDate;
+	private String lastDate;
+	private String returnDate;
+	
+	private int approval;
+	private int reject;
+	private String secondApproverNo;
+	private String lastApproverNo;
+	
 }

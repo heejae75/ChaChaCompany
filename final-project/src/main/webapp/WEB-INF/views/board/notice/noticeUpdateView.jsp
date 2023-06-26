@@ -9,9 +9,10 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <style>
-       .content{
-        width: 1570px;
-   		 }
+    .content2{ 
+        width: 1570px; 
+  		margin-top:-9px;
+   	}
        
          /*navibar*/
 	#board-tap-area{
@@ -81,7 +82,7 @@
         
    <%@ include file="../../common/menubar.jsp" %>
 ​
-    <div class="content">
+    <div class="content2">
     
          <div id="board-tap-area">
                 <ul id="nav-tabs"  class="nav-tabs nav-pills">
