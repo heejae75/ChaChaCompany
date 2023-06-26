@@ -26,4 +26,9 @@ public class Approval {
 	private String returnReason;
 	private String returnDate;
 	private String status;
+	
+	//메인에 필요한 vo
+	private String docTitle;
+	private String createDate;
+	private String docName;
 }

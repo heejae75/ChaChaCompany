@@ -63,12 +63,32 @@ public class ApprovalController {
 		
 		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
 		ArrayList<ApprovalDoc> list = as.selectApprovalDocList(pi,status);
-		m.addAttribute("list",list);
-		m.addAttribute("pi",pi);
-		m.addAttribute("status", status);
+		m.addAttribute("list",list).addAttribute("pi",pi).addAttribute("status", status);
 		return "approval/approvalListView";
 	}
-	
+	//검색
+	@RequestMapping("search.ap")
+	public String searchApprovalDocList(@RequestParam(value="currentPage",defaultValue="1")int currentPage
+								,String option, String keyword, Model m, String status) {
+		HashMap<String, String> map = new HashMap<>();
+		map.put("option", option);
+		map.put("keyword", keyword);
+		map.put("status",status);
+		
+		int listCount = as.searchApprovalCount(map);
+		int pageLimit = 20;
+		int boardLimit = 10;
+		
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
+		ArrayList<ApprovalDoc> list = as.searchApprovalDocList(map, pi);
+		log.info(String.valueOf(listCount));
+		System.out.println(list);
+		
+		
+		m.addAttribute("option", option).addAttribute("keyword",keyword)
+		 .addAttribute("list", list).addAttribute("pi",pi);
+		return "approval/approvalListView";
+	}
 	@ResponseBody
 	@RequestMapping(value="approvalMainList.ap", produces="application/json; charset=UTF-8")
 	public String approvalMainList(String status) {
@@ -130,9 +150,8 @@ public class ApprovalController {
 		ArrayList<Item> iList = new ArrayList<>();
 		
 		//파일 첨부
-		if(upfile!=null) {
 			for(MultipartFile file : upfile) {
-				if(!file.getOriginalFilename().equals(" ")) {
+				if(!file.getOriginalFilename().equals("")) {
 					String changeName = new SaveFile().getSaveFile(file, session);
 					
 					String filePath = session.getServletContext().getRealPath("/resources/uploadFiles/approvalDoc/");
@@ -150,7 +169,6 @@ public class ApprovalController {
 					atList.add(at);
 				}
 			}
-		}
 		//item 리스트
 		for(int j=0;j<i.getArrSupplyName().length;j++) {
 			Item i2 = new Item();
@@ -190,7 +208,6 @@ public class ApprovalController {
 			log.info(upfile.get(0).getOriginalFilename());
 			
 			//파일
-			if(upfile!=null) {
 				for(MultipartFile file : upfile) {
 					if(!file.getOriginalFilename().equals("")) {
 						String changeName = new SaveFile().getSaveFile(file, session);
@@ -211,28 +228,26 @@ public class ApprovalController {
 						atList.add(at);
 					}
 				}
-			}
 			
 			//leave 리스트
 			for(int i=0;i<l.getArrLeaveStatus().length;i++) {
-				Leave l2 = new Leave();
+				Leave ll = new Leave();
 				
 				String leaveCode = l.getArrLeaveCode()[i];
 				String startDate = l.getArrStartDate()[i];
 				String endDate = l.getArrEndDate()[i];
 				String leaveStatus = l.getArrLeaveStatus()[i];
 				
-				l2.setDeptCode(l.getDeptCode());
-				l2.setWorkReceiver(l.getWorkReceiver());
-				l2.setLeaveCode(leaveCode);
-				l2.setStartDate(startDate);
-				l2.setEndDate(endDate);
-				l2.setLeaveContent(l.getLeaveContent());
-				l2.setLeaveStatus(leaveStatus);
+				ll.setDeptCode(l.getDeptCode());
+				ll.setWorkReceiver(l.getWorkReceiver());
+				ll.setLeaveCode(leaveCode);
+				ll.setStartDate(startDate);
+				ll.setEndDate(endDate);
+				ll.setLeaveContent(l.getLeaveContent());
+				ll.setLeaveStatus(leaveStatus);
 				
-				leaveList.add(i, l2);
+				leaveList.add(i, ll);
 			}
-			
 			int result = as.insertLeave(leaveList,atList,ad,a);
 			
 			if(result>0) {

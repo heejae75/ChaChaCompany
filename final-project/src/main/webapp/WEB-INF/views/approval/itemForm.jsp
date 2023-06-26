@@ -208,10 +208,10 @@
     			insertTr += "<tr>";
     			insertTr += "<td><input type='checkbox' name='checkBox' onclick='isCheckAll();'></td>";
     			insertTr += "<td><input type='date'></td>";
-    			insertTr += "<td><input type='text' name='supplyName' ></td>";
-    			insertTr += "<td><input type='text' name='supplySize' value='0'></td>";
-    			insertTr += "<td><input type='text' name='amount' value='0'></td>";
-    			insertTr += "<td><input type='text' name='price' value='0'></td>";
+    			insertTr += "<td><input type='text' name='arrSupplyName' ></td>";
+    			insertTr += "<td><input type='text' name='arrSupplySize' value='0'></td>";
+    			insertTr += "<td><input type='text' name='arrAmount' value='0'></td>";
+    			insertTr += "<td><input type='text' name='arrPrice' value='0'></td>";
     			insertTr += "</tr>";
 	    		
 	    		$("#item-table tbody").append(insertTr);

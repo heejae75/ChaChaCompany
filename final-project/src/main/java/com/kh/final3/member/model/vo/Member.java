@@ -27,7 +27,12 @@ public class Member {
 	private String auth;//	AUTH	VARCHAR2(50 BYTE)
 	private int enabled;//	ENABLED	NUMBER(1,0)
 	private String status;//	STATUS	VARCHAR2(1 BYTE)
+	private String bank; 
+	private String accountNumber;
+	private String accountStatus;
 	
 	private String jobName;
 	private String deptName;
+	
+	
 }

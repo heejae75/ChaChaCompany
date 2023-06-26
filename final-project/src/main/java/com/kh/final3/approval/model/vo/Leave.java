@@ -24,4 +24,9 @@ public class Leave {
 	private String endDate;
 	private String leaveStatus;
 	
+	//부서 휴가 불러우는 VO
+	private String userName;
+	private String jobName;
+	private String leaveType;
+	
 }

@@ -32,13 +32,9 @@ div{
 		}
 		.table{
 			table-layout: fixed;
-	        
-		}
-		.table>thead{
 			text-align : center;
 		}
 		.table>tbody>tr>td {
-			text-align: center;
 			word-break:break-all;
 		}
 	    .table>tbody>tr:hover{
@@ -46,8 +42,7 @@ div{
 		    cursor: pointer;
 		}
 	 	#approval-tap-area{
-			width: 80%;
-			margin: auto;
+			width: 100%;
 		}
 			
 		#approval-tap-area>ul{

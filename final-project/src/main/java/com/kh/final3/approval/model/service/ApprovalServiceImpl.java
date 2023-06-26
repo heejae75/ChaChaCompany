@@ -36,7 +36,17 @@ public class ApprovalServiceImpl implements ApprovalService {
 	public ArrayList<ApprovalDoc> selectApprovalDocList(PageInfo pi, String status) {
 		return ad.selectApprovalDocList(ss,pi, status);
 	}
+	
+	@Override
+	public int searchApprovalCount(HashMap<String, String> map) {
+		return ad.searchApprovalCount(ss, map);
+	}
 
+	@Override
+	public ArrayList<ApprovalDoc> searchApprovalDocList(HashMap<String, String> map,PageInfo pi) {
+		return ad.searchApprovalDocList(ss, map,pi);
+	}
+	
 	@Override
 	public ArrayList<ApprovalDoc> approvalMainList(String status) {
 		return ad.approvalMainList(ss,status);
@@ -70,7 +80,7 @@ public class ApprovalServiceImpl implements ApprovalService {
 		}
 		
 		for(Item i : iList) {
-			itemResult = ss.insert("approvalMapper.insertItem",i);
+			itemResult *= ss.insert("approvalMapper.insertItem",i);
 		}
 		
 		int result = ApprovalDocResult*ApprovalResult*ApprovalAttachmentResult*itemResult;
@@ -157,5 +167,4 @@ public class ApprovalServiceImpl implements ApprovalService {
 	public List<ApprovalDoc> monthData(ApprovalDoc ad1) {
 		return ad.monthData(ss, ad1);
 	}
-
 }

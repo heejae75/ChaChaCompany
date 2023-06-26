@@ -11,18 +11,12 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="/final3/resources/css/Approval_List.css" >
 </head>
-<script type="text/javascript">
-	console.log("${list}")
-	console.log("${loginUser.userNo}")
-	console.log("${fn:length(list)}")
-</script>
 <body id="body-pd">
 	<%@ include file="../common/menubar.jsp" %>
 
         <div class="approval">
             <h1 style="padding-top: 20px;">결재함</h1>
             <br><br><br><br><br><br>
-            
             <div id="approval-tap-area">
                 <ul class="nav-tabs">
                 	<li class="nav-item">
@@ -40,28 +34,33 @@
                     <li class="nav-item">
                       <a class="nav-link" href="list.ap?status=R">반려함</a>
                     </li>
+                    <li class="nav-item" style="width:400px;float:right">
+	                    <form action="search.ap" method="post" style="display:flex;">
+	                    	<input type="hidden" name="status" value="${status }"/>
+	                    	<select class="form-control" name="option" style="width:100px;">
+	                    		<option value="">선택</option>
+	                    		<option value="1">부서</option>
+	                    		<option value="2">문서</option>
+	                    		<option value="3">제목</option>
+	                    	</select>
+	                    	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+		                   	<input type="search" class="form-control" name="keyword" placeholder="Search">
+							<button class="btn btn-primary" type="submit">검색</button>
+						</form>
+					</li>
                 </ul>
-
             </div>
-
-            
-            <!-- 관리자에게만 보이도록 조건 걸기
-            <div id="board-btn-area">
-                <button class="btn btn-danger">삭제</button> <button class="btn btn-success">이동</button>               
-            </div>
-              -->
             <div id="approval-list-area">
-            
                 <table id="approval-list" class="table table-hover" align="center">
-                    <thead>
+                    <thead style="font-weight: bold">
                         <tr>
-                            <th>문서번호</th>
-                            <th>부서</th>
-                            <th>문서종류</th>
-                            <th>제목</th>
-                            <th>작성일</th>
+                            <td>문서번호</td>
+                            <td>부서</td>
+                            <td>문서종류</td>
+                            <td>제목</td>
+                            <td>작성일</td>
                             <c:if test="${!empty 'a.secondDate' ||!empty 'a.lastDate'}">
-                            <th>승인/반려날짜 </th>
+                            <td>승인/반려날짜 </td>
                             </c:if>
                         </tr>
                     </thead>
@@ -134,6 +133,9 @@
                     		<c:when test="${!empty status}">
                     			<li class="page-item"><a class="page-link" href="list.ap?currentPage=${pi.currentPage-1}&status=${status}">Previous</a></li>
                     		</c:when>
+                    		<c:when test="${!empty status and !empty keyword  }">
+                    			<li class="page-item"><a class="page-link" href="list.ap?currentPage=${pi.currentPage-1}&status=${status}&keyword=${keyword}&option=${option}">Previous</a></li>
+                    		</c:when>
                     		<c:otherwise>
                     			<li class="page-item"><a class="page-link" href="list.ap?currentPage=${pi.currentPage-1}">Previous</a></li>
                     		</c:otherwise>
@@ -145,6 +147,9 @@
                     		<c:if test="${empty status}">
 		                        <li class="page-item"><a class="page-link" href="list.ap?currentPage=${p}">${p}</a></li>
                     		</c:if>
+                    		<c:if test="${!empty status and !empty keyword  }">
+                    			<li class="page-item"><a class="page-link" href="list.ap?currentPage=${p}&status=${status}&keyword=${keyword}&option=${option}">${p}</a></li>
+                    		</c:if>
                     	</c:forEach>
                     	
                        <c:choose>
@@ -153,6 +158,9 @@
 							</c:when>
 							<c:when test="${!empty status}">
 								<li class="page-item"><a class="page-link" href="list.ap?currentPage=${pi.currentPage+1}&status=${status}">Next</a></li>                		
+                    		</c:when>
+                    		<c:when test="${!empty status and !empty keyword  }">
+                    			<li class="page-item"><a class="page-link" href="list.ap?currentPage=${pi.currentPage+1}&status=${status}&keyword=${keyword}&option=${option}">Next</a></li>
                     		</c:when>
                 			<c:otherwise>
                     			<li class="page-item"><a class="page-link" href="list.ap?currentPage=${pi.currentPage+1}">Previous</a></li>
