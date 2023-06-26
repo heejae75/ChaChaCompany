@@ -90,6 +90,20 @@ public class PaymentServiceImpl implements PaymentService {
 		return paymentDao.selectSearchMemberList(sqlSession,pi,key);
 	}
 	
+	//회원 - 계좌 등록/변경 신청 메소드 
+	@Override
+	public int insertAccount(HashMap<String, Object> bankInfo) {
+
+		return paymentDao.insertAccount(sqlSession, bankInfo);
+	}
+	
+	//회원 - 월별 급여명세서 조회 
+	@Override
+	public Payment monthPayment(Payment info) {
+
+		return paymentDao.monthPayment(sqlSession, info);
+	}
+	
 	
 
 }

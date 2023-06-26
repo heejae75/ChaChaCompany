@@ -149,7 +149,7 @@
 	                    </tr>
 	                    <tr>
 	                        <th>내용</th>
-	                        <td><textarea id="content" class="form-control" rows="8" style="resize:none;" name="msgContent" required>${msg.msgContent}</textarea></td>
+	                        <td><textarea id="content" class="form-control" rows="8" style="resize:none;" name="msgContent" readonly>${msg.msgContent}</textarea></td>
 	                    </tr>
 	                </table>
 	                <br>

@@ -89,6 +89,17 @@ public class PaymentDao {
 		return (ArrayList)sqlSession.selectList("paymentMapper.selectSearchMemberList", key, rowBounds);
 	}
 	
+	//회원 - 계좌 변경/등록 신청 메소드 
+	public int insertAccount(SqlSession sqlSession, HashMap<String, Object> bankInfo) {
+
+		return sqlSession.update("paymentMapper.insertAccount", bankInfo);
+	}
+
+	public Payment monthPayment(SqlSession sqlSession, Payment info) {
+
+		return sqlSession.selectOne("paymentMapper.monthPayment", info);
+	}
+	
 	
 
 }

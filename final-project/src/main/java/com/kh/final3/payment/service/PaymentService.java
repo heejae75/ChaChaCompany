@@ -38,6 +38,12 @@ public interface PaymentService {
 
 	//필터에 해당하는 회원수 목록 조회 - 관리자 
 	ArrayList<Member> selectSearchMemberList(HashMap<String, String> key, PageInfo pi);
-
-
+	
+	//계좌 등록/변경 신청 - 회원 
+	int insertAccount(HashMap<String, Object> bankInfo);
+	
+	//월별 급여 명세서 조회 - 회원 
+	Payment monthPayment(Payment info);
+	
+	
 }

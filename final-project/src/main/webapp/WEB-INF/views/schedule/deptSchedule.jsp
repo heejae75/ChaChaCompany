@@ -188,7 +188,7 @@
 					        				var leave ={
 				        						id: leave.docNo, //휴가 번호  
 						            			title : leave.userName +" "+ leave.jobName+ "님 " + leave.leaveType, //휴가 대상자 이름 + 직급 
-						            			content : "업무 인수자 : "+leave.workReciver,
+						            			content : "업무 인수자 : "+leave.workReceiver,
 						            			code : leave.leaveCode,
 						            			start : leave.startDate, 
 						            			end : leave.endDate	

@@ -154,4 +154,22 @@
 		</choose>
 		ORDER BY USER_NO DESC
 	</select>
+	
+	<!-- 계좌 등록/변경 신청 메소드  -->
+	<update id="insertAccount">
+		UPDATE MEMBER 
+				SET BANK = #{bank},
+					ACCOUNT_NUMBER = #{accountNumber},
+					ACCOUNT_STATUS = 'P'
+				WHERE USER_NO = #{userNo}	
+	</update>
+	
+	<select id="monthPayment" resultMap="paymentResultSet">
+		SELECT PAY_NO, SALARY, MEALS, OVERTIME_PAY, HOLIDAY_PAY, ANNUAL_LEAVE_PAY, OTHER_PAY, 
+       		   (SALARY* NATIONAL_PENSION)/2 AS NATIONAL_PENSION , (SALARY * HEALTH_INSURANCE) AS HEALTH_INSURANCE, 
+      		   (SALARY* EMP_INSURANCE) AS EMP_INSURANCE , (SALARY*LNG_INSURANCE) AS LNG_INSURANCE
+		FROM PAYMENT
+		WHERE USER_NO = #{userNo}
+		AND TO_CHAR(MONTHLY,'YYYY-MM-DD') LIKE '%'||#{monthly}||'%'
+	</select>
 </mapper>
