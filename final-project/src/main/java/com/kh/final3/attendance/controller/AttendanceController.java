@@ -1,7 +1,6 @@
 package com.kh.final3.attendance.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
 
@@ -33,8 +32,13 @@ public class AttendanceController {
 		int userNo = loginUser.getUserNo();
 		// 출퇴근시간, 근무유형, 투두리스트
 		Attendance att = attendanceService.attendanceMain(userNo);
-		model.addAttribute("att",att);	
-		 return "attendance/attendanceMain";
+		if(att == null) {
+			session.setAttribute("alertMsg", "아직 일정이 없어요");
+			return "redirect:/member/mainPage.me";
+		}else {
+			model.addAttribute("att",att);	
+			return "attendance/attendanceMain";
+		}
 	}
 	@ResponseBody
 	@RequestMapping(value = "attList.at", produces = "application/json; charset=UTF-8")

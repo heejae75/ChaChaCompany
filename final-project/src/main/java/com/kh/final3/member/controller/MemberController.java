@@ -43,7 +43,7 @@ public class MemberController {
 	@GetMapping("/mainPage.me")
 	public ModelAndView MemberLogin(ModelAndView mv, Principal p, HttpSession session) {
 		if(session.getAttribute("loginUser") == null) {
-			String userId = p.getName();		
+			String userId = p.getName();
 			Member member = memberService.selectMemberById(userId);
 			session.setAttribute("loginUser", member);
 		}
