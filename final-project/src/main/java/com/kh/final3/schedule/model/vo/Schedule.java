@@ -22,7 +22,7 @@ public class Schedule {
      private String enrollDate;				//ENROLL_DATE DATE DEFAULT SYSDATE NOT NULL,
      private String modifyDate;				//MODIFY_DATE DATE
      private String startDate;				//START_DATE DATE,
-     private String endDate;					//END_DATE DATE,
+     private String endDate;				//END_DATE DATE,
      private String status;					//STATUS VARCHAR2(1) DEFAULT 'N' CHECK(STATUS IN('N','Y')),
      
      private String userName;  //등록자 이름 보여주기 위해 생성 
