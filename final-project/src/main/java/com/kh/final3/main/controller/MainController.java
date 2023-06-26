@@ -1,5 +1,6 @@
 package com.kh.final3.main.controller;
 
+import java.security.Principal;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpSession;
@@ -17,6 +18,7 @@ import com.kh.final3.attendance.model.vo.AttendanceRecord;
 import com.kh.final3.board.model.vo.Board;
 import com.kh.final3.email.model.vo.Email;
 import com.kh.final3.main.model.service.MainService;
+import com.kh.final3.member.model.service.MemberService;
 import com.kh.final3.member.model.vo.Member;
 
 @RequestMapping(value={"/member","/admin"})
@@ -25,6 +27,9 @@ public class MainController {
 	
 	@Autowired
 	private MainService mainService;
+	
+	@Autowired
+	private MemberService memberService;
 
 	//사용자 메인페이지 이동 
 	@RequestMapping("home.ma")
@@ -34,7 +39,12 @@ public class MainController {
 	
 	//관리자 메인페이지 이동 
 	@RequestMapping("adminHome.ma")
-	public String adminMain() {
+	public String adminMain(Principal p ,HttpSession session) {
+		if(session.getAttribute("loginUser") == null) {
+			String userId = p.getName();		
+			Member member = memberService.selectMemberById(userId);
+			session.setAttribute("loginUser", member);
+		}
 		return "main/adminMain";
 	}
 	

@@ -21,6 +21,7 @@
   			<mapper resource="/mappers/boardMappers/notice-mapper.xml"/>
   			<mapper resource="/mappers/boardMappers/document-mapper.xml"/>
   			<mapper resource="/mappers/boardMappers/reservation-mapper.xml"/>
+  			<mapper resource="/mappers/boardMappers/freeForum-mapper.xml"/>
   			<mapper resource="/mappers/approval/approval-mapper.xml"/>
   		</mappers>
   </configuration>

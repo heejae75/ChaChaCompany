@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="freeForumMapper">
+	<resultMap type="board" id="boardResultSet">
+	  	<result column="BOARD_NO" property="boardNo"/>
+	  	<result column="BOARD_WRITER" property="boardWriter"/>
+	  	<result column="CATEGORY_CODE" property="categoryCode"/>
+	  	<result column="BOARD_TITLE" property="boardTitle"/>
+	  	<result column="BOARD_CONTENT" property="boardContent"/>
+	  	<result column="CREATE_DATE" property="createDate"/>
+	  	<result column="MODIFY_DATE" property="modifyDate"/>
+	  	<result column="COUNT" property="count"/>
+	  	<result column="IMPORTANCE_LEVEL" property="importanceLevel"/>
+	  	<result column="ATTACHMENT_NO" property="attachmentNo"/>
+	  	<result column="CATEGORY_NAME" property="categoryName"/>
+ 	</resultMap>
+ 	
+	<resultMap type="attachment" id="attachmentResultSet">
+		<result column="ATTACHMENT_NO" property="attachmentNo"/>
+		<result column="REF_BNO" property="refBno"/>
+		<result column="ORIGIN_NAME" property="originName"/>
+		<result column="CHANGE_NAME" property="changeName"/>
+		<result column="FILE_PATH" property="filePath"/>
+	</resultMap>
+ 	
+ 	<select id="selectListCount" resultType="_int">
+ 		SELECT COUNT(*)
+ 		FROM BOARD
+ 		WHERE STATUS = 'Y'
+<!--  		<choose> -->
+<!-- 			<when test="category == 'title'"> -->
+<!-- 				AND BOARD_TITLE -->
+<!-- 				LIKE '%'||#{searchWord}||'%' -->
+<!-- 			</when> -->
+<!-- 			<when test="category == 'content'"> -->
+<!-- 				AND BOARD_CONTENT -->
+<!-- 				LIKE '%'||#{searchWord}||'%' -->
+<!-- 			</when> -->
+<!-- 			<when test="category == 'title_content'"> -->
+<!-- 				AND JOB_NAME -->
+<!-- 				LIKE '%'||#{searchWord}||'%' -->
+<!-- 			</when> -->
+<!-- 			<when test="category == 'writer'"> -->
+<!-- 				AND  -->
+<!-- 				LIKE '%'||#{searchWord}||'%' -->
+<!-- 			</when> -->
+<!-- 		</choose> -->
+ 	</select>
+ 	
+ 	<select id="selectList" resultMap="boardResultSet">
+		SELECT BOARD_NO, BOARD_TITLE, CREATE_DATE, COUNT, CATEGORY_NAME, USER_ID AS BOARD_WRITER
+		FROM BOARD B
+		JOIN BOARD_CATEGORY USING(CATEGORY_CODE)
+        JOIN MEMBER M ON(B.BOARD_WRITER = M.USER_NO)
+		WHERE B.STATUS = 'Y'
+		ORDER BY BOARD_NO DESC
+ 	</select>
+ 	
+ 	<select id="selectForumDetailsByNo" resultMap="boardResultSet">
+		SELECT BOARD_NO, BOARD_TITLE, BOARD_CONTENT, CREATE_DATE, COUNT, CATEGORY_NAME, USER_ID AS BOARD_WRITER
+		FROM BOARD B
+		JOIN BOARD_CATEGORY USING(CATEGORY_CODE)
+        JOIN MEMBER M ON(B.BOARD_WRITER = M.USER_NO)
+		WHERE B.BOARD_NO = #{boardNo}
+ 	</select>
+ 	
+ 	<select id="selectAttachmentList" resultMap="attachmentResultSet">
+ 		SELECT *
+ 		FROM BOARD_ATTACHMENT
+ 		WHERE REF_BNO = #{boardNo}
+ 	</select>
+ 	
+ 	<update id="increaseForumCount" parameterType="_int">
+ 		UPDATE BOARD
+ 		SET COUNT = COUNT+1
+ 		WHERE BOARD_NO = #{boardNo}
+ 		AND STATUS = 'Y'
+ 	</update>
+ 	
+ 	<insert id="insertForum">
+ 		INSERT INTO BOARD
+ 		VALUES(SEQ_BNO.NEXTVAL, #{boardWriter}, #{categoryCode}, #{boardTitle}, #{boardContent}, SYSDATE, #{modifyDate}, #{count}, 'Y', 'R')
+ 	</insert>
+ 	
+ 	<select id="checkRecommend" resultType="_int">
+ 		SELECT COUNT(*)
+ 		FROM RECOMMEND
+ 		WHERE REF_BNO = #{boardNo}
+ 		AND REF_UNO = #{userNo}
+ 	</select>
+ 	
+ 	<update id="insertRecommend">
+ 		INSERT INTO RECOMMEND(REF_BNO, REF_UNO)
+ 		VALUES(#{boardNo}, #{userNo})
+ 	</update>
+ 	
+ 	<select id="selectRecommendCount" resultType="_int">
+ 		SELECT COUNT(*)
+ 		FROM RECOMMEND
+ 		WHERE REF_BNO = #{boardNo}
+ 	</select>
+ 	
+ 	<select id="checkDeprecated" resultType="_int">
+ 		SELECT COUNT(*)
+ 		FROM DEPRECATED
+ 		WHERE REF_BNO = #{boardNo}
+ 		AND REF_UNO = #{userNo}
+ 	</select>
+ 	
+ 	<update id="insertDeprecated">
+ 		INSERT INTO DEPRECATED(REF_BNO, REF_UNO)
+ 		VALUES(#{boardNo}, #{userNo})
+ 	</update>
+ 	
+ 	<select id="selectDeprecatedCount" resultType="_int">
+ 		SELECT COUNT(*)
+ 		FROM DEPRECATED
+ 		WHERE REF_BNO = #{boardNo}
+ 	</select>
+</mapper>

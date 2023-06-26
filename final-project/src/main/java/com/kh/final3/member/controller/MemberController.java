@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
 import com.kh.final3.common.template.Pagination;
 import com.kh.final3.common.vo.PageInfo;
 import com.kh.final3.member.model.service.MemberService;
@@ -26,11 +28,17 @@ import com.kh.final3.member.model.vo.Member;
 
 
 @Controller
-@RequestMapping(value = {"/member", "/admin"})
+@RequestMapping(value = {"/member", "/admin", "/manager"})
 public class MemberController {
 	
 	@Autowired
 	MemberService memberService;
+	
+	@GetMapping("/managerPage.me")
+	public String managerPage() {
+		
+		return "main/managerMain";
+	}
 	
 	@GetMapping("/mainPage.me")
 	public ModelAndView MemberLogin(ModelAndView mv, Principal p, HttpSession session) {
@@ -40,10 +48,10 @@ public class MemberController {
 			session.setAttribute("loginUser", member);
 		}
 		
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal(); 
-		CustomUserDetails userDetails = (CustomUserDetails)principal; 
-		String username = userDetails.getUsername();
-		String password = userDetails.getPassword();
+//		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal(); 
+//		CustomUserDetails userDetails = (CustomUserDetails)principal;
+//		String username = userDetails.getUsername();
+//		String password = userDetails.getPassword();
 
 		mv.setViewName("main/mainPage");
 		
@@ -85,7 +93,7 @@ public class MemberController {
 		return "member/memberDetailListView";
 	}
 	
-	@PostMapping("/update.me")
+	@PostMapping("/update.me") //미완성
 	public ModelAndView updateMember(ModelAndView mv, Member member) {
 		
 		int result = memberService.updateMember(member);
@@ -93,4 +101,43 @@ public class MemberController {
 		return null;
 	}
 	
+	@GetMapping("/memberEnroll.me")
+	public String memberEnroll() {
+		
+		return "member/memberEnrollForm";
+	}
+	
+	@ResponseBody
+	@GetMapping(value = "/idCheck.me", produces = "application/json; charset=UTF-8")
+	public String idCheck(String userId) {
+		
+		Member member = memberService.selectMemberById(userId);
+		
+		if(member == null) {
+			return new Gson().toJson("1");			
+		}else {
+			return new Gson().toJson("2");
+		}
+	}
+	
+	@PostMapping("/insert.me")
+	public String insertMember(Member member, HttpSession session) {
+		
+		if(member.getJobCode().equals("J1") || member.getJobCode().equals("J2") || member.getJobCode().equals("J3")) {
+			member.setAuth("ROLE_ADMIN");
+		}else {
+			member.setAuth("ROLE_MEMBER");
+		}
+		
+		int result = memberService.insertMember(member);
+		
+		if(result>0) {
+			session.setAttribute("alertMsg", "회원가입성공");
+		}else {
+			session.setAttribute("alertMsg", "회원가입실패");
+		}
+		
+		
+		return "main/adminMain";
+	}
 }
