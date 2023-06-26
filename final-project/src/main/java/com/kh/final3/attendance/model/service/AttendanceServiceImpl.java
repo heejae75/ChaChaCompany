@@ -6,8 +6,10 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kh.final3.approval.model.vo.Leave;
 import com.kh.final3.attendance.model.dao.AttendanceDao;
 import com.kh.final3.attendance.model.vo.Attendance;
+import com.kh.final3.attendance.model.vo.Record;
 
 @Service
 public class AttendanceServiceImpl implements AttendanceService {
@@ -19,8 +21,44 @@ public class AttendanceServiceImpl implements AttendanceService {
 	private SqlSessionTemplate sqlSession;
 
 	@Override
-	public ArrayList<Attendance> attendanceList() {
-		return attendanceDao.attendanceList(sqlSession);
+	public ArrayList<Attendance> attendanceList(int userNo) {
+		return attendanceDao.attendanceList(sqlSession, userNo);
+	}
+
+	// 오늘의 근무계획 불러오기
+	@Override
+	public Attendance attendanceMain(int userNo) {
+		return attendanceDao.attendanceMain(sqlSession, userNo);
+	}
+
+	@Override
+	public int insertTodo(Attendance att) {
+		return attendanceDao.insertTodo(sqlSession, att);
+	}
+
+	@Override
+	public int updateTodo(Attendance att) {
+		return attendanceDao.updateTodo(sqlSession, att);
+	}
+
+	@Override
+	public Attendance selectTodo(int userNo) {
+		return attendanceDao.selectTodo(sqlSession, userNo);
+	}
+	// 휴가리스트 불러오기
+	@Override
+	public ArrayList<Leave> selectLeaveList(int userNo) {
+		return attendanceDao.selectLeaveList(sqlSession, userNo);
+	}
+
+	@Override
+	public Record selectAtt(Attendance att) {
+		return attendanceDao.selectAtt(sqlSession, att);
+	}
+
+	@Override
+	public Attendance selectLeave(Attendance att) {
+		return attendanceDao.selectLeave(sqlSession, att);
 	}
 
 }

@@ -205,6 +205,8 @@ public class ApprovalController {
 			ArrayList<ApprovalAttachment> atList = new ArrayList<>();
 			ArrayList<Leave> leaveList = new ArrayList<>();
 			
+			log.info(upfile.get(0).getOriginalFilename());
+			
 			//파일
 				for(MultipartFile file : upfile) {
 					if(!file.getOriginalFilename().equals("")) {
