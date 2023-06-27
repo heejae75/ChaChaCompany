@@ -131,6 +131,10 @@
                 <i class="fa-solid fa-plane" style="color: #0E6251; font-size: 80px;"></i>
                 <p>휴가 신청건</p>
             </div>
+            <div class="admin_c" id="admin_insert">
+                <i class="fa-solid fa-plane" style="color: #0E6251; font-size: 80px;"></i>
+                <p>사원가입</p>
+            </div>            
         </div>
 
         <!-- 관리자 메인 메일 -->
@@ -223,6 +227,10 @@
    }
 
    getTime();
+   
+   $("#admin_insert").click(function(){
+	  location.href = "/final3/admin/memberEnroll.me";
+   });
 	</script>
 </body>
 </html>

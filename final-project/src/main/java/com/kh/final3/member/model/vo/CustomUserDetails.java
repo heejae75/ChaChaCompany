@@ -40,7 +40,10 @@ public class CustomUserDetails implements UserDetails{
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		
         ArrayList<GrantedAuthority> authority = new ArrayList<GrantedAuthority>();
-        authority.add(new SimpleGrantedAuthority(auth));
+        String[] auths = auth.split(", ");
+        for(int i=0; i<auths.length; i++) {
+        	authority.add(new SimpleGrantedAuthority(auths[i]));        	
+        }
         
         return authority;
 	}
