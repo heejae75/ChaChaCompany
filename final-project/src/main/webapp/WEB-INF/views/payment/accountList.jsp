@@ -68,8 +68,8 @@
         width: 90%;
         height : 60px;
         margin:auto;
-        margin-top:20px;
-        margin-bottom:20px;
+        margin-top:10px;
+        margin-bottom:10px;
     }
     
     #option-box{
@@ -136,9 +136,9 @@
   		</div>
 		<!-- 검색창 영역  -->
 		<div id="board-search-area">
-			<form action="#" method="get">
+			<form action="accountSearch.ad" method="get">
 				<div id="option-box" align="right" >
-                	<select id="accountStatus" name="accountStatus" class="btn btn-secondary dropdown-toggle" style=" border: 1px solid #ccc; background-color: white; color:#0c0d0d; height: 34px; margin-right: 3px;">
+                	<select name="accountStatus" class="btn btn-secondary dropdown-toggle" style="border: 1px solid #ccc; background-color: white; color:#0c0d0d; height: 34px; margin-right: 5px; margin-top: 15px;">
 	                    <option value="전체">전체</option>
 	                    <option value="N">미등록</option>
 	                    <option value="Y">등록완료</option>
@@ -146,8 +146,8 @@
                 	</select>
 				</div>
 				<div id="search-box">
-					<input type="text" name="keyword" class="form-control" id="search-input" value="${keyword}"> 
-					<button type="submit" class="btn btn-secondary" style="background-color: #0E6251; margin-left: 5px;">
+					<input type="text" name="keyword" class="form-control" id="search-input" value="${keyword}" style=" margin-top: 15px;" > 
+					<button type="submit" class="btn btn-secondary" style="background-color: #0E6251; margin-left: 5px;  margin-top: 15px;">
 					<i id="search-icon" class="fa-solid fa-magnifying-glass fa-lg" style="color:white;"></i></button>
            		</div>
 			</form>
@@ -163,7 +163,7 @@
 		</c:if>
 		<!-- 버튼 영역 -->
 		<div id="account-btn-area">
-			<button type="button" class="btn btn-success" style="margin-bottom : 20px;">등록하기</button>
+			<button type="button" id="submit-account" class="btn btn-success" style="margin-bottom : 20px;">등록하기</button>
 		</div>
      	<!-- 게시글 리스트 영역 -->
      	<div id="account-list-area">
@@ -192,7 +192,7 @@
               		<c:otherwise>
               			<c:forEach var="m" items="${mList}">
               			<tr>
-              				<td><input type="checkbox" style="width:15px;height:15px;"></td>
+              				<td><input type="checkbox" style="width:15px;height:15px; cursor:pointer;"></td>
                				<td>${m.userNo}</td>
                				<td>${m.userName}</td>
                   			<td>${m.deptName}</td>
@@ -203,7 +203,7 @@
                   			<td>${m.accountNumber}</td>
                   			<c:choose>
                   				<c:when test="${m.accountStatus eq 'N' }">
-                  					<td style="font-weight:700;"> 계좌 미등록 </td>
+                  					<td style="font-weight:700; color: #8B0000;"> 계좌 미등록 </td>
                   				</c:when>
                   				<c:when test="${m.accountStatus eq 'P' }">
                   					<td style="font-weight:700; color: darkblue;"> 등록/변경신청 </td>
@@ -219,7 +219,61 @@
          		</tbody>
       		</table>
    			<br>
-   			
+   			<script>
+   				$(function(){
+   					//계좌 선택 등록 
+   					var noArr = [];
+   					
+   					$("#account-list tbody").on("click","input[type='checkbox']",function(){
+   						var userNo = $(this).parent().siblings().eq(0).text();
+   						
+   						if($(this).prop("checked")==true){
+	   						noArr.push(userNo);
+   						}else{
+   							for(var i = 0; i < noArr.length; i++){
+   								if(noArr[i] === userNo){
+   									noArr.splice(i,1);
+   								}
+   							}
+   						}
+	   						
+   					});
+   					
+   					$("#submit-account").on("click",function(){
+						if(confirm('선택한 계좌를 등록하시겠습니까?')){
+							$.ajax({
+								url : "updateAccount.ad",
+								type : "post",
+								beforeSend : function(xhr)
+					            {
+					                xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+					            },
+								traditional: true,
+								
+								data : {noArr : noArr},
+								
+								success : function(result){
+									if(result == "YYYY"){
+										alert("계좌등록에 성공하였습니다.");
+									}else{
+										alert("계좌 등록에 실패하였습니다. 다시 시도해주세요.")
+									}
+									
+									location.reload();
+								},
+								
+								error : function(){
+									console.log("통신실패");
+								}
+								
+							})
+						}
+   						
+   						
+   					});
+   				});
+   				
+   			</script>
 	     	<div id="account-pagebar-area">
 				<div id="pagingArea">
 					<ul class="pagination">

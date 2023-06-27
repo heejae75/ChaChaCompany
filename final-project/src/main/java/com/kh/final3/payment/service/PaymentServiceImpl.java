@@ -6,6 +6,7 @@ import java.util.HashMap;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kh.final3.common.vo.PageInfo;
 import com.kh.final3.member.model.vo.Member;
@@ -97,12 +98,50 @@ public class PaymentServiceImpl implements PaymentService {
 		return paymentDao.insertAccount(sqlSession, bankInfo);
 	}
 	
+	//관리자 - 계좌 등록 메소드  
+	@Transactional
+	@Override
+	public int updateAccount(int[] noArr) {
+		
+		int result = 1;
+		
+		for(int userNo : noArr) {
+			
+			result *= sqlSession.update("paymentMapper.updateAccount", userNo);
+		}
+		
+		return result;
+	}
+	
 	//회원 - 월별 급여명세서 조회 
 	@Override
 	public Payment monthPayment(Payment info) {
 
 		return paymentDao.monthPayment(sqlSession, info);
 	}
+	
+	//가장 최근 급여 명세서 조회 
+	@Override
+	public Payment newestPayment(int userNo) {
+
+		return paymentDao.newestPayment(sqlSession, userNo);
+	}
+	
+	//관리자 - 급여 계좌 검색 필터 숫자 조회 
+	@Override
+	public int accountSearch(HashMap<String, String> key) {
+		
+		return paymentDao.accountSearch(sqlSession, key);
+	}
+	
+	//관리자 - 급여 계좌 검색 필터 목록 조회 
+	@Override
+	public ArrayList<Member> accountSearchList(PageInfo pi, HashMap<String, String> key) {
+
+		return paymentDao.accountSearchList(sqlSession, pi, key);
+	}
+	
+	
 	
 	
 

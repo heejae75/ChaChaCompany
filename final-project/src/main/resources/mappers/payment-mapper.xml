@@ -164,12 +164,70 @@
 				WHERE USER_NO = #{userNo}	
 	</update>
 	
+	<!-- 급여 월별 조회 메소드 -->
 	<select id="monthPayment" resultMap="paymentResultSet">
-		SELECT PAY_NO, SALARY, MEALS, OVERTIME_PAY, HOLIDAY_PAY, ANNUAL_LEAVE_PAY, OTHER_PAY, 
+		SELECT PAY_NO, TO_CHAR(MONTHLY,'YYYY-MM') AS MONTHLY, SALARY, MEALS, OVERTIME_PAY, HOLIDAY_PAY, ANNUAL_LEAVE_PAY, OTHER_PAY, 
        		   (SALARY* NATIONAL_PENSION)/2 AS NATIONAL_PENSION , (SALARY * HEALTH_INSURANCE) AS HEALTH_INSURANCE, 
       		   (SALARY* EMP_INSURANCE) AS EMP_INSURANCE , (SALARY*LNG_INSURANCE) AS LNG_INSURANCE
 		FROM PAYMENT
 		WHERE USER_NO = #{userNo}
 		AND TO_CHAR(MONTHLY,'YYYY-MM-DD') LIKE '%'||#{monthly}||'%'
+	</select>
+	
+	<!-- 최근 등록 급여 조회 메소드  -->
+	<select id="newestPayment" resultMap="paymentResultSet">
+	SELECT *
+	FROM (SELECT PAY_NO, TO_CHAR(MONTHLY,'YYYY-MM') AS MONTHLY, SALARY, MEALS, OVERTIME_PAY, HOLIDAY_PAY, ANNUAL_LEAVE_PAY, OTHER_PAY, 
+	       (SALARY* NATIONAL_PENSION)/2 AS NATIONAL_PENSION , (SALARY * HEALTH_INSURANCE) AS HEALTH_INSURANCE, 
+	       (SALARY* EMP_INSURANCE) AS EMP_INSURANCE , (SALARY*LNG_INSURANCE) AS LNG_INSURANCE
+	      FROM PAYMENT
+	      WHERE USER_NO = 7
+	      ORDER BY MONTHLY DESC)
+	WHERE ROWNUM =1 
+	</select>
+	
+	<!-- 계좌 등록 메소드 -->
+	<update id="updateAccount">
+		UPDATE MEMBER 
+     		SET ACCOUNT_STATUS = 'Y'
+     	WHERE USER_NO = #{userNo}
+     	AND ACCOUNT_STATUS ='P'
+	</update>
+	
+	<!-- 급여계좌 관리 검색필터 개수 조회 -->
+	<select id="accountSearch" resultType="_int" parameterType="hashmap">
+		SELECT COUNT(*)
+		FROM MEMBER
+		JOIN DEPARTMENT USING (DEPT_CODE)
+		WHERE STATUS ='Y'
+		<choose>
+			<when test="status == '전체' ">
+				AND (USER_NAME LIKE '%'||#{keyword}||'%' OR DEPT_NAME LIKE '%'||#{keyword}||'%')
+			</when>
+			<when test="status != '전체' and keyword != null ">
+				AND ACCOUNT_STATUS = #{status}
+				AND (USER_NAME LIKE '%'||#{keyword}||'%' OR DEPT_NAME LIKE '%'||#{keyword}||'%')
+			</when>
+		</choose>
+	
+	</select>
+	
+	<!-- 급여계좌 관리 검색필터 목록 조회  -->
+	<select id="accountSearchList" resultMap="paymentMemberResultSet" parameterType="hashmap">
+		SELECT USER_NO, USER_NAME,USER_ID,EMAIL,DEPT_NAME, JOB_NAME ,BANK, ACCOUNT_NUMBER, ACCOUNT_STATUS
+		FROM MEMBER
+		JOIN DEPARTMENT USING(DEPT_CODE)
+		JOIN JOB USING(JOB_CODE)
+		WHERE STATUS ='Y'
+		<choose>
+			<when test="status == '전체' ">
+				AND (USER_NAME LIKE '%'||#{keyword}||'%' OR DEPT_NAME LIKE '%'||#{keyword}||'%')
+			</when>
+			<when test="status != '전체' and keyword != null ">
+				AND ACCOUNT_STATUS = #{status}
+				AND (USER_NAME LIKE '%'||#{keyword}||'%' OR DEPT_NAME LIKE '%'||#{keyword}||'%')
+			</when>
+		</choose>
+		ORDER BY USER_NO DESC
 	</select>
 </mapper>

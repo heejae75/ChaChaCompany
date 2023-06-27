@@ -35,8 +35,7 @@ public class DocumentDao {
 		int limit = pi.getBoardLimit();
 		
 		RowBounds rowBounds = new RowBounds(offset, limit);
-		
-		
+	
 		return (ArrayList)sqlSession.selectList("documentMapper.selectDocumentList", null, rowBounds);
 	}
 	

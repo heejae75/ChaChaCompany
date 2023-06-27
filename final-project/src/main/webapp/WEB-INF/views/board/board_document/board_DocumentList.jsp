@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
    <title>자료실</title>
+   <!-- Modal CSS  -->
    <link href="/final3/resources/css/document-modal.css" rel="stylesheet">
   <style>
 	
@@ -117,11 +118,15 @@
     	cursor: pointer;
     }
     
+    #board-list input[type='checkbox']:hover{
+    	cursor: pointer;
+    }
+    
     #pagingArea {
         width:fit-content; 
         margin:auto;
     }
-	
+    
     </style>
 </head>
 <%@ include file="../../common/menubar.jsp" %>
@@ -228,7 +233,7 @@
                   				<input type="hidden" value="${b.boardNo}"></td>
                   		
                   			<!-- 특정 직급 이상자에게만 보이도록 조건 걸기  -->	
-                  			<c:if test="${loginUser.auth eq 'ROLE_ADMIN'}">
+                  			<c:if test="${loginUser.auth eq 'ROLE_ADMIN' and b.deptName eq loginUser.deptName}">
                   			<td onclick="event.cancelBubble=true"><input type="checkbox" class="form-check-input" name="select_chk" style="width: 15px; height:15px"></td>
                   			</c:if>	
               			</tr>
@@ -250,7 +255,14 @@
                    		</c:otherwise>
                    	</c:choose>
                    	<c:forEach var="p" begin="${pi.startPage}" end="${pi.endPage}">
-                        <li class="page-item"><a class="page-link" href="list.dc?currentPage=${p}">${p}</a></li>
+                   		<c:choose>
+                   		<c:when test = "${empty deptCode}">
+                        	<li class="page-item"><a class="page-link" href="list.dc?currentPage=${p}">${p}</a></li>
+                        </c:when>
+                        <c:otherwise>
+                        	<li class="page-item"><a class="page-link" href="search.dc?currentPage=${p}&deptCode=${deptCode}&keyword=${keyword}">${p}</a></li>
+                        </c:otherwise>
+                   		</c:choose>
                    	</c:forEach>
                    	<c:choose>
                    		<c:when test="${pi.maxPage eq pi.currentPage}">

@@ -144,7 +144,7 @@ public class PaymentController {
 		return mv;
 	}
 	
-	//계좌 등록,변경 신청 메소드
+	//회원 - 계좌 등록,변경 신청 메소드
 	@ResponseBody
 	@RequestMapping("account.pa")
 	public String insertAccount(int userNo, String bank, String accountNumber) {
@@ -158,6 +158,16 @@ public class PaymentController {
 		int result = paymentService.insertAccount(bankInfo);
 		
 		return (result>0)? "YYYY": "NNNN";
+	}
+	
+	//관리자 - 계좌 등록 메소드 
+	@ResponseBody
+	@RequestMapping("updateAccount.ad")
+	public String updateAccount (int noArr[]) {
+		
+		int result = paymentService.updateAccount(noArr);
+		
+		return (result>0)? "YYYY" : "NNNN";
 	}
 	
 	//일반회원 - 급여 조회 페이지 이동
@@ -182,5 +192,40 @@ public class PaymentController {
 		return new Gson().toJson(pay);
 	}
 	
+	//가장 최근 급여 명세서 조회 -월별 
+	@ResponseBody
+	@RequestMapping(value="newestPayment.pa", produces = "application/json; UTF-8")
+	public String newestPayment(int userNo) {
+		
+		Payment pay = paymentService.newestPayment(userNo);
+		
+		
+		return new Gson().toJson(pay); 
+	}
+	
+	//관리자 - 급여 계좌관리 검색 필터 메소드 
+	@RequestMapping("accountSearch.ad")
+	public ModelAndView accountSearch(@RequestParam(value="currentPage", defaultValue="1") int currentPage, String accountStatus, String keyword, ModelAndView mv) {
+		
+		HashMap <String, String> key = new HashMap<>();
+		key.put("status", accountStatus);
+		key.put("keyword", keyword);
+		
+		int listCount = paymentService.accountSearch(key);
+		int boardLimit = 10;
+		int pageLimit =5;
+		
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
+		
+		ArrayList <Member> mList = paymentService.accountSearchList(pi, key);
+		
+		mv.addObject("accountStatus", accountStatus)
+		  .addObject("keyword", keyword)
+		  .addObject("mList", mList)
+		  .addObject("pi", pi)
+		  .setViewName("payment/accountList");
+		
+		return mv;
+	}
 	
 }

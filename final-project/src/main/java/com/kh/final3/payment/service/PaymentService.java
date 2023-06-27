@@ -30,6 +30,9 @@ public interface PaymentService {
 	//미등록, 계좌변경 신청수 조회 -관리자  
 	int selectAccount();
 	
+	//급여 계좌 등록 메소드 - 관리자 
+	int updateAccount(int[] noArr);
+
 	//계좌 미등록, 계좌 변경 신청 회원 목록 조회  - 관리자 
 	ArrayList<Member> selectAccountList(PageInfo pi);
 
@@ -44,6 +47,16 @@ public interface PaymentService {
 	
 	//월별 급여 명세서 조회 - 회원 
 	Payment monthPayment(Payment info);
+	
+	//가장 최근 급여 명세서 조회 
+	Payment newestPayment(int userNo);
+	
+	//급여 계좌 관리 검색 필터링 숫자 조회 - 관리자 
+	int accountSearch(HashMap<String, String> key);
+	
+	//급여 계좌 관리 검색 필터링 목록 조회 - 관리자 
+	ArrayList<Member> accountSearchList(PageInfo pi, HashMap<String, String> key);
+	
 	
 	
 }

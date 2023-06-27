@@ -90,7 +90,7 @@
 	                <tr>
 	                	<td style="font-weight:700; text-align:center; ">입사일</td>
 	                    <td style="text-align:center;">${mInfo.empolymentDate}</td>
-	                    <td style="font-weight:700; text-align:center; ">급여 지급월 </td>
+	                    <td style="font-weight:700; text-align:center; ">지급월 </td>
 	                    <td style="text-align:center;"><input type="date" class="form-control" id="monthly" name="monthly"></td>
 	                    <td style="font-weight:700; text-align:center; ">계좌번호</td>
 	                    <td style="text-align:center;" >${mInfo.bank}</td>
