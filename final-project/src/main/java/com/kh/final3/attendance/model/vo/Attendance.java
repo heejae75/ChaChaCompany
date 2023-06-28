@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+@ToString
 @Data
 @Builder
 @AllArgsConstructor
@@ -15,5 +17,9 @@ public class Attendance {
 	private int userNo;
 	private String onTime;
 	private String offTime;
-	private String date;
+	private String leaveType;
+	private String currDate;
+	private String todoContent;
+	private int todoNo;
+	private String status;
 }

@@ -5,7 +5,98 @@
   
   <mapper namespace="attendanceMapper">
   
+  <resultMap type="attendance" id="attendanceResultSet">
+	  <result column="ATT_RECORD_NO" property="attRecordNo"/>
+	  <result column="USER_NO" property="userNo"/>
+	  <result column="ON_TIME" property="onTime"/>
+	  <result column="OFF_TIME" property="offTime"/>
+	  <result column="LEAVE_TYPE" property="leaveType"/>
+	  <result column="CURRDATE" property="currDate"/>
+	  <result column="TODO_CONTENT" property="todoContent"/>
+	  <result column="TODO_NO" property="todoNo"/>
+  </resultMap>
   
+  <resultMap type="leave" id="leaveResultSet">
+  	<result column="LEAVE_TYPE" property="leaveCode"/>
+  	<result column="START_DATE" property="startDate"/>
+  	<result column="END_DATE" property="endDate"/>
+  </resultMap>
+  
+  <resultMap type="record" id="recordResultSet">
+  	<result column="WORK_RECORD" property="workRecord"/>
+  </resultMap>
+  
+  <select id="attendanceList" resultMap="attendanceResultSet">
+  SELECT ATT_RECORD_NO, USER_NO, TO_CHAR(ON_TIME, 'HH24:MI') AS ON_TIME,
+  	 TO_CHAR(OFF_TIME, 'HH24:MI') AS OFF_TIME, LEAVE_TYPE, TO_CHAR(ON_TIME, 'YYYY-MM-DD') AS CURRDATE
+  FROM ATTENDANCE_RECORD
+  JOIN WORK_TYPE USING(LEAVE_CODE)
+  WHERE USER_NO = #{userNo}
+  </select>
+  
+  <select id="attendanceMain" resultMap="attendanceResultSet">
+  SELECT ATT_RECORD_NO, USER_NO, TO_CHAR(ON_TIME, 'HH24:MI') AS ON_TIME,
+  	 TO_CHAR(OFF_TIME, 'HH24:MI') AS OFF_TIME, LEAVE_TYPE, TO_CHAR(ON_TIME, 'YYYY-MM-DD') AS CURRDATE
+  FROM ATTENDANCE_RECORD
+  JOIN WORK_TYPE USING(LEAVE_CODE)
+  WHERE USER_NO = #{userNo}
+  AND TO_CHAR(ON_TIME, 'YYYY-MM-DD') = TO_CHAR(SYSDATE, 'YYYY-MM-DD')
+
+  </select>
+  
+  <insert id="insertTodo">
+  INSERT INTO TODO (TODO_NO, USER_NO, TODO_CONTENT, STATUS)
+  VALUES (SEQ_TNO.NEXTVAL, #{userNo}, #{todoContent}, 'T')
+  </insert>
+  
+  <update id="updateTodo">
+  UPDATE TODO
+  SET TODO_CONTENT = #{todoContent}
+  WHERE USER_NO = #{userNo}
+  AND STATUS = 'T'
+  </update>
+  
+  <select id="selectTodo" resultMap="attendanceResultSet">
+  SELECT TODO_CONTENT
+  FROM TODO
+  WHERE USER_NO = #{userNo}
+  AND STATUS = 'T'
+  </select>
+  
+  <select id="selectLeaveList" resultMap="leaveResultSet">
+  SELECT LEAVE_TYPE, START_DATE, END_DATE
+  FROM LEAVE L
+  JOIN APPROVAL_DOC A USING(DOC_NO)
+  JOIN WORK_TYPE USING(LEAVE_CODE)
+  WHERE A.STATUS = 'Y'
+  AND A.DOC_WRITER = ${userNo}
+  AND L.LEAVE_STATUS = '신청'
+  </select>
+  
+  <select id="selectLeave" resultMap="attendanceResultSet">
+	 <![CDATA[
+		  SELECT LEAVE_TYPE, TO_CHAR(START_DATE, 'YYYY-MM-DD') AS CURRDATE
+			FROM (
+			  SELECT DOC_WRITER, LEAVE_TYPE, LEAVE_CODE, START_DATE, END_DATE, LEAVE_STATUS, L.CREATE_DATE
+			  FROM LEAVE L
+			  JOIN APPROVAL_DOC A USING(DOC_NO)
+			  JOIN WORK_TYPE USING(LEAVE_CODE)
+			  WHERE A.STATUS = 'Y'
+			  AND LEAVE_STATUS = '신청'
+			  AND #{currDate} >= START_DATE
+			  AND #{currDate} <= END_DATE
+			  AND A.DOC_WRITER = #{userNo}
+			  ORDER BY CREATE_DATE DESC) 
+			WHERE ROWNUM = 1
+		]]>
+  </select>
+  
+  <select id="selectAtt" resultMap="recordResultSet">
+   SELECT ROUND((OFF_TIME - ON_TIME) * 24 * 60) AS WORK_RECORD
+  FROM ATTENDANCE_RECORD
+  WHERE USER_NO = #{userNo}
+  AND TO_CHAR(ON_TIME, 'YYYY-MM-DD') = #{currDate}
+  </select>
   
   
   </mapper>
