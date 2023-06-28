@@ -12,17 +12,10 @@ div{
 		    width: 100%;
 		}
 		#approval-home_1{
-		    height: 20%;
+		    height: 35%;
 		}
 		#approval-home_2{
-		    height: 40%;
-		}
-		#approval-home_3{
-		    height: 40%;
-		}
-		#approval-home_1>div{
-		    height: 100%;
-		    float: left;
+		    height: 65%;
 		}
 		#lately-area{
 		    float: right;
@@ -49,6 +42,7 @@ div{
 			width:100%;
 			height : 42px;
 			list-style-type : none;
+			margin-bottom: 30px;
 		}
 			
 		#nav-tabs{
@@ -60,13 +54,26 @@ div{
 		    margin-right: 5px;
 		    float : left;
 		}
-		#approval-tap-area>ul li a{
-		    text-align: center; 	
-		}
-	    li button:hover{
-		    border-top: 1px solid #dee2e6;
+		#approval-tap-area a{
+	    	width: 100%;
+	    	height : 100%;
+	    	display: inline-block;
+	    	text-align: center;
+	    	line-height: 40px;
+	    	background-color: lightgrey;
+	    	text-decoration: none;
+	    	color: black;
+	    }
+	    
+	    #approval-tap-area>ul li:not(.active):hover{
+	    	border-top: 1px solid #dee2e6;
 			border-left: 1px solid #dee2e6;
 			border-right: 1px solid #dee2e6;
 			border-top-left-radius:0.25rem;
 			border-top-right-radius:0.25rem; 
-		}
+	    }
+		 #approval-tap-area .active a{
+		 	border-botton: none;
+		 	background-color: #0E6251;
+		 	color: white;
+		 }

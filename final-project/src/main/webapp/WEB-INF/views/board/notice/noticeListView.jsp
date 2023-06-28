@@ -152,7 +152,7 @@
                     </div>
                     <div id="search-box">
                         <input type="text" name="keyword" class="form-control" id="search-input" value="${keyword }"> 
-                        <button type="submit" class="btn btn-secondary" style="background-color: #0E6251; margin-left: 2px;"><i id="search-icon" class="fa-solid fa-magnifying-glass fa-lg"></i></button><!-- icon 사이즈 변경 fa-2xs /xs / sm / lg/ xl/ 2xl -->
+                        <button class="btn btn-secondary" type="submit" style="background-color: #0E6251; margin-left: 2px;"><i id="search-icon" class="fa-solid fa-magnifying-glass fa-lg"></i></button><!-- icon 사이즈 변경 fa-2xs /xs / sm / lg/ xl/ 2xl -->
                     </div>
                   </form>
                     <br><br>

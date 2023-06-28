@@ -62,7 +62,7 @@
             <div id="email-header">
                 <nav class="navbar navbar-default">
                     <ul class="nav navbar-nav">
-                        <li style="top: 10px;left:10px;margin-right: 25px;height:50px;"><button type="submit" class="btn btn-info">보내기</button></li>
+                        <li style="top: 10px;left:10px;margin-right: 25px;height:50px;"><button type="submit" class="btn btn-success">보내기</button></li>
                     </ul>
                 </nav>
             </div>

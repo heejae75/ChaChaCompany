@@ -12,44 +12,118 @@
 </head>
 <body id="body-pd">
 	<%@ include file="../common/menubar.jsp" %>
-    <div class="content">
-        <div id="board">
-            <h1 style="padding-top: 20px;">결재 문서</h1>
-            <br><br><br><br><br><br>
-                         
-            <div id="board-list-area">
-                <table id="board-list" class="table table-hover" align="center">
+            <br><br>
+	        <div class="approvalEnroll">
+	            <div id="approvalEnroll-tap-area">
+	                <ul class="nav-tabs" class="nav-tabs nav-pills">
+	                	<li role="presentation" class="nav1">
+	                      <a href="enrollList.ap">전체</a>
+	                    </li>
+	                    <li role="presentation" class="nav2">
+	                      <a href="enrollList.ap?docCategory=C">공통</a>
+	                    </li>
+	                    <li role="presentation" class="nav3">
+	                      <a href="enrollList.ap?docCategory=H">인사</a>
+	                    </li>
+	                    <li role="presentation" class="nav4">
+	                      <a href="enrollList.ap?docCategory=M">관리</a>
+	                    </li>
+	                </ul>
+	            </div>
+	            <br>
+	            <div id="approvalEnroll-search-area">
+			        <form action="enrollList.ap" method="post">
+				        <input type="hidden" name="docCategory" value="${docCategory}"/>
+				        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+				        <div id="search-box">
+					    <input type="search" class="form-control" name="keyword" id="search-input" placeholder="Search" value="${keyword }">
+						<button class="btn btn-primary" type="submit" style="background-color: #0E6251; margin-left: 2px;"><i id="search-icon" class="fa-solid fa-magnifying-glass fa-lg"></i></button>
+						</div>
+					</form>
+				</div>
+			<br><br>
+            <div id="approvalEnroll-list-area">
+                <table id="approvalEnroll-list" class="table table-hover" align="center">
                     <thead>
                         <tr>
-                            <th width="70px">번호</th>
-                            <th width="70px">양식명</th>
-                            <th width="140px">설명</th>
-                            <th></th>
+                        	<th width="1%"></th>
+                            <th width="20%">번호</th>
+                            <th width="20%">양식명</th>
+                            <th width="59%">설명</th>
                         </tr>
                     </thead>
                     <tbody align="center">
                         <c:forEach var="t" items="${list}" varStatus="status">
                         	<tr>
-                        		<td width="70px">${status.count}</td>
-                        		<td width="70px">${t.docName}</td>
-                        		<td></td>
-                        		<td width="70px"><button class="btn btn-danger">삭제</button></td>
+                        		<td width="1%"><input type="hidden" value="${t.docType }"></td>
+                        		<td width="20%">${status.count}</td>
+                        		<td width="20%">${t.docName}</td>
+                        		<td width="59%"></td>
                         	</tr>
                         </c:forEach>
                     </tbody>
                 </table>
-                <button class="btn btn-success">문서 추가</button> 
             </div>
         </div>
-    </div>
+        <div id="approval-pagebar-area">
+                <div id="pagingArea">
+		  			<ul class="pagination">
+		                   <c:choose>
+		                    	<c:when test="${pi.currentPage eq 1 }">
+				                        <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+		                    		</c:when>
+		                    		<c:when test="${!empty keyword}">
+                    					<li class="page-item"><a class="page-link" href="enrollList.ap?currentPage=${pi.currentPage-1}&docCategory=${docCategory}&keyword=${keyword}">Previous</a></li>
+                    				</c:when>	
+		                    		<c:otherwise>
+		                    			<li class="page-item"><a class="page-link" href="enrollList.ap?currentPage=${pi.currentPage-1}&docCategory=${docCategory}">Previous</a></li>
+		                    		</c:otherwise>
+		                    </c:choose>
+		                    	<c:forEach var="p" begin="${pi.startPage}" end="${pi.endPage}" step="1"> 
+		                    		<c:if test="${!empty keyword}">
+				                        <li class="page-item"><a class="page-link" href="enrollList.ap?currentPage=${p}&docCategory=${docCategory}&keyword=${keyword}">${p}</a></li>
+		                    		</c:if>
+		                    		<c:if test="${empty keyword}">
+				                        <li class="page-item"><a class="page-link" href="enrollList.ap?currentPage=${p}&docCategory=${docCategory}">${p}</a></li>
+		                    		</c:if>
+		                    	</c:forEach>
+		                   <c:choose>
+			                	<c:when test="${pi.currentPage eq pi.maxPage}">
+									<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>                		
+								</c:when>
+								<c:when test="${!empty keyword}">
+									<li class="page-item"><a class="page-link" href="enrollList.ap?currentPage=${pi.currentPage+1}&docCategory=${docCategory}&keyword=${keyword}">Next</a></li>                		
+			                    </c:when>
+			                	<c:otherwise>
+			                    	<li class="page-item"><a class="page-link" href="enrollList.ap?currentPage=${pi.currentPage+1}&docCategory=${docCategory}">Next</a></li>
+								</c:otherwise>
+		                </c:choose>
+		            </ul>
+                </div>
+            </div>
 	<script>
+	//클릭시 해당 페이지 이동
 		$(function(){
-			$("#board-list>tbody>tr").click(function(){
-				var appNo = $(this).children().eq(0).text();
-				
+			$("#approvalEnroll-list>tbody>tr").click(function(){
+				const appNo = $(this).children().children().val();
 				location.href = "enrollForm.ap?appNo="+appNo;
 			});
 		});
+	
+	//버튼 색깔변경
+	 $(function(){
+		 const category = "${docCategory}";
+		 
+		 if(category == ''){
+				$(".nav1").addClass("active");
+			}else if(category == 'C'){
+				$(".nav2").addClass("active");
+			}else if(category == 'H'){
+				$(".nav3").addClass("active");
+			}else if(category == 'M'){
+				$(".nav4").addClass("active");
+			}
+	 })
 	</script>
 </body>
 </html>
