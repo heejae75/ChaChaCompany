@@ -6,11 +6,12 @@
 <head>
 <meta charset="UTF-8">
 <title>보낸쪽지함</title>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<!-- icon cdn -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
+
 <style>
 	.messenger_content {
 	    background-color:#0E6251;
@@ -108,14 +109,27 @@
       width:fit-content;
       margin:auto;
    	}
-        
+   	
+   	#date-search-area{
+   		display:none;
+   	}
+   	
+   	#date-search-area>input{
+   		width:45%;
+   	}
+   	
+   	#date-search-area>p{
+   		float:left;
+   		margin:0px 10px 0px 5px;
+   		height:37.99px; 
+   	}
       
 </style>
 </head>
 <body>
 	<div class="messenger_content">
 	<div class="innerOuter">
-		<h2 style="font-weight:800;">쪽지</h2> 
+		<h2 style="font-weight:800;">쪽지 <i id="messenger" class="fa-sharp fa-solid fa-paper-plane fa-sm" style="color: #0E6251;"></i></h2> 
 		<div id="msg_header">
 			<!-- 쪽지 네비영역 -->
 			<div id="msg_nav">
@@ -128,21 +142,60 @@
 			</div>
 	        <!-- 쪽지 검색 영역 -->
 	        <div id="msgSearchForm">
-		        <form action="sendSearch.mg" method="get">
+		        <form action="#">
 		        	<select id="option-box" class="custom-select" name="category">
 		            	<option value="writer">작성자</option>
 						<option value="title">제목</option>
+						<option value="date">기간별</option>
 		           	</select>
-		            <input type="text" class="form-control" name="keyword" value="${keyword}" required>
-		            <input type="hidden" name="userNo" value="${loginUser.userNo }">
-					<button type="submit" class="btn btn-secondary">검색</button>
+		           	<div id=date-search-area>
+		           		<input type="date" name="startDate" class="form-control" value="${startDate}" ><p> ~ </p>
+		           		<input type="date" name="endDate" class="form-control" value="${endDate}"> 
+		           	</div>
+		            <input type="text" class="form-control" name="keyword" value="${keyword}">
+					<button type="submit" id="search-btn" class="btn btn-secondary" style="height:37.99px;">검색</button>
 		    	</form>
 	        </div>
-		</div>	
+		</div>
+		<script>
+			$(function(){
+				$('#search-btn').on("click",function(){
+					if(!$("#option-box").val() == ""){
+						location.href="slist.mg"
+					}
+				});
+			
+			})
+			
+			//기간별 검색시 날짜창 띄워주기 
+			$(function(){
+	   			$("#option-box").on("change", function(){
+	   				
+	   				if($(this).val() == 'date'){
+	   					$("#date-search-area").show()
+	   					$("input[name=keyword]").hide()
+	   					
+	   					
+	   				}else{
+	   					$("#date-search-area").hide()
+	   					$("input[name=keyword]").show()
+	   				}
+	   			})
+	   		});
+		
+		</script>
+		
 		<c:if test="${not empty category}">
 		<script>
 			$(function(){
-				$("#option-box option[value='${catecory}']").attr("selected", true);	
+				if($("#option-box option[value = '${category}']").val() =='date'){
+					$("#date-search-area").show()
+   					$("input[name=keyword]").hide()
+				}else{
+					$("#date-search-area").hide()
+   					$("input[name=keyword]").show()
+				}
+				$("#option-box option[value = '${category}']").attr("selected", true);
 			})
 		</script>
 		</c:if>	
@@ -165,7 +218,7 @@
                 	<c:choose>
                 		<c:when test="${empty msgList}">
                 			<tr>
-	               				<td colspan ="5">조회된 쪽지가 없습니다.</td>
+	               				<td colspan ="5" onclick="event.cancelBubble=true">조회된 쪽지가 없습니다.</td>
 	               			</tr>
                 		</c:when>
                 		<c:otherwise>
@@ -246,9 +299,8 @@
 										}
 									}else{
 										alert("쪽지 삭제에 실패하였습니다. 다시 시도해 주세요 ")
+										location.reload();
 									}
-									
-									location.reload();
 								},
 								
 								error : function(){
@@ -275,18 +327,18 @@
 		                    <li class="page-item disabled"><a class="page-link">이전</a></li>
                 		</c:when>
                 		<c:otherwise>
-		                    <li class="page-item"><a class="page-link" href="slist.mg?currentPage=${pi.currentPage-1}">이전</a></li>
+                				<li class="page-item"><a class="page-link" href="slist.mg?currentPage=${pi.currentPage-1}&category=${category}&keyword=${keyword}&startDate=${startDate}&endDate=${endDate}">이전</a></li>
                 		</c:otherwise>
                 	</c:choose>
-                	<c:forEach var="p" begin="${pi.startPage}" end="${pi.endPage}">	
-	                    <li class="page-item"><a class="page-link" href="slist.mg?currentPage=${p}">${p}</a></li>
-                	</c:forEach>
+                	<c:forEach var="p" begin="${pi.startPage}" end="${pi.endPage}">
+           				<li class="page-item"><a class="page-link" href="slist.mg?currentPage=${p}&category=${category}&keyword=${keyword}&startDate=${startDate}&endDate=${endDate}">${p}</a></li>
+                   	</c:forEach>
                 	<c:choose>
                 		<c:when test="${pi.maxPage eq pi.currentPage}">
-		                    <li class="page-item disabled"><a class="page-link">다음</a></li>
+	                    	<li class="page-item disabled"><a class="page-link">다음</a></li>
                 		</c:when>
                 		<c:otherwise>
-		                    <li class="page-item"><a class="page-link" href="slist.mg?currentPage=${pi.currentPage+1}">다음</a></li>
+               				<li class="page-item"><a class="page-link" href="slist.mg?currentPage=${pi.currentPage+1}&userNo=${loginUser.userNo}&category=${category}&keyword=${keyword}&startDate=${startDate}&endDate=${endDate}">다음</a></li>
                 		</c:otherwise>
                 	</c:choose>
                 </ul>

@@ -77,6 +77,12 @@
 	    height:40px;
 	    margin-top:10px;
 	}
+	
+	.popup-foot span:hover{
+    	 cursor:pointer; 
+    	 font-size: 20px;
+    }
+    
 	.pop-btn{ /*각각의 버튼*/
 	    display:inline-flex;            /*한줄로 나열하기 위한 inline속성과 flex속성 혼합*/
 	    width:50%;                      /*2개 버튼 각각 50% 영역*/

@@ -74,6 +74,7 @@ public class DocumentController {
 		
 		//조회된 결과물 숫자 구해오기 
 		int searchCount = documentService.selectSearchCount(searchMap);
+		
 		System.out.println(searchCount);
 		
 		int pageLimit = 5;
