@@ -28,7 +28,7 @@
             <c:if test="${(a.secondApproverNo == loginUser.userNo) || (a.lastApproverNo == loginUser.userNo) }">
 	            <div id="leave-btn-area">
 	                <button type="button" class="btn btn-primary" id="approval-btn" onclick="approval();">승인</button>
-    	            <button type="button" class="btn btn-danger" id="reject-btn" data-bs-toggle="modal" data-bs-target="#rejectModal">반려</button>
+    	            <button type="button" class="btn btn-danger" id="reject-btn" data-toggle="modal" data-target="#rejectModal">반려</button>
     	            <button type="button" class="btn btn-success" onclick="saveApproval();">나가기</button>
         	        <input type="checkbox" id="emergency-btn" value="${ad.emergency }"><label for="긴급">긴급문서</label>
 	            </div>
@@ -124,6 +124,7 @@
 	                                    <input type="text" id="total-date" value="" readonly>
 	                                </td>
 	                            </tr>
+                        	</c:forEach>
 	                            <tr>
 	                            <th colspan="6">사유</th>
 	                            </tr>
@@ -135,10 +136,9 @@
 	                            <tr>
 	                                <th colspan="3" style="vertical-align: middle;" >업무인수자</th>
 	                                <td colspan="3">
-	                                    <input type="text" name="workReceiver" value="${l.workReceiver }" style="width: 80%;vertical-align: middle;" >
+	                                    <input type="text" name="workReceiver" value="${lList[0].workReceiver }" style="width: 80%;vertical-align: middle;" >
 	                                </td>
 	                            </tr>
-                        	</c:forEach>
                         </tbody>
                         <tfoot>
                             <tr>
@@ -185,13 +185,13 @@
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <h1 class="modal-title fs-5" id="exampleModalLabel">반려사유</h1>
-	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 	      </div>
 	      <div class="modal-body">
 		      <textarea name="returnReason" id="returnReason">${a.returnReason}</textarea>	      
 		  </div>
 	      <div class="modal-footer">
-	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
 	        <button type="button" class="btn btn-primary" onclick="updateReject();">완료</button>
 	      </div>
 	    </div>

@@ -13,84 +13,108 @@
 </head>
 <body id="body-pd">
 	<%@ include file="../common/menubar.jsp" %>
-
+	<br><br>
         <div class="approval">
-            <h1 style="padding-top: 20px;">결재함</h1>
-            <br><br><br><br><br><br>
             <div id="approval-tap-area">
-                <ul class="nav-tabs">
-                	<li class="nav-item">
-                      <a class="nav-link" href="list.ap">전체</a>
+                <ul class="nav-tabs" class="nav-tabs nav-pills">
+                	<li role="presentation" class="nav1">
+                      <a href="list.ap">전체</a>
                     </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="list.ap?status=N">예고함</a>
+                    <li role="presentation" class="nav2">
+                      <a href="list.ap?status=P">진행함</a>
                     </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="list.ap?status=P">진행함</a>
+                    <li role="presentation" class="nav3">
+                      <a href="list.ap?status=Y">완료함</a>
                     </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="list.ap?status=Y">완료함</a>
+                    <li role="presentation" class="nav4">
+                      <a href="list.ap?status=R">반려함</a>
                     </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="list.ap?status=R">반려함</a>
-                    </li>
-                    <li class="nav-item" style="width:400px;float:right">
-	                    <form action="search.ap" method="post" style="display:flex;">
-	                    	<input type="hidden" name="status" value="${status }"/>
-	                    	<select class="form-control" name="option" style="width:100px;">
-	                    		<option value="">선택</option>
-	                    		<option value="1">부서</option>
-	                    		<option value="2">문서</option>
-	                    		<option value="3">제목</option>
-	                    	</select>
-	                    	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-		                   	<input type="search" class="form-control" name="keyword" placeholder="Search">
-							<button class="btn btn-primary" type="submit">검색</button>
-						</form>
-					</li>
                 </ul>
+            </div>
+            <br>
+            <div id="approval-search-area">
+		        <form action="list.ap" method="post">
+			        <input type="hidden" name="status" value="${status }"/>
+			        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+			        <div id="option-box" align="right">
+			        <select name="option" id="search_code" class="btn btn-secondary dropdown-toggle" style="background-color: white; color:#0c0d0d; height: 34px; margin-right: 3px; border:1px solid #ccc;" >
+				        <option value="0">선택</option>
+				        <option value="1">부서</option>
+				        <option value="2">문서</option>
+				        <option value="3">제목</option>
+			        </select>
+			        </div>
+			        <div id="search-box">
+					<button class="btn btn-primary" type="submit" style="background-color: #0E6251; margin-left: 2px;"><i id="search-icon" class="fa-solid fa-magnifying-glass fa-lg"></i></button>
+				    <input type="search" class="form-control" name="keyword" id="search-input" placeholder="Search" value="${keyword }">
+					</div>
+				</form>
+			<!-- 검색어 option값 유지 -->
+            <c:if test="${not empty option }">
+				<script>
+				$(function(){
+					
+					$("#approval-search-area option").each(function(){
+						if($(this).val()=="${option}"){
+							$(this).attr("selected", true);
+						}
+					});
+					
+					
+				});
+				</script>
+			</c:if>	
+			<br><br>
+			<div id="approvalEnroll-btn">
+		    	<button class="btn btn-sm" onclick="location.href='enrollList.ap'">결재문서 작성</button>
+		    </div>	
             </div>
             <div id="approval-list-area">
                 <table id="approval-list" class="table table-hover" align="center">
-                    <thead style="font-weight: bold">
+                    <thead>
                         <tr>
-                            <td>문서번호</td>
-                            <td>부서</td>
-                            <td>문서종류</td>
-                            <td>제목</td>
-                            <td>작성일</td>
+                            <th>문서번호</th>
+                            <th>부서</th>
+                            <th>문서종류</th>
+                            <th>제목</th>
+                            <th>작성일</th>
                             <c:if test="${!empty 'a.secondDate' ||!empty 'a.lastDate'}">
-                            <td>승인/반려날짜 </td>
+                            <th>승인/반려날짜 </th>
                             </c:if>
                         </tr>
                     </thead>
                     <tbody>
-                    <c:set var="length" value="${fn:length(list)}"/>
+                    	<c:set var="length" value="${fn:length(list)}"/>
                         <c:forEach var="i" begin="1" end="${length}" >
 	                    	<c:choose>
+		                    	<c:when test="${empty list}">
+		                    		<tr>
+		                    			<td colspan="6" style="text-align: center;font-size: 15px;color: gray;">
+		                    				결재문서가 비었습니다.
+		                    			</td>
+		                    		</tr>
+	                    		</c:when>
 	                    		<c:when test="${loginUser.auth eq 'ROLE_MEMBER'}">
-	                    			<c:if test="${(loginUser.userNo eq list[i-1].docWriter)||(loginUser.userNo eq list[i-1].secondApproverNo)||(loginUser.userNo eq list[i-1].lastApproverNo) }">
-				                        <tr>
-				                        	<td width="10%">${list[i-1].docNo}</td>
-				                        	<td width="10%">${list[i-1].deptCode}</td>
-				                        	<td width="10%" id="docType">${list[i-1].docType }</td>
-				                        	<td width="40%">
-				                        		<c:if test="${list[i-1].emergency eq 'Y' && list[i-1].status eq 'P'}">
-					                            	<button type="button" class="btn btn-danger btn-sm" disabled style="background-color: #c42d2d">긴급</button>
-					                            </c:if>
-				                        		${list[i-1].docTitle }
-				                        	</td>
-				                        	<td width="10%">${list[i-1].createDate}</td>
-				                        	<c:choose>
+				                    <tr>
+				                       	<td width="10%">${list[i-1].docNo}</td>
+				                       	<td width="10%">${list[i-1].deptCode}</td>
+				                       	<td width="10%" id="docType">${list[i-1].docType }</td>
+				                       	<td width="40%">
+				                       		<c:if test="${list[i-1].emergency eq 'Y' && list[i-1].status eq 'P'}">
+					                           	<button type="button" class="btn btn-danger btn-sm" disabled style="background-color: #c42d2d">긴급</button>
+					                           </c:if>
+				                       		${list[i-1].docTitle }
+				                       	</td>
+				                       	<td width="10%">${list[i-1].createDate}</td>
+				                       	<c:choose>
 			                        		<c:when test="${empty list[i-1].lastDate }">
 			                        			<td>${list[i-1].secondDate}</td>
 			                        		</c:when>
 			                        		<c:otherwise>
 			                        			<td>${list[i-1].lastDate}</td>
 			                        		</c:otherwise>
-			                        	</c:choose>
-				                        </tr>
-				                    </c:if>
+			                       		</c:choose>
+				                    </tr>
 	                    		</c:when>
 		                    	<c:otherwise>
 			                        <tr>
@@ -125,54 +149,45 @@
             <br><br>
             <div id="approval-pagebar-area">
                 <div id="pagingArea">
-                    <ul class="pagination">
-                    	<c:choose>
-                    		<c:when test="${pi.currentPage eq 1 }">
-		                        <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-                    		</c:when>
-                    		<c:when test="${!empty status}">
-                    			<li class="page-item"><a class="page-link" href="list.ap?currentPage=${pi.currentPage-1}&status=${status}">Previous</a></li>
-                    		</c:when>
-                    		<c:when test="${!empty status and !empty keyword  }">
-                    			<li class="page-item"><a class="page-link" href="list.ap?currentPage=${pi.currentPage-1}&status=${status}&keyword=${keyword}&option=${option}">Previous</a></li>
-                    		</c:when>
-                    		<c:otherwise>
-                    			<li class="page-item"><a class="page-link" href="list.ap?currentPage=${pi.currentPage-1}">Previous</a></li>
-                    		</c:otherwise>
-                    	</c:choose>
-                    	<c:forEach var="p" begin="${pi.startPage}" end="${pi.endPage}" step="1"> 
-                    		<c:if test="${!empty status}">
-		                        <li class="page-item"><a class="page-link" href="list.ap?currentPage=${p}&status=${status}">${p}</a></li>
-                    		</c:if>
-                    		<c:if test="${empty status}">
-		                        <li class="page-item"><a class="page-link" href="list.ap?currentPage=${p}">${p}</a></li>
-                    		</c:if>
-                    		<c:if test="${!empty status and !empty keyword  }">
-                    			<li class="page-item"><a class="page-link" href="list.ap?currentPage=${p}&status=${status}&keyword=${keyword}&option=${option}">${p}</a></li>
-                    		</c:if>
-                    	</c:forEach>
-                    	
-                       <c:choose>
-                			<c:when test="${pi.currentPage eq pi.maxPage}">
-								<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>                		
-							</c:when>
-							<c:when test="${!empty status}">
-								<li class="page-item"><a class="page-link" href="list.ap?currentPage=${pi.currentPage+1}&status=${status}">Next</a></li>                		
-                    		</c:when>
-                    		<c:when test="${!empty status and !empty keyword  }">
-                    			<li class="page-item"><a class="page-link" href="list.ap?currentPage=${pi.currentPage+1}&status=${status}&keyword=${keyword}&option=${option}">Next</a></li>
-                    		</c:when>
-                			<c:otherwise>
-                    			<li class="page-item"><a class="page-link" href="list.ap?currentPage=${pi.currentPage+1}">Previous</a></li>
-							</c:otherwise>
-                		</c:choose>
-                    </ul>
+		  			<ul class="pagination">
+		                   <c:choose>
+		                    <c:when test="${pi.currentPage eq 1 }">
+				                        <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+		                    		</c:when>
+		                    		<c:when test="${!empty keyword}">
+                    					<li class="page-item"><a class="page-link" href="list.ap?currentPage=${pi.currentPage-1}&status=${status}&keyword=${keyword}&option=${option}">Previous</a></li>
+                    				</c:when>	
+		                    		<c:otherwise>
+		                    			<li class="page-item"><a class="page-link" href="list.ap?currentPage=${pi.currentPage-1}&status=${status}">Previous</a></li>
+		                    		</c:otherwise>
+		                    	</c:choose>
+		                    	<c:forEach var="p" begin="${pi.startPage}" end="${pi.endPage}" step="1"> 
+		                    		<c:if test="${!empty keyword}">
+				                        <li class="page-item"><a class="page-link" href="list.ap?currentPage=${p}&status=${status}&keyword=${keyword}&option=${option}">${p}</a></li>
+		                    		</c:if>
+		                    		<c:if test="${empty keyword}">
+				                        <li class="page-item"><a class="page-link" href="list.ap?currentPage=${p}&status=${status}">${p}</a></li>
+		                    		</c:if>
+		                    	</c:forEach>
+		                    	
+		                       <c:choose>
+		                			<c:when test="${pi.currentPage eq pi.maxPage}">
+										<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>                		
+									</c:when>
+									<c:when test="${!empty keyword}">
+										<li class="page-item"><a class="page-link" href="list.ap?currentPage=${pi.currentPage+1}&status=${status}&keyword=${keyword}&option=${option}">Next</a></li>                		
+		                    		</c:when>
+		                			<c:otherwise>
+		                    			<li class="page-item"><a class="page-link" href="list.ap?currentPage=${pi.currentPage+1}&status=${status}">Next</a></li>
+									</c:otherwise>
+		                		</c:choose>
+		                    </ul>
                 </div>
             </div>
         </div>
         <br><br><br>
-
 	<script>
+	//행클릭시 해당 페이지로 이동
 	$(function(){
 		$("#approval-list>tbody>tr").click(function(){
 			var docNo = $(this).children().eq(0).text();
@@ -180,6 +195,20 @@
 			location.href = "detail.ap?docNo="+docNo+"&docType="+docType;
 		});
 	});
+	
+	//li 클릭시 active 부여
+	$(function(){
+		const status = "${status}";
+		if(status == ''){
+			$(".nav1").addClass("active");
+		}else if(status == 'P'){
+			$(".nav2").addClass("active");
+		}else if(status == 'Y'){
+			$(".nav3").addClass("active");
+		}else if(status == 'R'){
+			$(".nav4").addClass("active");
+		}
+	})
 	</script>
 </body>
 </html>
