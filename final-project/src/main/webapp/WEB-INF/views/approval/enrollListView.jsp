@@ -69,12 +69,15 @@
                 <div id="pagingArea">
 		  			<ul class="pagination">
 		                   <c:choose>
-		                    	<c:when test="${pi.currentPage eq 1 }">
+		                    		<c:when test="${pi.currentPage eq 1 }">
 				                        <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
 		                    		</c:when>
 		                    		<c:when test="${!empty keyword}">
                     					<li class="page-item"><a class="page-link" href="enrollList.ap?currentPage=${pi.currentPage-1}&docCategory=${docCategory}&keyword=${keyword}">Previous</a></li>
-                    				</c:when>	
+                    				</c:when>
+                    				<c:when test="${empty keyword and !empty docCategory}">
+									<li class="page-item"><a class="page-link" href="enrollList.ap?currentPage=${pi.currentPage+1}&docCategory=${docCategory}">Next</a></li>                		
+			                   		 </c:when>	
 		                    		<c:otherwise>
 		                    			<li class="page-item"><a class="page-link" href="enrollList.ap?currentPage=${pi.currentPage-1}&docCategory=${docCategory}">Previous</a></li>
 		                    		</c:otherwise>
@@ -83,8 +86,11 @@
 		                    		<c:if test="${!empty keyword}">
 				                        <li class="page-item"><a class="page-link" href="enrollList.ap?currentPage=${p}&docCategory=${docCategory}&keyword=${keyword}">${p}</a></li>
 		                    		</c:if>
-		                    		<c:if test="${empty keyword}">
+		                    		<c:if test="${empty keyword and !empty docCategory}">
 				                        <li class="page-item"><a class="page-link" href="enrollList.ap?currentPage=${p}&docCategory=${docCategory}">${p}</a></li>
+		                    		</c:if>
+		                    		<c:if test="${empty keyword and empty docCategory}">
+				                        <li class="page-item"><a class="page-link" href="enrollList.ap?currentPage=${p}">${p}</a></li>
 		                    		</c:if>
 		                    	</c:forEach>
 		                   <c:choose>
@@ -94,8 +100,11 @@
 								<c:when test="${!empty keyword}">
 									<li class="page-item"><a class="page-link" href="enrollList.ap?currentPage=${pi.currentPage+1}&docCategory=${docCategory}&keyword=${keyword}">Next</a></li>                		
 			                    </c:when>
+			                    <c:when test="${empty keyword and !empty docCategory}">
+									<li class="page-item"><a class="page-link" href="enrollList.ap?currentPage=${pi.currentPage+1}&docCategory=${docCategory}">Next</a></li>                		
+			                    </c:when>
 			                	<c:otherwise>
-			                    	<li class="page-item"><a class="page-link" href="enrollList.ap?currentPage=${pi.currentPage+1}&docCategory=${docCategory}">Next</a></li>
+			                    	<li class="page-item"><a class="page-link" href="enrollList.ap?currentPage=${pi.currentPage+1}">Next</a></li>
 								</c:otherwise>
 		                </c:choose>
 		            </ul>

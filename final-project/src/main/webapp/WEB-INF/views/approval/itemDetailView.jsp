@@ -16,17 +16,18 @@
           toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
         });
      </script>
+	<link rel="stylesheet" href="/final3/resources/css/Approval_ItemDetail.css" >
      <link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Song+Myung&display=swap" rel="stylesheet">
-	<link rel="stylesheet" href="/final3/resources/css/Approval_ItemDetail.css" >
 </head>
 
 <body>
 	<%@ include file="../common/menubar.jsp" %>
     <br><br><br><br>
+    <hr>
     <h1 align="center">구매 품의서</h1>
-    <br><br>
+    <hr>
         <div class="item-area">
         	<input type="hidden" name="deptCode" value="${loginUser.deptCode }">
         	<input type="hidden" name="docType" value="2">
@@ -40,37 +41,42 @@
 	            </div>
            	</c:if>
             <div id="item-header">
+            <!-- 중간결재자 유무에 따른 div -->
                <c:choose>
                		<c:when test="${!empty a.secondApprover }">
 			    		<table class='table table-bordered' id='approver-signature'>
 			                <tbody>
-			                    <tr><th width="20px" rowspan="4">결재</th></tr>
+			                    <tr><th rowspan="5">결재</th></tr>
 			                    <tr><td><input type="text" value="${a.lastJobName}" readonly/></td></tr>
-			                    <tr height="50px"><td><input type="text" id="lastApprover" value="${a.lastApprover }" readonly/></td></tr>
-			                    <tr height="80px"><td><input type="text" id="lastSignature" value="${a.lastSignature }" style="font-family: 'Song Myung', serif;font-size: 20px" readonly/></td></tr>
+			                    <tr><td><input type="text" id="lastSignature" value="${a.lastSignature }" style="font-family: 'Song Myung', serif;font-size: 20px" readonly/></td></tr>
+			                    <tr><td><input type="text" id="lastApprover" value="${a.lastApprover }" style="font-size: 12px" readonly/></td></tr>
+			                	<tr><td><input type="text" id="lastDate" value="${a.lastDate}" style="font-size: 12px" readonly></td></tr>
 			                </tbody>
 			    		</table>
                			<table class='table table-bordered' id='approver-signature'>
 			                <tbody>
-			                    <tr><th width="20px" rowspan="4">결재</th></tr>
+			                    <tr><th rowspan="5">결재</th></tr>
 			                    <tr><td><input type="text" value="${a.secondJobName}" readonly/></td></tr>
-			                    <tr height="50px"><td><input type="text" id="secondApprover" value="${a.secondApprover}" readonly/></td></tr>
-			                    <tr height="80px"><td><input type="text" id="secondSignature" value="${a.secondSignature }" style="font-family: 'Song Myung', serif;font-size: 20px" readonly/></td></tr>
+			                    <tr><td><input type="text" id="secondSignature" value="${a.secondSignature }" style="font-family: 'Song Myung', serif;font-size: 20px" readonly/></td></tr>
+			                    <tr><td><input type="text" id="secondApprover" value="${a.secondApprover}" style="font-size: 12px" readonly/></td></tr>
+			                	<tr><td><input type="text" id="secondDate" value="${a.secondDate}" style="font-size: 12px" readonly></td></tr>
 			                </tbody>
 			    		</table>
                		</c:when>
                		<c:otherwise>
                			<table class='table table-bordered' id='approver-signature'>
 			                <tbody>
-			                    <tr><th width="20px" rowspan="4">결재</th></tr>
+			                    <tr><th rowspan="5">결재</th></tr>
 			                    <tr><td><input type="text" value="${a.lastJobName}" readonly/></td></tr>
-			                    <tr height="50px"><td><input type="text" id="lastApprover" value="${a.lastApprover }" readonly/></td></tr>
-			                    <tr height="80px"><td><input type="text" id="lastSignature" value="${a.lastSignature }" style="font-family: 'Song Myung', serif;font-size: 20px" readonly/></td></tr>
+			                    <tr><td><input type="text" id="lastSignature" value="${a.lastSignature }" style="font-family: 'Song Myung', serif;font-size: 23px" readonly/></td></tr>
+			                    <tr><td><input type="text" id="lastApprover" value="${a.lastApprover }" style="font-size: 12px" readonly/></td></tr>
+			                	<tr><td><input type="text" id="lastDate" value="${a.lastDate}" style="font-size: 12px" readonly></td></tr>
 			                </tbody>
 			    		</table>
                		</c:otherwise>
                </c:choose>
             </div>
+            <hr>
             <div id="item-content">
                 <div id="item-content1">
                     <table class="table table-bordered" width="100%" height="100%" style="border-collapse: collapse;vertical-align: middle">
@@ -179,6 +185,8 @@
 		var lastApprover = "${a.lastApproverNo}";
 		var secondApprover = "${a.secondApproverNo}";
 		var docNo = "${ad.docNo}";
+		var secondDate = "${a.secondDate}";
+		var lastDate = "${a.lastDate}";
 		
 		if(loginUserNo === secondApprover){
 			$.ajax({
@@ -195,7 +203,9 @@
 				success : function(result){
 					if(result>0){
 						$("#secondSignature").attr("value",loginUserName);
+						$("#secondDate").attr("value",secondDate);
     					alert("승인이 완료되었습니다.")
+						location.reload();
 					}
 				},
 				error : function(){
@@ -225,7 +235,9 @@
     						$("#approval-btn").attr("disabled",true);
     						$("#reject-btn").attr("disabled",true);
     						$("#emergency-btn").attr("checked",false);
+    						$("#lastDate").attr("value",lastDate);
     						alert("승인이 완료되었습니다.");
+    						location.reload();
     					}
     				},
     				error : function(){
@@ -243,6 +255,8 @@
 		var secondApprover = "${a.secondApproverNo}";
 		var docNo = "${ad.docNo}";
 		var returnReason = $("#returnReason").val();
+		var secondDate = "${a.secondDate}";
+		var lastDate = "${a.lastDate}";
 		
 		if(secondApprover == loginUserNo){
 			if(confirm("반려하시겠습니까?")){
@@ -258,9 +272,10 @@
 	                    xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
 	                },
 					success : function(result){
-						console.log(result);
 						if(result>0){
-							$("#secondSignature").attr("value","반려");	
+							$("#secondSignature").attr("value","반려");
+							$("#secondDate").attr("value",secondDate);
+							location.reload();
 						}else{
 							console.log("실패");
 						}
@@ -294,6 +309,8 @@
 							$("#returnReason").attr("readonly",true);
 							$("#approval-btn").attr("disabled",true);
 							$("#reject-btn").attr("disabled",true);
+							$("#lastDate").attr("value",lastDate);
+							location.reload();
 						}else{
 							console.log("실패");
 						}
