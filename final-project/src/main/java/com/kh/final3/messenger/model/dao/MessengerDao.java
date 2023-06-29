@@ -15,13 +15,13 @@ import com.kh.final3.messenger.model.vo.Messenger;
 public class MessengerDao {
 	
 	//보낸 쪽지 개수 세어오는 메소드 
-	public int recvListCount(SqlSession sqlSession, String userNo) {
+	public int recvListCount(SqlSession sqlSession, int userNo) {
 
 		return sqlSession.selectOne("msgMapper.recvListCount", userNo);
 	}
 	
 	//받은 쪽지 목록 조회 메소드 
-	public ArrayList<Messenger> selectRecvList(SqlSession sqlSession, PageInfo pi, String userNo) {
+	public ArrayList<Messenger> selectRecvList(SqlSession sqlSession, PageInfo pi, int userNo) {
 
 		int offset = (pi.getCurrentPage()-1) * pi.getBoardLimit();
 		int limit = pi.getBoardLimit();
