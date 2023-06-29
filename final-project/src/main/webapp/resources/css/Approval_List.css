@@ -1,6 +1,4 @@
 @charset "UTF-8";
-
-
     .approval{
         width: 1570px;
     }
@@ -15,14 +13,14 @@
         width: 40%;
         float: left;
     }
-    #search_code{
-        margin-left: 5px;
-    }
+    
     #search-box{
         width: 60%;
         float: left;
     }
-
+	#search_code{
+        margin-left: 5px;
+    }
     #search-input{
         width: 30%;
         float: left;

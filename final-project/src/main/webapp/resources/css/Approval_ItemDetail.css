@@ -9,12 +9,16 @@
         	height : 100%;
         }
         .item-area{
-            width: 800px;
+            width: 700px;
             height: 1500px;
             margin: auto;
         }
         .item-area>div{
             width: 100%;
+        }
+        hr{
+        	width:700px;
+        	border:1px solid rgb(223, 221, 221);;
         }
         #item-btn-area{
             height: 4%;
@@ -50,17 +54,22 @@
         }
         #approver-signature {
             border-collapse: collapse;
-            width: 15%;
-            text-align: center;
+            width: 20%;
             margin-top: 10px;
             float: right;
             line-height:20px;
-            vertical-align: middle;
     
         }
-        #approver-signature>tr, td{
+        #approver-signature th,td{
             border-collapse: collapse;
-            padding: 8px;
+            padding: 10px;
+            vertical-align: middle;
+            text-align: center;
+        }
+        #approver-signature input{
+        	padding:0px;
+        	vertical-align: middle;
+            text-align: center;
         }
         #id-table input{
             box-sizing: border-box;

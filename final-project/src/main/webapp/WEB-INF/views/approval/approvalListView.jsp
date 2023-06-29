@@ -81,9 +81,11 @@
                             <c:if test="${!empty 'a.secondDate' ||!empty 'a.lastDate'}">
                             <th>승인/반려날짜 </th>
                             </c:if>
+                            <th>상태</th>
                         </tr>
                     </thead>
                     <tbody>
+                    <!-- 권한에 따른 게시판 보여주기 -->
                     	<c:set var="length" value="${fn:length(list)}"/>
                         <c:forEach var="i" begin="1" end="${length}" >
 	                    	<c:choose>
@@ -102,7 +104,7 @@
 				                       	<td width="40%">
 				                       		<c:if test="${list[i-1].emergency eq 'Y' && list[i-1].status eq 'P'}">
 					                           	<button type="button" class="btn btn-danger btn-sm" disabled style="background-color: #c42d2d">긴급</button>
-					                           </c:if>
+					                        </c:if>
 				                       		${list[i-1].docTitle }
 				                       	</td>
 				                       	<td width="10%">${list[i-1].createDate}</td>
@@ -113,6 +115,17 @@
 			                        		<c:otherwise>
 			                        			<td>${list[i-1].lastDate}</td>
 			                        		</c:otherwise>
+			                       		</c:choose>
+			                       		<c:choose>
+			                       			<c:when test="${list[i-1].status eq 'P' }">
+			                       				<td><button type="button" class="btn btn-primary" style="border:0;" disabled>신청</button><td>
+			                       			</c:when>
+			                       			<c:when test="${list[i-1].status eq 'Y' }">
+			                       				<td><button type="button" class="btn btn-success" style="border:0;" disabled>승인</button><td>
+			                       			</c:when>
+			                       			<c:when test="${list[i-1].status eq 'R' }">
+			                       				<td><button type="button" class="btn btn-success" style="background-color: #f87428;color:white;border:0;" disabled>반려</button><td>
+			                       			</c:when>
 			                       		</c:choose>
 				                    </tr>
 	                    		</c:when>
@@ -187,6 +200,7 @@
         </div>
         <br><br><br>
 	<script>
+	console.log("${list[6].status}")
 	//행클릭시 해당 페이지로 이동
 	$(function(){
 		$("#approval-list>tbody>tr").click(function(){
