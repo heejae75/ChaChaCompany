@@ -210,7 +210,7 @@
             	<tbody>
               		<c:choose>
               		<c:when test="${empty bList}">
-              			<tr>
+              			<tr onclick="event.cancelBubble=true">
               				<td colspan="7">조회된 게시글이 없습니다.</td>
               			</tr>
               		</c:when>
@@ -233,7 +233,7 @@
                   				<input type="hidden" value="${b.boardNo}"></td>
                   		
                   			<!-- 특정 직급 이상자에게만 보이도록 조건 걸기  -->	
-                  			<c:if test="${loginUser.auth eq 'ROLE_ADMIN' and b.deptName eq loginUser.deptName}">
+                  			<c:if test="${loginUser.auth eq 'ROLE_ADMIN'}">
                   			<td onclick="event.cancelBubble=true"><input type="checkbox" class="form-check-input" name="select_chk" style="width: 15px; height:15px"></td>
                   			</c:if>	
               			</tr>
@@ -251,7 +251,14 @@
 	                        <li class="page-item disabled"><a class="page-link">이전</a></li>
                    		</c:when>
                    		<c:otherwise>
-	                        <li class="page-item"><a class="page-link" href="list.dc?currentPage=${pi.currentPage-1}">이전</a></li>
+                   			<c:choose>
+	                   			<c:when test="${empty deptCode}">
+			                         <li class="page-item"><a class="page-link" href="list.dc?currentPage=${pi.currentPage-1}">이전</a></li>
+	                   			</c:when>
+	                   			<c:otherwise>
+	                   				<li class="page-item"><a class="page-link" href="search.dc?currentPage=${pi.currentPage-1}&deptCode=${deptCode}&keyword=${keyword}">이전</a></li>
+	                   			</c:otherwise>
+                   			</c:choose>
                    		</c:otherwise>
                    	</c:choose>
                    	<c:forEach var="p" begin="${pi.startPage}" end="${pi.endPage}">
@@ -269,7 +276,14 @@
 	                        <li class="page-item disabled"><a class="page-link">다음</a></li>
                    		</c:when>
                    		<c:otherwise>
-	                        <li class="page-item"><a class="page-link" href="list.dc?currentPage=${pi.currentPage+1}">다음</a></li>
+                   			<c:choose>
+	                   			<c:when test="${empty deptCode}">
+			                        <li class="page-item"><a class="page-link" href="list.dc?currentPage=${pi.currentPage+1}">다음</a></li>
+	                   			</c:when>
+	                   			<c:otherwise>
+	                   				<li class="page-item"><a class="page-link" href="search.dc?currentPage=${pi.currentPage+1}&deptCode=${deptCode}&keyword=${keyword}">다음</a></li>
+	                   			</c:otherwise>
+                   			</c:choose>
                    		</c:otherwise>
                    	</c:choose>
 				</ul>
@@ -296,20 +310,37 @@
 					//게시글 번호 
 					var $bno =$(this).parent().siblings().eq(0).text();
 					
-		 			var query = 'input[name="select_chk"]:checked';
-		  		
-		 			//선택된 체크박스 개수 
-		 			chkCount = document.querySelectorAll(query) //console.log("chkCount:",selectElements.length);
+					//선택한 게시글의 작성자의 부서 
+					var wirterDept = $(this).parent().siblings().eq(2).children().text();
+					
+					//로그인 유저(관리자)의 부서 
+					var loginUserDept = '${loginUser.deptName}';
+					
+					if(wirterDept.indexOf(loginUserDept) != -1){
+						console.log("포함");
+						
+						var query = 'input[name="select_chk"]:checked';
+				  		
+			 			//선택된 체크박스 개수 
+			 			chkCount = document.querySelectorAll(query) //console.log("chkCount:",selectElements.length);
+			 			
+				 		if($(this).prop("checked")==true){
+				  			bnoArr.push($bno);
+				 		}else{
+				 			for(let i = 0 ; i<bnoArr.length; i++){
+				 				if(bnoArr[i] === $bno){
+				 					bnoArr.splice(i,1);
+				 				}
+				 			}
+				 		}
+				 		
+					}else{
+					 	console.log("포함되지 않음");
+					 	alert("권한이 없습니다.")
+					 	return false;
+					}
+					
 		 			
-			 		if($(this).prop("checked")==true){
-			  			bnoArr.push($bno);
-			 		}else{
-			 			for(let i = 0 ; i<bnoArr.length; i++){
-			 				if(bnoArr[i] === $bno){
-			 					bnoArr.splice(i,1);
-			 				}
-			 			}
-			 		}
 		 			//console.log(bnoArr);
 				});
 				

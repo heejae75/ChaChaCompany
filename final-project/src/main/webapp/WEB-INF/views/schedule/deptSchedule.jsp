@@ -187,7 +187,7 @@
 				        				$.each(list, function(index,leave){
 					        				var leave ={
 				        						id: leave.docNo, //휴가 번호  
-						            			title : leave.userName +" "+ leave.jobName+ "님 " + leave.leaveType, //휴가 대상자 이름 + 직급 
+						            			title : leave.userName +" "+ leave.jobName+ "님 " + leave.leaveType, //휴가 대상자 이름 + 직급+ 휴가내용
 						            			content : "업무 인수자 : "+leave.workReceiver,
 						            			code : leave.leaveCode,
 						            			start : leave.startDate, 
@@ -359,7 +359,7 @@
 				//이벤트 클릭 -> 수정 포맷 
 				eventClick : function(calEvent, jsEvent, view){
 					
-					if((calEvent.title).match("휴가")){ //휴가일정은 상세보기 막기 
+					if(calEvent.code != null){ //휴가일정은 상세보기 막기 
 						return false;
 					}else{
 						//수정 모달 띄워주기 

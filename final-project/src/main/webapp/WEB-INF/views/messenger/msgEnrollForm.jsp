@@ -138,14 +138,14 @@
 	                    <tr>
 	                        <th>보낸사람</th>
 	                        <td>
-	                        	<input type="text" class="form-control" value="${loginUser.userName}" readonly>
+	                        	<input type="text" class="form-control" value="${loginUser.userId} (${loginUser.userName})" readonly>
 	                        	<input type="hidden" name="sender" value="${loginUser.userNo }"> <!-- controller에 보낼 보낸사람 번호  -->
 	                        </td>
 	                    </tr>
 	                    <tr>
 	                        <th>받는사람</th>
 	                        <td>
-	                        	<input type="text" id="recUser" class="form-control" readonly>
+	                        	<input type="text" id="recvUser" class="form-control" readonly>
 	                         	<input type="hidden" id="recvUno" name="recvUno"> <!-- controller에 보낼 받는사람 번호 --> 
 	                        </td>
 	                        <td>
@@ -180,7 +180,7 @@
 	      				<th>검색</th>
 						<td>
 							<select id="deptCode" name="deptCode" class="form-control"  style="width:30%; float:left; margin-right:5px; text-align:center">
-								<option value="">전체</option>
+								<option value="전체">전체</option>
 								<option value="D1">기타</option>
 	                            <option value="D2">회계관리부</option>
 	                            <option value="D3">마케팅부</option>
@@ -231,7 +231,7 @@
 		//1. 주소록 버튼 눌렀을 때 발생할 이벤트 
 		$("#address").on("click", function(){
 			
-			$("#recUser").val(); //기존에 입력된 id값이 있다면 지워주기
+			//$("#recvUser").val(); //기존에 입력된 id값이 있다면 지워주기
 			
 			$("#searchName").val(""); //기존에 검색한 키워드가 있다면 지워주기 
 		});
@@ -254,14 +254,16 @@
 					
 					if(result.length != 0){ //list가 비어있는지 유무는 length로 판단 
 						for(var i in result){
-							str += "<tr>"
-								+"<td>"+ result[i].userNo +"</td>"
-								+"<td><input name='searchChk' type='checkbox' style='width:15px; height:15px'></td>"
-								+"<td>" + result[i].userId + "</td>"
-								+"<td>" + result[i].userName + "</td>"
-								+"<td>" + result[i].deptName + "</td>"
-								+"<td>" + result[i].jobName + "</td>"
-								+"</tr>";
+							if(result[i].userNo != '${loginUser.userNo}' ){
+								str += "<tr>"
+									+"<td>"+ result[i].userNo +"</td>"
+									+"<td><input name='searchChk' type='checkbox' style='width:15px; height:15px'></td>"
+									+"<td>" + result[i].userId + "</td>"
+									+"<td>" + result[i].userName + "</td>"
+									+"<td>" + result[i].deptName + "</td>"
+									+"<td>" + result[i].jobName + "</td>"
+									+"</tr>";
+							}
 						}
 	      			
 					}else{
@@ -296,6 +298,12 @@
 					
 					//클릭한 체크박스가 체크되어 있다면 배열에 담기 
 					if($(this).prop("checked") == true){
+						for(let i = 0 ; i<objArray.length; i++){
+            				if(objArray[i].userNo === $uno){
+            					alert("이미 선택되었습니다. ")
+		            			return false;
+            				}
+            			}
 						objArray.push({userNo : $uno, userId: $uId, userName:$uName})
 					}else{
 						for(let i = 0 ; i<objArray.length; i++){
@@ -329,7 +337,7 @@
 					//console.log(resultStr);
 					
 					//받는사람 input에 넣어주기 
-					$("#recUser").val(resultStr);
+					$("#recvUser").val(resultStr);
 					$("#recvUno").val(resultUno);
 				
 					$("#searchName").val("");

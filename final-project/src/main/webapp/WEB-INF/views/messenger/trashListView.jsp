@@ -106,6 +106,20 @@
       width:fit-content;
       margin:auto;
    	}
+   	
+   	#date-search-area{
+   		display:none;
+   	}
+   	
+   	#date-search-area>input{
+   		width:45%;
+   	}
+   	
+   	#date-search-area>p{
+   		float:left;
+   		margin:0px 10px 0px 5px;
+   		height:37.99px; 
+   	}
       
 </style>
 </head>
@@ -125,25 +139,67 @@
 			</div>
 	        <!-- 쪽지 검색 영역 -->
 	        <div id="msgSearchForm">
-		        <form action="trashSearch.mg" method="get">
+		        <form action="#">
 		        	<select id="option-box" class="custom-select" name="category">
-		            	<option value="send">받은쪽지</option> <!-- 나한테 보낸사람 -->
-		            	<option value="receive">보낸쪽지</option> <!-- 내가 보낸사람  -->
+		            	<option value="send">보낸사람</option> <!-- 나한테 보낸사람 -->
+		            	<option value="receive">받는사람</option> <!-- 내가 보낸사람  -->
 						<option value="title">제목</option>
+						<option value="date">기간별</option>
 		           	</select>
-		            <input type="text" class="form-control" name="keyword" value="${keyword}" required>
+		           	<div id=date-search-area>
+		           		<input type="date" name="startDate" class="form-control" id="startDate" value="${startDate}" ><p> ~ </p>
+		           		<input type="date" name="endDate" class="form-control" id="endDate" value="${endDate}"> 
+		           	</div>
 		            <input type="hidden" value="${loginUser.userNo}" name="userNo">
-					<button type="submit" class="btn btn-secondary">검색</button>
+		            <input type="text" class="form-control" name="keyword" id="keyword" value="${keyword}">
+					<button type="submit" class="btn btn-secondary" id="search-btn" style="height:37.99px;">검색</button>
 		    	</form>
 	        </div>
-	        <c:if test ="${not empty category }">
-	        <script>
-	        	$(function(){
-	        		$("#option-box option[value = '${category}']").attr("selected", true)
-	        	});
 	        
-	        </script>
-	        </c:if>
+	        <script>
+		        $(function(){
+					$('#search-btn').on("click",function(){
+						if(!$("#option-box").val() == ""){
+							
+							location.href="tlist.mg"
+						}
+					});
+				
+				})
+	        
+			//기간별 검색시 날짜창 띄워주기 
+				$(function(){
+		   			$("#option-box").on("change", function(){
+		   				
+		   				if($(this).val() == 'date'){
+		   					$("#date-search-area").show()
+		   					$("input[name=keyword]").hide()
+		   					
+		   					
+		   				}else{
+		   					$("#date-search-area").hide()
+		   					$("input[name=keyword]").show()
+		   				}
+		   			})
+		   		});
+			
+		</script>
+		
+        <c:if test ="${not empty category }">
+        <script>
+			$(function(){
+				if($("#option-box option[value = '${category}']").val() =='date'){
+					$("#date-search-area").show()
+   					$("input[name=keyword]").hide()
+				}else{
+					$("#date-search-area").hide()
+   					$("input[name=keyword]").show()
+				}
+				$("#option-box option[value = '${category}']").attr("selected", true);
+			});		
+			
+		</script>
+        </c:if>
 	        
 		</div>		
 		<div id="msg_list">
@@ -164,7 +220,7 @@
                 	<c:choose>
                 		<c:when test="${empty tList}">
                 			<tr>
-                				<td colspan ="4">삭제된 쪽지가 없습니다.</td>
+                				<td onclick="event.cancelBubble=true" colspan ="4">삭제된 쪽지가 없습니다.</td>
                 			</tr>
                 		</c:when>
                 		<c:otherwise>
@@ -206,18 +262,18 @@
 	                        <li class="page-item disabled"><a class="page-link">이전</a></li>
                    		</c:when>
                    		<c:otherwise>
-	                        <li class="page-item"><a class="page-link" href="tlist.mg?currentPage=${pi.currentPage-1}">이전</a></li>
+	                        <li class="page-item"><a class="page-link" href="tlist.mg?currentPage=${pi.currentPage-1}&category=${category}&keyword=${keyword}&startDate=${startDate}&endDate=${endDate}">이전</a></li>
                    		</c:otherwise>
                    	</c:choose>
                    	<c:forEach var="p" begin="${pi.startPage}" end="${pi.endPage}">
-                        <li class="page-item"><a class="page-link" href="tlist.mg?currentPage=${p}">${p}</a></li>
+           				<li class="page-item"><a class="page-link" href="tlist.mg?currentPage=${p}&category=${category}&keyword=${keyword}&startDate=${startDate}&endDate=${endDate}">${p}</a></li>
                    	</c:forEach>
                    	<c:choose>
                    		<c:when test="${pi.maxPage eq pi.currentPage}">
 	                        <li class="page-item disabled"><a class="page-link">다음</a></li>
                    		</c:when>
                    		<c:otherwise>
-	                        <li class="page-item"><a class="page-link" href="tlist.mg?currentPage=${pi.currentPage+1}">다음</a></li>
+	                        <li class="page-item"><a class="page-link" href="tlist.mg?currentPage=${pi.currentPage+1}&category=${category}&keyword=${keyword}&startDate=${startDate}&endDate=${endDate}">다음</a></li>
                    		</c:otherwise>
                 	</c:choose>
                 </ul>

@@ -6,8 +6,10 @@
 <head>
 <meta charset="UTF-8">
 <title>쪽지</title>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <style>
         .messenger_content {
@@ -63,6 +65,10 @@
             background-color : white;
         }
         
+        .innerOuter i:hover{
+        	font-size:32px;
+        }
+        
       
     </style>
 </head>
@@ -70,10 +76,10 @@
 	<div class="messenger_content">
 		<div class="innerOuter">
 			<c:if test="${msg.recvrUno eq loginUser.userNo}">
-			<h2 style="font-weight: 700;">받은 쪽지</h2> 
+			<h2 style="font-weight: 700;"><i class="fa-solid fa-chevron-left fa-sm" onclick="history.back();" style="color: #bee6b1;"></i>&nbsp; 받은 쪽지</h2> 
 			</c:if>
 			<c:if test="${msg.senderUno eq loginUser.userNo}">
-			<h2 style="font-weight: 700;">보낸 쪽지</h2> 
+			<h2 style="font-weight: 700;"><i class="fa-solid fa-chevron-left fa-sm" onclick="history.back();" style="color: #bee6b1;"></i>&nbsp; 보낸 쪽지</h2> 
 			</c:if>
 			<div id="msg_nav">
 					<ul>
@@ -134,25 +140,25 @@
 	                    <button id="delete-btn" type="button" class="btn btn-danger">삭제</button>
 	                </div>
 	                <br>
-	                <table algin="center">
+	                <table class="table table" algin="center">
 	                    <tr>
 	                        <th width="15%">제목</th>
-	                        <td><input type="text" id="" class="form-control" value="${msg.msgTitle}" name="msgTitle" readonly></td>
+	                        <td>${msg.msgTitle}</td>
 	                    </tr>
 	                    <tr>
 	                        <th>보낸사람</th>
-	                        <td><input type="text" id="writer" class="form-control" value="${msg.senderId} (${msg.sender})" name="sender" readonly></td>
+	                        <td>${msg.senderId} (${msg.sender})</td>
 	                    </tr>
 	                    <tr>
 	                        <th>받는사람</th>
-	                        <td><input type="text" id="sendUser" class="form-control"  value="${msg.recvrId} (${msg.receiver})" name="receiver" readonly></td>
+	                        <td>${msg.recvrId} (${msg.receiver})</td>
 	                    </tr>
 	                    <tr>
 	                        <th>내용</th>
-	                        <td><textarea id="content" class="form-control" rows="8" style="resize:none;" name="msgContent" readonly>${msg.msgContent}</textarea></td>
+	                        <td><div style="height: 200px;" >${msg.msgContent}</div></td>
 	                    </tr>
 	                </table>
-	                <br>
+	                <hr>
 	            </div>
 				</c:if>
 				
@@ -195,25 +201,25 @@
 	                    <button id="send-delete-btn" type="button" class="btn btn-danger">삭제</button>
 	                </div>
 	                <br>
-	                <table algin="center">
+	                <table class="table table" algin="center">
 	                    <tr>
 	                        <th width="15%">제목</th>
-	                        <td><input type="text" class="form-control" value="${msg.msgTitle}"name="msgTitle" readonly></td>
+	                        <td>${msg.msgTitle}</td>
 	                    </tr>
 	                    <tr>
 	                        <th>보낸사람</th>
-	                        <td><input type="text" class="form-control" value="${msg.senderId} (${msg.sender})" name="sender" readonly></td>
+	                        <td>${msg.senderId} (${msg.sender})</td>
 	                    </tr>
 	                    <tr>
 	                        <th>받는사람</th>
-	                        <td><input type="text" class="form-control" value="${msg.recvrId} (${msg.receiver})" name="receiver" readonly></td>
+	                        <td>${msg.recvrId} (${msg.receiver})</td>
 	                    </tr>
 	                    <tr>
 	                        <th>내용</th>
-	                        <td><textarea class="form-control" rows="8" style="resize:none;" name="msgContent" readonly>${msg.msgContent}</textarea></td>
+	                        <td><div style="height:200px;">${msg.msgContent}</div></td>
 	                    </tr>
 	                </table>
-	                <br>
+					<hr>
 	            </div>
 				</c:if>
 	        </div>
