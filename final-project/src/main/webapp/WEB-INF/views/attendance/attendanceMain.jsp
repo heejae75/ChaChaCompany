@@ -63,11 +63,11 @@
     #calendar{
     	width: 100%;
     	height: 100%;
-    	margin-top: 50px;
+    	margin-top: 30px;
     	margin-left: 0;
     }
     .fc-toolbar{
-    	margin-top: 60px !important;
+    	margin-top: 30px !important;
     	margin-bottom: 40px !important;
     	font-size: 10px !important;
     }
@@ -77,19 +77,17 @@
 	.fc-toolbar h2{
 	  	font-size: 20px !important;
 	}
-	.fc-agendaWeek-view .fc-time-grid .fc-slats td {
-	  	height: 52px; 
-	}
 	#wrap{
 		margin: auto;
 		width: 80%;
 		height: 100%;
 	}
+	
     /* 캘린더구역 */
     #calendar-container{
    		margin: auto;
    		width: 60%;
-   		height: 100%;
+   		height: 90%;
    		display: inline-block;
    		float: left;
     }
@@ -100,7 +98,7 @@
     	width: 40%;
     	display: inline-block;
     	float: left;
-    	margin-top: 60px;
+    	margin-top: 30px;
     }
     #att-panel table{
     	margin: auto;
@@ -127,7 +125,12 @@
     	color: #0E6251;
     	font-weight: 600;
     }
-    
+    #status-btn:hover{
+    	cursor: default;
+    }
+    .sub-title{
+    	font-size: 17px;
+    }
    /* 나의근무구역 */
     #record-panel{
     	height: 50%;
@@ -152,9 +155,57 @@
     	vertical-align: middle;
     }
     .progress{margin:auto!important;}
-   
-    
-    
+    .progress-bar{
+    	line-height: 40px !important;
+    }
+    #progress-bar{
+    	height: 80%;
+    }
+   /*근무정정신청 폼 스타일*/
+    #att-request-form table{
+    	width : 100%;
+    	height : 100%;
+    	margin : auto;
+    }
+     #att-request-form td,  #att-request-form th{
+    	padding: 5px
+    }
+    #btn-table{
+    	margin: auto;
+    	text-align: center;
+    }
+    /* 알림메세지 */
+    #alertMsg{
+    	font-size: 11px;
+    	color: white;
+    	position: absolute;
+        display: none;
+    	right: 21%;
+    	top: 55%;
+    	padding: 5px 5px;
+     }
+     
+     
+     .alertMsg {
+	position: relative;
+	background: #0E6251;
+	border-radius: .4em;
+}
+
+.alertMsg:after {
+	content: '';
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	width: 0;
+	height: 0;
+	border: 9px solid transparent;
+	border-top-color: #0E6251;
+	border-bottom: 0;
+	border-right: 0;
+	margin-left: -4.5px;
+	margin-bottom: -9px;
+}
     
 </style>
 </head>
@@ -169,8 +220,16 @@
 						<a href="userAtt.at">나의근무</a>
 					</li>
 					<li role="presentation">
-					 	<a href="deptAtt.at">팀의근무</a>
+					 	<a href="requestList.at">신청확인</a>
 					</li>
+					<c:if test="${loginUser.auth eq 'ROLE_ADMIN' }">
+					<li role="presentation">
+					 	<a href="approveRequest.at">신청관리</a>
+					</li>
+					<li role="presentation">
+					 	<a href="manageAtt.at">근태관리</a>
+					</li>
+					</c:if>
 				</ul>
             </div>
             
@@ -185,12 +244,12 @@
 				<div id="att-today">
 				
 					<div class="panel panel-info" id="att-panel">
-						<div class="panel-heading">근무계획</div>
+						<div class="panel-heading">오늘의 근무</div>
 					
 						<table class="table">
 							<thead>
 								<tr style="border-left:2px solid green;height:15%;">
-									<td colspan="4" id="formattedDate"></td>
+									<td colspan="4" id="formattedDate" class="sub-title"></td>
 								</tr>
 								<tr style="height:15%;">
 									<td width="300px" colspan="2">
@@ -221,7 +280,7 @@
 									<td colspan="2" align="right">
 										<c:choose>
 											<c:when test="${att.onTime eq null}">
-												미타각
+												미입력
 											</c:when>
 											<c:otherwise>
 												${att.onTime}
@@ -234,7 +293,7 @@
 									<td colspan="2" align="right">
 										<c:choose>
 											<c:when test="${att.offTime eq null}">
-												미타각
+												미입력
 											</c:when>
 											<c:otherwise>
 												${att.offTime}
@@ -255,24 +314,24 @@
 				
 				
 					<div class="panel panel-success" id="record-panel">
-						<div class="panel-heading">나의근무</div>
-						
+						<div class="panel-heading">나의 근무실적</div>
+						<div id="alertMsg" class="alertMsg"><div>정산이 이미 종료된 근태는 변경할 수 없습니다.</div></div>
 						<table class="table">
 							<thead>
-								<tr style="border-left:2px solid green;">
-									<td id="formattedDate2" colspan="2" style="font-size: 15px;"></td>
-									<td align="right"><button class="btn btn-sm btn-default">근태사유서신청</button></td>
+								<tr style="border-left:2px solid green;height:18%">
+									<td class="sub-title" id="formattedDate2" colspan="2"></td>
+									<td id="btn-td" align="right"><button type="button" id="request-btn" class="btn btn-sm btn-default" onclick="chkDate();">근태사유서신청</button></td>
 								</tr>
-								<tr class="title">
+								<tr class="title" style="height:10%;">
 									<td class="date" colspan="2">근태</td>
 									<td class="date" align="right" id="leaveType">${att.leaveType }</td>
 								</tr>
-								<tr class="title">
+								<tr class="title" style="height:10%;">
 									<td colspan="2">출근</td>
 									<td align="right" id="startTime">
 										<c:choose>
 											<c:when test="${att.onTime eq null}">
-												미타각
+												미입력
 											</c:when>
 											<c:otherwise>
 												${att.onTime}
@@ -280,12 +339,12 @@
 										</c:choose>
 									</td>
 								</tr>
-								<tr class="title">
+								<tr class="title" style="height:10%;">
 									<td colspan="2">퇴근</td>
 									<td align="right" id="endTime">
 										<c:choose>
 											<c:when test="${att.offTime eq null}">
-												미타각
+												미입력
 											</c:when>
 											<c:otherwise>
 												${att.offTime}
@@ -293,29 +352,25 @@
 										</c:choose>
 									</td>
 								</tr>
-								<tr style="height:20px">
-									<td class="date" colspan="3"></td>
+								<tr>
+									<td style="height:40px;" class="date" colspan="3"></td>
 								</tr>
 							</thead>
 							<tbody>
-								<tr style="border-left:2px solid green;height:40px">
-									<td class="date" colspan="2">주간실적</td>
+								<tr style="border-left:2px solid green;height:17%">
+									<td class="date sub-title" colspan="2">주간실적</td>
 									<td class="date" align="right" style="font-size:13px"><label id="weekStart"></label> - <label id="weekEnd"></label></td>
 								</tr>
-								<tr>
-									<td class="date" colspan="3">
-										<div class="progress">
-										  <div id="work-record-progress" class="progress-bar progress-bar-striped progress-bar-info" style="width: 35%">
-										    <span class="sr-only"></span>
-										  </div>
-										  <div id="extra-work-progress" class="progress-bar progress-bar-striped progress-bar-danger" style="width: 20%">
-										    <span class="sr-only"></span>
-										  </div>
+								<tr style="height:15%;">
+									<td class="date" colspan="3" style="padding-top:15px">
+										<div class="progress" id="progress-bar">
+										  <div id="work-record-progress" class="progress-bar progress-bar-striped progress-bar-info"></div>
+										  <div id="extra-work-progress" class="progress-bar progress-bar-striped progress-bar-danger"></div>
 										</div>
 									</td>
 								</tr>
-								<tr id="progress" style="font-size:13px;">
-									<td id="work-plan"></td>
+								<tr id="progress" style="font-size:13px;height:10%;">
+									<td id="work-plan" height="10px"></td>
 									<td id="work-record"></td>
 									<td id="extra-work"></td>
 								</tr>
@@ -326,8 +381,65 @@
 				</div>
 				
 			</div>
-		</div>	
-			
+		</div>
+		
+		<!-- 근태사유 모달 -->
+	<div class="modal fade" id="att-request-modal" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				
+				    <div class="modal-header">
+				       <button type="button" class="close" data-dismiss="modal">&times;</button>
+				       <h4 class="modal-title">근태 정정 신청 사유서</h4>
+				    </div>
+				<form action="attRequest.at" id="att-request-form">
+				    <div class="modal-body">
+					      <table>
+					    		<tr>
+					    			<th>신청인</th>
+					    			<td colspan="2"><input type="text" class="form-control" readonly value="${loginUser.userName }"></td>
+					    		</tr>
+					    		<tr>
+					    			<th>날짜 </th>
+					    			<td colspan="2"><input type="text" id="work-date" class="form-control" readonly></td>
+					    		</tr>
+					    		<tr>
+					    			<th>기존근무시간</th>
+					    			<td><input type="text" id="start-time" class="form-control" readonly></td>
+					    			<td><input type="text" id="end-time" class="form-control" readonly></td>
+					    		</tr>
+					    		<tr>
+					    			<th>변경근무시간</th>
+					    			<td><input type="text" id="request-start-time" class="form-control" required></td>
+					    			<td><input type="text" id="request-end-time" class="form-control" required></td>
+					    		</tr>
+					    		<tr>
+					    			<th>신청사유</th>
+					    			<td colspan="2"><textarea rows="4" name="updateContent" id="updateContent" class="form-control" style="resize: none;padding: 5px;" required></textarea></td>
+					    		</tr>
+					    	</table>
+					    	
+					    	<input type="hidden" name="refAtno" id="refAtno">
+					    	<input type="hidden" name="userNo" value="${loginUser.userNo }">
+					    	<input type="hidden" name="updateOnTime" id="updateOnTime">
+					    	<input type="hidden" name="updateOffTime" id="updateOffTime">
+				    </div>
+				    <div class="modal-footer" id="status-modal-footer">
+					   	<table id="btn-table">
+					   		<tr>
+					   			<td>
+						   			<button type="button" class="btn btn-default" onclick="submitRequestForm();">신청</button>
+								    <button type="reset" class="btn btn-default" data-dismiss="modal">취소</button>
+					   			</td>
+					   		</tr>
+					   	</table>
+				    </div>
+				 </form>
+				       
+			 </div>
+		</div>
+	</div>	
+	<!-- 모달끝 -->		
 			
       <br><br><br><br>
  
@@ -374,14 +486,22 @@
 	        	 /*나의 근무에서 선택일과 출퇴근시간 변경*/
 	        	 if(arg.start.format("HH:mm") != "00:00"){
 		        	 $("#startTime").text(arg.start.format("HH:mm"));
+		        	 $("#start-time").val(arg.start.format("HH:mm"));
+		        	 $("#request-start-time").val(arg.start.format("HH:mm")); // 근무정정신청폼
 	        	 }else{
-	        		 $("#startTime").text("미타각");
+	        		 $("#startTime").text("미입력");
+	        		 $("#start-time").val("미입력");
+	        		 $("#request-start-time").val("미입력");
 	        	 }
 	         
 	        	 if(arg.end != null){
 	        		 $("#endTime").text(arg.end.format("HH:mm"));
+	        		 $("#end-time").val(arg.end.format("HH:mm"));
+	        		 $("#request-end-time").val(arg.end.format("HH:mm"));
 	        	 }else{
-	        		 $("#endTime").text("미타각");
+	        		 $("#endTime").text("미입력");
+	        		 $("#end-time").val("미입력");
+	        		 $("#request-end-time").val("미입력");
 	        	 }
 	        	 
 	        	 // 휴가근무인 경우
@@ -397,6 +517,11 @@
 	        	 }
 	         	 
 		        $("#formattedDate2").text(arg.day);
+		        $("#work-date").val(arg.day); // 근무정정신청폼 날짜
+		        
+		        ;
+		        
+		        $("#refAtno").val(arg.id); // 근무정정신청폼 근태번호
 		        $("#leaveType").text(arg.leaveType);
 		        
 				/* 주간실적 progress bar 함수 호출 */
@@ -407,6 +532,16 @@
 				var endDate = arg.start.clone().endOf('week').format('YYYY-MM-DD');
 				// 주간실적 함수 호출
 				weekWorkRecord(startDate, endDate);
+				
+				/* 월급정산이 끝난 지난달은 실적 정정 신청 불가 */
+				var selectedMonth = arg.start.format('MM');
+				var currMonth = new Date().getMonth() + 1;
+				if(selectedMonth < currMonth){
+					alertDisability(selectedMonth, currMonth); // 신청버튼 클릭 못하게, 버튼 마우스오버시 알림뜨게하는 함수
+				}else{
+					$("#request-btn").removeAttr("disabled");
+				}
+				
 		        
 		       },
 	           
@@ -438,7 +573,7 @@
 		        			  var event =  {
 		        					  title : leave.leaveCode,
 		        					  start : leave.startDate,
-		        					  end : leave.endDate,
+		        					  end : leave.endDate
 		        			  }
 		        			  events.push(event);
 		        		  }); 
@@ -452,7 +587,6 @@
 				                       xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
 				                   },
 					        	   success : function(list) {
-					        		   //console.log(list)
 					        		  $.each(list, function(index, attendance) {
 					        			
 					        			  var event =  {
@@ -464,7 +598,7 @@
 					        					  day : attendance.currDate,
 					        					  onTime : attendance.onTime,
 					        					  offTime : attendance.offTime,
-					        					  leaveType : attendance.leaveType
+					        					  leaveType : attendance.leaveType,
 					        			  }
 					        			  events.push(event);
 					        		});
@@ -482,7 +616,6 @@
 	        },
         	   
 	           eventRender: function(event, element) {
-	        	   console.log(event.title)
 		        	 element.css({
 		        		 "border": "1px solid #E0E0E0",
 		        		 "color": "#616161",
@@ -570,11 +703,13 @@
 			if("${att.onTime}"!="" && "${att.offTime}"==""){
 				$("#status-btn").text("근무중");
 				$("#status-btn").addClass("btn-info");
+				$("#status-btn").css("background-color","#5BC0DE");
 			}
 			// ontime not null 이고 offtime not null이면 퇴근
 			if("${att.onTime}"!="" && "${att.offTime}"!=""){
 				$("#status-btn").text("퇴근");
 				$("#status-btn").addClass("btn-danger");
+				$("#status-btn").css("background-color","#D9534F");
 			}
 		});
 		
@@ -596,21 +731,12 @@
 			existingEvents.forEach(function(e){
 				if(e.day != null && e.day >= startDate && e.day <= endDate){ // 실적이 있으면
 					while(currentDate <= endDate){
-						// currentDate : 클릭한 날 짜 첫 월요일
-						// endDate 
-						
-						// 날짜 순회하면서 계획/실적 가져오기 (db에서 att가져오면 됨)
-						/* workPlan += getWorkPlan(currentDate);
-						workRecord += getWorkRecord(currentDate) */
-						console.log(currentDate);
-						
-						var result = getWork(currentDate);
-						
+						var result = getWork(currentDate); // 근무계획, 실적 배열 리턴하는 함수호출
+						//console.log(currentDate);
+						//console.log(result)
 						if(result.length != 0){
 							workPlan += result[0];
 							workRecord += result[1];
-							console.log("계획 : " + getWork(currentDate)[0])
-							console.log("실적 : " + getWork(currentDate)[1])
 						}
 						currentDate = moment(currentDate).add(1, 'day').format('YYYY-MM-DD');
 					}
@@ -621,49 +747,18 @@
 				workPlan = 0;
 			}
 			extraWork = workRecord - workPlan;
-			console.log("총계획 : " + workPlan)
-			console.log("총실적 : " + workRecord)
-			console.log("초과근무  : " + extraWork)
-			
-			// 현재 진행중인 주간은 주간계획 조회 불가 TEST필요
-			/* var today = new Date();
-
-			var year = today.getFullYear();
-			var month = String(today.getMonth() + 1).padStart(2, '0');
-			var day = String(today.getDate()).padStart(2, '0');
-			
-			var formattedDate = year + '-' + month + '-' + day; // 오늘날짜
-			var friday = moment(endDate).add(-2, 'day').format('YYYY-MM-DD');
-			console.log(friday)
-			console.log(formattedDate)
-			console.log(startDate)
-			if(formattedDate<=friday && formattedDate>=startDate){
-				$("#progress").html("<td colspan='3'>주간실적은 지난 주간부터 조회가능합니다.</td>")
-			}else{
-				$("#work-plan").text("계획 : " + workPlan);
-				$("#work-record").text("실적 : " + workRecord);
-				$("#extra-work").text("초과 : " + extraWork);
-				
-				var fulltime = 52*60; // 주 52시간제
-				var workRecordProgress = workRecord/fulltime*100;
-				var extraWorkProgress = extraWork/fulltime*100;
-				//console.log(workRecordProgress)
-				//console.log(extraWorkProgress)
-				$("#work-record-progress").css("width",workRecordProgress+"%");
-				$("#extra-work-progress").css("width",extraWorkProgress+"%");
-			} */
 			
 			$("#work-plan").text("계획 : " + workPlan);
 			$("#work-record").text("실적 : " + workRecord);
 			$("#extra-work").text("초과 : " + extraWork);
 			
 			var fulltime = 52*60; // 주 52시간제
-			var workRecordProgress = workRecord/fulltime*100;
-			var extraWorkProgress = extraWork/fulltime*100;
-			//console.log(workRecordProgress)
-			//console.log(extraWorkProgress)
-			$("#work-record-progress").css("width",workRecordProgress+"%");
-			$("#extra-work-progress").css("width",extraWorkProgress+"%");
+			var workRecordProgress =  Math.round((workRecord / fulltime) * 100) + "%";
+			var extraWorkProgress =  Math.round((extraWork / fulltime) * 100) + "%";
+			$("#work-record-progress").css("width",workRecordProgress);
+			$("#work-record-progress").text(workRecordProgress);
+			$("#extra-work-progress").css("width",extraWorkProgress);
+			$("#extra-work-progress").text(extraWorkProgress);
 				
 			};
 	
@@ -691,12 +786,69 @@
             	console.log("통신오류");
             }
 		});
-		
 		return result;
+	};
+	// 캘린더날짜 선택해야 근태신청 가능(모달열기)
+	function chkDate(){
+		if($("#work-date").val()){
+			$("#att-request-modal").modal("show");
+		}else{
+			alert("캘린더에서 근태를 수정하실 날짜를 먼저 입력하세요.");
+		}
+	}
+	// 근태신청사유서 폼 submit함수 (날짜와 시간 더해서 시간형식 만든 후 hidden값 폼태그로 넘겨주기)
+	function submitRequestForm(){
+		
+		// 입력한 값이 정규식에 맞는지 검사하는 함수 호출
+		if(checkTimeFormat($("#request-start-time").val()) && checkTimeFormat($("#request-end-time").val())){
+			
+			var workDate = $("#work-date").val();
+			var startDate = workDate + " " + $("#request-start-time").val();
+			var endDate = workDate + " " + $("#request-end-time").val();
+			
+			$("#updateOnTime").val(startDate);
+			$("#updateOffTime").val(endDate);
+			
+			if($("#updateOnTime").val() && $("#updateOffTime").val() && $("#updateContent").val()){
+				if(confirm("위의 내용으로 신청 진행하시겠습니까?")){
+					$("#att-request-form").submit();
+				}
+			}else{
+				alert("모든 입력란을 작성하세요.");
+			}
+			
+		}else{
+			alert("시간형식으로 작성해주세요.");
+		}
+	};
+	
+	function checkTimeFormat(inputValue) {
+		  // 시간 형식인지 검사하는 정규식
+		  var timeRegex = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
+		  // 입력된 값과 정규식을 비교하여 시간 형식인지 확인
+		  if (timeRegex.test(inputValue)) {
+		    return true;
+		  } else {
+		    return false;
+		  }
+	};
+	
+	// 이미 정산이 끝난 지난 달의 근무는 정정 신청 불가능
+	function alertDisability(selectedMonth, currMonth){
+		
+		var btn = document.getElementById("request-btn");
+
+		btn.addEventListener("mouseenter",function(){
+			btn.setAttribute("disabled", true);
+			document.getElementById("alertMsg").style.display="block";
+		});
+		document.getElementById("btn-td").addEventListener("mouseout",function(){
+			document.getElementById("alertMsg").style.display="none";
+			btn.removeAttribute("disabled");
+		});
 	};
 
 			
- 	
   </script>
    
 
