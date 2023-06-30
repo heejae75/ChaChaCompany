@@ -168,7 +168,7 @@
 		
 		if(result == 'Y'){
 			$("#emergency-btn").attr("checked",true);
-		}else{
+		}else
 			$("#emergency-btn").attr("checked",false);
 		}
 	});
@@ -195,7 +195,17 @@
 				success : function(result){
 					if(result>0){
 						$("#secondSignature").attr("value",loginUserName);
-    					alert("승인이 완료되었습니다.")
+    					
+						//실시간 알림 서버에 보내기 
+						if(secondSignature != docWriter){
+							if (socket != null) {
+							    var message = "itemApproval," + secondSignature + ","+ docWriter +","+ docNo+","+ docTitle+","+ docType;
+							    console.log(message);
+							    socket.send(message);
+							}
+						}
+						
+						alert("승인이 완료되었습니다.")
 					}
 				},
 				error : function(){
@@ -225,6 +235,16 @@
     						$("#approval-btn").attr("disabled",true);
     						$("#reject-btn").attr("disabled",true);
     						$("#emergency-btn").attr("checked",false);
+    						
+    						//실시간 알림 서버에 보내기 
+    						if(secondSignature != docWriter){
+    							if (socket != null) {
+    							    var message = "itemApproval," + secondSignature + ","+ docWriter +","+ docNo+","+ docTitle+","+ docType;
+    							    console.log(message);
+    							    socket.send(message);
+    							}
+    						}
+    						
     						alert("승인이 완료되었습니다.");
     					}
     				},
@@ -261,6 +281,15 @@
 						console.log(result);
 						if(result>0){
 							$("#secondSignature").attr("value","반려");	
+							
+							//실시간 알림 서버에 보내기 
+    						if(lastSignature != docWriter){
+    							if (socket != null) {
+    							    var message = "itemUpdateReject," + lastSignature + ","+docWriter+","+docNo+","+docTitle+","+docType;
+									console.log(message);
+    							    socket.send(message);
+    							}
+    						}
 						}else{
 							console.log("실패");
 						}
@@ -294,6 +323,15 @@
 							$("#returnReason").attr("readonly",true);
 							$("#approval-btn").attr("disabled",true);
 							$("#reject-btn").attr("disabled",true);
+							
+							//실시간 알림 서버에 보내기 
+    						if(lastSignature != docWriter){
+    							if (socket != null) {
+    							    var message = "itemUpdateReject," + lastSignature + ","+docWriter+","+docNo+","+docTitle+","+docType;
+									console.log(message);
+    							    socket.send(message);
+    							}
+    						}
 						}else{
 							console.log("실패");
 						}

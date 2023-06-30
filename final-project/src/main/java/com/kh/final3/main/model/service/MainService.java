@@ -3,6 +3,7 @@ package com.kh.final3.main.model.service;
 import java.util.ArrayList;
 import java.util.Map;
 
+import com.kh.final3.alert.model.vo.Alert;
 import com.kh.final3.approval.model.vo.Approval;
 import com.kh.final3.attendance.model.vo.Attendance;
 import com.kh.final3.board.model.vo.Board;
@@ -59,6 +60,15 @@ public interface MainService {
 
 	//투두리스트 전체 삭제 
 	int allDeleteTodoList(Member m);
+
+	//알림 전체 조회
+	ArrayList<Alert> menuAlertList(int userNo);
+
+	//알림 a태그 선택시 상태 변경(읽음 처리)
+	int menuAlertUpdate(Alert al);
+
+	//알림 전체 삭제
+	int menuAlertAllDelete(Member m);
 
 
 

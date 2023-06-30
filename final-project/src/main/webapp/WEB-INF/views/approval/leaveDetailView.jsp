@@ -28,7 +28,7 @@
             <c:if test="${(a.secondApproverNo == loginUser.userNo) || (a.lastApproverNo == loginUser.userNo) }">
 	            <div id="leave-btn-area">
 	                <button type="button" class="btn btn-primary" id="approval-btn" onclick="approval();">승인</button>
-    	            <button type="button" class="btn btn-danger" id="reject-btn" data-bs-toggle="modal" data-bs-target="#rejectModal">반려</button>
+    	            <button type="button" class="btn btn-danger" id="reject-btn" data-toggle="modal" data-target="#rejectModal">반려</button>
     	            <button type="button" class="btn btn-success" onclick="saveApproval();">나가기</button>
         	        <input type="checkbox" id="emergency-btn" value="${ad.emergency }"><label for="긴급">긴급문서</label>
 	            </div>
@@ -185,13 +185,13 @@
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <h1 class="modal-title fs-5" id="exampleModalLabel">반려사유</h1>
-	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
 	      </div>
 	      <div class="modal-body">
 		      <textarea name="returnReason" id="returnReason">${a.returnReason}</textarea>	      
 		  </div>
 	      <div class="modal-footer">
-	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
 	        <button type="button" class="btn btn-primary" onclick="updateReject();">완료</button>
 	      </div>
 	    </div>
@@ -230,6 +230,14 @@
 		var secondApprover = "${a.secondApproverNo}";
 		var docNo = "${ad.docNo}";
 		
+		var lastSignature = "${a.lastApprover}";
+		var secondSignature = "${a.secondApprover}";
+		var docWriter = "${ad.docWriter}";
+		var docTitle = "${ad.docTitle}";
+		var docType = "${dt}";
+		
+		console.log("최종결제자 : "+lastSignature+"중간 결제자 : "+secondSignature+"전자결재 작성자 : "+docWriter+"전자결재 제목 : "+docTitle+ "전자결재 타입: "+docType);
+			
 		if(loginUserNo === secondApprover){
 			$.ajax({
 				url : "updateSecondApprover.ap",
@@ -245,8 +253,20 @@
 				success : function(result){
 					if(result>0){
 						$("#secondSignature").attr("value",loginUserName);
-    					alert("승인이 완료되었습니다.")
+						
+						//실시간 알림 서버에 보내기 
+						if(secondSignature != docWriter){
+							if (socket != null) {
+							    var message = "leaveApproval," + secondSignature + ","+ docWriter +","+ docNo+","+ docTitle+","+ docType;
+							    console.log(message);
+							    socket.send(message);
+							}
+						}
+						
+    					alert("승인이 완료되었습니다.");
 					}
+					
+					
 				},
 				error : function(){
 					console.log("통신오류")
@@ -275,6 +295,16 @@
     						$("#approval-btn").attr("disabled",true);
     						$("#reject-btn").attr("disabled",true);
     						$("#emergency-btn").attr("checked",false);
+    						
+    						//실시간 알림 서버에 보내기 
+    						if(lastSignature != docWriter){
+    							if (socket != null) {
+    							    var message = "leaveApproval," + lastSignature + ","+docWriter+","+docNo+","+docTitle+","+docType;
+									console.log(message);
+    							    socket.send(message);
+    							}
+    						}
+    						
     						alert("승인이 완료되었습니다.");
     					}
     				},
@@ -309,6 +339,16 @@
 					success : function(result){
 						if(result>0){
 							$("#secondSignature").attr("value","반려");	
+							
+							//실시간 알림 서버에 보내기 
+    						if(lastSignature != docWriter){
+    							if (socket != null) {
+    							    var message = "leaveUpdateReject," + lastSignature + ","+docWriter+","+docNo+","+docTitle+","+docType;
+									console.log(message);
+    							    socket.send(message);
+    							}
+    						}
+
 						}else{
 							console.log("실패");
 						}
@@ -341,6 +381,16 @@
 							$("#returnReason").attr("readonly",true);
 							$("#approval-btn").attr("disabled",true);
 							$("#reject-btn").attr("disabled",true);
+							
+							//실시간 알림 서버에 보내기 
+    						if(lastSignature != docWriter){
+    							if (socket != null) {
+    							    var message = "leaveUpdateReject," + lastSignature + ","+docWriter+","+docNo+","+docTitle+","+docType;
+									console.log(message);
+    							    socket.send(message);
+    							}
+    						}
+
 						}else{
 							console.log("실패");
 						}

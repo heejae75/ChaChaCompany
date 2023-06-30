@@ -6,6 +6,7 @@ import java.util.Map;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.kh.final3.alert.model.vo.Alert;
 import com.kh.final3.approval.model.vo.Approval;
 import com.kh.final3.attendance.model.vo.Attendance;
 import com.kh.final3.board.model.vo.Board;
@@ -92,6 +93,18 @@ public class MainDao {
 	//투두리스트 전체 삭제
 	public int allDeleteTodoList(SqlSessionTemplate sqlSession, Member m) {
 		return sqlSession.update("mainMapper.allDeleteTodoList", m);
+	}
+
+	public ArrayList<Alert> menuAlertList(SqlSessionTemplate sqlSession, int userNo) {
+		return (ArrayList)sqlSession.selectList("mainMapper.menuAlertList", userNo);
+	}
+
+	public int menuAlertUpdate(SqlSessionTemplate sqlSession, Alert al) {
+		return sqlSession.update("mainMapper.menuAlertUpdate",al);
+	}
+
+	public int menuAlertAllDelete(SqlSessionTemplate sqlSession, Member m) {
+		return sqlSession.delete("mainMapper.menuAlertAllDelete", m);
 	}
 
 

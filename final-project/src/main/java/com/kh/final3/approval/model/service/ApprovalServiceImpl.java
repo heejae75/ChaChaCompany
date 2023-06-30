@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.kh.final3.alert.model.vo.Alert;
 import com.kh.final3.approval.model.dao.ApprovalDao;
 import com.kh.final3.approval.model.vo.Approval;
 import com.kh.final3.approval.model.vo.ApprovalAttachment;
@@ -136,7 +137,8 @@ public class ApprovalServiceImpl implements ApprovalService {
 	public int updateLastReturnReason(Approval a, ApprovalDoc ad) {
 		int result = ss.update("approvalMapper.updateLastReturnReason",a);
 		int result2 = ss.update("approvalMapper.updateStatus",ad);
-		return result*result2;
+		int result3 = ss.insert("mainMapper.insertReturnAlert", a);
+		return result*result2*result3;
 	}
 	
 	@Override
@@ -149,8 +151,9 @@ public class ApprovalServiceImpl implements ApprovalService {
 	public int updateLastApprover(Approval a, ApprovalDoc ad) {
 		int result = ss.update("approvalMapper.updateLastApprover",a);
 		int result2 = ss.update("approvalMapper.updateStatus", ad);
+		int result3 = ss.insert("mainMapper.insertAlert", a);
 		
-		return result * result2;
+		return result * result2 * result3;
 	}
 
 	@Override
