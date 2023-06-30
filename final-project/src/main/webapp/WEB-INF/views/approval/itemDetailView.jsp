@@ -188,6 +188,12 @@
 		var secondDate = "${a.secondDate}";
 		var lastDate = "${a.lastDate}";
 		
+		var lastSignature = "${a.lastApprover}";
+		var secondSignature = "${a.secondApprover}";
+		var docWriter = "${ad.docWriter}";
+		var docTitle = "${ad.docTitle}";
+		var docType = "${dt}";
+		
 		if(loginUserNo === secondApprover){
 			$.ajax({
 				url : "updateSecondApprover.ap",
@@ -204,8 +210,18 @@
 					if(result>0){
 						$("#secondSignature").attr("value",loginUserName);
 						$("#secondDate").attr("value",secondDate);
-    					alert("승인이 완료되었습니다.")
 						location.reload();
+    					
+						//실시간 알림 서버에 보내기 
+						if(secondSignature != docWriter){
+							if (socket != null) {
+							    var message = "itemApproval," + secondSignature + ","+ docWriter +","+ docNo+","+ docTitle+","+ docType;
+							    console.log(message);
+							    socket.send(message);
+							}
+						}
+						
+						alert("승인이 완료되었습니다.")
 					}
 				},
 				error : function(){
@@ -236,8 +252,18 @@
     						$("#reject-btn").attr("disabled",true);
     						$("#emergency-btn").attr("checked",false);
     						$("#lastDate").attr("value",lastDate);
-    						alert("승인이 완료되었습니다.");
     						location.reload();
+    						
+    						//실시간 알림 서버에 보내기 
+    						if(lastSignature != docWriter){
+    							if (socket != null) {
+    							    var message = "itemApproval," + lastSignature + ","+ docWriter +","+ docNo+","+ docTitle+","+ docType;
+    							    console.log(message);
+    							    socket.send(message);
+    							}
+    						}
+    						
+    						alert("승인이 완료되었습니다.");
     					}
     				},
     				error : function(){
@@ -258,6 +284,12 @@
 		var secondDate = "${a.secondDate}";
 		var lastDate = "${a.lastDate}";
 		
+		var lastSignature = "${a.lastApprover}";
+		var secondSignature = "${a.secondApprover}";
+		var docWriter = "${ad.docWriter}";
+		var docTitle = "${ad.docTitle}";
+		var docType = "${dt}";
+		
 		if(secondApprover == loginUserNo){
 			if(confirm("반려하시겠습니까?")){
 	    		$.ajax({
@@ -273,9 +305,18 @@
 	                },
 					success : function(result){
 						if(result>0){
-							$("#secondSignature").attr("value","반려");
+							$("#secondSignature").attr("value","반려");	
 							$("#secondDate").attr("value",secondDate);
 							location.reload();
+							
+							//실시간 알림 서버에 보내기 
+    						if(secondSignature != docWriter){
+    							if (socket != null) {
+    							    var message = "itemUpdateReject," + secondSignature + ","+docWriter+","+docNo+","+docTitle+","+docType;
+									console.log(message);
+    							    socket.send(message);
+    							}
+    						}
 						}else{
 							console.log("실패");
 						}
@@ -311,6 +352,15 @@
 							$("#reject-btn").attr("disabled",true);
 							$("#lastDate").attr("value",lastDate);
 							location.reload();
+							
+							//실시간 알림 서버에 보내기 
+    						if(lastSignature != docWriter){
+    							if (socket != null) {
+    							    var message = "itemUpdateReject," + lastSignature + ","+docWriter+","+docNo+","+docTitle+","+docType;
+									console.log(message);
+    							    socket.send(message);
+    							}
+    						}
 						}else{
 							console.log("실패");
 						}

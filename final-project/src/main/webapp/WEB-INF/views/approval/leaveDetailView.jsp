@@ -190,6 +190,7 @@
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <h1 class="modal-title fs-5" id="exampleModalLabel">반려사유</h1>
+
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 	      </div>
 	      <div class="modal-body">
@@ -238,6 +239,14 @@
 		
 		var docNo = "${ad.docNo}";
 		
+		var lastSignature = "${a.lastApprover}";
+		var secondSignature = "${a.secondApprover}";
+		var docWriter = "${ad.docWriter}";
+		var docTitle = "${ad.docTitle}";
+		var docType = "${dt}";
+		
+		console.log("최종결제자 : "+lastSignature+"중간 결제자 : "+secondSignature+"전자결재 작성자 : "+docWriter+"전자결재 제목 : "+docTitle+ "전자결재 타입: "+docType);
+			
 		if(loginUserNo === secondApprover){
 			$.ajax({
 				url : "updateSecondApprover.ap",
@@ -254,9 +263,21 @@
 					if(result>0){
 						$("#secondSignature").attr("value",loginUserName);
 						$("#secondDate").attr("value",secondDate);
-    					alert("승인이 완료되었습니다.");
     					location.reload();
+						
+						//실시간 알림 서버에 보내기 
+						if(secondSignature != docWriter){
+							if (socket != null) {
+							    var message = "leaveApproval," + secondSignature + ","+ docWriter +","+ docNo+","+ docTitle+","+ docType;
+							    console.log(message);
+							    socket.send(message);
+							}
+						}
+						
+    					alert("승인이 완료되었습니다.");
 					}
+					
+					
 				},
 				error : function(){
 					console.log("통신오류")
@@ -285,8 +306,18 @@
     						$("#reject-btn").attr("disabled",true);
     						$("#emergency-btn").attr("checked",false);
     						$("#lastDate").attr("value",lastDate);
-    						alert("승인이 완료되었습니다.");
     						location.reload();
+    						
+    						//실시간 알림 서버에 보내기 
+    						if(lastSignature != docWriter){
+    							if (socket != null) {
+    							    var message = "leaveApproval," + lastSignature + ","+docWriter+","+docNo+","+docTitle+","+docType;
+									console.log(message);
+    							    socket.send(message);
+    							}
+    						}
+    						
+    						alert("승인이 완료되었습니다.");
     					}
     				},
     				error : function(){
@@ -306,6 +337,12 @@
 		var secondDate = "${a.secondDate}";
 		var lastDate = "${a.lastDate}";
 		
+		var lastSignature = "${a.lastApprover}";
+		var secondSignature = "${a.secondApprover}";
+		var docWriter = "${ad.docWriter}";
+		var docTitle = "${ad.docTitle}";
+		var docType = "${dt}";
+		
 		if(secondApprover == loginUserNo){
 			if(confirm("반려하시겠습니까?")){
 	    		$.ajax({
@@ -321,9 +358,19 @@
 	                },
 					success : function(result){
 						if(result>0){
-							$("#secondSignature").attr("value","반려");
+							$("#secondSignature").attr("value","반려");	
 							$("#secondDate").attr("value",secondDate);
 							location.reload();
+							
+							//실시간 알림 서버에 보내기 
+    						if(secondSignature != docWriter){
+    							if (socket != null) {
+    							    var message = "leaveUpdateReject," + secondSignature + ","+docWriter+","+docNo+","+docTitle+","+docType;
+									console.log(message);
+    							    socket.send(message);
+    							}
+    						}
+
 						}else{
 							console.log("실패");
 						}
@@ -358,6 +405,16 @@
 							$("#reject-btn").attr("disabled",true);
 							$("#lastDate").attr("value",lastDate);
 							location.reload();
+							
+							//실시간 알림 서버에 보내기 
+    						if(lastSignature != docWriter){
+    							if (socket != null) {
+    							    var message = "leaveUpdateReject," + lastSignature + ","+docWriter+","+docNo+","+docTitle+","+docType;
+									console.log(message);
+    							    socket.send(message);
+    							}
+    						}
+
 						}else{
 							console.log("실패");
 						}
