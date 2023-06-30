@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.kh.final3.alert.model.vo.Alert;
 import com.kh.final3.approval.model.vo.Approval;
 import com.kh.final3.approval.model.vo.ApprovalAttachment;
 import com.kh.final3.approval.model.vo.ApprovalDoc;
@@ -17,21 +18,19 @@ import com.kh.final3.member.model.vo.Member;
 public interface ApprovalService {
 		
 		//전체 결재문서 수
-		int selectListCount(String status);
+		int selectListCount(HashMap<String, String> map);
 		
 		//결재문서 조회
-		ArrayList<ApprovalDoc> selectApprovalDocList(PageInfo pi, String status);
-		
-		//검색 결과 수
-		int searchApprovalCount(HashMap<String, String> map);
-		//검색 결과
-		ArrayList<ApprovalDoc> searchApprovalDocList(HashMap<String, String> map, PageInfo pi);
+		ArrayList<ApprovalDoc> selectApprovalDocList(PageInfo pi, HashMap<String, String> map);
 		
 		//홈 결재문서 리스트 조회
 		ArrayList<ApprovalDoc> approvalMainList(String status);
 		
+		//결재문서작성 리스트 수 
+		int selectEnrollListCount(HashMap<String, String> map);
+		
 		//결재문서 종류 조회
-		ArrayList<DocType> selectEnrollList();
+		ArrayList<DocType> selectEnrollList(HashMap<String, String> map, PageInfo pi);
 		
 		//결재자 조회
 		ArrayList<Member> selectApproverList(String deptCode);
@@ -60,19 +59,21 @@ public interface ApprovalService {
 		//휴가계 상세 조히
 		ArrayList<Leave> selectLeave(int docNo);
 
-		//以묎컙寃곗옱�옄 諛섎젮
+		//중간결재자 반려사요
 		int updateSecondReturnReason(Approval a);
 		
-		//理쒖쥌寃곗옱�옄 諛섎젮
+		//최종결재자 반려사유
 		int updateLastReturnReason(Approval a, ApprovalDoc ad);
 		
-		//以묎컙寃곗옱�옄 �듅�씤
+		//중간결재자 승인
 		int updateSecondApprover(Approval a);
 		
-		//理쒖쥌寃곗옱�옄 �듅�씤
+		//최종결재자 승인
 		int updateLastApprover(Approval a,ApprovalDoc ad);
 		
-		//寃곗옱 �솃 洹몃옒�봽
+		//월별 데이터
 		List<ApprovalDoc> monthData(ApprovalDoc ad);
+		
+		
 
 }

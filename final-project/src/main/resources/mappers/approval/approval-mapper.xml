@@ -25,6 +25,7 @@
  	<resultMap type="docType" id="docTypeResultSet">
  		<result column="DOC_TYPE" property="docType"/>
  		<result column="DOC_NAME" property="docName"/>
+ 		<result column="DOC_CATEGROY" property="docCategory"/>
  	</resultMap>
  	
  	<resultMap type="member" id="memberResultSet">
@@ -87,9 +88,39 @@
  	
  	<select id="selectListCount" resultType="_int">
  		SELECT COUNT(*)
-		FROM APPROVAL_DOC
-		<if test="status !=null">
-			WHERE STATUS = #{status}
+		FROM APPROVAL_DOC A
+		<choose>
+			<when test='option == "0"'>
+				JOIN DEPARTMENT D ON (A.DEPT_CODE = D.DEPT_CODE )
+				JOIN DOC_TYPE T ON (A.DOC_TYPE = T.DOC_TYPE)
+				JOIN APPROVAL P ON (A.DOC_NO = P.DOC_NO)
+				WHERE (D.DEPT_NAME LIKE '%'||#{keyword}||'%' OR T.DOC_NAME LIKE '%'||#{keyword}||'%' OR A.DOC_TITLE LIKE '%'||#{keyword}||'%')
+				AND (A.DOC_WRITER = #{userNo} OR P.SECOND_APPROVER_NO = #{userNo} OR P.LAST_APPROVER_NO = #{userNo})
+			</when>
+	 		<when test='option == "1"'>
+	 			JOIN APPROVAL P ON (A.DOC_NO = P.DOC_NO)	
+				JOIN DEPARTMENT D ON (A.DEPT_CODE = D.DEPT_CODE )
+				WHERE D.DEPT_NAME LIKE '%'||#{keyword}||'%'
+				AND (A.DOC_WRITER = #{userNo} OR P.SECOND_APPROVER_NO = #{userNo} OR P.LAST_APPROVER_NO = #{userNo})
+			</when>
+			<when test='option == "2"'>	
+				JOIN APPROVAL P ON (A.DOC_NO = P.DOC_NO)	
+				JOIN DOC_TYPE T ON (A.DOC_TYPE = T.DOC_TYPE)
+				WHERE T.DOC_NAME LIKE '%'||#{keyword}||'%'
+				AND (A.DOC_WRITER = #{userNo} OR P.SECOND_APPROVER_NO = #{userNo} OR P.LAST_APPROVER_NO = #{userNo})
+			</when>
+			<when test='option == "3"'>
+				JOIN APPROVAL P ON (A.DOC_NO = P.DOC_NO)
+				WHERE A.DOC_TITLE LIKE '%'||#{keyword}||'%'
+				AND (A.DOC_WRITER = #{userNo} OR P.SECOND_APPROVER_NO = #{userNo} OR P.LAST_APPROVER_NO = #{userNo})
+			</when>
+			<otherwise>
+				JOIN APPROVAL P ON (A.DOC_NO = P.DOC_NO)
+				WHERE (A.DOC_WRITER = #{userNo} OR P.SECOND_APPROVER_NO = #{userNo} OR P.LAST_APPROVER_NO = #{userNo})
+			</otherwise>
+ 		</choose>
+		<if test='status != null and !status.equals("")'>
+			AND A.STATUS = #{status}
 		</if>
  	</select>
  	<select id="selectApprovalDocList" parameterType="approvalDoc" resultMap="approvalDocResultSet">
@@ -101,130 +132,58 @@
 			  ,TO_CHAR(A.CREATE_DATE,'YYYY-MM-DD')"CREATE_DATE"
 			  ,A.STATUS
 			  ,A.EMERGENCY
-			  ,TO_CHAR(B.SECOND_DATE, 'YYYY-MM-DD') "SECOND_DATE"
- 			  ,TO_CHAR(B.LAST_DATE, 'YYYY-MM-DD') "LAST_DATE"
- 			  ,B.SECOND_APPROVER_NO
- 			  ,B.LAST_APPROVER_NO
+			  ,TO_CHAR(P.SECOND_DATE, 'YYYY-MM-DD') "SECOND_DATE"
+ 			  ,TO_CHAR(P.LAST_DATE, 'YYYY-MM-DD') "LAST_DATE"
+ 			  ,P.SECOND_APPROVER_NO
+ 			  ,P.LAST_APPROVER_NO
+ 			  ,A.STATUS
  		FROM APPROVAL_DOC A
- 		JOIN DEPARTMENT D ON (A.DEPT_CODE = D.DEPT_CODE)
- 		JOIN DOC_TYPE T ON (A.DOC_TYPE = T.DOC_TYPE)
- 		JOIN APPROVAL B ON (A.DOC_NO=B.DOC_NO)
- 		<if test="status !=null">
-			WHERE A.STATUS = #{status}
-		</if>
-		ORDER BY DECODE(EMERGENCY,'Y',2), A.CREATE_DATE DESC
- 	</select>
- 	<select id="searchApprovalCount" resultType="_int">
- 		SELECT COUNT(*)
- 		FROM APPROVAL_DOC A
- 		<choose>
- 		<when test="status!=null and option ==1">
- 			JOIN DEPARTMENT USING (DEPT_CODE)
-			WHERE STATUS = #{status}
-			AND DEPT_NAME LIKE '%'||#{keyword}||'%'
-		</when>
-		<when test="status!=null and option ==2">
-			JOIN DOC_TYPE USING (DOC_TYPE)
-			WHERE STATUS = #{status}
-			AND DOC_NAME LIKE '%'||#{keyword}||'%'
-		</when> 
-		<when test="status!=null and option ==3">
-			WHERE STATUS = #{status}
-			AND DOC_TITLE LIKE '%'||#{keyword}||'%'
-		</when>
-		<when test="status!=null and option==null">
-			JOIN DEPARTMENT D ON (A.DEPT_CODE = D.DEPT_CODE)
-			JOIN DOC_TYPE T ON (A.DOC_TYPE=T.DOC_TYPE)
-			WHERE (D.DEPT_NAME LIKE '%'||#{keyword}||'%' OR T.DOC_NAME LIKE '%'||#{keyword}||'%' OR A.DOC_TITLE LIKE '%'||#{keyword}||'%')
-			AND STATUS = #{status}
-		</when>
-		<when test="status==null and option ==1">
- 			JOIN DEPARTMENT USING (DEPT_CODE)
-			WHERE DEPT_NAME LIKE '%'||#{keyword}||'%'
-		</when>
-		<when test="status ==null and option ==2">
-			JOIN DOC_TYPE USING (DOC_TYPE)
-			WHERE DOC_NAME LIKE '%'||#{keyword}||'%'
-		</when> 
-		<when test="status ==null and option ==3">
-			WHERE DOC_TITLE LIKE '%'||#{keyword}||'%'
-		</when>
-		<when test="status ==null and option==null">
-			JOIN DEPARTMENT D ON (A.DEPT_CODE = D.DEPT_CODE)
-			JOIN DOC_TYPE T ON (A.DOC_TYPE=T.DOC_TYPE)
-			WHERE (D.DEPT_NAME LIKE '%'||#{keyword}||'%' OR T.DOC_NAME LIKE '%'||#{keyword}||'%' OR A.DOC_TITLE LIKE '%'||#{keyword}||'%')
-		</when>
- 		</choose>
- 	</select>
- 	<select id="searchApprovalDocList" parameterType="approvalDoc" resultMap="approvalDocResultSet">
-		SELECT A.DOC_NO
-			  ,D.DEPT_NAME
-			  ,T.DOC_NAME
-			  ,A.DOC_WRITER
-			  ,A.DOC_TITLE
-			  ,TO_CHAR(A.CREATE_DATE,'YYYY-MM-DD')"CREATE_DATE"
-			  ,A.STATUS
-			  ,A.EMERGENCY
-			  ,TO_CHAR(B.SECOND_DATE, 'YYYY-MM-DD') "SECOND_DATE"
- 			  ,TO_CHAR(B.LAST_DATE, 'YYYY-MM-DD') "LAST_DATE"
- 			  ,B.SECOND_APPROVER_NO
- 			  ,B.LAST_APPROVER_NO
- 		FROM APPROVAL_DOC A
- 		JOIN DEPARTMENT D ON (A.DEPT_CODE = D.DEPT_CODE)
- 		JOIN DOC_TYPE T ON (A.DOC_TYPE = T.DOC_TYPE)
- 		JOIN APPROVAL B ON (A.DOC_NO=B.DOC_NO)
-	 	<choose>
-	 		<when test="status!=null and option==1">
-				WHERE A.STATUS = #{status}
-				AND D.DEPT_NAME = '%'||#{keyword}||'%'
-			</when>
-			<when test="status!=null and option==2">
-				WHERE A.STATUS = #{status}
-				AND T.DOC_NAME LIKE '%'||#{keyword}||'%'
-			</when>
-			<when test="status!=null and option==3">
-				WHERE A.STATUS = #{status}
-				AND A.DOC_TITLE LIKE '%'||#{keyword}||'%'
-			</when>
-			<when test="status !=null and option==null">
+ 		JOIN DEPARTMENT D ON (A.DEPT_CODE = D.DEPT_CODE )
+		JOIN DOC_TYPE T ON (A.DOC_TYPE = T.DOC_TYPE)
+		JOIN APPROVAL P ON (A.DOC_NO = P.DOC_NO)
+		<choose>
+			<when test='option == "0"'>
 				WHERE (D.DEPT_NAME LIKE '%'||#{keyword}||'%' OR T.DOC_NAME LIKE '%'||#{keyword}||'%' OR A.DOC_TITLE LIKE '%'||#{keyword}||'%')
-				AND A.STATUS = #{status}
+				AND (A.DOC_WRITER = #{userNo} OR P.SECOND_APPROVER_NO = #{userNo} OR P.LAST_APPROVER_NO = #{userNo})
 			</when>
-			<when test="status==null and option==1">
-				WHERE D.DEPT_NAME = '%'||#{keyword}||'%'
+	 		<when test='option == "1"'>
+				WHERE D.DEPT_NAME LIKE '%'||#{keyword}||'%'
+				AND (A.DOC_WRITER = #{userNo} OR P.SECOND_APPROVER_NO = #{userNo} OR P.LAST_APPROVER_NO = #{userNo})
 			</when>
-			<when test="status==null and option==2">
+			<when test='option == "2"'>
 				WHERE T.DOC_NAME LIKE '%'||#{keyword}||'%'
+				AND (A.DOC_WRITER = #{userNo} OR P.SECOND_APPROVER_NO = #{userNo} OR P.LAST_APPROVER_NO = #{userNo})
 			</when>
-			<when test="status==null and option==3">
+			<when test='option == "3"'>
 				WHERE A.DOC_TITLE LIKE '%'||#{keyword}||'%'
+				AND (A.DOC_WRITER = #{userNo} OR P.SECOND_APPROVER_NO = #{userNo} OR P.LAST_APPROVER_NO = #{userNo})
 			</when>
-			<when test="status ==null  and option==null">
-				WHERE (D.DEPT_NAME LIKE '%'||#{keyword}||'%' OR T.DOC_NAME LIKE '%'||#{keyword}||'%' OR A.DOC_TITLE LIKE '%'||#{keyword}||'%')
-			</when>
+			<otherwise>
+				WHERE (A.DOC_WRITER = #{userNo} OR P.SECOND_APPROVER_NO = #{userNo} OR P.LAST_APPROVER_NO = #{userNo})
+			</otherwise>
 		</choose>
-		ORDER BY DECODE(EMERGENCY,'Y',2), A.CREATE_DATE DESC
+		<if test='status != null and !status.equals("")'>
+			AND A.STATUS = #{status}
+		</if>
+		ORDER BY DECODE(A.EMERGENCY,'Y',2), A.CREATE_DATE DESC
  	</select>
- 	
- 	
- 	
  	<select id="approvalMainList" parameterType="approvalDoc" resultMap="approvalDocResultSet">
  		SELECT *
 		FROM (SELECT ROWNUM, A.*
-        FROM (SELECT P.DOC_NO
- 				     ,D.DEPT_NAME
- 				     ,T.DOC_NAME
- 				     ,P.DOC_TITLE
- 				     ,P.DOC_WRITER
- 				     ,A.SECOND_APPROVER_NO
- 				     ,A.LAST_APPROVER_NO
- 				     ,P.EMERGENCY
- 				     ,P.STATUS
- 				     ,TO_CHAR(P.CREATE_DATE,'YYYY-MM-DD')"CREATE_DATE"
+        FROM (SELECT DOC_NO
+ 				     ,DEPT_NAME
+ 				     ,DOC_NAME
+ 				     ,DOC_TITLE
+ 				     ,DOC_WRITER
+ 				     ,SECOND_APPROVER_NO
+ 				     ,LAST_APPROVER_NO
+ 				     ,EMERGENCY
+ 				     ,STATUS
+ 				     ,TO_CHAR(CREATE_DATE,'YYYY-MM-DD')"CREATE_DATE"
  			  FROM APPROVAL_DOC P
- 			  JOIN DEPARTMENT D ON (P.DEPT_CODE = D.DEPT_CODE)
- 			  JOIN DOC_TYPE T ON (P.DOC_TYPE = T.DOC_TYPE)
- 			  JOIN APPROVAL A ON (A.DOC_NO = P.DOC_NO)
+ 			  JOIN DEPARTMENT USING (DEPT_CODE)
+			  JOIN DOC_TYPE USING (DOC_TYPE)
+			  JOIN APPROVAL USING (DOC_NO)
  			  <if test="status !=null">
 				WHERE P.STATUS = #{status}
 			  </if>
@@ -232,9 +191,37 @@
               ) A)
     	WHERE ROWNUM BETWEEN 1 AND 5
  	</select>
+ 	<select id="selectEnrollListCount" resultType="_int">
+ 		SELECT COUNT(*)
+ 		FROM DOC_TYPE
+ 		<choose>
+ 			<when test='keyword != null'>
+	 			WHERE DOC_NAME LIKE '%'||#{keyword}||'%'
+ 			</when>
+ 			<when test='docCategory != null'>
+ 				WHERE DOC_CATEGORY = #{docCategory}
+ 			</when>
+ 			<when test='keyword != null and docCategory != null'>
+	 			WHERE DOC_NAME LIKE '%'||#{keyword}||'%'
+	 			AND DOC_CATEGORY = #{docCategory}
+ 			</when>
+ 		</choose>
+ 	</select>
  	<select id="selectEnrollList" parameterType="docType" resultMap="docTypeResultSet">
  		SELECT * 
  		FROM DOC_TYPE
+ 		<choose>
+ 			<when test='keyword != null'>
+	 			WHERE DOC_NAME LIKE '%'||#{keyword}||'%'
+ 			</when>
+ 			<when test='docCategory != null'>
+ 				WHERE DOC_CATEGORY = #{docCategory}
+ 			</when>
+ 			<when test='keyword != null and !docCategory.equals("")'>
+	 			WHERE DOC_NAME LIKE '%'||#{keyword}||'%'
+	 			AND DOC_CATEGORY = #{docCategory}
+ 			</when>
+ 		</choose>
  	</select>
  	<select id="selectApproverList" parameterType="member" resultMap="memberResultSet">
  		SELECT USER_NAME,DEPT_NAME,JOB_NAME,USER_NO,EMAIL
@@ -245,6 +232,7 @@
 		<if test="deptCode !=null">
 		AND DEPT_CODE = #{deptCode}
 		</if>
+		ORDER BY USER_NAME
  	</select>
  	<select id="searchApproverList" parameterType="member" resultMap="memberResultSet">
  		SELECT USER_NAME, DEPT_NAME, JOB_NAME,USER_NO
@@ -253,13 +241,14 @@
 		JOIN JOB USING(JOB_CODE)
 		WHERE STATUS = 'Y'
 		<choose>
-			<when test="status==1 and keyword !=null">
+			<when test='keyword !=null and status.equals("1")'>
 				AND DEPT_NAME LIKE '%'||#{keyword}||'%'
 			</when>
-			<when test="status==2 and keyword != null">
+			<when test='keyword !=null and status.equals("2")'>
 				AND USER_NAME LIKE '%'||#{keyword}||'%'
 			</when>
 		</choose>
+		ORDER BY USER_NAME
  	</select>
  	<insert id="insertApprovalDoc">
  		INSERT INTO APPROVAL_DOC(DOC_NO,DEPT_CODE,DOC_TYPE,DOC_WRITER,PHONE,DOC_TITLE,DOC_CONTENT,EMERGENCY) VALUES
@@ -293,6 +282,8 @@
  			  ,LAST_JOB_NAME
  			  ,LAST_APPROVER
  			  ,LAST_SIGNATURE
+ 			  ,TO_CHAR(SECOND_DATE, 'MM/DD hh24:mi') "SECOND_DATE"
+ 			  ,TO_CHAR(LAST_DATE, 'MM/DD hh24:mi') "LAST_DATE"
  			  ,RETURN_REASON
  		FROM APPROVAL
 	 	WHERE DOC_NO = #{docNo}

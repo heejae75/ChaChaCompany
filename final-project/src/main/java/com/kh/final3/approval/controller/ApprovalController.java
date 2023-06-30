@@ -11,12 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.kh.final3.alert.model.vo.Alert;
 import com.kh.final3.approval.model.service.ApprovalService;
 import com.kh.final3.approval.model.vo.Approval;
 import com.kh.final3.approval.model.vo.ApprovalAttachment;
@@ -54,39 +53,27 @@ public class ApprovalController {
 	}
 	
 	@RequestMapping("list.ap")
-	public String approvalList(@RequestParam(value="currentPage",defaultValue="1")int currentPage,HttpServletRequest request, Model m) {
-		String status = request.getParameter("status");
-		int listCount = as.selectListCount(status);
-		int pageLimit = 20;
-		int boardLimit = 10;
-		
-		
-		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
-		ArrayList<ApprovalDoc> list = as.selectApprovalDocList(pi,status);
-		m.addAttribute("list",list).addAttribute("pi",pi).addAttribute("status", status);
-		return "approval/approvalListView";
-	}
-	//검색
-	@RequestMapping("search.ap")
-	public String searchApprovalDocList(@RequestParam(value="currentPage",defaultValue="1")int currentPage
-								,String option, String keyword, Model m, String status) {
+	public String approvalList(@RequestParam(value="currentPage",defaultValue="1")int currentPage
+							  ,String status,HttpSession session, Model m
+							  ,String keyword, String option) {
+		Member loginUser = (Member)session.getAttribute("loginUser");
+		String userNo = String.valueOf(loginUser.getUserNo());		
 		HashMap<String, String> map = new HashMap<>();
-		map.put("option", option);
-		map.put("keyword", keyword);
-		map.put("status",status);
 		
-		int listCount = as.searchApprovalCount(map);
+		map.put("userNo", userNo);
+		map.put("status", status);
+		map.put("keyword", keyword);
+		map.put("option", option);
+
+		int listCount = as.selectListCount(map);
 		int pageLimit = 20;
 		int boardLimit = 10;
 		
+		
 		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
-		ArrayList<ApprovalDoc> list = as.searchApprovalDocList(map, pi);
-		log.info(String.valueOf(listCount));
-		System.out.println(list);
-		
-		
-		m.addAttribute("option", option).addAttribute("keyword",keyword)
-		 .addAttribute("list", list).addAttribute("pi",pi);
+		ArrayList<ApprovalDoc> list = as.selectApprovalDocList(pi,map);
+		m.addAttribute("list",list).addAttribute("pi",pi).addAttribute("status", status)
+		.addAttribute("keyword",keyword).addAttribute("option", option);
 		return "approval/approvalListView";
 	}
 	@ResponseBody
@@ -98,10 +85,22 @@ public class ApprovalController {
 	}
 	
 	@RequestMapping("enrollList.ap")
-	public String enrollList(Model m) {
-		ArrayList<DocType> list = as.selectEnrollList();
+	public String enrollList(@RequestParam(value="currentPage",defaultValue = "1")int currentPage
+							 ,Model m, String docCategory,String keyword) {
+		HashMap<String, String> map = new HashMap<>();
 		
-		m.addAttribute("list",list);
+		map.put("docCategory", docCategory);
+		map.put("keyword", keyword);
+
+		int listCount = as.selectEnrollListCount(map);
+		int pageLimit = 10;
+		int boardLimit = 10;
+		
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
+		ArrayList<DocType> list = as.selectEnrollList(map, pi);
+		
+		m.addAttribute("list",list).addAttribute("pi",pi)
+		.addAttribute("docCategory", docCategory).addAttribute("keyword",keyword);
 		return "approval/enrollListView";
 	}
 	
@@ -112,7 +111,6 @@ public class ApprovalController {
 		if(appNo==1) {
 			mv.setViewName("approval/leaveForm");
 		}else if(appNo==2) {
-			
 			mv.setViewName("approval/itemForm");
 		}else if(appNo==3) {
 			mv.setViewName("approval/minutes");
@@ -164,6 +162,7 @@ public class ApprovalController {
 					
 					at = ApprovalAttachment.builder().originName(file.getOriginalFilename())
 																		.changeName(changeName)
+																		.filePath(filePath+changeName)
 																		.deptCode(ad.getDeptCode()).build();
 					
 					atList.add(at);
@@ -204,8 +203,6 @@ public class ApprovalController {
 		public ModelAndView insertItem(Leave l, ApprovalDoc ad,ApprovalAttachment at, Approval a,ModelAndView mv,HttpSession session, ArrayList<MultipartFile> upfile){
 			ArrayList<ApprovalAttachment> atList = new ArrayList<>();
 			ArrayList<Leave> leaveList = new ArrayList<>();
-			
-			log.info(upfile.get(0).getOriginalFilename());
 			
 			//파일
 				for(MultipartFile file : upfile) {
@@ -274,13 +271,13 @@ public class ApprovalController {
 			if(docType.equals("구매품의서")) {
 				iList = as.selectItem(docNo);
 				mv.addObject("a",a).addObject("at",at).addObject("ad", ad)
-				.addObject("iList", iList)
+				.addObject("iList", iList).addObject("dt",docType)
 				.setViewName("approval/itemDetailView");
 				
 			}else if(docType.equals("휴가계")) {
 				lList = as.selectLeave(docNo);
 				mv.addObject("a",a).addObject("at",at).addObject("ad", ad)
-				.addObject("lList", lList)
+				.addObject("lList", lList).addObject("dt",docType)
 				.setViewName("approval/leaveDetailView");
 			}
 			
