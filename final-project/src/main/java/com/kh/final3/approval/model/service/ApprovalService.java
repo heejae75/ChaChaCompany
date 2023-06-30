@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.kh.final3.alert.model.vo.Alert;
 import com.kh.final3.approval.model.vo.Approval;
 import com.kh.final3.approval.model.vo.ApprovalAttachment;
 import com.kh.final3.approval.model.vo.ApprovalDoc;

@@ -25,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.kh.final3.alert.model.vo.Alert;
 import com.kh.final3.approval.model.service.ApprovalService;
 import com.kh.final3.approval.model.vo.Approval;
 import com.kh.final3.approval.model.vo.ApprovalAttachment;
@@ -270,13 +271,13 @@ public class ApprovalController {
 			if(docType.equals("구매품의서")) {
 				iList = as.selectItem(docNo);
 				mv.addObject("a",a).addObject("at",at).addObject("ad", ad)
-				.addObject("iList", iList)
+				.addObject("iList", iList).addObject("dt",docType)
 				.setViewName("approval/itemDetailView");
 				
 			}else if(docType.equals("휴가계")) {
 				lList = as.selectLeave(docNo);
 				mv.addObject("a",a).addObject("at",at).addObject("ad", ad)
-				.addObject("lList", lList)
+				.addObject("lList", lList).addObject("dt",docType)
 				.setViewName("approval/leaveDetailView");
 			}
 			
