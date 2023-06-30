@@ -7,12 +7,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>공지사항</title>
-<!--  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> --> 
     
   <style>
 	.content{
         width: 1570px;
+        height: 800px;
     }
 	/*검색영역*/
     #board-search-area>form{
@@ -96,6 +95,7 @@
 	 
     /* 게시글 목록영역 */
     #board-list-area{
+    	height: 60%;
         width: 80%;
         margin: auto;
         margin-top : 20px;
@@ -157,7 +157,9 @@
                   </form>
                     <br><br>
                     <div id="boardEnroll-btn">
+                    	<c:if test="${loginUser.auth eq 'ROLE_ADMIN' }">
 		           		<button class="btn btn-sm" onclick="location.href='enroll.no'">공지사항 작성</button>
+		           		</c:if>
 		            </div>
            
             
@@ -269,7 +271,7 @@
             
                 </div>
             </div>
-            
+    </div> 
             
             
             <!-- 현재페이지에 따라 이전/다음버튼 disabled처리 (클래스부여)-->
@@ -293,8 +295,7 @@
             
             
        
-        <br><br><br>
-    </div>
+  
     
    
 </body>
