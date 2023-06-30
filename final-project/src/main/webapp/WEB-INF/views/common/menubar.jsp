@@ -803,22 +803,19 @@ a{
    	function menuAlertList() {
     	$.ajax({
     		url: "menuAlertList.ma",
-    		data: {
-    			userNo : "$(loginUser.userNo)"
-    		},
     		type : "POST",
 			beforeSend : function(xhr) {
 				xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
 			},
 			success : function(result) {
-				console.log(result);
+				console.log(result[0].lastSignature);
 				var str = "";
 				if(result.length == 0){
 					str = "알림이 없습니다. ";
 				}
+				
 				for(var i in result) {
-					console.log(result[i].docNo);
-					console.log(result[i].docType);
+					if(result[i].lastSignature != '반려') {//반려일때 조건 걸기 
 					str += "<li>"
 						+ "<input type='hidden' id='menuAlertNo' value='"+result[i].alertNo+"'>"
 						+ "<input type='hidden' id='menuAlertStatus' value='"+result[i].status+"'>"
@@ -830,12 +827,24 @@ a{
 						+ "</a>"
 						+ "</li>"
 						+ "<li role='separator' class='divider'></li>"
+					}else{
+						str += "<li>"
+							+ "<input type='hidden' id='menuAlertNo' value='"+result[i].alertNo+"'>"
+							+ "<input type='hidden' id='menuAlertStatus' value='"+result[i].status+"'>"
+							+ "<input type='hidden' id='menuAlertDocNo' value='"+result[i].docNo+"'>"
+							+ "<input type='hidden' id='menuAlertDocType' value='"+result[i].docType+"'>"
+							+ "<a class='menuAlertLink'>"
+							+ "<p>["+result[i].docType+"]</p>"
+							+ "<span>"+result[i].sender+"님이 "+result[i].content+"의 전자결재를 반려하셨습니다.</span>"
+							+ "</a>"
+							+ "</li>"
+							+ "<li role='separator' class='divider'></li>"
+					}
 				}
 				
 				$('.menuAlertList').html(str);
 				
-				 $('.menuAlertLink').click(function(event) {
-					 	
+				$('.menuAlertLink').click(function(event) {
 		                event.preventDefault();
 		                var alertNo = $(this).prevAll('#menuAlertNo').val();
 		                var status = $(this).prevAll('#menuAlertStatus').val();
@@ -893,8 +902,8 @@ a{
 				
 				if(result == "success") {
 					alert("모두 삭제했습니다.");
-					selectTodoList();
 				}
+				location.reload();
 			},
 			error : function() {
 				console.log("투두 삭제 오류 ");

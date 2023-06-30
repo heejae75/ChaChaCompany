@@ -23,4 +23,5 @@ public class Alert {
 	private String status; //STATUS
 	
 	private String cmd; //ALERT_TYPE
+	private String lastSignature;
 }

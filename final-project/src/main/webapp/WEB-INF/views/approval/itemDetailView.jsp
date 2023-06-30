@@ -174,7 +174,7 @@
 		
 		if(result == 'Y'){
 			$("#emergency-btn").attr("checked",true);
-		}else
+		}else{
 			$("#emergency-btn").attr("checked",false);
 		}
 	});
@@ -187,6 +187,12 @@
 		var docNo = "${ad.docNo}";
 		var secondDate = "${a.secondDate}";
 		var lastDate = "${a.lastDate}";
+		
+		var lastSignature = "${a.lastApprover}";
+		var secondSignature = "${a.secondApprover}";
+		var docWriter = "${ad.docWriter}";
+		var docTitle = "${ad.docTitle}";
+		var docType = "${dt}";
 		
 		if(loginUserNo === secondApprover){
 			$.ajax({
@@ -249,9 +255,9 @@
     						location.reload();
     						
     						//실시간 알림 서버에 보내기 
-    						if(secondSignature != docWriter){
+    						if(lastSignature != docWriter){
     							if (socket != null) {
-    							    var message = "itemApproval," + secondSignature + ","+ docWriter +","+ docNo+","+ docTitle+","+ docType;
+    							    var message = "itemApproval," + lastSignature + ","+ docWriter +","+ docNo+","+ docTitle+","+ docType;
     							    console.log(message);
     							    socket.send(message);
     							}
@@ -278,6 +284,12 @@
 		var secondDate = "${a.secondDate}";
 		var lastDate = "${a.lastDate}";
 		
+		var lastSignature = "${a.lastApprover}";
+		var secondSignature = "${a.secondApprover}";
+		var docWriter = "${ad.docWriter}";
+		var docTitle = "${ad.docTitle}";
+		var docType = "${dt}";
+		
 		if(secondApprover == loginUserNo){
 			if(confirm("반려하시겠습니까?")){
 	    		$.ajax({
@@ -298,9 +310,9 @@
 							location.reload();
 							
 							//실시간 알림 서버에 보내기 
-    						if(lastSignature != docWriter){
+    						if(secondSignature != docWriter){
     							if (socket != null) {
-    							    var message = "itemUpdateReject," + lastSignature + ","+docWriter+","+docNo+","+docTitle+","+docType;
+    							    var message = "itemUpdateReject," + secondSignature + ","+docWriter+","+docNo+","+docTitle+","+docType;
 									console.log(message);
     							    socket.send(message);
     							}

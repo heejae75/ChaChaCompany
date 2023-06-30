@@ -249,7 +249,7 @@ public class MainController {
 	//알림 전체 조회 
 	@ResponseBody
 	@RequestMapping(value = "menuAlertList.ma", produces = "application/json; charset=UTF-8")
-	public String menuAlertList(HttpSession session ) {
+	public String menuAlertList(HttpSession session) {
 		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
 //		System.out.println(userId);
 		ArrayList<Alert> mainAlert = mainService.menuAlertList(userNo);
