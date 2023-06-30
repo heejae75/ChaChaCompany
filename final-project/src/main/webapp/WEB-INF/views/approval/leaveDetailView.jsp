@@ -204,8 +204,6 @@
 	  </div>
 	</div>
 	<script>
-	console.log("${a.secondDate}");
-	console.log("${a.lastDate}");
 	//시간 계산
 	$(function(){
 		for(var i=0;i<"${arrayLength}";i++){

@@ -46,17 +46,22 @@
         }
         #approver-signature {
             border-collapse: collapse;
-            width: 15%;
-            text-align: center;
+            width: 20%;
             margin-top: 10px;
             float: right;
             line-height:20px;
-            vertical-align: middle;
     
         }
-        #approver-signature>tr, td{
+        #approver-signature th,td{
             border-collapse: collapse;
-            padding: 8px;
+            padding: 10px;
+            vertical-align: middle;
+            text-align: center;
+        }
+        #approver-signature input{
+        	padding:0px;
+        	vertical-align: middle;
+            text-align: center;
         }
         #id-table input{
             box-sizing: border-box;
