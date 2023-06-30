@@ -339,6 +339,12 @@
 		var secondDate = "${a.secondDate}";
 		var lastDate = "${a.lastDate}";
 		
+		var lastSignature = "${a.lastApprover}";
+		var secondSignature = "${a.secondApprover}";
+		var docWriter = "${ad.docWriter}";
+		var docTitle = "${ad.docTitle}";
+		var docType = "${dt}";
+		
 		if(secondApprover == loginUserNo){
 			if(confirm("반려하시겠습니까?")){
 	    		$.ajax({
@@ -359,9 +365,9 @@
 							location.reload();
 							
 							//실시간 알림 서버에 보내기 
-    						if(lastSignature != docWriter){
+    						if(secondSignature != docWriter){
     							if (socket != null) {
-    							    var message = "leaveUpdateReject," + lastSignature + ","+docWriter+","+docNo+","+docTitle+","+docType;
+    							    var message = "leaveUpdateReject," + secondSignature + ","+docWriter+","+docNo+","+docTitle+","+docType;
 									console.log(message);
     							    socket.send(message);
     							}

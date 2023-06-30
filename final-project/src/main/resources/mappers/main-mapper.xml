@@ -100,6 +100,7 @@
 		<result column="ALERT_DATE" property="alertDate"/>
 		<result column="URL" property="url"/>
 		<result column="STATUS" property="status"/>
+		<result column="LAST_SIGNATURE" property="lastSignature"/>
 	</resultMap>
 	
 	<!-- 최신 공지사항 조회  -->
@@ -352,7 +353,7 @@
 	
 	<!-- 알림 조회 -->
 	<select id="menuAlertList" resultMap="mainAlertResultSet">
-		SELECT ALERT_NO, AL.DOC_NO, AL.DOC_TYPE, SENDER, RECEIVER, ALERT_CONTENT, ALERT_DATE, AL.STATUS
+		SELECT ALERT_NO, AL.DOC_NO, AL.DOC_TYPE, A.LAST_SIGNATURE, SENDER, RECEIVER, ALERT_CONTENT, ALERT_DATE, AL.STATUS
 		FROM ALERT AL
 		JOIN APPROVAL A ON (A.DOC_NO = AL.DOC_NO)
 		JOIN APPROVAL_DOC AD ON (AD.DOC_NO = AL.DOC_NO)
