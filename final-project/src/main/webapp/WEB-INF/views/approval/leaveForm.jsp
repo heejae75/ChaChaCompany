@@ -16,7 +16,7 @@
 </head>
 <body>
 	<br><br><br><br>
-    <form action="leave.ap" method="post" enctype="multipart/form-data" onsubmit="return chkApprover();">
+    <form action="leave.ap" method="post" enctype="multipart/form-data" onsubmit="return chkLeaveForm();">
         <h1 align="center">휴가계</h1>
         <br><br>
         <div class="leave-area">
@@ -198,11 +198,11 @@
                         </div>
                 </div>
                 <div id="search-area">
-                                <select name="status" id="search-select">
+                                <select name="status" id="receiver-search-select">
                                 <option value="1">부서</option>
                                 <option value="2">이름</option>
                             </select>
-                                <input class="form-control me-2" id="keyword" type="text" placeholder="Search" aria-label="Search">
+                                <input class="form-control me-2" id="receiver-keyword" type="text" placeholder="Search" aria-label="Search">
                                 <button class="btn btn-outline-success" type="submit" onclick="searchReceiver();">Search</button>
                     <table id="receiverList" class="table table-bordered">
                             <thead>
@@ -272,11 +272,11 @@
                         </div>
                  </div>
                  <div id="search-area">
-		                  	<select name="select" id="search-select">
+		                  	<select name="select" id="approval-search-select">
 		                         <option value="1">부서</option>
 		                         <option value="2">이름</option>
 		                    </select>
-		                         <input class="form-control me-2" id="keyword" type="text" placeholder="Search" aria-label="Search">
+		                         <input class="form-control me-2" id="approval-keyword" type="text" placeholder="Search" aria-label="Search">
 		                         <button class="btn btn-outline-success" type="submit" onclick="searchApprover();">Search</button>
 			        <table id="ApproverList" class="table table-bordered">
                             <thead>
@@ -329,6 +329,7 @@
 		  </div>
 		</div>
 		<script>
+		//오늘 날짜 이전이면 alert
 		//시간 계산
 		$(function() {
 		  $("#leave-table").on("change", "#start-date, #end-date", function() {
@@ -394,8 +395,8 @@
     	}
     	//업무 인수자 검색
     	function searchReceiver(){
-			var status = $("#search-select").val();
-			var keyword = $("#keyword").val();
+			var status = $("#receiver-search-select").val();
+			var keyword = $("#receiver-keyword").val();
     		$.ajax({
     			url : "searchApprover.ap",
     			type : "POST",
@@ -483,14 +484,14 @@
 	    		insertTr += "<tr>";
 	    		insertTr += "<td><input type='checkbox' name='checkBox'onclick='isCheckAll();''></td>";
 	    		insertTr += "<td>";
-	            insertTr += "<select name='leaveStatus' id='select-option'>";
+	            insertTr += "<select name='arrLeaveStatus' id='select-option'>";
 	            insertTr += "<option>선택</option>";
 	            insertTr += "<option>신청</option>";
 	            insertTr += "<option>취소</option>";
 	            insertTr += "</select>";
 	            insertTr += "</td>";
 	            insertTr += "<td>";
-	            insertTr += "<select name='leaveCode' id='select-leave-option'>";
+	            insertTr += "<select name='arrLeaveCode' id='select-leave-option'>";
 	            insertTr += "<option value=''>선택</option>";
 	            insertTr += "<option value='L1'>정상근무</option>";
 	            insertTr += "<option value='L2'>연차</option>";
@@ -504,10 +505,10 @@
 	            insertTr += "</select>";
 	            insertTr += "</td>";
 	            insertTr += "<td>";
-	            insertTr += "<input type='date' name='startDate' id='start-date'>"
+	            insertTr += "<input type='date' name='arrStartDate' id='start-date'>"
 	            insertTr += "</td>";
 	            insertTr += "<td>";
-	            insertTr += "<input type='date' name='endDate' id='end-date'>"
+	            insertTr += "<input type='date' name='arrEndDate' id='end-date'>"
 	            insertTr += "</td>";
 	            insertTr += "<td>";
 	            insertTr += "<input type='text' value='' id='total-date'>"
@@ -622,36 +623,40 @@
     	}
     	//결재선 검색
     	function searchApprover(){
-			var status = $("#search-select").val();
-			var keyword = $("#keyword").val();
-    		$.ajax({
-    			url : "searchApprover.ap",
-    			type : "POST",
-    			data :{
-    				status : status,
-    				keyword : keyword
-    			},
-    			beforeSend : function(xhr)
-                {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-                    xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
-                },
-    			success : function(list){
-    				str ="";
-    				for(var i=0;i<list.length;i++){
-    					str += "<tr>"
-    						 + "<td><input type='checkbox' id='chkMember'></td>"
-    						 + "<td>"+list[i].userName+"</td>"
-    						 + "<td>"+list[i].jobCode+"</td>"
-    						 + "<td>"+list[i].deptCode+"</td>"
-    						 + "<td>"+list[i].userNo+"</td>"
-    						 + "</tr>"
-    				}
-	    			$("#ApproverList>tbody").html(str);
-    			},
-    			error : function(){
-    				console.log("통신오류");
-    			}
-    		});
+			var status = $("#approval-search-select").val();
+			var keyword = $("#approval-keyword").val();
+			if(keyword == ''){
+				alert("검색어를 입력해주세요");
+			}else{
+				$.ajax({
+	    			url : "searchApprover.ap",
+	    			type : "POST",
+	    			data :{
+	    				status : status,
+	    				keyword : keyword
+	    			},
+	    			beforeSend : function(xhr)
+	                {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+	                    xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+	                },
+	    			success : function(list){
+	    				str ="";
+	    				for(var i=0;i<list.length;i++){
+	    					str += "<tr>"
+	    						 + "<td><input type='checkbox' id='chkMember'></td>"
+	    						 + "<td>"+list[i].userName+"</td>"
+	    						 + "<td>"+list[i].jobCode+"</td>"
+	    						 + "<td>"+list[i].deptCode+"</td>"
+	    						 + "<td>"+list[i].userNo+"</td>"
+	    						 + "</tr>"
+	    				}
+		    			$("#ApproverList>tbody").html(str);
+	    			},
+	    			error : function(){
+	    				console.log("통신오류");
+	    			}
+	    		});
+			}
     	}
     	//결재선 추가
     	function addApprover1(){
@@ -776,11 +781,23 @@
     		}
     	}
     	//결재자 확인
-    	function chkApprover(){
+    	function chkLeaveForm(){
+    		var today = new Date().toISOString().split('T')[0];
+    		var startDate2 = $("#start-date").val();
+    		var endDate2 = $("#end-date").val();
     		var flag = "";
     		
     		if($("input[name=lastApprover]").val()==null){
     			alert("결재자를 선택해주세요.");
+    			flag = false;
+    		}else if(today>startDate2){
+    			alert("오늘 날짜 이후로만 입력가능합니다.")
+    			flag = false;
+    		}else if(today>endDate2){
+    			alert("오늘 날짜 이후로만 입력가능합니다.")
+    			flag = false;
+    		}else if($("#docTitle").val()==''){
+    			alert("제목을 입력해주세요.");
     			flag = false;
     		}else{
     			flag = true;

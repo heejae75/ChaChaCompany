@@ -63,6 +63,10 @@ public class MainDao {
 	public ArrayList<Schedule> mainDailyEvents(SqlSessionTemplate sqlSession, Map<String, Object> params) {
 		return (ArrayList)sqlSession.selectList("mainMapper.mainDailyEvents", params);
 	}
+	// 근무계획조회
+	public Attendance selectLeaveType(SqlSessionTemplate sqlSession, int userNo) {
+		return sqlSession.selectOne("mainMapper.selectLeaveType", userNo);
+	}
 
 	//전자결재 승인 여부 조회 
 	public ArrayList<Approval> mainApprovalStatus(SqlSessionTemplate sqlSession, Member m) {

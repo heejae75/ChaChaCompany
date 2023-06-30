@@ -8,6 +8,7 @@
 <style>
 	.content{
         width: 1570px;
+        height: 800px;
     }
 	
      /*navibar*/
@@ -76,12 +77,84 @@
 	.fc-toolbar h2{
 	  	font-size: 20px !important;
 	}
+	.fc-agendaWeek-view .fc-time-grid .fc-slats td {
+	  	height: 52px; 
+	}
+	#wrap{
+		margin: auto;
+		width: 80%;
+		height: 100%;
+	}
     /* 캘린더구역 */
     #calendar-container{
    		margin: auto;
-   		width: 80%;
-    	height: 80%;
+   		width: 60%;
+   		height: 100%;
+   		display: inline-block;
+   		float: left;
     }
+    div.fc-content:hover{cursor: pointer;}
+    /* 오늘의 근무 구역 */
+    #att-today{
+    	height: 100%;
+    	width: 40%;
+    	display: inline-block;
+    	float: left;
+    	margin-top: 60px;
+    }
+    #att-panel table{
+    	margin: auto;
+    	margin-top:10px;
+    	height: 80%;
+    	width: 95%;
+    }
+    #att-panel table thead td{
+    	border: none!important;
+    } 
+    #att-panel table td{
+    	padding: 5px;
+    	vertical-align: middle;
+    }
+    #att-panel table tbody{
+    	font-size: 13px;
+    }
+    #att-panel{
+    	height: 45%;
+    	width: 80%;
+    	margin: auto;
+    }
+    .panel-heading{
+    	color: #0E6251;
+    	font-weight: 600;
+    }
+    
+   /* 나의근무구역 */
+    #record-panel{
+    	height: 50%;
+    	width: 80%;
+    	margin: auto;
+    	margin-top: 10px;
+    }
+    #record-panel table{
+    	margin: auto;
+    	margin-top:10px;
+    	height: 80%;
+    	width: 95%;
+    }
+    #record-panel .title{
+    	font-size: 13px;
+    }
+    #record-panel .date, #record-panel tbody td{
+    	border: none!important;
+    } 
+    #record-panel table td{
+    	padding: 5px;
+    	vertical-align: middle;
+    }
+    .progress{margin:auto!important;}
+   
+    
+    
     
 </style>
 </head>
@@ -100,12 +173,162 @@
 					</li>
 				</ul>
             </div>
-	        <!-- 캘린더구역 -->
-	        <div id="calendar-container">
-				<div id="calendar"></div>
+            
+	        
+	        <div id="wrap">
+	        	<!-- wrap -->
+		        <div id="calendar-container">
+					<div id="calendar"></div>
+				</div>
+				
+				
+				<div id="att-today">
+				
+					<div class="panel panel-info" id="att-panel">
+						<div class="panel-heading">근무계획</div>
+					
+						<table class="table">
+							<thead>
+								<tr style="border-left:2px solid green;height:15%;">
+									<td colspan="4" id="formattedDate"></td>
+								</tr>
+								<tr style="height:15%;">
+									<td width="300px" colspan="2">
+									<c:choose>
+										<c:when test="${att.leaveType eq '정상근무' }">
+											${att.leaveType } (09:00 - 18:00)
+										</c:when>
+										<c:when test="${att.leaveType eq '오전반차' }">
+											${att.leaveType } (13:00 - 18:00)
+										</c:when>
+										<c:when test="${att.leaveType eq '오후반차' }">
+											${att.leaveType } (09:00 - 12:00)
+										</c:when>
+										<c:otherwise>
+											${att.leaveType }
+										</c:otherwise>
+									
+									</c:choose>
+										
+									
+									</td>
+									<td align="right" style="width:10px"><button id="status-btn" class="btn btn-sm btn-default">부재중</button></td>
+								</tr>
+							</thead>
+							<tbody>
+								<tr style="height:10%;">
+									<td>출근</td>
+									<td colspan="2" align="right">
+										<c:choose>
+											<c:when test="${att.onTime eq null}">
+												미타각
+											</c:when>
+											<c:otherwise>
+												${att.onTime}
+											</c:otherwise>
+										</c:choose>
+									</td>
+								</tr>
+								<tr style="height:10%;">
+									<td>퇴근</td>
+									<td colspan="2" align="right">
+										<c:choose>
+											<c:when test="${att.offTime eq null}">
+												미타각
+											</c:when>
+											<c:otherwise>
+												${att.offTime}
+											</c:otherwise>
+										</c:choose>
+									</td>
+								</tr>
+								<tr style="height:10%;">
+									<td colspan="2">근무노트</td>
+									<td align="right"><button class="btn btn-sm btn-default" onclick="insertTodo()">저장</button></td>
+								</tr>
+								<tr style="height:40%;">
+									<td colspan="3"><textarea rows="4" id="todoContent" class="form-control" style="resize: none;padding: 5px;">${att.todoContent }</textarea></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				
+				
+					<div class="panel panel-success" id="record-panel">
+						<div class="panel-heading">나의근무</div>
+						
+						<table class="table">
+							<thead>
+								<tr style="border-left:2px solid green;">
+									<td id="formattedDate2" colspan="2" style="font-size: 15px;"></td>
+									<td align="right"><button class="btn btn-sm btn-default">근태사유서신청</button></td>
+								</tr>
+								<tr class="title">
+									<td class="date" colspan="2">근태</td>
+									<td class="date" align="right" id="leaveType">${att.leaveType }</td>
+								</tr>
+								<tr class="title">
+									<td colspan="2">출근</td>
+									<td align="right" id="startTime">
+										<c:choose>
+											<c:when test="${att.onTime eq null}">
+												미타각
+											</c:when>
+											<c:otherwise>
+												${att.onTime}
+											</c:otherwise>
+										</c:choose>
+									</td>
+								</tr>
+								<tr class="title">
+									<td colspan="2">퇴근</td>
+									<td align="right" id="endTime">
+										<c:choose>
+											<c:when test="${att.offTime eq null}">
+												미타각
+											</c:when>
+											<c:otherwise>
+												${att.offTime}
+											</c:otherwise>
+										</c:choose>
+									</td>
+								</tr>
+								<tr style="height:20px">
+									<td class="date" colspan="3"></td>
+								</tr>
+							</thead>
+							<tbody>
+								<tr style="border-left:2px solid green;height:40px">
+									<td class="date" colspan="2">주간실적</td>
+									<td class="date" align="right" style="font-size:13px"><label id="weekStart"></label> - <label id="weekEnd"></label></td>
+								</tr>
+								<tr>
+									<td class="date" colspan="3">
+										<div class="progress">
+										  <div id="work-record-progress" class="progress-bar progress-bar-striped progress-bar-info" style="width: 35%">
+										    <span class="sr-only"></span>
+										  </div>
+										  <div id="extra-work-progress" class="progress-bar progress-bar-striped progress-bar-danger" style="width: 20%">
+										    <span class="sr-only"></span>
+										  </div>
+										</div>
+									</td>
+								</tr>
+								<tr id="progress" style="font-size:13px;">
+									<td id="work-plan"></td>
+									<td id="work-record"></td>
+									<td id="extra-work"></td>
+								</tr>
+							</tbody>		
+						</table>
+					</div>
+					
+				</div>
+				
 			</div>
-			<!-- 캘린더구역 끝 -->
-      </div>
+		</div>	
+			
+			
       <br><br><br><br>
  
   
@@ -117,91 +340,362 @@
 			locale 					  : "ko",    
 			timezone                  : "local", 
 			nextDayThreshold          : "09:00:00",
-			allDaySlot                : false,
-			displayEventTime          : true,
+			displayEventTime          : false,
 			displayEventEnd           : true,
 			firstDay                  : 1, //월요일이 먼저 오게 하려면 1
 			weekNumbers               : false,
-			selectable                : true,
 			weekNumberCalculation     : "ISO",
 			eventLimit                : true,
+			selectHelper 			  : true,
+	      	selectMirror			  : true,
+	        dayMaxEvents			  : true,
 			views                     : { 
-			                             
+			                              month : { eventLimit : 12 } // 한 날짜에 최대 이벤트 12개, 나머지는 + 처리됨
 				                              },
-			navLinks                  : true,
 			timeFormat                : "HH:mm",
-			defaultTimedEventDuration : "01:00:00", // 한시간단위
-			minTime                   : "09:00:00",
-			maxTime                   : "19:00:00",
-			slotLabelFormat           : "HH:mm",
-			slotDuration			  : "1:00:00", // 시간 슬롯 단위를 1시간으로 설정
-			weekends                  : false, // 주말 안보이게
-			nowIndicator              : true,
+			weekends                  : true, // 주말 안보이게
 			header                    : {
-			                              left   : "today",
-			                              center : "prev, title, next",
-			                              right  : "agendaMonth, agendaWeek, listWeek"
+										center : "prev, title ,next ",
+							        	right : "prevYear, today, nextYear ",
+							        	left : ""
 			                            },
-			defaultView				  : "agendaMonth",
+			defaultView				  : "month",
 			views                     : {
-				 						  month : { eventLimit : 12 } // 한 날짜에 최대 이벤트 12개, 나머지는 + 처리됨
-			                              agendaWeek : {
-				  	                          columnFormat : "M/D ddd",
-					                          titleFormat  : "YYYY/MM/D",
-					                          eventLimit   : false
-				                          },
-				                          listWeek : {
-				                          columnFormat : ""
-				                          }
-				                        },
+										 month : {
+								        		titleFormat: "YYYY년 MM월"
+								        	}
+				                       },
 			buttonText				  : {
-				today: '오늘',
-				week: '주간', 
-				list: '목록'},
+										today: '오늘',
+										month: '월간'
+										},
 			
-			selectHelper : true,
-			select : function(start, end) { // 화면에서 날짜 선택하면
-				
-	           },
-	           
-	           events: function(start, end, timezone, callback) { // 화면에 이벤트 출력
-	        	   
-	        	      $.ajax({
-	        	        url: "attList.at", // 예약 정보를 가져올 컨트롤러 URL
-	        	        beforeSend : function(xhr){
-	                        xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
-	                    },
-	        	        success: function(list) {
-	        	        	
-	        	          
-	        	        },
-	        	        error: function() {
-	        	        	console.log("예약 정보를 가져오는 데 실패했습니다.");
-	        	        }
-	        	      });
-	        	    },
+	         eventClick: function(arg, event){ // 화면에서 일정 선택하면
+	        	 /*나의 근무에서 선택일과 출퇴근시간 변경*/
+	        	 if(arg.start.format("HH:mm") != "00:00"){
+		        	 $("#startTime").text(arg.start.format("HH:mm"));
+	        	 }else{
+	        		 $("#startTime").text("미타각");
+	        	 }
+	         
+	        	 if(arg.end != null){
+	        		 $("#endTime").text(arg.end.format("HH:mm"));
+	        	 }else{
+	        		 $("#endTime").text("미타각");
+	        	 }
 	        	 
-	        	eventClick: 
-	        		
-	        		function(arg){ // 화면에서 일정 선택하면
-
-	        			
-		        		
-		        	},
-	        	    
-	        	eventRender: function(event, element) {
-	        	  
+	        	 // 휴가근무인 경우
+	        	 if(arg.title == '연차휴가' || arg.title == '병가' || arg.title == '육아휴직'){
+	        		 $("#formattedDate2").text(arg.start.format("YYYY-MM-DD") + " ~ " + arg.end.format("YYYY-MM-DD"));
+	        		 $("#startTime").text("휴가");
+	        		 $("#endTime").text("휴가");
+	        	 }
+	        	 if(arg.title == '오전반차' || arg.title == '오후반차'){
+	        		 $("#formattedDate2").text(arg.start.format("YYYY-MM-DD"));
+	        		 $("#startTime").text("반차");
+	        		 $("#endTime").text("반차");
+	        	 }
+	         	 
+		        $("#formattedDate2").text(arg.day);
+		        $("#leaveType").text(arg.leaveType);
 		        
+				/* 주간실적 progress bar 함수 호출 */
+				
+				// 선택한 날짜의 주의 첫 번째 날짜인 월요일
+				var startDate = arg.start.clone().startOf('week').format('YYYY-MM-DD');
+				// 선택한 날짜의 주의 마지막 날짜인 일요일
+				var endDate = arg.start.clone().endOf('week').format('YYYY-MM-DD');
+				// 주간실적 함수 호출
+				weekWorkRecord(startDate, endDate);
+		        
+		       },
+	           
+	        events: function(start, end, timezone, callback) {
+	        	
+	        	/* 주간실적 progress bar 함수 호출 */
+				
+	        	// 선택한 날짜의 주의 첫 번째 날짜인 월요일
+	        	var curr = moment();
+				var startDate = curr.clone().startOf('isoWeek').format('YYYY-MM-DD');
+				// 선택한 날짜의 주의 마지막 날짜인 일요일
+				var endDate = curr.clone().endOf('isoWeek').format('YYYY-MM-DD');
+				// 주간실적 함수 호출
+				weekWorkRecord(startDate, endDate);
+				
+				
+				$.ajax({ // 휴가계획 가져오기
+      			  url : "leaveList.at",
+		        	   type : "POST",
+		        	   async : false,
+		        	   data : {userNo : ${loginUser.userNo}},
+		        	   beforeSend : function(xhr){
+	                       xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+	                   },
+		        	   success : function(lList) {
+		        		   var events = [];
+		        		  $.each(lList, function(index, leave) {
+		        			
+		        			  var event =  {
+		        					  title : leave.leaveCode,
+		        					  start : leave.startDate,
+		        					  end : leave.endDate,
+		        			  }
+		        			  events.push(event);
+		        		  }); 
+		        		  
+			        		   $.ajax({ // 근태기록 가져오기
+					        	   url : "attList.at",
+					        	   type : "POST",
+					        	   async : false,
+					        	   data : {userNo : ${loginUser.userNo}},
+					        	   beforeSend : function(xhr){
+				                       xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+				                   },
+					        	   success : function(list) {
+					        		   //console.log(list)
+					        		  $.each(list, function(index, attendance) {
+					        			
+					        			  var event =  {
+					        					  id: attendance.attRecordNo,
+					        					  userNo : attendance.userNo,
+					        					  title : "실적 : " + attendance.leaveType,
+					        					  start : attendance.currDate + "T" + attendance.onTime,
+					        					  end : attendance.currDate + "T" + attendance.offTime,
+					        					  day : attendance.currDate,
+					        					  onTime : attendance.onTime,
+					        					  offTime : attendance.offTime,
+					        					  leaveType : attendance.leaveType
+					        			  }
+					        			  events.push(event);
+					        		});
+			        	  		 },
+			        	  		 error: function(){
+			        	  			 console.log("통신오류");
+			        	  		 }
+			        	   	}); 
+				        callback(events);
+		        	   },
+		        	   error: function() {
+		        	   		console.log('통신 오류');
+		        	   }
+		        	 });
+	        },
+        	   
+	           eventRender: function(event, element) {
+	        	   console.log(event.title)
+		        	 element.css({
+		        		 "border": "1px solid #E0E0E0",
+		        		 "color": "#616161",
+		        		 "margin":"0px"
+		        		});
 	        	   
-	        	     
-	        	       }
-	        	 	}
+	        	   // 근무실적 색상변경
+		           if(event.onTime==null && event.offTime==null){ // 출퇴근등록 안하면
+		        	   element.css("background-color", "#C3E2DF");
+		           }else if(event.onTime!=null && event.offTime==null){ // 출근이나 퇴근 등록을 하지 않으면 색 변경
+	        		   element.css("background-color", "#F6A88A");
+	        	   }else{ // 출퇴근등록하면
+	        		   element.css("background-color", "#F9DD7C");
+	        	   }
+	        	   // 근무계획 색상변경
+	        	   if(event.title == '오전반차' || event.title == '오후반차'){
+	        		   element.css("background-color", "#D3AFD5");
+	        	   }
+	        	}
 			});
-		
-		
-		
 		});
 
+		// 오늘날짜 형식 바꾸기
+		$(function(){
+			var date = new Date();
+
+			var year = date.getFullYear().toString();
+			var month = (date.getMonth() + 1).toString().padStart(2, '0');
+			var day = date.getDate().toString().padStart(2, '0');
+
+			var formattedDate = year + '-' + month + '-' + day;
+
+			$("#formattedDate").text(formattedDate);
+			$("#formattedDate2").text(formattedDate);
+			
+			selectTodo(); // 노트 불러오기 함수 호출
+			
+		});
+		
+		function insertTodo(){
+			
+			$.ajax({
+				url : "insert.at",
+				data : {
+					userNo : "${loginUser.userNo}",
+					todoContent : $("#todoContent").val(),
+				},
+				beforeSend : function(xhr){
+	                xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+	            },
+	            success : function(result){
+	    			if(result == "success"){
+	    			
+	    				alert("메모 작성 완료");
+	    			}
+		    			selectTodo();
+	    		},
+	            error : function(){
+	            	console.log("통신오류");
+	            }
+			});
+		}
+		
+		function selectTodo(){
+			
+			$.ajax({
+				url : "select.at",
+				data : {
+					userNo : "${loginUser.userNo}",
+				},
+				beforeSend : function(xhr){
+	                xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+	            },
+	            success : function(result){
+	    			$("#todoContent").val(result);
+	    		},
+	            error : function(){
+	            	console.log("통신오류");
+	            }
+			});
+		}
+		
+		$(function(){ // 근무 상태 $("#status-btn") 띄우기
+			// ontime not null 이고 offtime null이면 근무중
+			if("${att.onTime}"!="" && "${att.offTime}"==""){
+				$("#status-btn").text("근무중");
+				$("#status-btn").addClass("btn-info");
+			}
+			// ontime not null 이고 offtime not null이면 퇴근
+			if("${att.onTime}"!="" && "${att.offTime}"!=""){
+				$("#status-btn").text("퇴근");
+				$("#status-btn").addClass("btn-danger");
+			}
+		});
+		
+		function weekWorkRecord(startDate, endDate){
+			/*주간실적 날짜 바꾸기*/
+			$("#weekStart").text(startDate);
+			$("#weekEnd").text(endDate);
+			
+			/* 주간실적 progress bar */
+			var workPlan = 0; // 근무 계획 = 정상근무 외근 출장 8시간 + 반차 4시간 
+			var workRecord = 0; // 근무 실적 = 출근 - 퇴근
+			var extraWork = 0; // 연장 근무 = 실적 - 계획
+			
+			
+			var existingEvents = $('#calendar').fullCalendar('clientEvents'); // 이미 추가된 이벤트들을 가져옴
+			
+			var currentDate = startDate;
+		
+			existingEvents.forEach(function(e){
+				if(e.day != null && e.day >= startDate && e.day <= endDate){ // 실적이 있으면
+					while(currentDate <= endDate){
+						// currentDate : 클릭한 날 짜 첫 월요일
+						// endDate 
+						
+						// 날짜 순회하면서 계획/실적 가져오기 (db에서 att가져오면 됨)
+						/* workPlan += getWorkPlan(currentDate);
+						workRecord += getWorkRecord(currentDate) */
+						console.log(currentDate);
+						
+						var result = getWork(currentDate);
+						
+						if(result.length != 0){
+							workPlan += result[0];
+							workRecord += result[1];
+							console.log("계획 : " + getWork(currentDate)[0])
+							console.log("실적 : " + getWork(currentDate)[1])
+						}
+						currentDate = moment(currentDate).add(1, 'day').format('YYYY-MM-DD');
+					}
+				}
+			});
+			workPlan = workPlan - 8*60*2; // 주말제외
+			if(workPlan < 0){
+				workPlan = 0;
+			}
+			extraWork = workRecord - workPlan;
+			console.log("총계획 : " + workPlan)
+			console.log("총실적 : " + workRecord)
+			console.log("초과근무  : " + extraWork)
+			
+			// 현재 진행중인 주간은 주간계획 조회 불가 TEST필요
+			/* var today = new Date();
+
+			var year = today.getFullYear();
+			var month = String(today.getMonth() + 1).padStart(2, '0');
+			var day = String(today.getDate()).padStart(2, '0');
+			
+			var formattedDate = year + '-' + month + '-' + day; // 오늘날짜
+			var friday = moment(endDate).add(-2, 'day').format('YYYY-MM-DD');
+			console.log(friday)
+			console.log(formattedDate)
+			console.log(startDate)
+			if(formattedDate<=friday && formattedDate>=startDate){
+				$("#progress").html("<td colspan='3'>주간실적은 지난 주간부터 조회가능합니다.</td>")
+			}else{
+				$("#work-plan").text("계획 : " + workPlan);
+				$("#work-record").text("실적 : " + workRecord);
+				$("#extra-work").text("초과 : " + extraWork);
+				
+				var fulltime = 52*60; // 주 52시간제
+				var workRecordProgress = workRecord/fulltime*100;
+				var extraWorkProgress = extraWork/fulltime*100;
+				//console.log(workRecordProgress)
+				//console.log(extraWorkProgress)
+				$("#work-record-progress").css("width",workRecordProgress+"%");
+				$("#extra-work-progress").css("width",extraWorkProgress+"%");
+			} */
+			
+			$("#work-plan").text("계획 : " + workPlan);
+			$("#work-record").text("실적 : " + workRecord);
+			$("#extra-work").text("초과 : " + extraWork);
+			
+			var fulltime = 52*60; // 주 52시간제
+			var workRecordProgress = workRecord/fulltime*100;
+			var extraWorkProgress = extraWork/fulltime*100;
+			//console.log(workRecordProgress)
+			//console.log(extraWorkProgress)
+			$("#work-record-progress").css("width",workRecordProgress+"%");
+			$("#extra-work-progress").css("width",extraWorkProgress+"%");
+				
+			};
+	
+	function getWork(currentDate){ // attendanceRecord 먼저 조회해오고, 결과가 만약 null(출퇴근등록 안함)이면 휴가계에서 근무계획 불러오기, 배열로 계획과 실적 return		 
+		var result = [];
+		$.ajax({
+			url : "selectAtt.at",
+			data : {
+				userNo : "${loginUser.userNo}",
+				currDate : currentDate
+			},
+			beforeSend : function(xhr){
+                xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+            },
+            async: false,
+            success : function(r){
+            	if(r!=null){
+            	 var workPlan = r.workPlan;
+                 var workRecord = r.workRecord;
+
+                 result = [workPlan, workRecord]; // 배열로 결과값 묶기
+            	}
+    		},
+            error : function(){
+            	console.log("통신오류");
+            }
+		});
+		
+		return result;
+	};
+
+			
  	
   </script>
    

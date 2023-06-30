@@ -25,4 +25,7 @@ public interface MemberService {
 
 	//회원 업데이트 메서드
 	int updateMember(Member member);
+
+	//회원가입 메서드
+	int insertMember(Member member);
 }

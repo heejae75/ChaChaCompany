@@ -152,7 +152,7 @@
 		                   <th colspan="4">
 		                       <textarea class="form-control" name="replyContent" id="reply-input" cols="55" rows="2" style="resize:none; width:100%;"></textarea>
 		                   </th>
-		                   <th style="vertical-align:middle"><button class="btn btn-secondary" id="reply-btn" onclick="insertReply();">등록하기</button></th>
+		                   <th style="vertical-align:middle"><button class="btn btn-secondary" id="reply-btn">등록하기</button></th>
 	                    </tr>
 	                    <tr>
 	                        <td colspan="5">댓글(<span id="rcount"></span>)</td>
@@ -244,6 +244,8 @@
  		chkblankReply =$("#reply-input").val();
  		if(chkblankReply.length==0){
  			alert("댓글을 입력해주세요.")
+ 		}else{
+ 			insertReply();
  		}
  	});
      
@@ -263,7 +265,6 @@
 	                xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
 	            },
 	    		success : function(list){
-	    			
 	    			var str = "";    				
 	    			for(var i in list){
 	    				str += "<tr id='reply-row'>"

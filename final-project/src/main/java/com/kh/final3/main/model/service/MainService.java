@@ -43,6 +43,8 @@ public interface MainService {
 	//선택한 날짜 일정 조회 
 	ArrayList<Schedule> mainDailyEvents(Map<String, Object> params);
 
+	// 근무계획 조회
+	Attendance selectLeaveType(int userNo);
 	//전자결재 승인 상태 조회 
 	ArrayList<Approval> mainApprovalStatus(Member m);
 

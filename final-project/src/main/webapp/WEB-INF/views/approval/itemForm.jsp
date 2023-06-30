@@ -20,7 +20,7 @@
 </head>        
 <body>
     <br><br><br><br>
-    <form action="item.ap" method="post" enctype="multipart/form-data" id="item-form" onsubmit="return chkApprover();">
+    <form action="item.ap" method="post" enctype="multipart/form-data" id="item-form" onsubmit="return chkItemForm();">
     <h1 align="center">구매 품의서</h1>
     <br><br>
         <div class="item-area">
@@ -142,7 +142,7 @@
                         </div>
                  </div>
                  <div id="search-area">
-		                  	<select name="select" id="search-select">
+		                  	<select name="status" id="search-select">
 		                         <option value="1">부서</option>
 		                         <option value="2">이름</option>
 		                    </select>
@@ -208,10 +208,10 @@
     			insertTr += "<tr>";
     			insertTr += "<td><input type='checkbox' name='checkBox' onclick='isCheckAll();'></td>";
     			insertTr += "<td><input type='date'></td>";
-    			insertTr += "<td><input type='text' name='supplyName' ></td>";
-    			insertTr += "<td><input type='text' name='supplySize' value='0'></td>";
-    			insertTr += "<td><input type='text' name='amount' value='0'></td>";
-    			insertTr += "<td><input type='text' name='price' value='0'></td>";
+    			insertTr += "<td><input type='text' name='arrSupplyName' ></td>";
+    			insertTr += "<td><input type='text' name='arrSupplySize' value='0'></td>";
+    			insertTr += "<td><input type='text' name='arrAmount' value='0'></td>";
+    			insertTr += "<td><input type='text' name='arrPrice' value='0'></td>";
     			insertTr += "</tr>";
 	    		
 	    		$("#item-table tbody").append(insertTr);
@@ -325,34 +325,38 @@
     	function searchApprover(){
 			var status = $("#search-select").val();
 			var keyword = $("#keyword").val();
-    		$.ajax({
-    			url : "searchApprover.ap",
-    			type : "POST",
-    			data :{
-    				status : status,
-    				keyword : keyword
-    			},
-    			beforeSend : function(xhr)
-                {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-                    xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
-                },
-    			success : function(list){
-    				str ="";
-    				for(var i=0;i<list.length;i++){
-    					str += "<tr>"
-    						 + "<td><input type='checkbox' id='chkMember'></td>"
-    						 + "<td>"+list[i].userName+"</td>"
-    						 + "<td>"+list[i].jobCode+"</td>"
-    						 + "<td>"+list[i].deptCode+"</td>"
-    						 + "<td>"+list[i].userNo+"</td>"
-    						 + "</tr>"
-    				}
-	    			$("#ApproverList>tbody").html(str);
-    			},
-    			error : function(){
-    				console.log("통신오류");
-    			}
-    		});
+			if(keyword == ''){
+				alert("검색어를 입력해주세요");
+			}else{
+				$.ajax({
+	    			url : "searchApprover.ap",
+	    			type : "POST",
+	    			data :{
+	    				status : status,
+	    				keyword : keyword
+	    			},
+	    			beforeSend : function(xhr)
+	                {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+	                    xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+	                },
+	    			success : function(list){
+	    				str ="";
+	    				for(var i=0;i<list.length;i++){
+	    					str += "<tr>"
+	    						 + "<td><input type='checkbox' id='chkMember'></td>"
+	    						 + "<td>"+list[i].userName+"</td>"
+	    						 + "<td>"+list[i].jobCode+"</td>"
+	    						 + "<td>"+list[i].deptCode+"</td>"
+	    						 + "<td>"+list[i].userNo+"</td>"
+	    						 + "</tr>"
+	    				}
+		    			$("#ApproverList>tbody").html(str);
+	    			},
+	    			error : function(){
+	    				console.log("통신오류");
+	    			}
+	    		});
+			}
     	}
     	//결재선 추가
     	function addApprover1(){
@@ -477,11 +481,14 @@
     		}
     	}
     	//결재자 확인
-    	function chkApprover(){
+    	function chkItemForm(){
     		var flag = "";
     		
     		if($("input[name=lastApprover]").val()==null){
     			alert("결재자를 선택해주세요.");
+    			flag = false;
+    		}else if($("#docTitle").val()==''){
+    			alert("제목을 입력해주세요.");
     			flag = false;
     		}else{
     			flag = true;

@@ -24,19 +24,24 @@
 	 	<result column="JOB_Name" property="jobName"/>
 	</resultMap>
 
-	<insert id="insertMember" parameterType="member">
+	<insert id="insertAdmin" parameterType="member">
 		INSERT INTO MEMBER(USER_NO, USER_ID, USER_NAME, USER_PWD, PHONE, EMAIL, ADDRESS, BIRTH, DEPT_CODE, JOB_CODE,
 							EMPOLYMENT_DATE, DEPATURE_DATE, AUTH, ENABLED)
-		VALUES(SEQ_UNO.NEXTVAL, #{userId}, '관리자', #{userPwd}, 'n', 'n', 'n', SYSDATE, 'n', 'n', SYSDATE, SYSDATE, 'ROLE_MEMBER', 1)
+		VALUES(SEQ_UNO.NEXTVAL, #{userId}, '관리자', #{userPwd}, '010-0000-0000', 'ADMIN@NAVER.COM', 'SYSDATE', SYSDATE, 'D1', 'J1', SYSDATE, SYSDATE, 'ROLE_ADMIN', 1)
 	</insert>
 	
+	<!-- 아이디로 회원 조회 -->
 	<select id="selectMemberById" resultMap="memberResultSet">
-		SELECT *
+		SELECT USER_NO, USER_ID, USER_NAME, USER_PWD, PHONE, EMAIL, ADDRESS, TO_CHAR(BIRTH, 'YYMMDD') AS BIRTH, DEPT_NAME, JOB_NAME,DEPT_CODE,
+												EMPOLYMENT_DATE, DEPATURE_DATE, AUTH, ENABLED
 		FROM MEMBER
+		JOIN DEPARTMENT USING(DEPT_CODE)
+		JOIN JOB USING(JOB_CODE)
 		WHERE USER_ID = #{userId}
 		AND STATUS = 'Y'
 	</select>
 	
+	<!-- 게시글 총 개수 -->
 	<select id="selectListCount" resultType="_int">
 		SELECT COUNT(*)
 		FROM MEMBER
@@ -59,6 +64,7 @@
 		</choose>
 	</select>
 	
+	<!-- 게시글 조회 -->
 	<select id="selectList" resultMap="memberResultSet">
 		SELECT *
 		FROM MEMBER
@@ -82,6 +88,7 @@
 		ORDER BY ${currentStatus}
 	</select>
 	
+	<!-- 회원 번호로 회원 찾기 -->
 	<select id="selectMemberByUserNo" resultMap="memberResultSet">
 		SELECT USER_NO, USER_ID, USER_NAME, USER_PWD, PHONE, EMAIL, ADDRESS, TO_CHAR(BIRTH, 'YYMMDD') AS BIRTH, DEPT_NAME, JOB_NAME,
 												EMPOLYMENT_DATE, DEPATURE_DATE, AUTH, ENABLED
@@ -96,6 +103,14 @@
 <!-- 		UPDATE MEMBER -->
 <!-- 		SET USER_NAME = #{userName}, PHONE = #{phone}, EMAIL = #{email}, ADDRESS = #{address},  -->
 	</update>
+	
+	<!-- 회원가입 -->
+	<insert id="insertMember" parameterType="member">
+		INSERT INTO MEMBER(USER_NO, USER_ID, USER_NAME, USER_PWD, PHONE, EMAIL, ADDRESS, BIRTH, DEPT_CODE, JOB_CODE,
+							EMPOLYMENT_DATE, DEPATURE_DATE, AUTH, ENABLED)
+		VALUES(SEQ_UNO.NEXTVAL, #{userId}, #{userName}, #{userPwd}, #{phone}, #{email}, #{address}, #{birth}, #{deptCode}, #{jobCode},
+								#{empolymentDate}, #{depatureDate}, #{auth}, 1)
+	</insert>
 	
 	<!-- customUserDetails 관련 -->
 	<resultMap type="com.kh.final3.member.model.vo.CustomUserDetails" id="customUserSet">

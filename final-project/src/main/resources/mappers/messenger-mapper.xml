@@ -110,14 +110,14 @@
 		JOIN JOB USING(JOB_CODE)
 		WHERE STATUS = 'Y'
 		<choose>
-			<when test="deptCode == null and keyword != null ">
+			<when test="deptCode == '전체' and keyword != null ">
 				AND USER_NAME LIKE '%'||#{keyword}||'%'
 			</when>
-			<when test="deptCode !=null and keyword != null">
+			<when test="deptCode != '전체' and keyword != null">
 				AND USER_NAME LIKE '%'||#{keyword}||'%'
 				AND DEPT_CODE = #{deptCode}
 			</when>
-			<when test="deptCode != null and keyword == null">
+			<when test="deptCode != '전체'" >
 				AND DEPT_CODE = #{deptCode}
 			</when>
 		</choose>
@@ -186,32 +186,42 @@
 	<select id="selectSearchListCount" resultType="_int" parameterType="hashmap">
 		SELECT COUNT(*)
 		FROM MESSENGER
-		JOIN MEMBER ON (RECEIVER = USER_NO)
+		JOIN MEMBER SM ON (SENDER = SM.USER_NO)
+		JOIN MEMBER RM ON (RECEIVER = RM.USER_NO)
 		WHERE RECV_DELETE = 'N'
 		AND RECEIVER = #{userNo}
 		<choose>
 			<when test="category == 'writer'">
-				AND USER_NAME LIKE '%'||#{keyword}||'%' 
+				AND SM.USER_NAME LIKE '%'||#{keyword}||'%' 
 			</when>
 			<when test="category == 'title'">
 				AND MSG_TITLE LIKE '%'||#{keyword}||'%'
+			</when>
+			<when test="category == 'date'">
+				AND RECV_DATE BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD')
+               	 			  AND TO_DATE(#{endDate},'YYYY-MM-DD')
 			</when>
 		</choose>
 	</select>
 	
 	<!-- 조건별 검색 목록 조회 (받은 쪽지)-->
 	<select id="selectSearchList" resultMap="messengerResultSet" parameterType="hashmap">
-		SELECT MESSENGER_NO, USER_NAME AS SENDER, MSG_TITLE, RECV_DATE, READ_STATUS, EMC_STATUS
+		SELECT MESSENGER_NO, SM.USER_NAME AS SENDER, MSG_TITLE, RECV_DATE, READ_STATUS, EMC_STATUS
 		FROM MESSENGER
-		JOIN MEMBER ON (SENDER = USER_NO)
+		JOIN MEMBER SM ON (SENDER = SM.USER_NO)
+		JOIN MEMBER RM ON (RECEIVER = RM.USER_NO)
 		WHERE RECV_DELETE = 'N'
 		AND RECEIVER = #{userNo}
 		<choose>
 			<when test="category == 'writer'">
-				AND USER_NAME LIKE '%'||#{keyword}||'%' 
+				AND SM.USER_NAME LIKE '%'||#{keyword}||'%' 
 			</when>
 			<when test="category == 'title'">
 				AND MSG_TITLE LIKE '%'||#{keyword}||'%'
+			</when>
+			<when test="category == 'date'">
+				AND RECV_DATE BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD')
+               				  AND TO_DATE(#{endDate},'YYYY-MM-DD')
 			</when>
 		</choose>
 		ORDER BY RECV_DATE DESC
@@ -221,32 +231,42 @@
 	<select id="sendSearchListCount" parameterType="hashmap" resultType="_int">
 		SELECT COUNT(*)
 		FROM MESSENGER
-		JOIN MEMBER ON (RECEIVER = USER_NO)
+		JOIN MEMBER SM ON (SENDER = SM.USER_NO)
+		JOIN MEMBER RM ON (RECEIVER = RM.USER_NO)
 		WHERE SEND_DELETE = 'N'
 		AND SENDER = #{userNo}
 		<choose>
 			<when test="category == 'writer'">
-				AND USER_NAME LIKE '%'||#{keyword}||'%' 
+				AND RM.USER_NAME LIKE '%'||#{keyword}||'%' 
 			</when>
 			<when test="category == 'title'">
 				AND MSG_TITLE LIKE '%'||#{keyword}||'%'
+			</when>
+			<when test="category == 'date'">
+				AND SEND_DATE BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD')
+               				  AND TO_DATE(#{endDate},'YYYY-MM-DD')
 			</when>
 		</choose>
 	</select>
 	
 	<!-- 조건별 검색 게시글 목록 조회(보낸쪽지) -->
 	<select id="sendSearchList" resultMap="messengerResultSet" parameterType="hashmap">
-		SELECT MESSENGER_NO, USER_NAME AS RECEIVER, MSG_TITLE, RECV_DATE, READ_STATUS, EMC_STATUS
+		SELECT MESSENGER_NO, RM.USER_NAME AS RECEIVER, MSG_TITLE, SEND_DATE, READ_STATUS, EMC_STATUS
 		FROM MESSENGER
-		JOIN MEMBER ON (RECEIVER = USER_NO)
+		JOIN MEMBER SM ON (SENDER = SM.USER_NO)
+		JOIN MEMBER RM ON (RECEIVER = RM.USER_NO)
 		WHERE SEND_DELETE = 'N'
 		AND SENDER = #{userNo}
 			<choose>
 				<when test="category == 'writer'">
-					AND USER_NAME LIKE '%'||#{keyword}||'%' 
+					AND RM.USER_NAME LIKE '%'||#{keyword}||'%' 
 				</when>
 				<when test="category == 'title'">
 					AND MSG_TITLE LIKE '%'||#{keyword}||'%'
+				</when>
+				<when test="category == 'date'">
+				AND SEND_DATE BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD')
+               				  AND TO_DATE(#{endDate},'YYYY-MM-DD')
 				</when>
 			</choose>
 			ORDER BY SEND_DATE DESC
@@ -262,34 +282,46 @@
 		AND (SEND_DELETE = 'K' OR RECV_DELETE ='K')
 		<choose>
 			<when test="category == 'receive'">
-				AND RM.USER_NAME LIKE '%'||#{keyword}||'%'
+				AND (RM.USER_NAME LIKE '%'||#{keyword}||'%' OR MSG_TITLE LIKE '%'||#{keyword}||'%')
 			</when>
 			<when test="category == 'send'">
-				AND SM.USER_NAME LIKE '%'||#{keyword}||'%'
+				AND (SM.USER_NAME LIKE '%'||#{keyword}||'%' OR MSG_TITLE LIKE '%'||#{keyword}||'%')
 			</when>
 			<when test="category == 'title'">
 				AND MSG_TITLE LIKE '%'||#{keyword}||'%'
+			</when>
+			<when test="category == 'date'">
+				AND (SEND_DATE BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD')
+               				  AND TO_DATE(#{endDate},'YYYY-MM-DD')
+               		 OR RECV_DATE BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD')
+               				  AND TO_DATE(#{endDate},'YYYY-MM-DD'))		  
 			</when>
 		</choose>	
 	</select>
 	
 	<select id="trashSearchList" resultMap="messengerResultSet" parameterType="hashmap">
 		SELECT MESSENGER_NO, SM.USER_NAME AS SENDER, SM.USER_NO AS SENDER_UNO , RM.USER_NAME AS RECEIVER, RM.USER_NO AS RECVR_UNO,
-       		   MSG_TITLE, RECV_DATE, READ_STATUS, EMC_STATUS
+       		   MSG_TITLE, RECV_DATE, SEND_DATE, READ_STATUS, EMC_STATUS
 		FROM MESSENGER
 		JOIN MEMBER SM ON (SENDER = SM.USER_NO)
 		JOIN MEMBER RM ON (RECEIVER = RM.USER_NO)
-		WHERE (SENDER =7 OR RECEIVER = 7)
+		WHERE (SENDER = #{userNo} OR RECEIVER =#{userNo})
 		AND (SEND_DELETE = 'K' OR RECV_DELETE ='K')
 		<choose>
 			<when test="category == 'receive'">
 				AND RM.USER_NAME LIKE '%'||#{keyword}||'%'
 			</when>
 			<when test="category == 'send'">
-				AND SM.USER_NAME LIKE '%'||#{keyword}||'%'
+				AND SM.USER_NAME LIKE '%'||#{keyword}||'%' 
 			</when>
 			<when test="category == 'title'">
 				AND MSG_TITLE LIKE '%'||#{keyword}||'%'
+			</when>
+			<when test="category == 'date'">
+				AND (SEND_DATE BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD')
+               				  AND TO_DATE(#{endDate},'YYYY-MM-DD')
+               		 OR RECV_DATE BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD')
+               				  AND TO_DATE(#{endDate},'YYYY-MM-DD'))		  
 			</when>
 		</choose>	
 		ORDER BY SEND_DATE DESC

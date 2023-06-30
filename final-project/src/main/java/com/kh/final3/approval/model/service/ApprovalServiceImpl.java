@@ -29,23 +29,23 @@ public class ApprovalServiceImpl implements ApprovalService {
 	private SqlSessionTemplate ss;
 
 	@Override
-	public int selectListCount(String status) {
-		return ad.selectListCount(ss, status);
+	public int selectListCount(HashMap<String, String> map) {
+		return ad.selectListCount(ss, map);
 	}
 
 	@Override
-	public ArrayList<ApprovalDoc> selectApprovalDocList(PageInfo pi, String status) {
-		return ad.selectApprovalDocList(ss,pi, status);
+	public ArrayList<ApprovalDoc> selectApprovalDocList(PageInfo pi, HashMap<String, String> map) {
+		return ad.selectApprovalDocList(ss,pi, map);
 	}
-
+	
 	@Override
 	public ArrayList<ApprovalDoc> approvalMainList(String status) {
 		return ad.approvalMainList(ss,status);
 	}
 
 	@Override
-	public ArrayList<DocType> selectEnrollList() {
-		return ad.selectEnrollList(ss);
+	public ArrayList<DocType> selectEnrollList(HashMap<String, String> map,PageInfo pi) {
+		return ad.selectEnrollList(ss,map,pi);
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class ApprovalServiceImpl implements ApprovalService {
 		}
 		
 		for(Item i : iList) {
-			itemResult = ss.insert("approvalMapper.insertItem",i);
+			itemResult *= ss.insert("approvalMapper.insertItem",i);
 		}
 		
 		int result = ApprovalDocResult*ApprovalResult*ApprovalAttachmentResult*itemResult;
@@ -161,4 +161,8 @@ public class ApprovalServiceImpl implements ApprovalService {
 		return ad.monthData(ss, ad1);
 	}
 
+	@Override
+	public int selectEnrollListCount(HashMap<String, String> map) {
+		return ad.selectEnrollListCount(ss,map);
+	}
 }

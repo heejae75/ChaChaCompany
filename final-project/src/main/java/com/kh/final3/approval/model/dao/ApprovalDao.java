@@ -20,24 +20,29 @@ import com.kh.final3.member.model.vo.Member;
 @Repository
 public class ApprovalDao {
 
-	public int selectListCount(SqlSessionTemplate ss, String status) {
-		return ss.selectOne("approvalMapper.selectListCount",status);
+	public int selectListCount(SqlSessionTemplate ss, HashMap<String, String> map) {
+		return ss.selectOne("approvalMapper.selectListCount",map);
 	}
 
-	public ArrayList<ApprovalDoc> selectApprovalDocList(SqlSessionTemplate ss, PageInfo pi,String status) {
+	public ArrayList<ApprovalDoc> selectApprovalDocList(SqlSessionTemplate ss, PageInfo pi,HashMap<String, String> map) {
 		int limit = pi.getBoardLimit();
 		int offset = (pi.getCurrentPage()-1)*limit;
 		
 		RowBounds rowBounds = new RowBounds(offset, limit);
-		return (ArrayList)ss.selectList("approvalMapper.selectApprovalDocList",status,rowBounds);
+		return (ArrayList)ss.selectList("approvalMapper.selectApprovalDocList",map,rowBounds);
 	}
 
 	public ArrayList<ApprovalDoc> approvalMainList(SqlSessionTemplate ss, String status) {
 		return (ArrayList)ss.selectList("approvalMapper.approvalMainList",status);
 	}
 
-	public ArrayList<DocType> selectEnrollList(SqlSessionTemplate ss) {
-		return (ArrayList)ss.selectList("approvalMapper.selectEnrollList");
+	public ArrayList<DocType> selectEnrollList(SqlSessionTemplate ss, HashMap<String, String> map,PageInfo pi) {
+		int limit = pi.getBoardLimit();
+		int offset = (pi.getCurrentPage()-1)*limit;
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		return (ArrayList)ss.selectList("approvalMapper.selectEnrollList",map,rowBounds);
 	}
 
 	public ArrayList<Member> selectApproverList(SqlSessionTemplate ss, String deptCode) {
@@ -80,7 +85,7 @@ public class ApprovalDao {
 		return ss.selectList("approvalMapper.monthData",ad);
 	}
 
-
-	
-
+	public int selectEnrollListCount(SqlSessionTemplate ss, HashMap<String, String> map) {
+		return ss.selectOne("approvalMapper.selectEnrollListCount", map);
+	}
 }

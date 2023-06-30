@@ -32,10 +32,15 @@ public class MainController {
 	
 	@Autowired
 	private MainService mainService;
-	
-	@Autowired
+
 	private Todo td;
 
+	//사용자 메인페이지 이동 
+	@RequestMapping("home.ma")
+	public String MainHome() {
+		return "main/userMain";
+	}
+	
 	//최근 공지 불러오기 
 	@ResponseBody
 	@RequestMapping(value="mainNoticeList.ma", produces="application/json; charset=UTF-8")
@@ -74,17 +79,24 @@ public class MainController {
 	//@RequestMapping(value="insertGo.ma", method=RequestMethod.POST)
 	public String insertGoToWork(Attendance at, HttpSession session, RedirectAttributes rttr) {
 		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
+		// 근무계획 조회
+		Attendance at2 = mainService.selectLeaveType(userNo);
 		
-		at.setUserNo(userNo);
-		
+		if(at2 == null) { // 근무계획 없으면
+			at.setUserNo(userNo);
+		}else { // 근무계획 있으면
+			at.setUserNo(userNo);
+			at.setLeaveType(at2.getLeaveType());
+		}
 		int result = mainService.insertGoToWork(at);
-		
-		if(result > 0) {
-			rttr.addFlashAttribute("onTime",at.getOnTime());
+
+		if (result > 0) {
+			rttr.addFlashAttribute("onTime", at.getOnTime());
 			session.setAttribute("alertMsg", "출근 성공!");
-		}else {
+		} else {
 			session.setAttribute("alertMsg", "출근 실패! ");
 		}
+
 		return "redirect:/member/mainPage.me";
 	}
 	

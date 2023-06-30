@@ -79,6 +79,11 @@ public class MainServiceImpl implements MainService {
 	public ArrayList<Schedule> mainDailyEvents(Map<String, Object> params) {
 		return mainDao.mainDailyEvents(sqlSession, params);
 	}
+	// 근무계획조회
+	@Override
+	public Attendance selectLeaveType(int userNo) {
+		return mainDao.selectLeaveType(sqlSession, userNo);
+	}
 
 	//전자결재 리스트 조회 
 	@Override

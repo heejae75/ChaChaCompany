@@ -16,50 +16,53 @@ import com.kh.final3.member.model.vo.Member;
 
 
 public interface ApprovalService {
-	
-	//각 status의 갯수 가져오기
-		int selectListCount(String status);
 		
-		//결재함 리스트 불러오기
-		ArrayList<ApprovalDoc> selectApprovalDocList(PageInfo pi, String status);
-		
-		//결재 홈 리스트 불러오기
-		ArrayList<ApprovalDoc> approvalMainList(String status);
-		
-		//양식리스트 가져오기
-		ArrayList<DocType> selectEnrollList();
-		
-		//결재라인 사원조회
-		ArrayList<Member> selectApproverList(String deptCode);
-		
-		//결재라인 사원 검색
-		ArrayList<Member> searchApproverList(HashMap<String, String> map);
-		
-		//구매품의서 작성
-		int insertItem(ArrayList<Item> iList, ArrayList<ApprovalAttachment> atList, ApprovalDoc ad, Approval a);
-		
-		//휴가계 작성
-		int insertLeave(ArrayList<Leave> leaveList, ArrayList<ApprovalAttachment> atList, ApprovalDoc ad, Approval a);
-		
-		//결재자 조회
-		Approval selectApproval(int docNo);
-		
-		//결재문서 첨부파일 조회
-		ArrayList<ApprovalAttachment> selectApprovalAttachment(int docNo);
+		//전체 결재문서 수
+		int selectListCount(HashMap<String, String> map);
 		
 		//결재문서 조회
+		ArrayList<ApprovalDoc> selectApprovalDocList(PageInfo pi, HashMap<String, String> map);
+		
+		//홈 결재문서 리스트 조회
+		ArrayList<ApprovalDoc> approvalMainList(String status);
+		
+		//결재문서작성 리스트 수 
+		int selectEnrollListCount(HashMap<String, String> map);
+		
+		//결재문서 종류 조회
+		ArrayList<DocType> selectEnrollList(HashMap<String, String> map, PageInfo pi);
+		
+		//결재자 조회
+		ArrayList<Member> selectApproverList(String deptCode);
+		
+		//결재자 검색 조회
+		ArrayList<Member> searchApproverList(HashMap<String, String> map);
+		
+		//구매 품의서 
+		int insertItem(ArrayList<Item> iList, ArrayList<ApprovalAttachment> atList, ApprovalDoc ad, Approval a);
+		
+		//휴가계
+		int insertLeave(ArrayList<Leave> leaveList, ArrayList<ApprovalAttachment> atList, ApprovalDoc ad, Approval a);
+		
+		//승인자 조회
+		Approval selectApproval(int docNo);
+		
+		//첨부파일 조회
+		ArrayList<ApprovalAttachment> selectApprovalAttachment(int docNo);
+		
+		//결재문서 상세 조회
 		ApprovalDoc selectApprovalDoc(int docNo);
 		
-		//구매품의서 내용 조회
+		//구매품의서 상세 조회
 		ArrayList<Item> selectItem(int docNo);
 		
-		//휴가계 내용조회
+		//휴가계 상세 조히
 		ArrayList<Leave> selectLeave(int docNo);
 
-		//중간결재자 반려
+		//중간결재자 반려사요
 		int updateSecondReturnReason(Approval a);
 		
-		//최종결재자 반려
+		//최종결재자 반려사유
 		int updateLastReturnReason(Approval a, ApprovalDoc ad);
 		
 		//중간결재자 승인
@@ -68,9 +71,9 @@ public interface ApprovalService {
 		//최종결재자 승인
 		int updateLastApprover(Approval a,ApprovalDoc ad);
 		
-		//결재 홈 그래프
+		//월별 데이터
 		List<ApprovalDoc> monthData(ApprovalDoc ad);
+		
+		
 
-	
-	
 }

@@ -118,7 +118,7 @@
 	                </tr>
 	                <tr>
 	                    <th>작성자</th>
-	                    <td><input type="text" id="boardWriter" class="form-control" value="${loginUser.deptCode }">
+	                    <td><input type="text" id="boardWriter" class="form-control" value="${loginUser.deptName }" readonly>
                             <input type="hidden" name="boardWriter" value="${loginUser.userNo }"></td>
 	                    <th>중요도</th>
 	                    <td><select id="selectBox" name="importanceLevel" style=" width :100%; height:100%; font-size: 20px; ">

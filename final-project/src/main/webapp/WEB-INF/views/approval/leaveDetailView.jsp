@@ -18,8 +18,9 @@
 </head>
 <body>
 	<br><br><br><br>
+	<hr>
     <h1 align="center">휴가계</h1>
-    <br><br>
+    <hr>
         <div class="leave-area">
             <input type="hidden" name="deptCode" value="${loginUser.deptCode }">
             <input type="hidden" name="docType" value="1">
@@ -38,33 +39,37 @@
                		<c:when test="${!empty a.secondApprover }">
 			    		<table class='table table-bordered' id='approver-signature'>
 			                <tbody>
-			                    <tr><th width="20px" rowspan="4">결재</th></tr>
+			                    <tr><th rowspan="5">결재</th></tr>
 			                    <tr><td><input type="text" value="${a.lastJobName}" readonly/></td></tr>
-			                    <tr height="50px"><td><input type="text" id="lastApprover" value="${a.lastApprover }" readonly/></td></tr>
-			                    <tr height="80px"><td><input type="text" id="lastSignature" value="${a.lastSignature }" style="font-family: 'Song Myung', serif;font-size: 20px" readonly/></td></tr>
+			                    <tr><td><input type="text" id="lastSignature" value="${a.lastSignature }" style="font-family: 'Song Myung', serif;font-size: 20px" readonly/></td></tr>
+			                    <tr><td><input type="text" id="lastApprover" value="${a.lastApprover }" style="font-size: 12px" readonly/></td></tr>
+			                	<tr><td><input type="text" id="lastDate" value="${a.lastDate}" style="font-size: 12px" readonly></td></tr>
 			                </tbody>
 			    		</table>
                			<table class='table table-bordered' id='approver-signature'>
 			                <tbody>
-			                    <tr><th width="20px" rowspan="4">결재</th></tr>
+			                    <tr><th rowspan="5">결재</th></tr>
 			                    <tr><td><input type="text" value="${a.secondJobName}" readonly/></td></tr>
-			                    <tr height="50px"><td><input type="text" id="secondApprover" value="${a.secondApprover}" readonly/></td></tr>
-			                    <tr height="80px"><td><input type="text" id="secondSignature" value="${a.secondSignature }" style="font-family: 'Song Myung', serif;font-size: 20px" readonly/></td></tr>
+			                    <tr><td><input type="text" id="secondSignature" value="${a.secondSignature }" style="font-family: 'Song Myung', serif;font-size: 20px" readonly/></td></tr>
+			                    <tr><td><input type="text" id="secondApprover" value="${a.secondApprover}" style="font-size: 12px" readonly/></td></tr>
+			                	<tr><td><input type="text" id="secondDate" value="${a.secondDate}" style="font-size: 12px" readonly></td></tr>
 			                </tbody>
 			    		</table>
                		</c:when>
                		<c:otherwise>
                			<table class='table table-bordered' id='approver-signature'>
 			                <tbody>
-			                    <tr><th width="20px" rowspan="4">결재</th></tr>
+			                    <tr><th rowspan="5">결재</th></tr>
 			                    <tr><td><input type="text" value="${a.lastJobName}" readonly/></td></tr>
-			                    <tr height="50px"><td><input type="text" id="lastApprover" value="${a.lastApprover }" readonly/></td></tr>
-			                    <tr height="80px"><td><input type="text" id="lastSignature" value="${a.lastSignature }" style="font-family: 'Song Myung', serif;font-size: 20px" readonly/></td></tr>
+			                    <tr><td><input type="text" id="lastSignature" value="${a.lastSignature }" style="font-family: 'Song Myung', serif;font-size: 23px" readonly/></td></tr>
+			                    <tr><td><input type="text" id="lastApprover" value="${a.lastApprover }" style="font-size: 12px" readonly/></td></tr>
+			                	<tr><td><input type="text" id="lastDate" value="${a.lastDate}" style="font-size: 12px" readonly></td></tr>
 			                </tbody>
 			    		</table>
                		</c:otherwise>
                </c:choose>
             </div>
+            <hr>
             <div id="leave-content">
                 <div id="leave-content1">
                     <table class="table table-bordered" width="100%" height="100%" style="border-collapse: collapse;vertical-align: middle">
@@ -124,6 +129,7 @@
 	                                    <input type="text" id="total-date" value="" readonly>
 	                                </td>
 	                            </tr>
+                        	</c:forEach>
 	                            <tr>
 	                            <th colspan="6">사유</th>
 	                            </tr>
@@ -135,10 +141,9 @@
 	                            <tr>
 	                                <th colspan="3" style="vertical-align: middle;" >업무인수자</th>
 	                                <td colspan="3">
-	                                    <input type="text" name="workReceiver" value="${l.workReceiver }" style="width: 80%;vertical-align: middle;" >
+	                                    <input type="text" name="workReceiver" value="${lList[0].workReceiver }" style="width: 80%;vertical-align: middle;" >
 	                                </td>
 	                            </tr>
-                        	</c:forEach>
                         </tbody>
                         <tfoot>
                             <tr>
@@ -185,7 +190,8 @@
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <h1 class="modal-title fs-5" id="exampleModalLabel">반려사유</h1>
-	        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 	      </div>
 	      <div class="modal-body">
 		      <textarea name="returnReason" id="returnReason">${a.returnReason}</textarea>	      
@@ -198,6 +204,8 @@
 	  </div>
 	</div>
 	<script>
+	console.log("${a.secondDate}");
+	console.log("${a.lastDate}");
 	//시간 계산
 	$(function(){
 		for(var i=0;i<"${arrayLength}";i++){
@@ -225,9 +233,12 @@
 	//승인
 	function approval(){
 		var loginUserNo = "${loginUser.userNo}";
-		var loginUserName = "${loginUser.userName}"
+		var loginUserName = "${loginUser.userName}";
 		var lastApprover = "${a.lastApproverNo}";
 		var secondApprover = "${a.secondApproverNo}";
+		var secondDate = "${a.secondDate}";
+		var lastDate = "${a.lastDate}";
+		
 		var docNo = "${ad.docNo}";
 		
 		var lastSignature = "${a.lastApprover}";
@@ -253,6 +264,8 @@
 				success : function(result){
 					if(result>0){
 						$("#secondSignature").attr("value",loginUserName);
+						$("#secondDate").attr("value",secondDate);
+    					location.reload();
 						
 						//실시간 알림 서버에 보내기 
 						if(secondSignature != docWriter){
@@ -289,12 +302,13 @@
                         xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
                     },
     				success : function(result){
-    					console.log(result)
     					if(result>0){
     						$("#lastSignature").attr("value",loginUserName);
     						$("#approval-btn").attr("disabled",true);
     						$("#reject-btn").attr("disabled",true);
     						$("#emergency-btn").attr("checked",false);
+    						$("#lastDate").attr("value",lastDate);
+    						location.reload();
     						
     						//실시간 알림 서버에 보내기 
     						if(lastSignature != docWriter){
@@ -322,6 +336,8 @@
 		var secondApprover = "${a.secondApproverNo}";
 		var docNo = "${ad.docNo}";
 		var returnReason = $("#returnReason").val();
+		var secondDate = "${a.secondDate}";
+		var lastDate = "${a.lastDate}";
 		
 		if(secondApprover == loginUserNo){
 			if(confirm("반려하시겠습니까?")){
@@ -339,6 +355,8 @@
 					success : function(result){
 						if(result>0){
 							$("#secondSignature").attr("value","반려");	
+							$("#secondDate").attr("value",secondDate);
+							location.reload();
 							
 							//실시간 알림 서버에 보내기 
     						if(lastSignature != docWriter){
@@ -381,6 +399,8 @@
 							$("#returnReason").attr("readonly",true);
 							$("#approval-btn").attr("disabled",true);
 							$("#reject-btn").attr("disabled",true);
+							$("#lastDate").attr("value",lastDate);
+							location.reload();
 							
 							//실시간 알림 서버에 보내기 
     						if(lastSignature != docWriter){
