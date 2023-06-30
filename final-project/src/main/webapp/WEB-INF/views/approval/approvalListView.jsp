@@ -200,7 +200,6 @@
         </div>
         <br><br><br>
 	<script>
-	console.log("${list[6].status}")
 	//행클릭시 해당 페이지로 이동
 	$(function(){
 		$("#approval-list>tbody>tr").click(function(){
