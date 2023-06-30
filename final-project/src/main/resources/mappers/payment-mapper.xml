@@ -61,6 +61,7 @@
 		JOIN DEPARTMENT USING(DEPT_CODE)
 		JOIN JOB USING(JOB_CODE)
 		WHERE STATUS = 'Y'
+		ORDER BY JOB_CODE
 	</select>
 	
 	<!-- 회원 기본 정보 조회 -->
@@ -119,18 +120,17 @@
 		FROM MEMBER
 		WHERE STATUS = 'Y'
 		<choose>
-			<when test="deptCode == '전체'" >
+			<when test="deptCode == '전체' and keyword != null" >
 				AND USER_NAME LIKE '%'||#{keyword}||'%'
 			</when>
-			<when test="deptCode != null and keyword ==null">
+			<when test="deptCode != '전체' and keyword == null">
 				AND DEPT_CODE = #{deptCode}		
 			</when>	
-			<when test="deptCode != null">
+			<when test="deptCode != '전체'">
 				AND USER_NAME LIKE '%'||#{keyword}||'%'
 				AND DEPT_CODE = #{deptCode}		
 			</when>
 		</choose>
-		ORDER BY USER_NO DESC
 	</select>
 	
 	<!-- 검색 필터 해당 하는 회원수 목록 조회  -->
@@ -141,18 +141,18 @@
 		JOIN JOB USING(JOB_CODE)
 		WHERE STATUS = 'Y'
 		<choose>
-			<when test="deptCode == '전체'" >
+			<when test="deptCode == '전체' and keyword != null" >
 				AND USER_NAME LIKE '%'||#{keyword}||'%'
 			</when>
-			<when test="deptCode != null and keyword ==null">
+			<when test="deptCode != '전체' and keyword ==null">
 				AND DEPT_CODE = #{deptCode}		
 			</when>	
-			<when test="deptCode != null">
+			<when test="deptCode != '전체'">
 				AND USER_NAME LIKE '%'||#{keyword}||'%'
 				AND DEPT_CODE = #{deptCode}		
 			</when>
 		</choose>
-		ORDER BY USER_NO DESC
+		ORDER BY JOB_CODE 
 	</select>
 	
 	<!-- 계좌 등록/변경 신청 메소드  -->

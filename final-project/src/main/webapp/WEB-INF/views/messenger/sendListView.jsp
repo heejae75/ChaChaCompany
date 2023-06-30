@@ -6,61 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>보낸쪽지함</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
 <style>
-	.messenger_content {
-	    background-color:#0E6251;
-	    width:100%;
-	    height: 750px;
-	    margin:auto;
-	}
-	.innerOuter {
-	    border:1px solid lightgray;
-	    width:80%;
-	    height:100%;
-	    margin:auto;
-	    padding:3% 7%;
-	    background-color:white;
-	}
-    
-    /* navi + 검색창 영영  */    
-	.innerOuter>#msg_header{
-		width:100%;
-		height: 130px;
-		margin-top: 10px;
-		margin-bottom : 10px;
-	}
-    /* navi 영역 */
-    #msg_header>#msg_nav{
-       	width: 25%;
-       	height: 100%;
-       	float : left;
-    }
-        
-	#msg_nav>ul{
-		list-style-type: none;
-		padding: 0;
-		margin : 0;
-		
-	}
-        
-    #msg_nav li a{
-		text-decoration-line: none;
-		color: black;
-		font-size: 20px;
-		font-weight: 700;
-	}
-
-	#msg_nav li a:hover{
-		font-size :23px;
-		color: #009966;	
-	}
-
 	/* msg_search area */
     #msgSearchForm{
 		width: 75%;
@@ -127,19 +73,7 @@
 </style>
 </head>
 <body>
-	<div class="messenger_content">
-	<div class="innerOuter">
-		<h2 style="font-weight:800;">쪽지 <i id="messenger" class="fa-sharp fa-solid fa-paper-plane fa-sm" style="color: #0E6251;"></i></h2> 
-		<div id="msg_header">
-			<!-- 쪽지 네비영역 -->
-			<div id="msg_nav">
-				<ul>
-					<li><a href="insert.mg">쪽지쓰기</a></li>
-					<li><a href="list.mg">받은쪽지함</a></li>
-					<li><a href="slist.mg">보낸쪽지함</a></li>
-					<li><a href="tlist.mg">휴지통</a></li>
-				</ul>
-			</div>
+<%@ include file="../messenger/msgHeader.jsp" %>
 	        <!-- 쪽지 검색 영역 -->
 	        <div id="msgSearchForm">
 		        <form action="#">
@@ -301,6 +235,7 @@
 										alert("쪽지 삭제에 실패하였습니다. 다시 시도해 주세요 ")
 										location.reload();
 									}
+									location.reload();
 								},
 								
 								error : function(){
