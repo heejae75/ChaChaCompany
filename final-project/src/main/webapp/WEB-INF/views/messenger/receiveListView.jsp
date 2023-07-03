@@ -5,58 +5,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>쪽지</title>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<title>받은쪽지함</title>
 <style>
-	.messenger_content {
-	    background-color:#0E6251;
-	    width:100%;
-	    height: 750px;
-	    margin:auto;
-	}
-	.innerOuter {
-	    border:1px solid lightgray;
-	    width:80%;
-	    height:100%;
-	    margin:auto;
-	    padding:3% 7%;
-	    background-color:white;
-	}
-    
-    /* navi + 검색창 영영  */    
-	.innerOuter>#msg_header{
-		width:100%;
-		height: 130px;
-		margin-top: 10px;
-		margin-bottom : 10px;
-	}
-    /* navi 영역 */
-    #msg_header>#msg_nav{
-       	width: 25%;
-       	height: 100%;
-       	float : left;
-    }
-        
-	#msg_nav>ul{
-		list-style-type: none;
-		padding: 0;
-		margin : 0;
-		
-	}
-        
-    #msg_nav li a{
-		text-decoration-line: none;
-		color: black;
-		font-size: 20px;
-		font-weight: 700;
-	}
-
-	#msg_nav li a:hover{
-		font-size :23px;
-		color: #009966;	
-	}
 
 	/* msg_search area */
     #msgSearchForm{
@@ -107,44 +57,85 @@
       width:fit-content;
       margin:auto;
    	}
-        
-      
+   	
+   	#date-search-area{
+   		display:none;
+   	}
+   	
+   	#date-search-area>input{
+   		width:45%;
+   	}
+   	
+   	#date-search-area>p{
+   		float:left;
+   		margin:0px 10px 0px 5px;
+   		height:37.99px; 
+   	}
+   	
 </style>
 </head>
-<body>
-	<div class="messenger_content">
-	<div class="innerOuter">
-		<h2 style="font-weight:800;">쪽지</h2> 
-		<div id="msg_header">
-			<!-- 쪽지 네비영역 -->
-			<div id="msg_nav">
-				<ul>
-					<li><a href="insert.mg">쪽지쓰기</a></li>
-					<li><a href="list.mg">받은쪽지함</a></li>
-					<li><a href="slist.mg">보낸쪽지함</a></li>
-					<li><a href="tlist.mg">휴지통</a></li>
-				</ul>
-			</div>
+<%@ include file="../messenger/msgHeader.jsp" %>
 	        <!-- 쪽지 검색 영역 -->
 	        <div id="msgSearchForm">
-		        <form action="search.mg" method="get">
-		        	<input type="hidden" value="${loginUser.userNo}" name="userNo">
+		        <form action="#">
 		        	<select id="option-box" class="custom-select" name="category">
 		            	<option value="writer">작성자</option>
 						<option value="title">제목</option>
+						<option value="date">기간별</option>
 		           	</select>
-		            <input type="text" class="form-control" name="keyword" value="${keyword}" required>
-					<button type="submit" class="btn btn-secondary">검색</button>
+		           	<div id=date-search-area>
+		           		<input type="date" name="startDate" class="form-control" id="startDate" value="${startDate}" ><p> ~ </p>
+		           		<input type="date" name="endDate" class="form-control" id="endDate" value="${endDate}"> 
+		           	</div>
+		            <input type="text" class="form-control" name="keyword" id="keyword" value="${keyword}">
+					<button type="submit" class="btn btn-secondary" id="search-btn" style="height:37.99px;">검색</button>
 		    	</form>
 	        </div>
 		</div>
+		<script>
+			$(function(){
+				$('#search-btn').on("click",function(){
+					if(!$("#option-box").val() == ""){
+						
+						location.href="list.mg"
+					}
+				});
+			
+			})
+		
+			//기간별 검색시 날짜창 띄워주기 
+			$(function(){
+	   			$("#option-box").on("change", function(){
+	   				
+	   				if($(this).val() == 'date'){
+	   					$("#date-search-area").show()
+	   					$("input[name=keyword]").hide()
+	   					
+	   					
+	   				}else{
+	   					$("#date-search-area").hide()
+	   					$("input[name=keyword]").show()
+	   				}
+	   			})
+	   		});
+			
+		</script>
 
 		<c:if test="${not empty category}">
 		<script>
 			$(function(){
+				if($("#option-box option[value = '${category}']").val() =='date'){
+					$("#date-search-area").show()
+   					$("input[name=keyword]").hide()
+				}else{
+					$("#date-search-area").hide()
+   					$("input[name=keyword]").show()
+				}
 				$("#option-box option[value = '${category}']").attr("selected", true);
 			});		
+			
 		</script>
+		
 		</c:if>
 				
 		<div id="msg_list">
@@ -157,8 +148,7 @@
                 <thead>
                     <tr>
                         <th width="10%">선택</th>
-                        <th width="10%">보낸사람</th>
-                        <th width="5%"></th>
+                        <th width="15%">보낸사람</th>
                         <th width="45%">제목</th>
                         <th width="30%">날짜</th>
                     </tr>
@@ -171,19 +161,25 @@
 		                        <td onclick="event.cancelBubble=true"><input type="checkbox" style="width:15px; height:15px;"></td>
 		                        <td>${m.sender}<input type="hidden" value="${m.messengerNo}"></td>
 		                        <c:choose>
-		                        	<c:when test="${m.emcStatus eq 'Y' }">
-		                        		<td style="color: red; font-weight:600;">[긴급]</td>
-		                        	</c:when>
-		                        	<c:otherwise>
-				                        <td></td>
-		                        	</c:otherwise>
-		                        </c:choose>
-		                        <c:choose>
 		                        	<c:when test="${m.readStatus eq 'N'}">
-		                        		<td style="text-align:left; font-weight:700;">${m.msgTitle}</td>
+		                        		<c:choose>
+		                        			<c:when test="${m.emcStatus eq 'Y' }">
+			                        			<td style="text-align:left; font-weight:700; "><i class="fa-solid fa-circle-exclamation fa-xl" style="color: #f4c92f;"></i> &nbsp;${m.msgTitle}</td>
+		                        			</c:when>
+		                        			<c:otherwise>
+		                        			<td style="text-align:left; font-weight:700;">${m.msgTitle}</td>
+		                        			</c:otherwise>
+		                        		</c:choose>
 		                        	</c:when>
 		                        	<c:otherwise>
-		                        		<td style="text-align:left;">${m.msgTitle}</td>
+		                        		<c:choose>
+			                        		<c:when test="${m.readStatus eq 'Y'}">
+			                        			<td style="text-align:left;"><i class="fa-solid fa-circle-exclamation fa-xl" style="color: #f4c92f;"></i> &nbsp;${m.msgTitle}</td>
+			                        		</c:when>
+			                        		<c:otherwise>
+			                        			<td style="text-align:left;">${m.msgTitle}</td>
+			                        		</c:otherwise>
+		                        		</c:choose>
 		                        	</c:otherwise>
 		                        </c:choose>
 		                        <td>${m.recvDate}</td>
@@ -192,7 +188,7 @@
     	            	</c:when>
     	            	<c:otherwise>
     	            		<tr>
-    	            			<td colspan="5">조회된 쪽지가 없습니다.</td>
+    	            			<td colspan="5" onclick="event.cancelBubble=true">조회된 쪽지가 없습니다.</td>
     	            		</tr>
     	            	</c:otherwise>
                 	</c:choose>
@@ -208,18 +204,18 @@
 	                        <li class="page-item disabled"><a class="page-link">이전</a></li>
                    		</c:when>
                    		<c:otherwise>
-	                        <li class="page-item"><a class="page-link" href="list.mg?currentPage=${pi.currentPage-1}">이전</a></li>
+	                         <li class="page-item"><a class="page-link" href="list.mg?currentPage=${pi.currentPage-1}&userNo=${loginUser.userNo}&category=${category}&keyword=${keyword}&startDate=${startDate}&endDate=${endDate}">이전</a></li>
                    		</c:otherwise>
                    	</c:choose>
                    	<c:forEach var="p" begin="${pi.startPage}" end="${pi.endPage}">
-                        <li class="page-item"><a class="page-link" href="list.mg?currentPage=${p}">${p}</a></li>
+	                        <li class="page-item"><a class="page-link" href="list.mg?currentPage=${p}&userNo=${loginUser.userNo}&category=${category}&keyword=${keyword}&startDate=${startDate}&endDate=${endDate}">${p}</a></li>
                    	</c:forEach>
                    	<c:choose>
                    		<c:when test="${pi.maxPage eq pi.currentPage}">
 	                        <li class="page-item disabled"><a class="page-link">다음</a></li>
                    		</c:when>
                    		<c:otherwise>
-	                        <li class="page-item"><a class="page-link" href="list.mg?currentPage=${pi.currentPage+1}">다음</a></li>
+	                        <li class="page-item"><a class="page-link" href="list.mg?currentPage=${pi.currentPage+1}&userNo=${loginUser.userNo}&category=${category}&keyword=${keyword}&startDate=${startDate}&endDate=${endDate}">다음</a></li>
                    		</c:otherwise>
                    	</c:choose>
                	</ul>
@@ -284,8 +280,8 @@
 										}
 									}else{
 										alert("쪽지 삭제에 실패하였습니다. 다시 시도해 주세요 ")
+										location.reload();
 									}
-									
 									location.reload();
 								},
 								

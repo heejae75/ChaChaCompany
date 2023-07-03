@@ -17,7 +17,7 @@ public class Payment {
 	private int payNo;					//PAY_NO	NUMBER
 	private int userNo;					//USER_NO	NUMBER
 	private String accountNumber;		//ACCOUNT_NUMBER	VARCHAR2(20 BYTE)
-	private String bank;				
+	private String bank;				//BANK VARCHAR2
 	private String monthly;				//MONTHLY	DATE
 	private int salary;					//SALARY	NUMBER
 	private int meals;					//MEALS	NUMBER
@@ -30,7 +30,6 @@ public class Payment {
 	private int empInsurance;			//EMP_INSURANCE	NUMBER
 	private int lngInsurance;			//LNG_INSURANCE	NUMBER
 	private String accountStatus;		//ACCOUNT_STATUS      
-	
 	
 	private String userName;
 	private String deptName;

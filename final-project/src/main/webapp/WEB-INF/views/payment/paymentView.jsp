@@ -44,43 +44,65 @@
     
     }
 	
-	#payment_table input{
-		background-color : white;
-	}
-	
 	#payment_table>thead td, #payment_table>thead th{
 		border-bottom : 3px solid #ddd;
 	}
 	
-	
-
 </style>
 </head>
 <body>
 <%@ include file="../common/menubar.jsp" %>
 <div class="content">
 	<div class="payment_content">
-        <h1>급여 명세서 조회</h1>
+        <h1 id="payHeader">급여 명세서</h1>
       
         <div id ="payment_search_area">
-            <input type="month" id="monthly" class="form-control"> <button type="button" class="btn btn-secondary" > 조회 </button>
+            <input type="month" id="monthly" name="monthly" class="form-control"> <button type="button" id="search-btn" class="btn btn-secondary" > 조회 </button>
             <button type="button" class="btn btn-seconary" data-toggle="modal" data-target="#account"> 계좌등록/변경 </button>
+            <button type="button" id="print-btn" class="btn btn-primary">인쇄하기</button>
         </div>
+        <script>
+        	//영역 지정 프린트 
+        	$(function(){
+        		$("#print-btn").on("click", function(){
+        			var printHeader = document.getElementById("payHeader");
+        			var printContent = document.getElementById("payment_list");
+                	var winPrint = window.open('','','left=0,top=0,width=1000,height=600,toolbar=0,scrollbars=0,status=0');
+
+                	winPrint.document.write(printHeader.innerHTML);
+                	winPrint.document.write(printContent.innerHTML);
+                	winPrint.document.write('<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>') //적용한 cssLinkTag도 함께 불러와야 적용된채로 출력 
+                	winPrint.document.close();
+                	winPrint.focus();
+                	winPrint.print();
+                	winPrint.close();
+        		})
+        	});
+        	
+        
+        </script>
+        
         <div id="payment_list">
             <table  class="table table" id="payment_table">
                	<thead>
 	                <tr>
-	                    <td style="font-weight:700; text-align:center;" >사번</td>
-	                    <td style="text-align:center;">${loginUser.userNo}</td>
-	                    <td style="font-weight:700; text-align:center; ">성명</td>
-	                    <td colspan="2" style="text-align:center;">${loginUser.userName}</td>
-	                    <td style="font-weight:700; text-align:center; ">부서</td>
-	                    <td style="text-align:center;"></td> 
-	                    <td style="font-weight:700; text-align:center; ">직급</td>
-	                    <td style="text-align:center;"></td> 
-	                    <td style="text-align:center;" colspan="2"></td>
+	                    <td colspan="2" style="font-weight:700; text-align:center;" >사번</td>
+	                    <td colspan="2" style="text-align:center;">${mInfo.userNo}</td>
+	                    <td colspan="2" style="font-weight:700; text-align:center; ">성명</td>
+	                    <td colspan="2" style="text-align:center;">${mInfo.userName}</td>
+	                    <td colspan="2" style="font-weight:700; text-align:center; ">지급월 </td>
+	                    <td colspan="2" style="text-align:center;" id="month"></td>
+	                    
 	                </tr>
-	                 <tr>
+	                <tr>
+	                	<td colspan="2" style="font-weight:700; text-align:center; ">부서</td>
+	                    <td colspan="2" style="text-align:center;">${mInfo.deptName}</td> 
+	                    <td colspan="2" style="font-weight:700; text-align:center; ">직급</td>
+	                    <td colspan="2" style="text-align:center;">${mInfo.jobName}</td> 
+	                    <td colspan="2" style="font-weight:700; text-align:center;">지급계좌</td>
+	                    <td colspan="2" style="text-align:center;">${mInfo.accountNumber }</td>
+	                </tr>
+                 	<tr>
 	                    <th colspan="3">지급내역</th>
 	                    <th colspan="3">지급액</th>
 	                    <th colspan="3">공제내역</th>
@@ -91,38 +113,37 @@
 	               
 	                <tr >
 	                	<th colspan="3">기본급</th>
-	                    <td colspan="3"><input type="text" name="salary" id="salary" value="" class="form-control" readonly ></td>
+	                    <td colspan="3" style="text-align:right;" id="salary"></td>
 	                    <th colspan="3">국민연금</th>
-	                    <td colspan="3"><input type="text" name="nationalPension" id="nationalPension" value="" class="form-control" readonly></td>
-	                    
+	                    <td colspan="3" style="text-align:right;" id="nationalPension"></td>
 	               </tr>
 	               <tr>
 	               		<th colspan="3" style="border-top:0px;" >식대</th>
-	                    <td colspan="3" style="border-top:0px;"><input type="text" name="meals" id="meals" value="" class="form-control" readonly ></td>
+	                    <td colspan="3" style="border-top:0px; text-align:right;" id="meals"></td>
 	                    <th colspan="3" style="border-top:0px;">건강보험</th>
-	                    <td colspan="3" style="border-top:0px;"><input type="text" name="healthInsurance" id="healthInsurance" value="" class="form-control" readonly></td>
+	                    <td colspan="3" style="border-top:0px; text-align:right;" id="healthInsurance"></td>
 	               </tr>
 	               <tr>
 	               		<th colspan="3" style="border-top:0px;">추가근로수당</th>
-	                    <td colspan="3" style="border-top:0px;"><input type="text" name="overtimePay" id="overtimePay" value="" class="form-control" readonly></td>
+	                    <td colspan="3" style="border-top:0px; text-align:right;" id="overtimePay"></td>
 	                    <th colspan="3" style="border-top:0px;">고용보험</th>
-	                    <td colspan="3" style="border-top:0px;"><input type="text" name="empInsurance" id="empInsurance" value="" class="form-control" readonly></td>
+	                    <td colspan="3" style="border-top:0px; text-align:right;" id="empInsurance"></td>
 	               </tr>
 	               <tr>
 	               		<th colspan="3" style="border-top:0px;">휴일근로수당</th>
-	                    <td colspan="3" style="border-top:0px;"><input type="text" name="holidayPay" id="holidayPay" value="" class="form-control" readonly></td>
+	                    <td colspan="3" style="border-top:0px; text-align:right;" id="holidayPay"></td>
 	                    <th colspan="3" style="border-top:0px;">장기요양보험</th>
-	                    <td colspan="3" style="border-top:0px;"><input type="text" name="lngInsurance" id="lngInsurance" value="" class="form-control" readonly></td>
+	                    <td colspan="3" style="border-top:0px; text-align:right;" id="lngInsurance"></td>
 	               </tr>
 	               <tr>
 	               		<th colspan ="3" style="border-top:0px;" >연차수당</th>
-	                    <td colspan ="3" style="border-top:0px;"><input type="text" name="annualLeavePay" id="annualLeavePay" value="" class="form-control" readonly></td>
+	                    <td colspan ="3" style="border-top:0px; text-align:right;" id="annualLeavePay"></td>
 	                    <th colspan ="3" style="border-top:0px;"></th>
 	                    <td colspan ="3" style="border-top:0px;"></td>
 	               </tr>
 	               <tr>
 	               		<th colspan ="3" style="border-top:0px;">그외수당</th>
-	                    <td colspan ="3" style="border-top:0px;"><input type="text" name="otherPay" id="otherPay" value="" class="form-control" readonly></td>
+	                    <td colspan ="3" style="border-top:0px; text-align:right;" id="otherPay"></td>
 	                    <th colspan ="3" style="border-top:0px;"></th>
 	                    <td colspan ="3" style="border-top:0px;"></td>
 	               </tr>
@@ -130,13 +151,13 @@
 	                    <th colspan ="3" ></th>
 	                    <td colspan ="3" ></td>
 	               		<th colspan ="3">공제계액</th>
-	                    <td colspan ="3"></td>
+	                    <td colspan ="3" style="text-align: right;" id="deductionSum"></td>
 	               </tr>
 	               <tr>
 	                    <th colspan ="3" style="border-bottom:3px solid #ddd;">지급계액</th>
-	                    <td colspan ="3" style="border-bottom:3px solid #ddd;"></td>
+	                    <td colspan ="3" style="border-bottom:3px solid #ddd; text-align:right;" id="originTotal"></td>
 	               		<th colspan ="3" style="border-bottom:3px solid #ddd;">차인지급액</th>
-	                    <td colspan ="3" style="border-bottom:3px solid #ddd;"></td>
+	                    <td colspan ="3" style="border-bottom:3px solid #ddd; text-align:right;" id="totalPay" ></td>
 	               </tr>
                 </tbody>
             </table>
@@ -154,7 +175,8 @@
 			      </div>
 			      <div class="modal-body">
 			      	<!-- 계좌정보 -->
-			      	<select name="bank" class="form-control" style="width:20%; float:left; margin-right:5px;">
+			      	<select name="bank" id="bankName" class="form-control" style="width:20%; float:left; margin-right:5px;">
+			      		<option >은행명</option>
 			      		<option value="국민은행">국민은행</option>
 			      		<option value="신한은행">신한은행</option>
 			      		<option value="하나은행">하나은행</option>
@@ -167,18 +189,182 @@
 			      		<option value="신협">신협</option>
 			      		<option value="수협">수협</option>
 			      	</select>
-			      	<input type="text"  class="form-control" id="accountNumber" style="width: 50%; float:left; margin-right:5px;"> <button class="btn btn-primary"> 등록 </button>
-			      	
+			      	<input type="text" placeholder="-를 포함하여 입력해주세요" class="form-control" id="accountNumber" style="width: 50%; float:left; margin-right:5px;" required>
+			      	<button type="button" id="change-account" class="btn btn-primary">등록/변경</button>
 			      </div>
 			      
 			      <div class="modal-footer">
 			        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close" >취소</button>
-			        <button type="button" id="account" class="btn btn-primary" data-bs-dismiss="modal">확인</button>
+			        
 			      </div>
 			    </div>
 			  </div>
 			</div>
         </div>
+        <!-- 계좌 등록/변경 script -->
+        <script>
+       	 	payment();
+        		//$("#payment_list").css("display:none");
+        		//계좌 변경및 등록 신청
+        		$("#change-account").on("click",function(){
+        			var $account = $("#accountNumber").val();
+					var chk = /^[\d\-]{10,16}/
+					
+        			if($account==""){
+        				alert("계좌번호를 입력해주세요");
+        				$("#accountNumber").focus();
+        			}else if(!$account.match(chk)){
+        				alert("잘못된 형식입니다. 다시 입력해주세요")
+        				$("#accountNumber").focus();
+        			}else if($("#bankName").val()== "은행명"){
+        				alert("은행명을 선택해주세요")
+        			}else{
+        				if(confirm("계좌 변경을 신청하시겠습니까?")){
+        					$.ajax({
+        						
+	        					url : "account.pa",
+	        					type : "post",
+	        					beforeSend : function(xhr){
+	        			                xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+	        			        },
+	        					data : {
+	        						userNo : '${loginUser.userNo}',
+	        						bank : $("#bankName").val(),
+	        						accountNumber : $("#accountNumber").val()
+	        					},
+	        					success : function(result){
+	        						if(result == "YYYY"){
+	        							 alert("급여 계좌 등록/변경 신청이 완료되었습니다.")
+	        						}else{
+	        							alert("급여 계좌 등록/변경 신청에 실패하였습니다. 다시 시도해주세요")
+	        						}
+	        						location.reload();
+	        					},	
+	        					error : function(){
+	        						console.log("통신실패");
+	        					}
+        				
+        					});
+        					
+        				}
+        			}
+        		});
+        		
+        	//월별 조회 
+        	$(function(){
+        		$("#search-btn").on("click",function(){
+        			if($("#monthly").val()==""){
+        				alert("원하는 조회달을 선택해주세요")
+        				$("#monthly").focus()
+        			}else{
+        				
+        				$.ajax({
+	        				url : "monthPayment.me",
+	        				type : "post",
+	        				beforeSend : function(xhr){
+				                xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+				        	},
+	        				data : { 
+	        					userNo : '${loginUser.userNo}',
+	        					monthly : $("#monthly").val()
+	        				},
+	        				
+	        				success : function(pay){
+	        					if(pay != null){
+	        						$("#month").html(pay.monthly) //지급월 
+		        					$("#salary").html(pay.salary.toLocaleString()+'₩'); //급여
+		        					$("#nationalPension").html(pay.nationalPension.toLocaleString()+'₩'); //국민연금
+		        					$("#meals").html(pay.meals.toLocaleString()+'₩'); //식대
+		        					$("#healthInsurance").html(pay.healthInsurance.toLocaleString()+'₩'); //건강보험
+		        					$("#overtimePay").html(pay.overtimePay.toLocaleString()+'₩'); //추가근무수당
+		        					$("#empInsurance").html(pay.empInsurance.toLocaleString()+'₩'); //고용보험
+		        					$("#holidayPay").html(pay.holidayPay.toLocaleString()+'₩'); //휴일근무수당
+		        					$("#lngInsurance").html(pay.lngInsurance.toLocaleString()+'₩'); //장기요양보험
+		        					$("#annualLeavePay").html(pay.annualLeavePay.toLocaleString()+'₩'); //연차수당
+		        					$("#otherPay").html(pay.otherPay.toLocaleString()+'₩'); //그외수당 
+		        					
+		        					//세금합계 
+		        					var deduction = pay.nationalPension + pay.healthInsurance + pay.empInsurance + pay.lngInsurance ;
+									
+		        					//급여 합계 
+		        					var originTotal = pay.salary + pay.meals + pay.overtimePay + pay.holidayPay +pay.annualLeavePay +pay.otherPay;
+		        					
+		        					//총급여 
+		        					var totalPay = originTotal-deduction;
+		        					
+		        					$("#deductionSum").html(deduction.toLocaleString()+'₩') // 공제합계 
+		        					$("#originTotal").html(originTotal.toLocaleString()+'₩') //지급계액 
+		        					$("#totalPay").html(totalPay.toLocaleString()+'₩') //차인지급액 
+		        					
+	        					}else{
+	        						alert("조회된 내역이 없습니다.");
+	        					}
+	        				},
+	        				
+	        				error : function(){
+	        					console.log("통신실패");
+	        				}
+        				
+        				});
+        			}
+        			
+        		});
+        		
+        	});
+        	
+        	//가장 최근 급여 명세서 조회  
+    		function payment(){
+    			$.ajax({
+    				url : "newestPayment.pa",
+    				type : "post",
+    				beforeSend : function(xhr){
+		                xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+		        	},
+    				data : { 
+    					userNo : '${loginUser.userNo}'
+    				},
+    				
+    				success : function(pay){
+    					if(pay != null){
+
+    						$("#month").html(pay.monthly) //지급월 
+    						$("#monthly").val(pay.monthly)
+        					$("#salary").html(pay.salary.toLocaleString()+'₩'); //급여
+        					$("#nationalPension").html(pay.nationalPension.toLocaleString()+'₩'); //국민연금
+        					$("#meals").html(pay.meals.toLocaleString()+'₩'); //식대
+        					$("#healthInsurance").html(pay.healthInsurance.toLocaleString()+'₩'); //건강보험
+        					$("#overtimePay").html(pay.overtimePay.toLocaleString()+'₩'); //추가근무수당
+        					$("#empInsurance").html(pay.empInsurance.toLocaleString()+'₩'); //고용보험
+        					$("#holidayPay").html(pay.holidayPay.toLocaleString()+'₩'); //휴일근무수당
+        					$("#lngInsurance").html(pay.lngInsurance.toLocaleString()+'₩'); //장기요양보험
+        					$("#annualLeavePay").html(pay.annualLeavePay.toLocaleString()+'₩'); //연차수당
+        					$("#otherPay").html(pay.otherPay.toLocaleString()+'₩'); //그외수당 
+        					
+        					//세금합계 
+        					var deduction = pay.nationalPension + pay.healthInsurance + pay.empInsurance + pay.lngInsurance ;
+							
+        					//급여 합계 
+        					var originTotal = pay.salary + pay.meals + pay.overtimePay + pay.holidayPay +pay.annualLeavePay +pay.otherPay;
+        					
+        					//총급여 
+        					var totalPay = originTotal-deduction;
+        					
+        					$("#deductionSum").html(deduction.toLocaleString()+'₩') // 공제합계 
+        					$("#originTotal").html(originTotal.toLocaleString()+'₩') //지급계액 
+        					$("#totalPay").html(totalPay.toLocaleString()+'₩') //차인지급액 
+        					
+    					}else{
+    						alert("조회된 내역이 없습니다.");
+    					}
+    				},
+    				
+    				error : function(){
+    					console.log("통신실패");
+    				}
+    			})
+    		}
+        	
+        </script>
     </div>
 </div>
 </body>

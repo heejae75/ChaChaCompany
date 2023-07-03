@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 public class DocType {
 	private String docType;
 	private String docName;
+	private String docCategory;
 
 }

@@ -34,5 +34,4 @@ public class Member {
 	private String jobName;
 	private String deptName;
 	
-	
 }

@@ -89,6 +89,41 @@ public class PaymentDao {
 		return (ArrayList)sqlSession.selectList("paymentMapper.selectSearchMemberList", key, rowBounds);
 	}
 	
+	//회원 - 계좌 변경/등록 신청 메소드 
+	public int insertAccount(SqlSession sqlSession, HashMap<String, Object> bankInfo) {
+
+		return sqlSession.update("paymentMapper.insertAccount", bankInfo);
+	}
+
+	public Payment monthPayment(SqlSession sqlSession, Payment info) {
+
+		return sqlSession.selectOne("paymentMapper.monthPayment", info);
+	}
+	
+	//가장 최근 명세서 조회 
+	public Payment newestPayment(SqlSession sqlSession, int userNo) {
+
+		return sqlSession.selectOne("paymentMapper.newestPayment", userNo);
+	}
+	
+	//관리자 - 급여 계좌 관리 검색 필터 개수 조회 
+	public int accountSearch(SqlSession sqlSession, HashMap<String, String> key) {
+		
+		return sqlSession.selectOne("paymentMapper.accountSearch", key);
+	}
+
+	//관리자 - 급여 계좌 관리 검색 필터 
+	public ArrayList<Member> accountSearchList(SqlSession sqlSession, PageInfo pi, HashMap<String, String> key) {
+
+		int offset = (pi.getCurrentPage()-1)*pi.getBoardLimit();
+		int limit = pi.getBoardLimit();
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		return (ArrayList)sqlSession.selectList("paymentMapper.accountSearchList", key, rowBounds);
+	}
+
+	
 	
 
 }

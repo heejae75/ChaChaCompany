@@ -10,10 +10,10 @@ import com.kh.final3.messenger.model.vo.Messenger;
 public interface MessengerService {
 	
 	// 받은 쪽지 개수 세어오는 메소드 
-	int recvListCount(String userNo);
+	int recvListCount(int userNo);
 	
 	//받은쪽지 목록 조회 메소드 
-	ArrayList<Messenger> selectRecvList(PageInfo pi, String userNo);
+	ArrayList<Messenger> selectRecvList(PageInfo pi, int userNo);
 
 	//보낸 쪽지 개수 세어오는 메소드 
 	int sendListCount(int userNo);
@@ -67,6 +67,9 @@ public interface MessengerService {
 	int trashSearchListCount(HashMap<String, Object> key);
 
 	ArrayList<Messenger> trashSearchList(HashMap<String, Object> key, PageInfo pi);
+	
+	//읽지않은 쪽지 개수 조회(받은쪽지) 
+	int selectCountRecvMsg(int userNo);
 	
 
 	

@@ -103,6 +103,14 @@
     	text-decoration: none;
     	color : black;
     }
+    
+    #fileLink:hover{
+    	cursor:pointer;
+    	font-size : 17px;
+    }
+    
+    
+    
     </style>
     
 </head>
@@ -142,29 +150,24 @@
                               <td width="65%"> &nbsp; ${b.boardTitle}</td>
                           </c:otherwise>
                          </c:choose>      
-                         <td width="10%" style="text-align: center;">조회수</td>
+                         <td width="10%" style="text-align: center;"><b>조회수</b></td>
                          <td style="text-align: center;" >${b.count}</td>
                      </tr>
                      <tr>
                          <td style="text-align: center;"><b>작성자</b></td>
-                         <td> &nbsp; ${b.deptName}</td>
-                         <td style="text-align: center;">작성일</td>
+                         <td> &nbsp; ${b.boardWriter} [${b.deptName}]</td>
+                         <td style="text-align: center;"><b>작성일</b></td>
                          <td style="text-align: center;">${b.createDate}</td>
                          
                      </tr>
                  </thead>
-                 <tbody>
-             		<tr>
-             			<td style="text-align: center;"><b>첨부파일</b></td>
-                    	<td></td>
-                    	<td style="text-align: center;">프린트</td>
-                       	<td style="text-align: center;"><button class="btn btn-secondary" style="background-color: white;"><i class="fa-sharp fa-solid fa-print fa-lg" style="color: #0c0d0d;"></i></button></td>
-           			</tr>
+                 <tbody id="file-area">
            			<tr>
+             			<td style="text-align: center;"><b>첨부파일</b></td>
           				<td colspan="4">
                   	 		<c:forEach var="at" items="${atList}">
-                        		<ul>
-                        			<li><a href="/final3${at.filePath}" download="${at.originName}">${at.originName}</a></li>
+                        		<ul style="padding-left:10px;">
+                        			<li><a id="fileLink" onclick="window.open('/final3${at.filePath}','${at.originName}','width = 1100, height = 900')">${at.originName}</a></li>
                         		</ul>
                 			</c:forEach>		
                    		</td>
@@ -176,10 +179,12 @@
         	</table>
 	    <hr>   
        	</div>
+       	<c:if test = "${loginUser.userName eq b.boardWriter or (loginUser.auth eq 'ROLE_ADMIN' and loginUser.deptName eq b.deptName) }">
 		<div id="board-btn-area">
 		    	<button class="btn btn-danger" onclick="documentDelete();">삭제</button> 
 		    	<button type="submit" class="btn btn-success" onclick="location.href='update.dc?bno='+${b.boardNo}">수정</button>               
 		</div>
+       	</c:if>
 		<script>
 		/* 게시글 삭제 이벤트  */
 		    function documentDelete(){
@@ -218,5 +223,3 @@
 	</div>
 </body>
 </html>
-
-

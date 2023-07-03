@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
+import com.kh.final3.alert.model.vo.Alert;
 import com.kh.final3.approval.model.vo.Approval;
 import com.kh.final3.attendance.model.vo.Attendance;
 import com.kh.final3.board.model.vo.Board;
@@ -78,17 +79,24 @@ public class MainController {
 	//@RequestMapping(value="insertGo.ma", method=RequestMethod.POST)
 	public String insertGoToWork(Attendance at, HttpSession session, RedirectAttributes rttr) {
 		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
+		// 근무계획 조회
+		Attendance at2 = mainService.selectLeaveType(userNo);
 		
-		at.setUserNo(userNo);
-		
+		if(at2 == null) { // 근무계획 없으면
+			at.setUserNo(userNo);
+		}else { // 근무계획 있으면
+			at.setUserNo(userNo);
+			at.setLeaveType(at2.getLeaveType());
+		}
 		int result = mainService.insertGoToWork(at);
-		
-		if(result > 0) {
-			rttr.addFlashAttribute("onTime",at.getOnTime());
+
+		if (result > 0) {
+			rttr.addFlashAttribute("onTime", at.getOnTime());
 			session.setAttribute("alertMsg", "출근 성공!");
-		}else {
+		} else {
 			session.setAttribute("alertMsg", "출근 실패! ");
 		}
+
 		return "redirect:/member/mainPage.me";
 	}
 	
@@ -234,6 +242,46 @@ public class MainController {
 		m.setUserNo(userNo);
 		
 		int result = mainService.allDeleteTodoList(m);
+		
+		return (result > 0) ? "success" : "fail";
+	}
+	
+	//알림 전체 조회 
+	@ResponseBody
+	@RequestMapping(value = "menuAlertList.ma", produces = "application/json; charset=UTF-8")
+	public String menuAlertList(HttpSession session) {
+		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
+//		System.out.println(userId);
+		ArrayList<Alert> mainAlert = mainService.menuAlertList(userNo);
+//		System.out.println(mainEmail);
+		return new Gson().toJson(mainAlert);
+	}
+	
+	//알림 a태그 선택시 상태 변경(읽음 처리)
+	@ResponseBody
+	@RequestMapping(value = "menuAlertUpdate.ma", method = RequestMethod.POST)
+	public String menuAlertUpdate(int alertNo, String status) {
+		Alert al = new Alert();
+		al.setAlertNo(alertNo);
+		al.setStatus(status);
+		
+		int result = mainService.menuAlertUpdate(al);
+		System.out.println(result);
+		if(result > 0) {
+			return "success";
+		}else {
+			return "fail";
+		}
+	}
+	
+	//알림 전체 삭제
+	@ResponseBody
+	@RequestMapping(value = "menuAlertAllDelete.ma", method = RequestMethod.POST)
+	public String menuAlertAllDelete(HttpSession session, int userNo) {
+		Member m = ((Member)session.getAttribute("loginUser"));
+		m.setUserNo(userNo);
+		
+		int result = mainService.menuAlertAllDelete(m);
 		
 		return (result > 0) ? "success" : "fail";
 	}

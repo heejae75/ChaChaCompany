@@ -7,6 +7,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kh.final3.alert.model.vo.Alert;
 import com.kh.final3.approval.model.vo.Approval;
 import com.kh.final3.attendance.model.vo.Attendance;
 import com.kh.final3.board.model.vo.Board;
@@ -78,6 +79,11 @@ public class MainServiceImpl implements MainService {
 	public ArrayList<Schedule> mainDailyEvents(Map<String, Object> params) {
 		return mainDao.mainDailyEvents(sqlSession, params);
 	}
+	// 근무계획조회
+	@Override
+	public Attendance selectLeaveType(int userNo) {
+		return mainDao.selectLeaveType(sqlSession, userNo);
+	}
 
 	//전자결재 리스트 조회 
 	@Override
@@ -113,6 +119,24 @@ public class MainServiceImpl implements MainService {
 	@Override
 	public int allDeleteTodoList(Member m) {
 		return mainDao.allDeleteTodoList(sqlSession, m);
+	}
+
+	//알림 전체 조회
+	@Override
+	public ArrayList<Alert> menuAlertList(int userNo) {
+		return mainDao.menuAlertList(sqlSession, userNo);
+	}
+
+	//알림 a태그 선택시 상태 변경(읽음 처리)
+	@Override
+	public int menuAlertUpdate(Alert al) {
+		return mainDao.menuAlertUpdate(sqlSession, al);
+	}
+
+	//알림 전체 삭제
+	@Override
+	public int menuAlertAllDelete(Member m) {
+		return mainDao.menuAlertAllDelete(sqlSession, m);
 	}
 
 

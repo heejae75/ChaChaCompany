@@ -87,8 +87,8 @@
     /* 캘린더구역 */
     #calendar-container{
    		margin: auto;
-   		width: 80%;
-    	height: 80%;
+   		width: 70%;
+    	height: 50%;
     }
     /* 예약폼스타일 */
     #reserve-table{
@@ -260,7 +260,7 @@
 				    		</tr>
 				    		<tr>
 				    			<th>이용시간</th>
-				    			<td><select name="startTime" class="startTime selectbox form-control" disabled>
+				    			<td><select name="startTime" id="startTime" class="startTime selectbox form-control" disabled>
 							    		<option value="09:00">09:00</option>
 							    		<option value="10:00">10:00</option>
 							    		<option value="11:00">11:00</option>
@@ -273,7 +273,7 @@
 							    		<option value="18:00">18:00</option>
 						    		</select>
 				    			</td>
-				    			<td><select name="endTime" class="endTime selectbox form-control" disabled>
+				    			<td><select name="endTime" id="endTime" class="endTime selectbox form-control" disabled>
 							    		<option value="10:00">10:00</option>
 							    		<option value="11:00">11:00</option>
 							    		<option value="12:00">12:00</option>
@@ -331,7 +331,7 @@
 			views                     : { 
 			                              month : { eventLimit : 12 } // 한 날짜에 최대 이벤트 12개, 나머지는 + 처리됨
 				                              },
-			navLinks                  : true,
+			navLinks                  : false,
 			timeFormat                : "HH:mm",
 			defaultTimedEventDuration : "01:00:00", // 한시간단위
 			minTime                   : "09:00:00",
@@ -349,7 +349,7 @@
 			views                     : {
 			                              agendaWeek : {
 				  	                          columnFormat : "M/D ddd",
-					                          titleFormat  : "YYYY/MM/D",
+					                          titleFormat  : "MM월 D",
 					                          eventLimit   : false
 				                          },
 				                          listWeek : {
@@ -371,7 +371,6 @@
 						// 날짜 
 		                var start = moment(start).format("YYYY-MM-DD");
 		                var end = moment(end).format("YYYY-MM-DD");
-		                
 		                $("#meetingRoom-reservation #startTime").val(starttime);
 		                $("#meetingRoom-reservation #endTime").val(endtime);
 		                $("#meetingRoom-reservation #revDate").val(start);
@@ -404,7 +403,6 @@
 	        	                roomCode : reservation.roomCode
 	        	                
 	        	              };
-
 	        	              events.push(event);
 	        	            });
 

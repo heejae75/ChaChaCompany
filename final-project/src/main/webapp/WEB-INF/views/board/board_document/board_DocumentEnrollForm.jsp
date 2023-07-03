@@ -118,8 +118,8 @@
 			<li role="presentation">
 				<a href="list.no">공지사항</a>
 			</li>
-			<li role="presentation">
-	 			<a href="list.dc" class="active" >자료실</a>
+			<li role="presentation" class="active">
+	 			<a href="list.dc" >자료실</a>
 			</li>
 			<li role="presentation">
 				<a href="list.re">대여</a>
@@ -141,36 +141,50 @@
 		<table id="document-table" class="table table-hover" align="center">
 			<thead>
 				<tr>
-					<td width="10%" style="font-weight: 800;">제목</td>  
-					<td colspan="5"><input id="title" name="boardTitle" type="text" class="form-control" style="width :100%; height:100%; font-size: 17px;"></td>      
-				</tr>
-				<tr>
-					<td width="10%" style="font-weight: 800;" >작성자</td>
-					<td width="40%" style="text-align: left;">${loginUser.userName}</td>
-					<td width="10%" style="font-weight: 800;">중요도</td>
-					<td width="10%">
+					<td width="12%" style="font-weight: 800;">중요도</td>
+					<td width="7%">
 	               		<select  class="form-control" name="importanceLevel">
 	               			<option value="R">일반</option>
 	               			<option value="I">중요</option>
 	           			</select>
 					</td>
-					<td width="10%" style="font-weight: 800;">카테고리</td> 
-					<td width="10%">
+					<td width="7%" style="font-weight: 800;">카테고리</td> 
+					<td width="12%">
 						<select class="form-control" name="categoryCode">
 	               			<option value="B2">자료실</option>
 	               			<option value="B1">공지사항</option>
 	               			<option value="B3">커뮤니티</option>
 						</select>
-					</td> 
+					</td>
+					<td></td>    
+					<td></td>    
 				</tr>
-			</thead>
-      		<tbody>
+				<tr>
+					<td style="font-weight: 800;">제목</td>  
+					<td colspan="5"><input name="boardTitle" type="text" class="form-control" style="width :100%; height:100%; font-size: 17px;"></td>   
+				</tr>
+				<tr>
+					<td style="font-weight: 800;" >작성자</td>
+					<td colspan="5" style="text-align: left;">${loginUser.userName}</td>
+				</tr>
 				<tr>
 					<td style="font-weight: 800;" >첨부파일</td>
                   	<td colspan="5">
-                   		<input type="file" name="upfile" multiple required>
+                   		<input type="file" name="upfile"  accept=".pdf,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.hwp,.jpg" multiple required>
                    	</td>
                </tr>
+			</thead>
+      		<tbody>
+               <tr>
+               		<td></td>
+               		<td colspan="5">
+               			<div id="upfile-area" style="text-align:left; font-size:17px">
+               			
+               			
+               			</div>
+               		</td>
+               </tr>
+               
                <tr>
                    <td colspan="6"><textarea name ="boardContent" style="resize: none; width: 100%; height: 300px; padding: 0;" required></textarea></td>
                </tr>
@@ -182,6 +196,27 @@
 			</div>
 		</form>
 	</div>
+	<script>
+		//선택된 첨부파일 이름 보여주기 
+		$(function(){
+			$("input[type=file]").on('change',function(){
+				//첨부파일 입력 input 태그에 변화가 생겼을 때 등록된 첨부파일 개수 구하기 
+				var fileCount = $("input[type=file]")[0].files.length;
+				
+				var str = "";
+				//선택된 파일 개수만큼 반복하면서 각 파일의 이름을 꺼내서 더하기 
+				for(var i = 0; i<fileCount ; i++){
+					var name = $("input[type=file]")[0].files[i].name;
+					
+					str +="<li>" + name +"</li>"
+				}
+					
+				$("#upfile-area").html(str);
+			
+			})
+		});
+	</script>
+	
 </div>
 </body>
 </html>

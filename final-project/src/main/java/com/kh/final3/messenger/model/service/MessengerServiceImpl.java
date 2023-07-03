@@ -24,14 +24,14 @@ public class MessengerServiceImpl implements MessengerService{
 
 	//쪽지 개수 세어오는 메소드 
 	@Override
-	public int recvListCount(String userNo) {
+	public int recvListCount(int userNo) {
 
 		return msgDao.recvListCount(sqlSession, userNo);
 	}
 	
 	//받은 쪽지 목록 조회 메소드 
 	@Override
-	public ArrayList<Messenger> selectRecvList(PageInfo pi, String userNo) {
+	public ArrayList<Messenger> selectRecvList(PageInfo pi, int userNo) {
 
 		return msgDao.selectRecvList(sqlSession, pi, userNo);
 	}
@@ -162,6 +162,13 @@ public class MessengerServiceImpl implements MessengerService{
 	@Override
 	public ArrayList<Messenger> trashSearchList(HashMap<String, Object> key, PageInfo pi) {
 		return msgDao.trashSearchList(sqlSession, key, pi);
+	}
+	
+	//읽지않은 쪽지 개수 조회(받은 쪽지)
+	@Override
+	public int selectCountRecvMsg(int userNo) {
+
+		return msgDao.selectCountRecvMsg(sqlSession, userNo);
 	}
 	
 	

@@ -30,45 +30,91 @@ public class MessengerController {
 	
 	//쪽지 페이지로 이동 메소드(받은쪽지함)
 	@RequestMapping("list.mg")
-	public String sendList(@RequestParam(value="currentPage",defaultValue="1") int currentPage, HttpSession session, Model model){
+	public String recvList(@RequestParam(value="currentPage",defaultValue="1") int currentPage, 
+						   @RequestParam(value="keyword", defaultValue="") String keyword,
+						   @RequestParam(value="category", defaultValue="") String category,
+						   @RequestParam(value="startDate", defaultValue="") String startDate, 
+						   @RequestParam(value="endDate", defaultValue="")  String endDate, HttpSession session, Model model){
 
-		//로그인한 회원 번호 string타입으로 형변환 
-		String userNo = String.valueOf(((Member)session.getAttribute("loginUser")).getUserNo());
+		HashMap <String, Object> key = new HashMap<>();
 		
-		//쪽지 개수 세어오기 
-		int listCount = msgService.recvListCount(userNo);
+		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
 		
+		key.put("keyword",keyword);
+		key.put("userNo", userNo);
+		key.put("category", category);
+		key.put("startDate",startDate);
+		key.put("endDate", endDate);
+		
+		int listCount = 0;
 		int pageLimit =10;
 		int boardLimit = 5;
 		
-		
-		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
-		
-		//페이지 정보 + 로그인 회원 번호 가지고 받은 쪽지 목록 조회해오기 
-		ArrayList<Messenger> msgList = msgService.selectRecvList(pi, userNo);
+		PageInfo pi = new PageInfo();
+		ArrayList<Messenger> msgList = new ArrayList <>();
+ 		if(category.equals("")) { //검색조건이 비어있을경우 전체조회 
+			listCount = msgService.recvListCount(userNo);
+			pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
+			//페이지 정보 + 로그인 회원 번호 가지고 받은 쪽지 목록 조회해오기 
+			msgList = msgService.selectRecvList(pi, userNo);
+			
+		}else { //검색조건이 있을경우 
+			listCount = msgService.selectSearchListCount(key);
+			pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
+			msgList = msgService.selectSearchList(key, pi);
+
+			model.addAttribute("keyword", keyword);
+			model.addAttribute("category", category);
+			model.addAttribute("startDate", startDate);
+			model.addAttribute("endDate", endDate);
+		}
 		
 		model.addAttribute("msgList", msgList);
 		model.addAttribute("pi",pi);
+		
 		
 		return "messenger/receiveListView";
 	}
 	
 	//보낸 편지함 목록 조회 
 	@RequestMapping(value="slist.mg")
-	public String sendList(@RequestParam(value="currentPage", defaultValue = "1") int currentPage, 
-						   Model model, HttpSession session) {
+	public String sendList(@RequestParam(value="currentPage", defaultValue = "1") int currentPage,
+						   @RequestParam(value="keyword", defaultValue="") String keyword,
+						   @RequestParam(value="category", defaultValue="") String category,
+						   @RequestParam(value="startDate", defaultValue="") String startDate,
+						   @RequestParam(value="endDate", defaultValue="") String endDate, HttpSession session, Model model) {
 		
-		int userNo =((Member)session.getAttribute("loginUser")).getUserNo();
+		HashMap <String, Object> key = new HashMap<>();
 		
-		int listCount = msgService.sendListCount(userNo);
+		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
 		
+		key.put("keyword",keyword);
+		key.put("userNo", userNo);
+		key.put("category", category);
+		key.put("startDate",startDate);
+		key.put("endDate", endDate);
+		
+		int listCount = 0;
 		int pageLimit = 10;
-		
 		int boardLimit = 5;
 		
-		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
+		PageInfo pi = new PageInfo();
+		ArrayList<Messenger> msgList = new ArrayList <>();
 		
-		ArrayList<Messenger> msgList = msgService.selectSendList(pi, userNo);
+		if(category.equals("")) { //검색조건이 비어있을경우 전체조회 
+			listCount = msgService.sendListCount(userNo);
+			pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
+			msgList = msgService.selectSendList(pi, userNo);
+		
+		}else { //검색조건이 있을경우 조회 
+			listCount = msgService.sendSearchListCount(key);
+			pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
+			msgList = msgService.sendSearchList(key,pi);
+			model.addAttribute("keyword", keyword);
+			model.addAttribute("category", category);
+			model.addAttribute("startDate", startDate);
+			model.addAttribute("endDate", endDate);
+		}
 		
 		model.addAttribute("msgList", msgList);
 		model.addAttribute("pi", pi);
@@ -78,20 +124,43 @@ public class MessengerController {
 	
 	//휴지통 목록 조회 
 	@RequestMapping(value="tlist.mg")
-	public String trashList(@RequestParam(value="currentPage", defaultValue="1")int currentPage,
-										  Model model, HttpSession session) {
-		//휴지통 쪽지 개수 세어오는 메소드
-		int userNo =((Member)session.getAttribute("loginUser")).getUserNo();
+	public String trashList(@RequestParam(value="currentPage", defaultValue = "1") int currentPage,
+						    @RequestParam(value="keyword", defaultValue="") String keyword,
+						    @RequestParam(value="category", defaultValue="") String category,
+						    @RequestParam(value="startDate", defaultValue="") String startDate,
+						    @RequestParam(value="endDate", defaultValue="") String endDate, HttpSession session, Model model) {
+		HashMap <String, Object> key = new HashMap<>();
 		
-		int listCount = msgService.trashListCount(userNo);
+		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
 		
+		key.put("keyword",keyword);
+		key.put("userNo", userNo);
+		key.put("category", category);
+		key.put("startDate",startDate);
+		key.put("endDate", endDate);
+		
+		int listCount = 0;
 		int pageLimit = 10;
-		
 		int boardLimit = 5;
 		
-		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
+		PageInfo pi = new PageInfo();
+		ArrayList<Messenger> tList = new ArrayList <>();
+		if(category.equals("")) {
+			listCount = msgService.trashListCount(userNo);
+			pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
+			tList = msgService.selectTrashList(pi,userNo);
 		
-		ArrayList <Messenger> tList = msgService.selectTrashList(pi,userNo);
+		}else {
+			
+			listCount = msgService.trashSearchListCount(key);
+			pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit); 
+			tList = msgService.trashSearchList(key,pi);
+			model.addAttribute("keyword", keyword);
+			model.addAttribute("category", category);
+			model.addAttribute("startDate", startDate);
+			model.addAttribute("endDate", endDate);
+		}
+		
 		
 		model.addAttribute("tList", tList);
 		model.addAttribute("pi",pi);
@@ -268,88 +337,24 @@ public class MessengerController {
 		
 		return mv;
 	}
-	//조건별 검색(받은 쪽지함)
-	@RequestMapping("search.mg")
-	public ModelAndView searchMessage(@RequestParam(value="currentPage" , defaultValue="1") int currentPage, 
-									  String category, String keyword, int userNo, ModelAndView mv) {
+	
+	//읽지않은 쪽지 개수 조회(받은 쪽지함)
+	@ResponseBody
+	@RequestMapping("countRecvMsg.mg")
+	public int countRecvMsg(int userNo) {
 		
-		HashMap <String, Object> key = new HashMap<>();
+		int count = msgService.selectCountRecvMsg(userNo);
 		
-		key.put("keyword",keyword);
-		key.put("userNo", userNo);
-		key.put("category", category);
-		
-		int listCount = msgService.selectSearchListCount(key);
-		
-		int pageLimit = 10;
-		int boardLimit = 5;
-		
-		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
-		
-		ArrayList<Messenger> msgList = msgService.selectSearchList(key,pi);
-		
-		mv.addObject("msgList", msgList)
-		  .addObject("pi", pi)
-		  .addObject("keyword",keyword)
-		  .addObject("category", category)
-		  .setViewName("messenger/receiveListView");
-		
-		return mv;
+		return count;
 	}
 	
-	@RequestMapping("sendSearch.mg")
-	public ModelAndView sendSearchMessage(@RequestParam(value="currentPage", defaultValue="1") int currentPage,
-										  String category, String keyword, int userNo, ModelAndView mv) {
+	//삭제된 쪽지 개수 조회(휴지통)
+	@ResponseBody
+	@RequestMapping("countTrashMsg.mg")
+	public int countTrashMsg(int userNo) {
 		
-		HashMap <String, Object> key = new HashMap<>();
+		int count = msgService.trashListCount(userNo);
 		
-		key.put("category", category);
-		key.put("keyword", keyword);
-		key.put("userNo", userNo);
-		
-		int listCount = msgService.sendSearchListCount(key);
-		
-		int pageLimit = 10;
-		int boardLimit = 5;
-
-		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
-		
-		ArrayList<Messenger> msgList = msgService.sendSearchList(key,pi);
-		
-		mv.addObject("msgList", msgList)
-		  .addObject("pi", pi)
-		  .addObject("keyword",keyword)
-		  .addObject("category", category)
-		  .setViewName("messenger/sendListView");
-		
-		
-		return mv;
+		return count;
 	}
-	
-	@RequestMapping("trashSearch.mg")
-	public ModelAndView trashSearchMessage(@RequestParam(value="currentPage", defaultValue="1") int currentPage,
-											String category, String keyword, int userNo, ModelAndView mv) {
-		HashMap <String, Object> key = new HashMap<>();
-		
-		key.put("category", category);
-		key.put("keyword", keyword);
-		key.put("userNo", userNo);
-		
-		int listCount = msgService.trashSearchListCount(key);
-		
-		int pageLimit = 10;
-		int boardLimit = 5;
-
-		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
-		
-		ArrayList<Messenger> tList = msgService.trashSearchList(key,pi); 
-		
-		mv.addObject("tList", tList)
-		  .addObject("pi", pi)
-		  .addObject("keyword",keyword)
-		  .addObject("category", category)
-		  .setViewName("messenger/trashListView");
-		return mv;
-	}
-	
 }

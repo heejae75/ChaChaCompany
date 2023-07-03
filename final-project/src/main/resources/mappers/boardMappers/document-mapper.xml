@@ -15,23 +15,23 @@
 	
 	<!-- 검색 게시글 개수 조회  -->
 	<select id="selectSearchCount" resultType="_int">
-		SELECT COUNT(*)
+		SELECT COUNT(*) COUNT
 		FROM BOARD B 
 		JOIN MEMBER ON (BOARD_WRITER = USER_NO)
+		WHERE B.STATUS ='Y'
+		AND B.CATEGORY_CODE ='B2'
 		<choose>
-			<when test="deptCode == null or deptCode == '전체'" >
-				WHERE B.BOARD_TITLE LIKE '%'||#{keyword}||'%' OR USER_NAME LIKE '%'||#{keyword}||'%'
+			<when test="deptCode == '전체' and keyword !=null" >
+				AND (B.BOARD_TITLE LIKE '%'||#{keyword}||'%' OR USER_NAME LIKE '%'||#{keyword}||'%')
 			</when>
-			<when test="deptCode != null and keyword ==null">
+			<when test="deptCode != '전체' and keyword ==null">
 				AND DEPT_CODE = #{deptCode}		
 			</when>	
-			<when test="deptCode != null">
-				WHERE (B.BOARD_TITLE LIKE '%'||#{keyword}||'%' OR USER_NAME LIKE '%'||#{keyword}||'%')
+			<when test="deptCode != '전체'">
+				AND (B.BOARD_TITLE LIKE '%'||#{keyword}||'%' OR USER_NAME LIKE '%'||#{keyword}||'%')
 				AND DEPT_CODE = #{deptCode}		
 			</when>
 		</choose>
-		AND B.STATUS ='Y'
-		AND B.CATEGORY_CODE ='B2'
 	</select>
 	
 	<!-- Board ResultMap -->
@@ -74,19 +74,20 @@
 		FROM BOARD B
 		JOIN MEMBER ON (B.BOARD_WRITER = USER_NO)
 		JOIN DEPARTMENT USING (DEPT_CODE)
+		WHERE B.STATUS ='Y'
+		AND B.CATEGORY_CODE ='B2'
 		<choose>
-			<when test="deptCode == null or deptCode == '전체'">
-				WHERE B.BOARD_TITLE LIKE '%'||#{keyword}||'%' OR USER_NAME LIKE '%'||#{keyword}||'%'
+			<when test="deptCode == '전체' and keyword != null">
+				AND (B.BOARD_TITLE LIKE '%'||#{keyword}||'%' OR USER_NAME LIKE '%'||#{keyword}||'%')
 			</when>	
-			<when test="deptCode != null and keyword == null">
+			<when test="deptCode != '전체' and keyword == null">
 				AND DEPT_CODE = #{deptCode}		
 			</when>
 			<when test="deptCode != null">
-				WHERE (B.BOARD_TITLE LIKE '%'||#{keyword}||'%' OR USER_NAME LIKE '%'||#{keyword}||'%')
+				AND (B.BOARD_TITLE LIKE '%'||#{keyword}||'%' OR USER_NAME LIKE '%'||#{keyword}||'%')
 				AND DEPT_CODE = #{deptCode}		
 			</when>
 		</choose>
-		AND B.STATUS ='Y'
 		ORDER BY B.BOARD_NO DESC
 	</select>
 	
