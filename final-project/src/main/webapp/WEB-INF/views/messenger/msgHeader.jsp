@@ -63,6 +63,19 @@
 </style>
 </head>
 <body>
+<c:if test="${not empty alertMsg }">
+		<script>
+			alert("${alertMsg}");
+		</script>
+		<c:remove var="alertMsg" scope="session"/>
+	</c:if>
+<c:if test="${not empty errorMsg }">
+	<script>
+		alert("${errorMsg}")		
+	</script>
+	<c:remove var="errorMsg" scope="session"/>
+</c:if>
+
 <div class="messenger_content">
 	<div class="innerOuter">
 		<h2 style="font-weight:800;">쪽지 <i id="messenger" class="fa-sharp fa-solid fa-paper-plane fa-sm" style="color: #0E6251;"></i></h2> 
@@ -79,7 +92,7 @@
 			
 			<script>
 				var $userNo = '${loginUser.userNo}'
-				//읽지 않은 쪽지 조회해오기 
+				//읽지 않은 쪽지수 조회해오기 
 				$(function(){
 					
 					$.ajax({
@@ -101,7 +114,7 @@
 					})
 				})
 				
-				//삭제된 쪽지 개수 조회해오기 
+				//삭제된 쪽지수 조회해오기 
 				$(function(){
 					
 					$.ajax({

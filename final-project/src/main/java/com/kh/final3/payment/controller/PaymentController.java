@@ -84,7 +84,7 @@ public class PaymentController {
 		
 		//해당 회원의 급여 명세서 이미 등록되었는지 확인 -> 등록하려고 하는 급여 명세서의 날짜와 기존 등록 날짜 비교 
 		int userNo = pay.getUserNo();
-		String month = pay.getMonthly().substring(0, 6);
+		String month = pay.getMonthly().substring(0,7);
 		
 		HashMap <String, Object> key = new HashMap <>();
 		key.put("userNo", userNo);
@@ -92,14 +92,13 @@ public class PaymentController {
 		
 		int count = paymentService.compareMonthly(key); 
 		
-		if(count<0) { //등록된 명세서 없음 
-			
+		if(count>0) { //등록된 명세서 있음  
+			return "duplicate";
+		}else {// 등록된 명세서 없음 
+			//급여명세서 등록 
 			int result = paymentService.insertPayment(pay);
 			return (result>0)? "YYYY":"NNNN";
 			
-		}else {// 등록된 명세서 있음 
-			
-			return "duplicate";
 		}
 		
 	}

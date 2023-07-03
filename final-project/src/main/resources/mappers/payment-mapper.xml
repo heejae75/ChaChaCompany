@@ -71,6 +71,7 @@
 		LEFT JOIN DEPARTMENT USING(DEPT_CODE)
 		LEFT JOIN JOB USING(JOB_CODE)
 		WHERE USER_NO = #{userNo}
+		AND ACCOUNT_STATUS ='Y'
 	</select>
 	
 	<!-- 월별 비교 메소드 -->
