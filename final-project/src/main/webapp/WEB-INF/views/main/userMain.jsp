@@ -24,6 +24,13 @@
 	float: left;
 }
 
+#main_profile a {
+	text-decoration: none;
+	color:black;
+	font-size: 20px;
+	font-weight: bold;
+}
+
 #main_profile img {
 	border: 1px solid black;
 	width: 200px;
@@ -36,6 +43,16 @@
 	text-decoration: none;
 	color: black;
 	cursor: pointer;
+}
+
+#main_logout {
+	background-color: rgb(203, 235, 216);
+	border: 0px;
+	color: black;
+	cursor: pointer;
+	float: left;
+	font-size: 20px;
+	font-weight: bold;
 }
 
 /* 출퇴근 기록하는 div */
@@ -57,7 +74,7 @@
 
 /* 메인 가운데 전체 div */
 .content_center {
-	/*         background-color: gold; */
+	/* background-color: gold; */
 	float: left;
 	width: 800px;
 	height: 100%;
@@ -105,13 +122,13 @@
 	margin-right: 5px;
 	float: left;
 	background-color: rgb(203, 235, 216);
-	/*     	border : 1px solid black; */
+	/* border : 1px solid black; */
 	border-radius: 10px;
 }
 
 #notice_new>a, #notice_liked>a {
 	text-decoration: none;
-	color: black;
+	color: white;
 	margin-left: 18px;
 	font-size: 20px;
 }
@@ -122,14 +139,14 @@
 
 #others_team>a {
 	text-decoration: none;
-	color: black;
+	color: white;
 	margin-left: 15px;
 	font-size: 20px;
 }
 
 #others_all>a {
 	text-decoration: none;
-	color: black;
+	color: white;
 	margin-left: 26px;
 	font-size: 20px;
 }
@@ -198,7 +215,7 @@
 }
 
 #mainOthersList {
-	/*      	border: 1px solid black;  */
+	/* border: 1px solid black;  */
 	width: 750px;
 	height: 80px;
 	margin: auto;
@@ -216,18 +233,22 @@
 }
 
 #calendar {
-	width: 300px; /* 원하는 너비 값으로 변경 */
+	width: 350px; /* 원하는 너비 값으로 변경 */
 	margin: 55px auto 10px auto; /* 가운데 정렬을 위해 추가 */
 }
 
 .fc-left h2 {
-	font-size: 15px;
+	font-size: 20px;
+	padding: 15px 25px 0 8px;
 }
 
 .fc-right button, .fc-button-group button {
 	height: 10px;
 }
 
+.fc-button-group button {
+	margin-left: 0px;
+}
 .main_calendar_info {
 	margin: auto;
 }
@@ -288,6 +309,16 @@
 #todoLabelId{
     margin-left: 10px;
 }
+
+table tr {
+	cursor: pointer;
+}
+
+a{
+	text-decoration: none;
+}
+
+
 </style>
 </head>
 <body>
@@ -297,9 +328,16 @@
 			<div id="main_profile">
 				<img src="https://i.imgur.com/hczKIze.jpg" alt="">
 				<p style="font-size: 30px; margin: 0 0 0 0;">${loginUser.userName }</p>
-				<p>${loginUser.deptCode }/ ${loginUser.jobCode }</p>
-				<div>
-					<a href="#">마이페이지</a> <a href="#">로그아웃</a>
+				<p>${loginUser.deptName } / ${loginUser.jobName }</p>
+				<div style="float:left; margin-left: 80px;">
+					<a href="#" id="profileMypage">마이페이지</a>
+				</div>
+				<div style="float:left; margin-left: 20px;  ">
+					<form action="/final3/logout" method="post">
+				        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+				        <input type="submit" id="main_logout" value="로그아웃" style="">
+<!-- 					        <button type="submit" id="menubar_logout">LOGOUT</button> -->
+					</form>
 				</div>
 				<br>
 			</div>
@@ -309,15 +347,16 @@
 					<c:when test="${loginUser.auth eq 'ROLE_ADMIN' }">
 				<div style="float: left; margin: 0 0 0 65px;">
 					<a href="#"> <i class="fa-sharp fa-solid fa-address-card"
-						style="color: #000000; font-size: 70px;"></i>
-						<p style="margin: 0 0 0 0;">회원 등록 </p>
+						style="color: #000000; font-size: 70px; margin: 20px 10px 0 0;"></i>
+						<p style="margin: 0 10px 0 0;">회원 등록 </p>
 					</a>
 				</div>
 					</c:when>
 				</c:choose>
 				<div>
-					<a href="#" data-target='#main_toDoList' data-toggle='modal'> <i class="fa-sharp fa-regular fa-address-card"
-						style="color: #000000; font-size: 70px;" ></i>
+					<a href="#" data-target='#main_toDoList' data-toggle='modal' style="text-decoration:none; color:black;">
+						<i class="fa-solid fa-list-check"
+						style="color: #000000; font-size: 70px; margin: 20px 10px 0 10px;" ></i>
 						<p style="margin: 0 0 0 0;">TO DO</p>
 					</a>
 				</div>
@@ -333,35 +372,26 @@
 
 				<div id="mp_work_output">
 					<div id="begin_time" style="margin-bottom: 4px;">
-						<div>출근 시간</div>
-						<div>${att.onTime }</div>
+						<div id="mainOnTimeDiv">출근 시간 : </div>
 					</div>
 					<div style="border: 1px solid black; width: 280px;"></div>
 					<div id="end_time" style="margin: 6px 0 12px 0;">
-						<div>퇴근 시간</div>
-						<div>${att.offTime}</div>
+						<div id="mainOffTimeDiv">퇴근 시간 : </div>
 					</div>
 				</div>
 				<div id="mp_work_input">
-					<c:choose>
-						<c:when test="">
-							<!-- 출근 버튼이 찍혔을때 한번만 버튼 누를수 있게 하기 -->
+<!-- 					<form action="insertGo.ma" method="post"> -->
+<%-- 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /> --%>
+<!-- 						<button type="submit" class="btn btn-primary">출근</button> -->
+<!-- 					</form> -->
 
-						</c:when>
-						<c:otherwise>
-							<!-- 출근이 안 찍혔으면 퇴근 버튼 비활성 -->
-
-						</c:otherwise>
-					</c:choose>
-					<form action="insertGo.ma" method="post">
-						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-						<button type="submit" class="btn btn-primary">출근</button>
-					</form>
-
-					<form action="insertLeave.ma" method="post">
-						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-						<button type="submit" class="btn btn-primary">퇴근</button>
-					</form>
+<!-- 					<form action="insertLeave.ma" method="post"> -->
+<%-- 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /> --%>
+<!-- 						<button type="submit" class="btn btn-primary">퇴근</button> -->
+<!-- 					</form> -->
+						<button id="onTimeBtn" class="btn btn-primary" onclick="insertOnTime();">출근</button>
+						
+						<button id="offTimeBtn" class="btn btn-primary" onclick="insertOffTime();" >퇴근</button>
 				</div>
 			</div>
 		</div>
@@ -374,7 +404,7 @@
 						<span>최근 온 쪽지</span>
 					</div>
 					<div class="main_ctn_plus">
-						<a href="#"> <i class="fa-solid fa-plus fa-2xl" style="color: #0e6251;"></i>
+						<a href="#" id="msgPlus"> <i class="fa-solid fa-plus fa-2xl" style="color: #0e6251;"></i>
 						</a>
 					</div>
 				</div>
@@ -433,7 +463,7 @@
 								</ul>
 							</div>
 							<div class="main_ctn_plus">
-								<a href="#"> 
+								<a href="list.me"> 
 									<i class="fa-solid fa-plus fa-2xl" style="color: #0e6251;"></i>
 								</a>
 							</div>
@@ -454,7 +484,7 @@
 								<span>전자 결재 </span>
 							</div>
 							<div class="main_ctn_plus">
-								<a href="#">
+								<a href="home.ap">
 									<i class="fa-solid fa-plus fa-2xl"style="color: #0e6251;"></i>
 								</a>
 							</div>
@@ -478,13 +508,13 @@
 						<span>일정</span>
 					</div>
 					<div class="main_ctn_plus">
-						<a href="#"> <i class="fa-solid fa-plus fa-2xl"
-							style="color: #0e6251;"></i>
+						<a href="schedule.sc">
+							<i class="fa-solid fa-plus fa-2xl" style="color: #0e6251;"></i>
 						</a>
 					</div>
 				</div>
 				<div id="calendar"></div>
-				<table class="main_calendar_info" border=1>
+				<table class="main_calendar_info">
 					<tbody>
 						<tr>
 							<td style="font-size: 35px;" id="mainDay"></td>
@@ -552,11 +582,13 @@
 					</button>
 					<h4 class="modal-title" id="myModalLabel">정보</h4>
 				</div>
-				<div class="modal-body" id="other_profile_body">
+				<div class="modal-body" id="other_profile_body" style="text-align: center;">
 					<table border=1 id="others_profile_table" class="table">
 						<tbody>
 						</tbody>
 					</table>
+					<a href="#" id="otherProfileMsg">
+					</a>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">닫기
@@ -606,12 +638,13 @@
 		getTime();
 
 		
-		//최근 온 쪽지 조회 
 		$(function() {
 
 			mainMessengerList(); //이메일 호출 
 			mainApprovalStatusList(); //전자결재 호출 
 			selectTodoList(); //투두리스트 호출 
+			selectOnTime(); //출근시간 조회
+			selectOffTime(); //퇴근시간 조회
 
 			//공지사항 상세보기 가기 
 			$("#mainNoticeList>tbody").on("click", "tr", function() {
@@ -635,31 +668,13 @@
 				var msgNo = $(this).children().eq(0).children().val();
 				window.open("recvMessage.mg?msgNo="+msgNo,"메신저","width = 1100 , height = 600");
 			})
+			
+			//최근 온 쪽지 플러스 버튼 누를 시 쪽지 리스트 가기
+			$("#msgPlus").on("click", function() {
+				window.open("list.mg","메신저","width = 1100 , height = 600");
+			})
 		});
 		
-
-		/* function mainNoticeBoardList() {
-		   $.ajax({
-			   url : "mainNoticeList.ma",
-			   success : function(result) {
-				   var str = "";
-				   
-				   for(var i in result) {
-					   str += "<tr>"
-					   		+ "<td>" + result[i].boardTitle + "</td>"
-					   		+ "<td>" + result[i].boardWriter + "</td>"
-					   		+ "<td>" + result[i].createDate + "</td>"
-					   		+ "</tr>"
-				   }
-				   
-				   $("#mainNoticeList tbody").html(str);
-			   },
-			   error : function() {
-				   console.log("통신 실패 ");
-			   }
-		   });
-		} */
-
 		//메일 최신순으로 조회
 		function mainMessengerList() {
 			$.ajax({
@@ -737,7 +752,7 @@
 			$("#notice_liked").click(function() {
 				var activeTab = $(this).attr("data-tab");
 				$("#notice_new").css("background-color", "rgb(203, 235, 216)"); //모든 탭의 배경색 초기화
-				$(this).css({"background-color" : "#0E6251", "color" : "white"}); // 클릭한 탭의 배경색 변경
+				$(this).css("background-color", "#0E6251"); // 클릭한 탭의 배경색 변경
 				$.ajax({
 					url : "mainNoticeLiked.ma",
 					type : "POST",
@@ -794,11 +809,14 @@
 
 						
 						for (var i = 0; i < result.length; i++) {
-							if (i % 5 === 0) { //5명 넘으면 tr 생기기 
+							//console.log(result[i].userId);
+							if (i % 5 == 0) { //5명 넘으면 tr 생기기 
 								str += "<tr id='mainTeamTr" + rowCount + "'>";
 								rowCount++;
 							}
 
+							console.log("회원 번호 : "+result[i].userNo);
+							
 							str += "<td>"
 									+ "<p data-target='#others_profile' data-toggle='modal'>"
 									+ result[i].userName
@@ -808,9 +826,11 @@
 									+ "<input type = 'hidden' value='"+result[i].phone+"'>"
 									+ "<input type = 'hidden' value='"+result[i].email+"'>"
 									+ "<input type = 'hidden' value='"+result[i].empolymentDate+"'>";
+									+ "<input type = 'hidden' value='"+result[i].userNo+"'>";
+									+ "<input type = 'hidden' value='"+result[i].userId+"'>";
 									+"</p></td>";
 
-							if (i % 5 === 4 || i === result.length - 1) {
+							if (i % 5 == 4 || i == result.length - 1) {
 								str += "</tr>";
 							}
 						}
@@ -828,7 +848,10 @@
 							var phone = userData.phone;
 							var email = userData.email;
 							var empolymentDate = userData.empolymentDate;
+							var userId = userData.userId;
+							var userNo = userData.userNo;
 
+							//console.log("찍히니?"+userNo);
 							$("#others_profile_table tbody").html("<tr><td>이름</td><td>"
 																	+ userName
 																	+ "</td></tr>"
@@ -838,15 +861,29 @@
 																	+ "<tr><td>부서</td><td>"
 																	+ deptName
 																	+ "</td></tr>"
-																	+ "<tr><td>전화번호</td><td>"
+																	+ "<tr><td>전화번호</td><td id='tbPhone'>"
 																	+ phone
 																	+ "</td></tr>"
-																	+ "<tr><td>이메일</td><td>"
+																	+ "<tr><td>이메일</td><td id='tbEmail'>"
 																	+ email
 																	+ "</td></tr>"
 																	+ "<tr><td>입사일 </td><td>"
 																	+ empolymentDate
 																	+ "</td></tr>");
+							
+							$("#otherProfileMsg").html("<button class='btn btn-success' style='margin-top: 20px' data-value1='"+userId+"' data-value2='"+userName+"' data-value3='"+userNo+"'>쪽지 쓰기 </button>");
+						
+							$("#otherProfileMsg button").click(function() {
+								var userId = $(this).data("value1");
+								var userName = $(this).data("value2"); 
+								var userNo = $(this).data("value3");
+// 								console.log(userId);
+// 								console.log(userName);
+// 								console.log(userNo);
+								
+								var url = "insertMsg.ma?userId=" + userId +"&userName="+ userName +"&userNo="+ userNo;
+								window.open(url,"메신저","width = 1100 , height = 600");
+							});
 						})
 					},
 					error : function() {
@@ -875,7 +912,7 @@
 						var rowCount = 0;
 
 						for (var i = 0; i < result.length; i++) {
-							if (i % 5 === 0) {
+							if (i % 5 == 0) {
 								str += "<tr id='mainTeamTr" + rowCount + "'>";
 								rowCount++;
 							}
@@ -890,9 +927,11 @@
 									+ "<input type = 'hidden' value='"+result[i].phone+"'>"
 									+ "<input type = 'hidden' value='"+result[i].email+"'>"
 									+ "<input type = 'hidden' value='"+result[i].empolymentDate+"'>"
+									+ "<input type = 'hidden' value='"+result[i].userNo+"'>";
+									+ "<input type = 'hidden' value='"+result[i].userId+"'>";
 									+ "</p></td>";
 
-							if (i % 5 === 4 || i === result.length - 1) {
+							if (i % 5 == 4 || i == result.length - 1) {
 								str += "</tr>";
 							}
 						}
@@ -909,6 +948,8 @@
 							var phone = userData.phone;
 							var email = userData.email;
 							var empolymentDate = userData.empolymentDate;
+							var userId = userData.userId;
+							var userNo = userData.userNo;
 
 							$("#others_profile_table tbody").html("<tr><td>이름</td><td>"
 																	+ userName
@@ -928,6 +969,20 @@
 																	+ "<tr><td>입사일 </td><td>"
 																	+ empolymentDate
 																	+ "</td></tr>");
+							
+							$("#otherProfileMsg").html("<button style='align:center;' data-value1='"+userId+"' data-value2='"+userName+"' data-value3='"+userNo+"'>쪽지 쓰기 </button>");
+							
+							$("#otherProfileMsg button").click(function() {
+								var userId = $(this).data("value1");
+								var userName = $(this).data("value2"); 
+								var userNo = $(this).data("value3");
+// 								console.log(userId);
+// 								console.log(userName);
+// 								console.log(userNo);
+								
+								var url = "insertMsg.ma?userId=" + userId +"&userName="+ userName +"&userNo="+ userNo;
+								window.open(url,"메신저","width = 1100 , height = 600");
+							});
 						})
 
 					},
@@ -943,7 +998,6 @@
 		function onchangeDay(yy, mm, dd, ss) {
 			$("#mainDay").html(yy + "년" + mm + "월" + dd + "일(" + ss + "요일)");
 		}
-		
 
 		//풀캘린더 API 시작 
 		//$(function() { }) <- 이렇게 해도된다.
@@ -976,7 +1030,7 @@
 
 			//풀캘린더
 			$('#calendar').fullCalendar({
-				height : 488,
+				height : 500,
 				//contentHeight: 400,
 				expandRows : true, //화면에 맞게 높이 재설정 
 				local : "ko", //달력의 언어설정 = 한국어 
@@ -1040,7 +1094,10 @@
 									title : schedule.scheduleTitle,
 									content : schedule.scheduleContent,
 									start : schedule.startDate,
-									end : moment(schedule.endDate).add(1, 'day')
+									end : moment(schedule.endDate).add(1, 'day'),
+									backgroundColor : "rgb(203, 235, 216)",
+									color : "#FFFFFF",
+									textColor : "#000000"
 								}
 
 								events.push(event);
@@ -1103,49 +1160,52 @@
 			
 		//전자결재 상태
 		function mainApprovalStatusList() {
-			$.ajax({
-				url : "mainApprovalStatus.ma",
-				type : "POST",
-				beforeSend : function(xhr) {
-					xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
-				},
-				success : function(result){
-					var str = "";
-					
-					for(var i in result) {
-						if(result[i].lastSignature.includes("대기")){
-							str += "<tr>"
-								+ "<td><input type = 'hidden' value='"+result[i].DocNo+"'></td>"
-								+ "<td><input type = 'hidden' value='"+result[i].docName+"'></td>"
-								+"<td style='width:60%;'>"+result[i].docTitle+"</td>"
-								+"<td style='width:20%; text-align:right;'>"+result[i].createDate+"<td>"
-								+"<td style='width:20%; text-align:right; color:gold; font-weight:bold;'>"+result[i].lastSignature+"</td>"
-								+"</tr>";
-						}else if (result[i].lastSignature.includes("반려")) {
-							str += "<tr>"
-								+ "<td><input type = 'hidden' value='"+result[i].DocNo+"'></td>"
-								+ "<td><input type = 'hidden' value='"+result[i].docName+"'></td>"
-								+"<td style='width:60%;'>"+result[i].docTitle+"</td>"
-								+"<td style='width:20%; text-align:right;'>"+result[i].createDate+"<td>"
-								+"<td style='width:20%; text-align:right; color:red; font-weight:bold;'>"+result[i].lastSignature+"</td>"
-								+"</tr>";
-						}else if (result[i].lastSignature.includes("승인")) {
-							str += "<tr>"
-								+ "<td><input type = 'hidden' value='"+result[i].DocNo+"'></td>"
-								+ "<td><input type = 'hidden' value='"+result[i].docName+"'></td>"
-								+"<td style='width:60%;'>"+result[i].docTitle+"</td>"
-								+"<td style='width:20%; text-align:right;'>"+result[i].createDate+"<td>"
-								+"<td style='width:20%; text-align:right; color:lightgreen; font-weight:bold;'>"+result[i].lastSignature+"</td>"
-								+"</tr>";
+			
+ 			if ("${loginUser.auth}" == "ROLE_ADMIN") {
+				$.ajax({
+					url : "mainApprovalStatus.ma",
+					type : "POST",
+					beforeSend : function(xhr) {
+						xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+					},
+					success : function(result){
+						var str = "";
+						
+						for(var i in result) {
+							if(result[i].lastSignature.includes("대기")){
+								str += "<tr>"
+									+ "<td><input type = 'hidden' value='"+result[i].DocNo+"'></td>"
+									+ "<td><input type = 'hidden' value='"+result[i].docName+"'></td>"
+									+"<td style='width:60%;'>"+result[i].docTitle+"</td>"
+									+"<td style='width:20%; text-align:right;'>"+result[i].createDate+"<td>"
+									+"<td style='width:20%; text-align:right; color:gold; font-weight:bold;'>"+result[i].lastSignature+"</td>"
+									+"</tr>";
+							}else if (result[i].lastSignature.includes("반려")) {
+								str += "<tr>"
+									+ "<td><input type = 'hidden' value='"+result[i].DocNo+"'></td>"
+									+ "<td><input type = 'hidden' value='"+result[i].docName+"'></td>"
+									+"<td style='width:60%;'>"+result[i].docTitle+"</td>"
+									+"<td style='width:20%; text-align:right;'>"+result[i].createDate+"<td>"
+									+"<td style='width:20%; text-align:right; color:red; font-weight:bold;'>"+result[i].lastSignature+"</td>"
+									+"</tr>";
+							}else if (result[i].lastSignature.includes("승인")) {
+								str += "<tr>"
+									+ "<td><input type = 'hidden' value='"+result[i].DocNo+"'></td>"
+									+ "<td><input type = 'hidden' value='"+result[i].docName+"'></td>"
+									+"<td style='width:60%;'>"+result[i].docTitle+"</td>"
+									+"<td style='width:20%; text-align:right;'>"+result[i].createDate+"<td>"
+									+"<td style='width:20%; text-align:right; color:lightgreen; font-weight:bold;'>"+result[i].lastSignature+"</td>"
+									+"</tr>";
+							}
 						}
+						
+						$("#mainApprovalList tbody").html(str);
+					},
+					error : function() {
+						console.log("전자결재 조회 통신오류 ");
 					}
-					
-					$("#mainApprovalList tbody").html(str);
-				},
-				error : function() {
-					console.log("전자결재 조회 통신오류 ");
-				}
-			});
+				});
+ 			}
 		}
 		
 		//투두리스트 등록 
@@ -1185,6 +1245,7 @@
 				success: function(result) {
 					var str = "";
 					for(var i in result) {
+					//console.log(result[i].todoNo);
 						str += "<li>"
 							+ "<div id='main_result_div'>"
 							+ "<input type='hidden' id='mainTodoNo' value='" + result[i].todoNo + "'>"
@@ -1192,7 +1253,7 @@
 							+ "<input type='hidden' id='mainTodoStatus' value='" + result[i].status + "'>"
 							+ "<input type='checkbox' id='todoLabel"+i+"' class='todoCheck' style='float:left;' value='"+result[i].todoContent + "'>"
 							+ "<label id='todoLabelId' for='todoLabel"+i+"'>" + result[i].todoContent + "</label>"
-							+ "<button class='delete_btn' onclick='deleteTodoList();'> x</button>"
+							+ "<button class='delete_btn'> x</button>"
 							+ "</div>"
 							+ "</li>";
 					}
@@ -1204,7 +1265,7 @@
 						var status = $(this).parent().find('#mainTodoStatus').val();
 						//console.log($(this).parent().find('#mainTodoStatus').val());
 						var label = $(this).next("label")
-						console.log(label);
+						//console.log(label);
 						if(status == "C") {
 							$(this).attr("checked", true);
 							label.css("color", "lightgray");
@@ -1220,6 +1281,13 @@
 						
 						updateTodoList(todoNo, status, content, $(this).is(":checked"));
 					});
+					
+					$('.delete_btn').click(function() {
+						//console.log("클릭이 되니?");
+						var todoNo = $(this).parent().find('#mainTodoNo').val();
+						
+						deleteTodoList(todoNo);
+					})
 					
 				},
 				error: function() {
@@ -1279,11 +1347,11 @@
 		}
 		
 		//투두리스트 한개만 삭제 
-		function deleteTodoList() {
+		function deleteTodoList(todoNo) {
 			$.ajax({
 				url : "deleteTodoList.ma",
 				data : {
-					todoNo : $("#mainTodoNo").val()
+					todoNo : todoNo
 				},
 				type : "POST",
 				beforeSend : function(xhr) {
@@ -1329,6 +1397,146 @@
 			})
 		}
 		
+		
+		//출근 시간 등록
+		function insertOnTime() {
+			
+		    document.getElementById("onTimeBtn").disabled = true;
+			document.getElementById("offTimeBtn").disabled = false;
+
+			$.ajax({
+				url: "insertOnTime.ma",
+				
+				type : "POST",
+				beforeSend : function(xhr) {
+					xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+				},
+				success : function(result) {
+					//console.log(result);
+						if(result == "countFail") {
+							alert("이미 출근했음 ")
+							
+						}else if(result == "success"){
+							alert("출근 시간이 등록되었습니다.");
+							selectOnTime(); //출근 시간 조회
+						}
+				},
+				error : function() {
+					
+				}
+			});
+		}
+		
+		//퇴근 시간 등록
+		function insertOffTime() {
+			document.getElementById("onTimeBtn").disabled = false; //출근 버튼 활성화 
+			document.getElementById("offTimeBtn").disabled = true; //퇴근 버튼 비활성화
+			
+			$.ajax({
+				url: "insertOffTime.ma",
+				type : "POST",
+				beforeSend : function(xhr) {
+					xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+				},
+				success : function(result) {
+					if(result == "success") {
+						alert("퇴근 시간이 등록되었습니다.");
+						selectOffTime(); //퇴근 시간 조회
+					}
+				},
+				error : function() {
+					
+				}
+			});
+		}
+		
+		//출근시간 조회
+		function selectOnTime() {
+			$.ajax({
+				url: "mainSelectOnTime.ma",
+				type : "POST",
+				beforeSend : function(xhr) {
+					xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+				},
+				success : function(result) {
+					//console.log(result);
+					
+					for(var i in result){
+						//console.log(result[i].onTime);
+						
+						var str = "<div id='mainOnTimeDiv'>출근 시간 : "+result[i].onTime+"</div>";
+						$("#onTimeBtn").prop("disabled", true);
+	                    break;
+					}
+					
+					$("#mainOnTimeDiv").html(str);
+					
+// 					var userData = result[0].onTime;
+// 					var onTime = userData.slice(0,10);
+// 					console.log(onTime);
+// 					var currentDate = new Date().toISOString().slice(0, 10);
+					
+// 					console.log("오늘 날짜 :" +currentDate);
+					
+// 		            if (onTime == currentDate) {
+// 		                updateOnTime();
+// 		            }else {
+// 		            	insertOnTime();
+// 		            }
+				},
+				error : function() {
+					console.log("출근 시간 조회 오류");
+				}
+			});	
+		}
+		
+		//퇴근 시간 조회
+	 	function selectOffTime() {
+	 		$.ajax({
+				url: "mainSelectOffTime.ma",
+				type : "POST",
+				beforeSend : function(xhr) {
+					xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+				},
+				success : function(result) {
+					for(var i in result){
+						//console.log(result[i].offTime);
+						
+						var str = "<div id='mainOffTimeDiv'>퇴근 시간 : "+result[i].offTime+"</div>";
+						//$("#onTimeBtn").prop("disabled", false);
+						//$("#offTimeBtn").prop("disabled", true); //퇴근 시간이 조회가 되면 퇴근 비활성화
+	                    //break;
+					}
+					
+					$("#mainOffTimeDiv").html(str);
+				},
+				error : function() {
+					console.log("퇴근 시간 조회 오류");
+				}
+			});	
+
+	 	}
+		
+// 		//한번 더 눌렀을 때 업데이트
+// 		function updateOnTime() {
+// 			$.ajax({
+// 				url: "mainUpdateOnTime.ma",
+// 				type : "POST",
+// 				beforeSend : function(xhr) {
+// 					xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+// 				},
+// 				success : function(result) {
+// 					console.log(result);
+// 					if(result == "success") {
+// 						alert("출근 시간이 업데이트되었습니다.");
+// 						selectOnTime(); //퇴근 시간 조회
+// 					}
+// 				},
+// 				error : function() {
+// 					console.log("퇴근 시간 조회 오류");
+// 				}
+// 			})
+// 		}
 	</script>
 </body>
 </html>

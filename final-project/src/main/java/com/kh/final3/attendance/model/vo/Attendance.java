@@ -18,6 +18,7 @@ public class Attendance {
 	private String onTime;
 	private String offTime;
 	private String leaveType;
+	
 	private String currDate;
 	private String todoContent;
 	private int todoNo;
