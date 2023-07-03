@@ -40,7 +40,7 @@
             </div>
             <div id="item-content">
                 <div id="item-content1">
-                    <table class="table table-bordered" width="100%" height="100%" style="border-collapse: collapse;vertical-align: middle">
+                    <table class="table table-bordered" width="100%" height="100%" id="member-info-table">
                         <tr>
                             <th width="15%">작성자</th>
                             <td><input type="text" id="docWriter"  value="${loginUser.userName}" readonly></td>
@@ -321,7 +321,7 @@
     			}
     		});
     	}
-    	//결재선 검색
+    	//결재자 검색
     	function searchApprover(){
 			var status = $("#search-select").val();
 			var keyword = $("#keyword").val();
@@ -329,7 +329,7 @@
 				alert("검색어를 입력해주세요");
 			}else{
 				$.ajax({
-	    			url : "searchApprover.ap",
+	    			url : "selectApproverList.ap",
 	    			type : "POST",
 	    			data :{
 	    				status : status,
@@ -362,6 +362,8 @@
     	function addApprover1(){
     		var tdArr1 = new Array();
     		var checkbox1 = $("#chkMember:checked");
+    		var loginUserNo = "${loginUser.userNo}";
+    		
     		checkbox1.each(function(i){
     			var tr = checkbox1.parent().parent().eq(i);
     			var td = tr.children();
@@ -377,13 +379,19 @@
     			tdArr1.push(userno);
     			
     		});
+    		if(tdArr1[3] == loginUserNo){
+    			alert("결재자와 작성자가 동일합니다. 다시확인해주세요.");
+    			$("#approver1").attr("value",'');
+    			$("#ApproverList>tbody input[type='checkbox']").prop("checked",false);    			
+    		}else{
     			$("#approver1").attr("value",tdArr1);
     			$("#ApproverList>tbody input[type='checkbox']").prop("checked",false);
-    			
+    		}
     	}
     	function addApprover2(){
     		var tdArr2 = new Array();
     		var checkbox2 = $("#chkMember:checked");
+    		var loginUserNo = "${loginUser.userNo}";
     		
     		checkbox2.each(function(i){
     			var tr = checkbox2.parent().parent().eq(i);
@@ -402,8 +410,14 @@
     			
     			
     			});
-	    		$("#approver2").attr("value",tdArr2);
-	    		$("#ApproverList>tbody input[type='checkbox']").prop("checked",false);
+    		if(tdArr2[3] == loginUserNo){
+    			alert("결재자와 작성자가 동일합니다. 다시확인해주세요.");
+    			$("#approver2").attr("value",'');
+    			$("#ApproverList>tbody input[type='checkbox']").prop("checked",false);    			
+    		}else{
+    			$("#approver2").attr("value",tdArr2);
+    			$("#ApproverList>tbody input[type='checkbox']").prop("checked",false);
+    		}
     	}
     	
     	//결재선 삭제

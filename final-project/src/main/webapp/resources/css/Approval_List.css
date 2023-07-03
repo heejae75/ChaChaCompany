@@ -1,10 +1,17 @@
 @charset "UTF-8";
+	div{
+		    box-sizing: border-box;
+		}
     .approval{
         width: 1570px;
+        margin: auto;
+    }
+    .approval>div{
+    	width: 100%
     }
 	/*검색영역*/
     #approval-search-area>form{
-        width: 80%;
+        width: 100%;
         margin:auto;
         margin-top:20px;
     }
@@ -27,7 +34,7 @@
     }
    /*navibar*/
 	#approval-tap-area{
-		width: 80%;
+		width: 100%;
 		margin: auto;
 	}
 	
@@ -73,7 +80,7 @@
 	}
 	 /* 결재목록영역 */
     #approval-list-area{
-        width: 80%;
+        width: 100%;
         margin: auto;
         margin-top : 20px;
     }
@@ -93,7 +100,9 @@
    		margin-right: 200px;
    		text-align: right;
    }
-   #approvalEnroll-btn > button{
+   #approvalEnroll-btn > a{
    		background-color: #0E6251;
    		color: white;
+   		border : 0;
+   		
    }

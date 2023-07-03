@@ -10,7 +10,7 @@
     <title>결재함</title>
     <link rel="stylesheet" href="/final3/resources/css/Approval_EnrollList.css" >
 </head>
-<body id="body-pd">
+<body>
 	<%@ include file="../common/menubar.jsp" %>
             <br><br>
 	        <div class="approvalEnroll">

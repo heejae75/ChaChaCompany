@@ -49,14 +49,10 @@ public class ApprovalServiceImpl implements ApprovalService {
 	}
 
 	@Override
-	public ArrayList<Member> selectApproverList(String deptCode) {
-		return ad.selectApproverList(ss,deptCode);
+	public ArrayList<Member> selectApproverList(HashMap<String, String> map) {
+		return ad.selectApproverList(ss,map);
 	}
 
-	@Override
-	public ArrayList<Member> searchApproverList(HashMap<String, String> map) {
-		return ad.searchApproverList(ss,map);
-	}
 
 	@Override
 	@Transactional

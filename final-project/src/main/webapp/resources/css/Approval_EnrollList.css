@@ -1,11 +1,17 @@
 @charset "UTF-8";
-
+	div{
+		    box-sizing: border-box;
+		}
     .approvalEnroll{
         width: 1570px;
+        margin: auto;
+    }
+    .approvalEnroll>div{
+    	width : 100%;
     }
     /*검색영역*/
     #approvalEnroll-search-area>form{
-        width: 80%;
+        width: 100%;
         margin:auto;
         margin-top:20px;
     }
@@ -21,7 +27,7 @@
     }
     /*navibar*/
 	#approvalEnroll-tap-area{
-		width: 80%;
+		width: 100%;
 		margin: auto;
 	}
 	
@@ -70,7 +76,7 @@
 	 
     /* 게시글 목록영역 */
     #approvalEnroll-list-area{
-        width: 80%;
+        width: 100%;
         margin: auto;
     }
     
