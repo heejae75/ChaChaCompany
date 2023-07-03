@@ -465,10 +465,10 @@
 			                              month : { eventLimit : 12 } // 한 날짜에 최대 이벤트 12개, 나머지는 + 처리됨
 				                              },
 			timeFormat                : "HH:mm",
-			weekends                  : true, // 주말 안보이게
+			weekends                  : true, 
 			header                    : {
 										center : "prev, title ,next ",
-							        	right : "prevYear, today, nextYear ",
+							        	right : "today",
 							        	left : ""
 			                            },
 			defaultView				  : "month",
@@ -479,9 +479,8 @@
 				                       },
 			buttonText				  : {
 										today: '오늘',
-										month: '월간'
 										},
-			
+										
 	         eventClick: function(arg, event){ // 화면에서 일정 선택하면
 	        	 /*나의 근무에서 선택일과 출퇴근시간 변경*/
 	        	 if(arg.start.format("HH:mm") != "00:00"){
@@ -519,7 +518,6 @@
 		        $("#formattedDate2").text(arg.day);
 		        $("#work-date").val(arg.day); // 근무정정신청폼 날짜
 		        
-		        ;
 		        
 		        $("#refAtno").val(arg.id); // 근무정정신청폼 근태번호
 		        $("#leaveType").text(arg.leaveType);
@@ -536,13 +534,9 @@
 				/* 월급정산이 끝난 지난달은 실적 정정 신청 불가 */
 				var selectedMonth = arg.start.format('MM');
 				var currMonth = new Date().getMonth() + 1;
-				if(selectedMonth < currMonth){
-					alertDisability(selectedMonth, currMonth); // 신청버튼 클릭 못하게, 버튼 마우스오버시 알림뜨게하는 함수
-				}else{
-					$("#request-btn").removeAttr("disabled");
-				}
 				
-		        
+				alertDisability(selectedMonth, currMonth); // 신청버튼 클릭 못하게, 버튼 마우스오버시 알림뜨게하는 함수
+				
 		       },
 	           
 	        events: function(start, end, timezone, callback) {
@@ -743,22 +737,32 @@
 				}
 			});
 			workPlan = workPlan - 8*60*2; // 주말제외
-			if(workPlan < 0){
-				workPlan = 0;
-			}
 			extraWork = workRecord - workPlan;
+			if(workPlan < 0 || extraWork < 0){
+				workPlan = 0;
+				extraWork = 0;
+			}
 			
 			$("#work-plan").text("계획 : " + workPlan);
 			$("#work-record").text("실적 : " + workRecord);
 			$("#extra-work").text("초과 : " + extraWork);
 			
 			var fulltime = 52*60; // 주 52시간제
-			var workRecordProgress =  Math.round((workRecord / fulltime) * 100) + "%";
+			// progressbar100% 대비 width값
+			var workRecordProgress =  Math.round(((workRecord-extraWork) / fulltime) * 100) + "%";
 			var extraWorkProgress =  Math.round((extraWork / fulltime) * 100) + "%";
+			// 기본근무시간, 연장근무시간 대비 실적 text값
+			var workRecordProgressBar = Math.round((workRecord / workPlan) * 100) + "%";
+			var extraWorkProgressBar = Math.round((extraWork / (12 * 60)) * 100) + "%";
+			
+			if(workPlan <= workRecord){
+				workRecordProgressBar = "100%";
+			}
+			
 			$("#work-record-progress").css("width",workRecordProgress);
-			$("#work-record-progress").text(workRecordProgress);
+			$("#work-record-progress").text(workRecordProgressBar);
 			$("#extra-work-progress").css("width",extraWorkProgress);
-			$("#extra-work-progress").text(extraWorkProgress);
+			$("#extra-work-progress").text(extraWorkProgressBar);
 				
 			};
 	
@@ -818,7 +822,7 @@
 			}
 			
 		}else{
-			alert("시간형식으로 작성해주세요.");
+			alert("형식에 맞게 작성해주세요 (00:00)");
 		}
 	};
 	
@@ -835,17 +839,24 @@
 	
 	// 이미 정산이 끝난 지난 달의 근무는 정정 신청 불가능
 	function alertDisability(selectedMonth, currMonth){
-		
 		var btn = document.getElementById("request-btn");
-
-		btn.addEventListener("mouseenter",function(){
-			btn.setAttribute("disabled", true);
-			document.getElementById("alertMsg").style.display="block";
-		});
-		document.getElementById("btn-td").addEventListener("mouseout",function(){
-			document.getElementById("alertMsg").style.display="none";
-			btn.removeAttribute("disabled");
-		});
+		
+		if(selectedMonth < currMonth){ 
+			btn.addEventListener("mouseenter",function(){
+				document.getElementById("alertMsg").style.display="block";
+				btn.setAttribute("disabled", true);
+			});
+			document.getElementById("btn-td").addEventListener("mouseout",function(){
+				document.getElementById("alertMsg").style.display="none";
+				btn.removeAttribute("disabled");
+			});
+			
+		}else{
+			btn.addEventListener("mouseenter",function(){
+				document.getElementById("alertMsg").style.display="none";
+				btn.removeAttribute("disabled");
+			});
+		}
 	};
 
 			
