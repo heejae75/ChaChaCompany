@@ -164,6 +164,13 @@ public class MessengerServiceImpl implements MessengerService{
 		return msgDao.trashSearchList(sqlSession, key, pi);
 	}
 	
+	//읽지않은 쪽지 개수 조회(받은 쪽지)
+	@Override
+	public int selectCountRecvMsg(int userNo) {
+
+		return msgDao.selectCountRecvMsg(sqlSession, userNo);
+	}
+	
 	
 
 	

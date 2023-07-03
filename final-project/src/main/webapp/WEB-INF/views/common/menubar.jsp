@@ -569,7 +569,7 @@ a{
                                 <li>
                                 	<a href="#user_active" data-toggle="modal">상태 표시</a>
                                 </li>
-                                <li><a href="#">마이 페이지</a></li>
+                                <li><a href="myPage.me">마이 페이지</a></li>
                             </ul>
                         </div>
                     </li>
@@ -645,7 +645,9 @@ a{
                                  <li>
                                     <a href="payment.me?userNo=${loginUser.userNo}">급여명세서 조회</a>
                                 </li>
-                                <c:if test="${(loginUser.auth eq 'ROLE_ADIM' and loginUser.deptCode eq 'D9') or (loginUser.deptCode eq 'D9') }">
+                                <c:if test="${(loginUser.auth eq 'ROLE_ADIM' and loginUser.deptCode eq 'D7') or (loginUser.deptCode eq 'D7') or
+                                			  (loginUser.auth eq 'ROLE_ADIM' and loginUser.deptCode eq 'D8') or (loginUser.deptCode eq 'D8') or
+                                			  (loginUser.auth eq 'ROLE_ADIM' and loginUser.deptCode eq 'D9') or (loginUser.deptCode eq 'D9')}">
                                 <li>
                                     <a href="payment.ad">급여명세서 작성</a>
                                 </li>

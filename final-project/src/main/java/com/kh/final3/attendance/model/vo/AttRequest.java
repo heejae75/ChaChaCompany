@@ -7,23 +7,24 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@ToString
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Attendance {
-	private int attRecordNo;
+@Builder
+@ToString
+public class AttRequest {
+	private int refAtno;
 	private int userNo;
 	private String userName;
 	private String deptName;
 	private String workDate;
 	private String onTime;
+	private String updateOnTime;
 	private String offTime;
-	private String leaveType;
+	private String updateOffTime;
 	private String leaveCode;
-	private String currDate;
-	private String todoContent;
-	private int todoNo;
+	private String leaveType;
+	private String updateContent;
+	private String createDate;
 	private String status;
 }

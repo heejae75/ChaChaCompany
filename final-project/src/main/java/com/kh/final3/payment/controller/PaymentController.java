@@ -26,17 +26,38 @@ public class PaymentController {
 	
 	//관리자 - 급여 관리 페이지 이동 
 	@RequestMapping("payment.ad")
-	public ModelAndView paymentAdminHome(@RequestParam(value="currentPage", defaultValue="1") int currentPage, ModelAndView mv) {
+	public ModelAndView paymentAdminHome(@RequestParam(value="currentPage", defaultValue="1") int currentPage,
+										 @RequestParam(value="deptCode" ,defaultValue="전체") String deptCode, 
+										 @RequestParam(value="keyword", defaultValue="") String keyword,
+										 ModelAndView mv) {
 		
-		//전체 회원수 조회 
-		int listCount = paymentService.selectMemberCount();
+		HashMap <String, String> key = new HashMap<>();
+		
+		key.put("deptCode", deptCode);
+		key.put("keyword", keyword);
+		
+		int listCount =0;
 		int boardLimit = 10;
 		int pageLimit = 5;
 		
-		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
+		PageInfo pi = new PageInfo();
+		ArrayList<Member> mList = new ArrayList<>();
 		
-		//회원 조회 
-		ArrayList<Member> mList = paymentService.selectMemberList(pi);
+		if(deptCode.equals("전체") && (keyword.equals("")) ) {
+			//전체 회원수 조회 
+			listCount = paymentService.selectMemberCount();
+			pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
+			mList = paymentService.selectMemberList(pi);
+		
+		}else {
+			//조건에 맞는 회원수 조회 
+			listCount = paymentService.selectSearchMemberCount(key);
+			pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
+			mList = paymentService.selectSearchMemberList(key,pi);
+			
+			mv.addObject("keyword", keyword)
+			  .addObject("deptCode", deptCode);
+		}
 		
 		mv.addObject("mList", mList).addObject("pi", pi).setViewName("payment/paymentList");
 		
@@ -63,7 +84,7 @@ public class PaymentController {
 		
 		//해당 회원의 급여 명세서 이미 등록되었는지 확인 -> 등록하려고 하는 급여 명세서의 날짜와 기존 등록 날짜 비교 
 		int userNo = pay.getUserNo();
-		String month = pay.getMonthly().substring(0, 6);
+		String month = pay.getMonthly().substring(0,7);
 		
 		HashMap <String, Object> key = new HashMap <>();
 		key.put("userNo", userNo);
@@ -71,14 +92,13 @@ public class PaymentController {
 		
 		int count = paymentService.compareMonthly(key); 
 		
-		if(count<0) { //등록된 명세서 없음 
-			
+		if(count>0) { //등록된 명세서 있음  
+			return "duplicate";
+		}else {// 등록된 명세서 없음 
+			//급여명세서 등록 
 			int result = paymentService.insertPayment(pay);
 			return (result>0)? "YYYY":"NNNN";
 			
-		}else {// 등록된 명세서 있음 
-			
-			return "duplicate";
 		}
 		
 	}
@@ -95,51 +115,41 @@ public class PaymentController {
 	
 	//관리자 - 급여 계좌 관리 페이지 이동 
 	@RequestMapping("account.ad")
-	public ModelAndView accountList(@RequestParam(value="currentPage", defaultValue="1") int currentPage, ModelAndView mv) {
-		
-		//계좌 미등록, 계좌 변경 신청 회원 숫자 조회 
-		int listCount = paymentService.selectAccount();
-		int boardLimit =10;
-		int pageLimit = 5;
-		
-		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
-		
-		//계좌 미등록, 계좌 변경 신청 회원 목록 조회 
-		ArrayList <Member> mList = paymentService.selectAccountList(pi);
-		
-		mv.addObject("mList", mList).addObject("pi", pi).setViewName("payment/accountList");
-		
-		return mv;
-	}
-	
-	//관리자 - 급여 관리 검색 필터 
-	@ResponseBody
-	@RequestMapping("search.pa")
-	public ModelAndView searchPayment(@RequestParam(value="currentPage", defaultValue="1") int currentPage,String deptCode, String keyword ,ModelAndView mv) {
-		
+	public ModelAndView accountList(@RequestParam(value="currentPage", defaultValue="1") int currentPage, 
+									@RequestParam(value="accountStatus" ,defaultValue="전체") String accountStatus, 
+									@RequestParam(value="keyword", defaultValue="") String keyword,
+									ModelAndView mv) {
 		HashMap <String, String> key = new HashMap<>();
 		
-		key.put("deptCode", deptCode);
+		key.put("status", accountStatus);
 		key.put("keyword", keyword);
 		
-		//필터에 해당하는 회원수 조회 
-		int listCount = paymentService.selectSearchMemberCount(key);
+		int listCount =0;
 		int boardLimit = 10;
-		int pageLimit =5;
+		int pageLimit = 5;
 		
-		System.out.println(listCount);
+		PageInfo pi = new PageInfo();
+		ArrayList<Member> mList = new ArrayList<>();
 		
-		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
-		
-		ArrayList <Member> mList = paymentService.selectSearchMemberList(key,pi);
-		
-		System.out.println(mList);
+		if(accountStatus.equals("전체") && (keyword.equals(""))) {
+			//계좌 미등록, 계좌 변경 신청 회원 숫자 조회 
+			listCount = paymentService.selectAccount();
+			pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
+			//계좌 미등록, 계좌 변경 신청 회원 목록 조회 
+			mList = paymentService.selectAccountList(pi);
+		}else {
+			//검색 조건에 맞는 회원 숫자 조회 
+			listCount = paymentService.accountSearch(key);
+			pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
+			//검색 조건에 맞는 회원 목록 조회 
+			mList = paymentService.accountSearchList(pi, key);
+			mv.addObject("accountStatus", accountStatus)
+			  .addObject("keyword", keyword);
+		}
 		
 		mv.addObject("mList", mList)
 		  .addObject("pi", pi)
-		  .addObject("keyword", keyword)
-		  .addObject("deptCode", deptCode)
-		  .setViewName("payment/paymentList");
+		  .setViewName("payment/accountList");
 		
 		return mv;
 	}
@@ -201,31 +211,6 @@ public class PaymentController {
 		
 		
 		return new Gson().toJson(pay); 
-	}
-	
-	//관리자 - 급여 계좌관리 검색 필터 메소드 
-	@RequestMapping("accountSearch.ad")
-	public ModelAndView accountSearch(@RequestParam(value="currentPage", defaultValue="1") int currentPage, String accountStatus, String keyword, ModelAndView mv) {
-		
-		HashMap <String, String> key = new HashMap<>();
-		key.put("status", accountStatus);
-		key.put("keyword", keyword);
-		
-		int listCount = paymentService.accountSearch(key);
-		int boardLimit = 10;
-		int pageLimit =5;
-		
-		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
-		
-		ArrayList <Member> mList = paymentService.accountSearchList(pi, key);
-		
-		mv.addObject("accountStatus", accountStatus)
-		  .addObject("keyword", keyword)
-		  .addObject("mList", mList)
-		  .addObject("pi", pi)
-		  .setViewName("payment/accountList");
-		
-		return mv;
 	}
 	
 }

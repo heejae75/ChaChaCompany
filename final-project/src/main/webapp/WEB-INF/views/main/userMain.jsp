@@ -299,7 +299,7 @@
 				<p style="font-size: 30px; margin: 0 0 0 0;">${loginUser.userName }</p>
 				<p>${loginUser.deptCode }/ ${loginUser.jobCode }</p>
 				<div>
-					<a href="#">마이페이지</a> <a href="#">로그아웃</a>
+					<a href="myPage.me">마이페이지</a> <a href="#">로그아웃</a>
 				</div>
 				<br>
 			</div>
@@ -308,7 +308,7 @@
 				<c:choose>
 					<c:when test="${loginUser.auth eq 'ROLE_ADMIN' }">
 				<div style="float: left; margin: 0 0 0 65px;">
-					<a href="#"> <i class="fa-sharp fa-solid fa-address-card"
+					<a href="memberEnroll.me"> <i class="fa-sharp fa-solid fa-address-card"
 						style="color: #000000; font-size: 70px;"></i>
 						<p style="margin: 0 0 0 0;">회원 등록 </p>
 					</a>

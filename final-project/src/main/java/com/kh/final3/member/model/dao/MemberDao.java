@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.kh.final3.common.vo.PageInfo;
 import com.kh.final3.member.model.vo.CustomUserDetails;
 import com.kh.final3.member.model.vo.Member;
+import com.kh.final3.member.model.vo.MemberAttachment;
 
 @Repository
 public class MemberDao{
@@ -57,6 +58,26 @@ public class MemberDao{
 	public int insertMember(SqlSession sqlSession, Member member) {
 		
 		return sqlSession.insert("memberMapper.insertMember", member);
+	}
+
+	public MemberAttachment selectMemberAttachment(SqlSession sqlSession, String userNo) {
+		
+		return sqlSession.selectOne("memberMapper.selectMemberAttachment", userNo);
+	}
+
+	public int updateMemberAttachment(SqlSession sqlSession, MemberAttachment memberAttachment) {
+		
+		return sqlSession.update("memberMapper.updateMemberAttachment", memberAttachment);
+	}
+
+	public int insertMemberAttachment(SqlSession sqlSession, MemberAttachment memberAttachment) {
+		
+		return sqlSession.insert("memberMapper.insertMemberAttachment", memberAttachment);
+	}
+
+	public int updatePwd(SqlSession sqlSession, Member member) {
+		
+		return sqlSession.update("memberMapper.updatePwd", member);
 	}
 
 }

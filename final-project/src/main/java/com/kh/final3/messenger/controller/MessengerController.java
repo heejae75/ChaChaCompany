@@ -338,4 +338,23 @@ public class MessengerController {
 		return mv;
 	}
 	
+	//읽지않은 쪽지 개수 조회(받은 쪽지함)
+	@ResponseBody
+	@RequestMapping("countRecvMsg.mg")
+	public int countRecvMsg(int userNo) {
+		
+		int count = msgService.selectCountRecvMsg(userNo);
+		
+		return count;
+	}
+	
+	//삭제된 쪽지 개수 조회(휴지통)
+	@ResponseBody
+	@RequestMapping("countTrashMsg.mg")
+	public int countTrashMsg(int userNo) {
+		
+		int count = msgService.trashListCount(userNo);
+		
+		return count;
+	}
 }
