@@ -11,12 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.kh.final3.alert.model.vo.Alert;
 import com.kh.final3.approval.model.service.ApprovalService;
 import com.kh.final3.approval.model.vo.Approval;
 import com.kh.final3.approval.model.vo.ApprovalAttachment;
@@ -94,7 +93,7 @@ public class ApprovalController {
 		map.put("keyword", keyword);
 
 		int listCount = as.selectEnrollListCount(map);
-		int pageLimit = 20;
+		int pageLimit = 10;
 		int boardLimit = 10;
 		
 		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
@@ -205,8 +204,6 @@ public class ApprovalController {
 			ArrayList<ApprovalAttachment> atList = new ArrayList<>();
 			ArrayList<Leave> leaveList = new ArrayList<>();
 			
-			log.info(upfile.get(0).getOriginalFilename());
-			
 			//파일
 				for(MultipartFile file : upfile) {
 					if(!file.getOriginalFilename().equals("")) {
@@ -274,13 +271,13 @@ public class ApprovalController {
 			if(docType.equals("구매품의서")) {
 				iList = as.selectItem(docNo);
 				mv.addObject("a",a).addObject("at",at).addObject("ad", ad)
-				.addObject("iList", iList)
+				.addObject("iList", iList).addObject("dt",docType)
 				.setViewName("approval/itemDetailView");
 				
 			}else if(docType.equals("휴가계")) {
 				lList = as.selectLeave(docNo);
 				mv.addObject("a",a).addObject("at",at).addObject("ad", ad)
-				.addObject("lList", lList)
+				.addObject("lList", lList).addObject("dt",docType)
 				.setViewName("approval/leaveDetailView");
 			}
 			

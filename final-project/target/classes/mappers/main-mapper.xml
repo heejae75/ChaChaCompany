@@ -89,6 +89,20 @@
 		<result column ="STATUS" property="status"/>
 	</resultMap>
 	
+	<resultMap type="alert" id="mainAlertResultSet">
+		<result column="ALERT_NO" property="alertNo"/>
+		<result column="DOC_NO" property="docNo"/>
+		<result column="DOC_TYPE" property="docType"/>
+		<result column="SENDER" property="sender"/>
+		<result column="RECEIVER" property="receiver"/>
+		<result column="ALERT_CONTENT" property="content"/>
+		<result column="ALERT_TYPE" property="cmd"/>
+		<result column="ALERT_DATE" property="alertDate"/>
+		<result column="URL" property="url"/>
+		<result column="STATUS" property="status"/>
+		<result column="LAST_SIGNATURE" property="lastSignature"/>
+	</resultMap>
+	
 	<!-- 최신 공지사항 조회  -->
 	<select id="mainNoticeList" resultMap="mainBoardResultset">
 		SELECT ROWNUM, B.*
@@ -311,4 +325,54 @@
 		SET STATUS = 'Y'
 		WHERE USER_NO = #{userNo}
 	</update>
+	
+	<!-- 알림 승인 등록  -->
+	<insert id="insertAlert">
+<!-- 		INSERT INTO ALERT (ALERT_NO, DOC_NO, DOC_TYPE, SENDER, RECEIVER, ALERT_DATE) -->
+<!-- 		VALUES(SEQ_ALNO.NEXTVAL, #{docNo}, #{docName}, #{lastSignature}, #{docWriter}, SYSDATE) -->
+		
+		INSERT INTO ALERT(ALERT_NO, DOC_NO, SENDER, RECEIVER, ALERT_DATE, ALERT_CONTENT, DOC_TYPE)
+		SELECT SEQ_ALNO.NEXTVAL, A.DOC_NO, A.LAST_APPROVER, AD.DOC_WRITER, SYSDATE, AD.DOC_TITLE, DT.DOC_NAME
+		FROM APPROVAL A
+		JOIN APPROVAL_DOC AD ON (A.DOC_NO = AD.DOC_NO)
+		JOIN DOC_TYPE DT ON (AD.DOC_TYPE = DT.DOC_TYPE)
+		WHERE A.LAST_SIGNATURE = #{lastSignature}
+		AND AD.DOC_NO = #{docNo}
+	</insert>
+	
+	<!-- 알림 반려 등록  -->
+	<insert id="insertReturnAlert">
+		INSERT INTO ALERT(ALERT_NO, DOC_NO, SENDER, RECEIVER, ALERT_DATE, ALERT_CONTENT, DOC_TYPE)
+		SELECT SEQ_ALNO.NEXTVAL, A.DOC_NO, A.LAST_APPROVER, AD.DOC_WRITER, SYSDATE, AD.DOC_TITLE, DT.DOC_NAME
+		FROM APPROVAL A
+		JOIN APPROVAL_DOC AD ON (A.DOC_NO = AD.DOC_NO)
+		JOIN DOC_TYPE DT ON (AD.DOC_TYPE = DT.DOC_TYPE)
+		WHERE A.LAST_SIGNATURE = '반려'
+		AND AD.DOC_NO = #{docNo}
+	</insert>
+	
+	<!-- 알림 조회 -->
+	<select id="menuAlertList" resultMap="mainAlertResultSet">
+		SELECT ALERT_NO, AL.DOC_NO, AL.DOC_TYPE, A.LAST_SIGNATURE, SENDER, RECEIVER, ALERT_CONTENT, ALERT_DATE, AL.STATUS
+		FROM ALERT AL
+		JOIN APPROVAL A ON (A.DOC_NO = AL.DOC_NO)
+		JOIN APPROVAL_DOC AD ON (AD.DOC_NO = AL.DOC_NO)
+		JOIN MEMBER M ON (M.USER_NO = AD.DOC_WRITER)
+		WHERE AL.STATUS = 'N'
+		AND M.USER_NO = #{userNo}
+		ORDER BY ALERT_NO DESC
+	</select>
+	
+	<!-- 알림 a태그 선택시 읽음 처리 -->
+	<update id="menuAlertUpdate">
+		UPDATE ALERT
+		SET STATUS = 'Y'
+		WHERE ALERT_NO = #{alertNo}
+	</update>
+	
+	<!-- 알림 전체 삭제 -->
+	<delete id="menuAlertAllDelete">
+		DELETE FROM ALERT
+		WHERE RECEIVER = #{userNo}
+	</delete>
 </mapper>

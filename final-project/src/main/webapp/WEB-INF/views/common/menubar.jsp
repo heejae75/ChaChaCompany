@@ -21,6 +21,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script> <!-- 동현님 -->
+	<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script> <!-- socket.js 사용 cdn -->
     
 	<!-- <link href="/final3/resources/css/menubar.css" rel="stylesheet"> -->
     <!-- <link rel="stylesheet" href="/css/chat.css"> --> 
@@ -389,6 +390,50 @@ a{
     outline: 3px solid #F8E4FF;
     border-radius: 10px;
 }
+/* 알림 전체 div */
+#menuAlertDiv{
+	width: 340px;
+	height: 390px;
+}
+
+.menuAlertHeader{
+	margin: 10px 20px 3px;
+}
+
+#menuAlertAllTitle{
+	font-size: 27px;
+	font-weight: bold;
+}
+
+.menuAlertHeader button{
+	margin-left: 117px;
+	border: none;
+	background-color: #0E6251;
+	color: white;
+}
+
+/* 알림 내역구간 */
+.menuAlertList{
+	list-style-type: none;
+	margin: 10px 0 0 0;
+	padding: 0 0 0 10px;
+}
+
+.menuAlertList a{
+	text-decoration: none;
+	color: black;
+}
+
+.menuAlertList p{
+	font-size: 20px;
+	margin: 0 0 0 0;
+}
+
+.menuAlertList span{
+	font-size: 16px;
+}
+
+.menuAlertList
    
 /* 채팅  */
 .header_chat{
@@ -407,6 +452,30 @@ a{
 	font-size:12px;
 	font-weight:400;
 	line-height:15px;
+}
+
+/* 토스트 css */
+#toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    padding: 15px 20px;
+    transform: translate(0, 10px);
+    border-radius: 30px;
+    overflow: hidden;
+    font-size: .8rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .5s, visibility .5s, transform .5s;
+    background: rgba(0, 0, 0, .35);
+    color: #fff;
+    z-index: 100000;
+}
+
+#toast.reveal {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0)
 }
 </style>
 </head>
@@ -427,7 +496,7 @@ a{
 	
 
     <div class="header" id="header">
-    	
+    	<div id="toast" class="toast"></div>
     	<!-- 헤더 메뉴버튼  -->
         <div class="head">
             <i class="fa-sharp fa-solid fa-bars fa-lg" id="header-toggle" style="color: #0E6251;"></i>
@@ -469,9 +538,24 @@ a{
 
 			<!-- 알림  -->
             <div class="header_alert">
-            	<a href="#">
-                	<i class="fa-sharp fa-solid fa-bell fa-lg" style="color: #0E6251;"></i>
-                </a>
+            	<div class="dropdown">
+	            	<a href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" onclick="menuAlertList();">
+	                	<i class="fa-sharp fa-solid fa-bell fa-lg" style="color: #0E6251;"></i>
+	                </a>
+	                
+	                <div id="menuAlertDiv" class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
+		                <div class="menuAlertHeader">
+			                <span id="menuAlertAllTitle" class="title mb-0">알림 목록</span>
+			                <button id="menuAlertAllDelete" onclick="menuAlertAllDelete()"> 모두 지우기</button>
+						</div>
+						<div style="border:1px solid lightgray;"></div>
+						<div>
+							<ul class="menuAlertList" style="max-height: 300px; overflow-y: auto;">
+								
+							</ul>
+						</div>
+	                </div>
+				</div>
             </div>
             
             <!-- 회원 프로필  -->
@@ -490,9 +574,6 @@ a{
                         </div>
                     </li>
                 </ul>
-				
-                
-                
             </div>  
         </div>
     </div>
@@ -635,8 +716,10 @@ a{
 				</div>
 			</div>
 		</div>
+		
+		
 	</div>
-
+	
     <script>
     	document.addEventListener("DOMContentLoaded", function(event) {
         const showNavbar = (toggleId, navId, bodyId, headerId) =>{
@@ -717,11 +800,182 @@ a{
         });
         
     });
+    
+    /* 알림 목록 조회 */
+   	function menuAlertList() {
+    	$.ajax({
+    		url: "menuAlertList.ma",
+    		type : "POST",
+			beforeSend : function(xhr) {
+				xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+			},
+			success : function(result) {
+				console.log(result[0].lastSignature);
+				var str = "";
+				if(result.length == 0){
+					str = "알림이 없습니다. ";
+				}
+				
+				for(var i in result) {
+					if(result[i].lastSignature != '반려') {//반려일때 조건 걸기 
+					str += "<li>"
+						+ "<input type='hidden' id='menuAlertNo' value='"+result[i].alertNo+"'>"
+						+ "<input type='hidden' id='menuAlertStatus' value='"+result[i].status+"'>"
+						+ "<input type='hidden' id='menuAlertDocNo' value='"+result[i].docNo+"'>"
+						+ "<input type='hidden' id='menuAlertDocType' value='"+result[i].docType+"'>"
+						+ "<a class='menuAlertLink'>"
+						+ "<p>["+result[i].docType+"]</p>"
+						+ "<span>"+result[i].sender+"님이 "+result[i].content+"의 전자결재를 승인하셨습니다.</span>"
+						+ "</a>"
+						+ "</li>"
+						+ "<li role='separator' class='divider'></li>"
+					}else{
+						str += "<li>"
+							+ "<input type='hidden' id='menuAlertNo' value='"+result[i].alertNo+"'>"
+							+ "<input type='hidden' id='menuAlertStatus' value='"+result[i].status+"'>"
+							+ "<input type='hidden' id='menuAlertDocNo' value='"+result[i].docNo+"'>"
+							+ "<input type='hidden' id='menuAlertDocType' value='"+result[i].docType+"'>"
+							+ "<a class='menuAlertLink'>"
+							+ "<p>["+result[i].docType+"]</p>"
+							+ "<span>"+result[i].sender+"님이 "+result[i].content+"의 전자결재를 반려하셨습니다.</span>"
+							+ "</a>"
+							+ "</li>"
+							+ "<li role='separator' class='divider'></li>"
+					}
+				}
+				
+				$('.menuAlertList').html(str);
+				
+				$('.menuAlertLink').click(function(event) {
+		                event.preventDefault();
+		                var alertNo = $(this).prevAll('#menuAlertNo').val();
+		                var status = $(this).prevAll('#menuAlertStatus').val();
+		                var docNo = $(this).prevAll('#menuAlertDocNo').val();
+		               	var docType = $(this).prevAll('#menuAlertDocType').val();
+		               	
+		                location.href = "detail.ap?docNo="+docNo+"&docType="+docType;
+		                menuAlertUpdate(alertNo, status);
+		         });
+				
+			},
+			error : function(result) {
+				console.log("알림 조회 실패!!");
+			}
+    	});
+    }
+    
+    /* a태그 클릭 시 읽음 상태로 수정 */
+    function menuAlertUpdate(alertNo, status) {
+    	$.ajax({
+    		url: "menuAlertUpdate.ma",
+    		data : {
+    			alertNo : alertNo,
+    			status : status
+    		},
+    		type: "POST",
+		    beforeSend: function(xhr) {
+				xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+		    },
+		    success: function(result) {
+		    	console.log(result);
+		    },
+		    error: function() {
+		    	console.log("알림 상태 수정 오류 ");
+		    }
+    	});
+    }
+    
+    /* 알림 모두 삭제 */
+    function menuAlertAllDelete() {
+    	var ans = confirm("리스트를 모두 삭제하시겠습니까?");
+        if(!ans) return false;
+        
+    	$.ajax({
+    		url: "menuAlertAllDelete.ma",
+    		data: {
+    			userNo : "${loginUser.userNo}"
+    		},
+    		type : "POST",
+			beforeSend : function(xhr) {
+				xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+			},
+			success : function(result) {
+				//console.log(result);
+				
+				if(result == "success") {
+					alert("모두 삭제했습니다.");
+				}
+				location.reload();
+			},
+			error : function() {
+				console.log("투두 삭제 오류 ");
+			}
+    	})
+    }
 
+    /* 알림 웹소켓 */
+    var socket;
+   	$(document).ready(function(){
+   			alertConnect();
+   	});
+   		
+   	function alertConnect() {
+    	console.log(socket);
+    	
+    	if(!socket) { //중복 접속 막음 
+	    	var url = "ws://localhost:8888/final3/ws-alert";
+	    	socket = new WebSocket(url);
+    	}
+    	
+    	socket.onopen = function() {
+    		console.log("알림 서버와 연결되었습니다.");
+    	};
+    
+    	socket.onclose = function() {
+    		console.log("알림 서버와의 연결이 종료되었습니다.");
+    	};
+    	
+    	socket.onerror = function() {
+    		console.log("알림 서버 연결과정에서 오류가 발생했습니다.");
+    	};
+    	
+    	socket.onmessage = function(evt) {
+    		console.log("알림이 도착하였습니다.");
+    		console.log("AlertMessage : "+evt.data);
+    		
+    		//var userNo = "${loginUser.userNo}"
+    		//console.log(userNo);
+    		//var data = evt.data;
+    		var data = JSON.parse(evt.data);
+    		var text = data.sender + "님이 [" + data.docType + "] "+ data.content;
+    		toast(text);
+    		
+    	};
+    }
+   	
+   	//토스트 
+   	function toast(text) {
+   	    const toast = document.getElementById("toast");
+
+	   	 clearTimeout(toast.removeTimeout); // 이전 토스트 제거 타임아웃을 취소
+	
+	     toast.classList.remove("reveal"); // 토스트 숨김 
+	     toast.innerText = text;
+	
+	     // 토스트 스타일 적용 
+	     setTimeout(function () {
+	       toast.classList.add("reveal");
+	     }, 10);
+	
+	     // 토스트 숨기는 스타일 적용/ 일정시간 후 제거 
+	     toast.removeTimeout = setTimeout(function () {
+	       toast.classList.remove("reveal");
+	     }, 10000);
+   	}
 </script>
 
 
-
+<!-- 채킹 웹소켓 -->
 <script>    
 function chatList(){
     connect();
