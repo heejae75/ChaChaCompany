@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.kh.final3.common.vo.PageInfo;
 import com.kh.final3.member.model.dao.MemberDao;
 import com.kh.final3.member.model.vo.Member;
+import com.kh.final3.member.model.vo.MemberAttachment;
 
 @Service
 public class MemberServiceImpl implements MemberService{
@@ -71,6 +72,43 @@ public class MemberServiceImpl implements MemberService{
 		member.setUserPwd(encodedPwd);
 		
 		return memberDao.insertMember(sqlSession, member);
+	}
+
+	@Override
+	public MemberAttachment selectMemberAttachment(String userNo) {
+		
+		return memberDao.selectMemberAttachment(sqlSession, userNo);
+	}
+
+	@Override
+	public int updateMemberAttachment(MemberAttachment memberAttachment) {
+		
+		return memberDao.updateMemberAttachment(sqlSession, memberAttachment);
+	}
+
+	@Override
+	public int insertMemberAttachment(MemberAttachment memberAttachment) {
+		
+		return memberDao.insertMemberAttachment(sqlSession, memberAttachment);
+	}
+
+	@Override
+	public String checkPwd(String rawPassword, String encodedPassword) {
+		
+		if(bcryptPasswordEncoder.matches(rawPassword, encodedPassword)) {
+			return "true";
+		}
+		
+		return "false";
+	}
+
+	@Override
+	public int updatePwd(Member member) {
+		
+		String encodedPwd = bcryptPasswordEncoder.encode(member.getUserPwd());
+		member.setUserPwd(encodedPwd);
+		
+		return memberDao.updatePwd(sqlSession, member);
 	}
 
 }

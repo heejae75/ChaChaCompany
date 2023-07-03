@@ -569,7 +569,7 @@ a{
                                 <li>
                                 	<a href="#user_active" data-toggle="modal">상태 표시</a>
                                 </li>
-                                <li><a href="#">마이 페이지</a></li>
+                                <li><a href="myPage.me">마이 페이지</a></li>
                             </ul>
                         </div>
                     </li>

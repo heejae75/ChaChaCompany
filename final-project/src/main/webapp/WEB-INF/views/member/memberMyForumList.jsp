@@ -9,55 +9,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <title>자유게시판</title>
+    <title>내가 쓴 글</title>
 <style>
-/*navibar*/
-	#board-tap-area{
-		width: 80%;
-		margin: auto;
-	}
-	
-	#board-tap-area>ul{
-		width:100%;
-		height : 42px;
-		list-style-type : none;
-		margin-bottom: 30px;
-	}
-	
-	#nav-tabs{
-		padding : 0;
-		display: flex;
-	}
-	
-    #board-tap-area>ul li{
-    	width :98px;
-    	margin-right: 5px;
-    	float : left;
-    }
-    
-    #board-tap-area a{
-    	width: 100%;
-    	height : 100%;
-    	display: inline-block;
-    	text-align: center;
-    	line-height: 40px;
-    	background-color: lightgrey;
-    	text-decoration: none;
-    	color: black;
-    }
-    
-    #board-tap-area>ul li:not(.active):hover{
-    	border-top: 1px solid #dee2e6;
-		border-left: 1px solid #dee2e6;
-		border-right: 1px solid #dee2e6;
-		border-top-left-radius:0.25rem;
-		border-top-right-radius:0.25rem; 
-    }
-	 #board-tap-area .active a{
-	 	border-botton: none;
-	 	background-color: #0E6251;
-	 	color: white;
-	 }
 	.table-responsive{
         width: 80%;
         margin : auto;
@@ -78,13 +31,6 @@
     	width : 100px;
     	font-size : 18px;
     	font-weight : 900;
-    }
-    #popularity_btn{
-    	background-color : white;
-    	color : rgb(2, 117, 216);
-    }
-    #write_btn{
-    	float:right;
     }
 	.table>tbody>tr:hover{
     	background-color : rgb(198, 247, 190);
@@ -117,27 +63,11 @@
 </style>
 </head>
 <body id="body-pd">
-<%@ include file="../../common/menubar.jsp" %>
+<%@ include file="../common/menubar.jsp" %>
  
 <div class="content">
-         <div id="board-tap-area">
-                <ul id="nav-tabs"  class="nav-tabs nav-pills">
-					<li role="presentation">
-						<a href="list.no">공지사항</a>
-					</li>
-					<li role="presentation">
-					 	<a href="list.dc">자료실</a>
-					</li>
-					<li role="presentation">
-						<a href="list.re">대여</a>
-					</li>
-					<li role="presentation" class="active">
-						<a href="list.fr">커뮤니티</a>
-					</li>
-				</ul>
-            </div>
 	    <div class="table-responsive"> 	
-	    	<h1>자유게시판</h1>
+	    	<h1>내가 쓴 글</h1>
 	    	<br>
             <table class="table">
 				<thead>
@@ -165,11 +95,6 @@
 					</c:forEach>
 				</tbody>
 			</table>
-			<div id="button_div">
-			<button type="button" class="btn btn-primary" id="all_btn" onclick="boardAll()">전체글</button>
-			<button type="button" class="btn btn-primary" id="popularity_btn" onclick="boardPopularity()">인기글</button>
-			<button type="button" class="btn btn-primary" id="write_btn" onclick="writing()">글쓰기</button>
-			</div>
 			<br><br>
 			<div id="footer">
 					<form action="list.fr" method="get">
@@ -197,13 +122,13 @@
 						</c:when>
 						<c:otherwise>
 							<li class="page-item">
-								<a class="page-link" href="/final3/${role}/list.fr?currentPage=${pi.currentPage-1}">이전페이지</a>
+								<a class="page-link" href="/final3/${role}/myForumList.me?currentPage=${pi.currentPage-1}">이전페이지</a>
 							</li>
 						</c:otherwise>
 					</c:choose>
 					<c:forEach var="p" begin="${pi.startPage}" end="${pi.endPage}">
 						<li class="page-item">
-							<a class="page-link" onclick="pageColor()" href="/final3/${role}/list.fr?currentPage=${p}">${p}</a>
+							<a class="page-link" onclick="pageColor()" href="/final3/${role}/myForumList.me?currentPage=${p}">${p}</a>
 						</li>
 					</c:forEach>
 					<c:choose>
@@ -214,7 +139,7 @@
 						</c:when>
 						<c:otherwise>
 							<li class="page-item">
-								<a class="page-link" href="/final3/${role}/list.fr?currentPage=${pi.currentPage+1}">다음페이지</a>
+								<a class="page-link" href="/final3/${role}/myForumList.me?currentPage=${pi.currentPage+1}">다음페이지</a>
 							</li>
 						</c:otherwise>
 					</c:choose>					
@@ -228,23 +153,12 @@
 		$(".page-link").eq(${pi.currentPage}).css('color', 'red');
 	});
 	
-	function boardAll(){
-		location.href = "/final3/${role}/list.fr?currentPage=1";
-	}
-	
-	function boardPopularity(){
-		location.href = "list.fr?currentStatus=popularity"
-	}
-	
 	$(".table>tbody>tr").click(function(){
 		var dv = event.currentTarget;
 		var boardNo = dv.children[0].innerText
 		location.href = "/final3/${role}/detailList.fr?boardNo=" + boardNo;
 	});
 	
-	function writing(){
-		location.href = "/final3/${role}/enrollForm.fr";
-	}
 </script>	
 </body>
 </html>

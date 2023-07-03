@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.kh.final3.board.model.vo.Board;
 import com.kh.final3.board.model.vo.BoardAttachment;
+import com.kh.final3.board.model.vo.Reply;
 import com.kh.final3.common.vo.PageInfo;
 
 public interface FreeForumService {
@@ -13,7 +14,7 @@ public interface FreeForumService {
 	int selectListCount(Map<String, String> map);
 	
 	//게시글 리스트 조회
-	ArrayList<Board> forumList(PageInfo pi);
+	ArrayList<Board> forumList(PageInfo pi, Map<String, String> map);
 	
 	//게시글 상세 조회
 	Board findForumDetails(int boardNo);
@@ -44,6 +45,27 @@ public interface FreeForumService {
 
 	//싫어요 개수
 	int selectDeprecatedCount(int boardNo);
+	
+	//댓글 작성 메서드
+	int insertReply(Reply reply);
+	
+	//댓글 조회 메서드
+	ArrayList<Reply> selectReplyList(int boardNo);
+	
+	//댓글 개수 조회 메서드
+	int replyCount(int boardNo);
+	
+	//게시글 수정
+	int updateForum(Board board);
+
+	//게시글 삭제
+	int deleteForum(int boardNo);
+	
+	//댓글 수정
+	int updateReply(Reply reply);
+
+	//댓글 삭제
+	int deleteReply(int replyNo);
 
 	
 
