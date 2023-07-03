@@ -295,6 +295,9 @@ a{
     /* margin: 0; */
     /* padding: 0; */
 }
+.header_profile_submenu a {
+	text-decoration: none;
+}
 
 .header_profile_menu:after{
     display: block;
@@ -569,7 +572,9 @@ a{
                                 <li>
                                 	<a href="#user_active" data-toggle="modal">상태 표시</a>
                                 </li>
-                                <li><a href="#">마이 페이지</a></li>
+                                <li>
+                                	<a href="myPage.me">마이 페이지</a>
+                                </li>
                             </ul>
                         </div>
                     </li>
@@ -645,7 +650,9 @@ a{
                                  <li>
                                     <a href="payment.me?userNo=${loginUser.userNo}">급여명세서 조회</a>
                                 </li>
-                                <c:if test="${(loginUser.auth eq 'ROLE_ADIM' and loginUser.deptCode eq 'D9') or (loginUser.deptCode eq 'D9') }">
+                                <c:if test="${(loginUser.auth eq 'ROLE_ADIM' and loginUser.deptCode eq 'D7') or (loginUser.deptCode eq 'D7') or
+                                			  (loginUser.auth eq 'ROLE_ADIM' and loginUser.deptCode eq 'D8') or (loginUser.deptCode eq 'D8') or
+                                			  (loginUser.auth eq 'ROLE_ADIM' and loginUser.deptCode eq 'D9') or (loginUser.deptCode eq 'D9')}">
                                 <li>
                                     <a href="payment.ad">급여명세서 작성</a>
                                 </li>
@@ -808,7 +815,7 @@ a{
 				xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
 			},
 			success : function(result) {
-				console.log(result[0].lastSignature);
+				//console.log(result[0].lastSignature);
 				var str = "";
 				if(result.length == 0){
 					str = "알림이 없습니다. ";
@@ -875,7 +882,7 @@ a{
 				xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
 		    },
 		    success: function(result) {
-		    	console.log(result);
+		    	//console.log(result);
 		    },
 		    error: function() {
 		    	console.log("알림 상태 수정 오류 ");
@@ -918,7 +925,7 @@ a{
    	});
    		
    	function alertConnect() {
-    	console.log(socket);
+    	//console.log(socket);
     	
     	if(!socket) { //중복 접속 막음 
 	    	var url = "ws://localhost:8888/final3/ws-alert";

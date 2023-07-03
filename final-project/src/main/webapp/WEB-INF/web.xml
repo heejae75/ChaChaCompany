@@ -31,7 +31,7 @@
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 	
-		<!-- 한글설정 -->
+	<!-- 한글설정 -->
 	<filter>
 		<filter-name>encodingFilter</filter-name>
 		<filter-class>
@@ -52,7 +52,7 @@
 	</filter-mapping>
 	<!-- 한글설정 END -->
 	
-	    <!-- Spring Security Filter -->
+	<!-- Spring Security Filter -->
 	<filter>
         <description>스프링 파일업로드 필터 등록-스프링시큐리티설정전에 위치해야 한다</description>
         <filter-name>MultipartFilter</filter-name>

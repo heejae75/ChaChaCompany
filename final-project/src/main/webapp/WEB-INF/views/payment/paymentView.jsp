@@ -189,9 +189,8 @@
 			      		<option value="신협">신협</option>
 			      		<option value="수협">수협</option>
 			      	</select>
-			      	<input type="text"  class="form-control" id="accountNumber" style="width: 50%; float:left; margin-right:5px;" required>
-			      	<button type="button"id="submit-account" class="btn btn-success"> 등록 </button>
-			      	<button type="button" id="change-account" class="btn btn-primary">변경</button>
+			      	<input type="text" placeholder="-를 포함하여 입력해주세요" class="form-control" id="accountNumber" style="width: 50%; float:left; margin-right:5px;" required>
+			      	<button type="button" id="change-account" class="btn btn-primary">등록/변경</button>
 			      </div>
 			      
 			      <div class="modal-footer">
@@ -205,13 +204,18 @@
         <!-- 계좌 등록/변경 script -->
         <script>
        	 	payment();
-       	 	
-        	$(function(){
         		//$("#payment_list").css("display:none");
-        		//계좌 변경 신청
+        		//계좌 변경및 등록 신청
         		$("#change-account").on("click",function(){
-        			if($("#accountNumber").val()==""){
+        			var $account = $("#accountNumber").val();
+					var chk = /^[\d\-]{10,16}/
+					
+        			if($account==""){
         				alert("계좌번호를 입력해주세요");
+        				$("#accountNumber").focus();
+        			}else if(!$account.match(chk)){
+        				alert("잘못된 형식입니다. 다시 입력해주세요")
+        				$("#accountNumber").focus();
         			}else if($("#bankName").val()== "은행명"){
         				alert("은행명을 선택해주세요")
         			}else{
@@ -230,9 +234,9 @@
 	        					},
 	        					success : function(result){
 	        						if(result == "YYYY"){
-	        							 alert("급여 계좌 변경 신청이 완료되었습니다.")
+	        							 alert("급여 계좌 등록/변경 신청이 완료되었습니다.")
 	        						}else{
-	        							alert("급여 계좌 변경 신청에 실패하였습니다. 다시 시도해주세요")
+	        							alert("급여 계좌 등록/변경 신청에 실패하였습니다. 다시 시도해주세요")
 	        						}
 	        						location.reload();
 	        					},	
@@ -245,8 +249,7 @@
         				}
         			}
         		});
-        	})
-        	
+        		
         	//월별 조회 
         	$(function(){
         		$("#search-btn").on("click",function(){

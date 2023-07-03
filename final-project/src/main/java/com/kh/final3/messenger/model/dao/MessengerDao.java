@@ -205,6 +205,12 @@ public class MessengerDao {
 		return (ArrayList)sqlSession.selectList("msgMapper.trashSearchList", key, rowBounds);
 	}
 	
+	//읽지않은 쪽지 수 조회(받은쪽지함)
+	public int selectCountRecvMsg(SqlSession sqlSession, int userNo) {
+		
+		return sqlSession.selectOne("msgMapper.selectCountRecvMsg", userNo);
+	}
+	
 	
 	
 	

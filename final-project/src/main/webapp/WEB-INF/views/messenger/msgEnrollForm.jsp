@@ -139,14 +139,14 @@
 	                        <th>보낸사람</th>
 	                        <td>
 	                        	<input type="text" class="form-control" value="${loginUser.userId} (${loginUser.userName})" readonly>
-	                        	<input type="hidden" name="sender" value="${loginUser.userNo }"> <!-- controller에 보낼 보낸사람 번호  -->
+	                        	<input type="hidden" name="sender" value="${loginUser.userNo }"> <!-- controller에 보낼사람 번호  -->
 	                        </td>
 	                    </tr>
 	                    <tr>
 	                        <th>받는사람</th>
 	                        <td>
 	                        	<input type="text" id="recvUser" class="form-control" readonly>
-	                         	<input type="hidden" id="recvUno" name="recvUno"> <!-- controller에 보낼 받는사람 번호 --> 
+	                         	<input type="hidden" id="recvUno" name="recvUno"> <!-- controller에 받는사람 번호 --> 
 	                        </td>
 	                        <td>
 	                        	<button type="button" class="btn btn-secondary" id="address" style="margin-left:20px;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">주소록</button>
@@ -199,18 +199,18 @@
 	      	</table>
 	      	
 	      	<table id="msg-searchNameList" class="table table">
-	      		<thead>
+	      		<thead style="display:block;  ">
 	      			<tr>
-	      				<th align="center">NO.</th>
-	      				<th>선택</th> 
-						<th>아이디</th>
-						<th>이름</th>
-						<th>부서</th>
-						<th>직급</th>
+	      				<th width="5%" align="center">NO.</th>
+	      				<th width="15%">선택</th> 
+						<th width="20%">아이디</th>
+						<th width="20%">이름</th>
+						<th width="20%">부서</th>
+						<th width="20%">직급</th>
 	      			</tr>
 	      		</thead>
-				<tbody>
-				<!-- 검색 결과를 담아줄 곳  -->
+				<tbody style="display:block; height: 300px; width:100%; overflow:auto;">
+					<!-- 검색 결과를 담아줄 곳  -->
 				</tbody>	      			
 	      	</table>
 	      </div>
@@ -227,7 +227,6 @@
 		/* 주소록 검색 script */
 		//여러 사람을 선택할 경우를 위해 배열 생성 -- script 전역에서 사용하기 위해 가장 바깥에 생성함  
 		var objArray = new Array();
-		
 		//1. 주소록 버튼 눌렀을 때 발생할 이벤트 
 		$("#address").on("click", function(){
 			
@@ -256,12 +255,12 @@
 						for(var i in result){
 							if(result[i].userNo != '${loginUser.userNo}' ){
 								str += "<tr>"
-									+"<td>"+ result[i].userNo +"</td>"
-									+"<td><input name='searchChk' type='checkbox' style='width:15px; height:15px'></td>"
-									+"<td>" + result[i].userId + "</td>"
-									+"<td>" + result[i].userName + "</td>"
-									+"<td>" + result[i].deptName + "</td>"
-									+"<td>" + result[i].jobName + "</td>"
+									+"<td width='5%'>"+ result[i].userNo +"</td>"
+									+"<td width='15%'><input name='searchChk' type='checkbox' style='width:15px; height:15px'></td>"
+									+"<td width='20%'>" + result[i].userId + "</td>"
+									+"<td width='20%'>" + result[i].userName + "</td>"
+									+"<td width='20%'>" + result[i].deptName + "</td>"
+									+"<td width='20%'>" + result[i].jobName + "</td>"
 									+"</tr>";
 							}
 						}
@@ -272,7 +271,7 @@
 							+ "</tr>";
 					}
 					
-					//Modal의 content 부분의table에 뿌려주
+					//Modal의 content 부분의table에 뿌려주기
 					$("#msg-searchNameList>tbody").html(str);
 					
 				},
@@ -286,11 +285,10 @@
 		
 		//3.선택한 받는사람 목록 input창에 띄워주기 위한 함수  
 		$(function(){
-			
-			//-체크박스 클릭시 발생할 이벤트 함수
+			//체크박스 클릭시 발생할 이벤트 함수
 			$("#msg-searchNameList>tbody").on("change","tr input[type=checkbox]",function(){
-					
 					console.log($(this));
+					
 					//객체 배열에 담을 변수 
 					var $uno = $(this).parent().siblings().eq(0).text(); 	//console.log($uno); 
 					var $uId = $(this).parent().siblings().eq(1).text(); 	//console.log($uId);
@@ -347,5 +345,17 @@
 		});
 			
 	</script>
+	
+	<!-- 프로필에서 쪽지 보내기 스크립 -->
+	<script> 
+ 		$(document).ready(function() {
+ 			var userNo = "<%= request.getParameter("userNo") %>";
+ 			var userId = "<%= request.getParameter("userId") %>";  
+ 			var userName = "<%= request.getParameter("userName") %>"; 
+			  
+			$("#recvUser").val(userId + " (" + userName + ")");
+			$("#recvUno").val(userNo);
+		});
+ 	</script> 
 </body>
 </html>

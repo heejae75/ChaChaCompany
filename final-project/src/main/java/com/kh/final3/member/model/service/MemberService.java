@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.kh.final3.common.vo.PageInfo;
 import com.kh.final3.member.model.vo.Member;
+import com.kh.final3.member.model.vo.MemberAttachment;
 
 public interface MemberService {
 	
@@ -28,4 +29,19 @@ public interface MemberService {
 
 	//회원가입 메서드
 	int insertMember(Member member);
+	
+	//회원 사진 조회
+	MemberAttachment selectMemberAttachment(String userNo);
+	
+	//회원 사진 업데이트
+	int updateMemberAttachment(MemberAttachment memberAttachment);
+
+	//회원 사진 삽입
+	int insertMemberAttachment(MemberAttachment memberAttachment);
+
+	//비밀번호 확인 메서드
+	String checkPwd(String rawPassword, String encodedPassword);
+	
+	//비밀번호 변경 메서드
+	int updatePwd(Member member);
 }

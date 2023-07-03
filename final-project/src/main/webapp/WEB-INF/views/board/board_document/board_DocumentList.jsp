@@ -318,7 +318,6 @@
 					
 					if(wirterDept.indexOf(loginUserDept) != -1){
 						console.log("포함");
-						
 						var query = 'input[name="select_chk"]:checked';
 				  		
 			 			//선택된 체크박스 개수 

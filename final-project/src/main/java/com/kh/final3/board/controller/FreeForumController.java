@@ -31,6 +31,7 @@ import com.google.gson.Gson;
 import com.kh.final3.board.model.service.FreeForumService;
 import com.kh.final3.board.model.vo.Board;
 import com.kh.final3.board.model.vo.BoardAttachment;
+import com.kh.final3.board.model.vo.Reply;
 import com.kh.final3.common.template.Pagination;
 import com.kh.final3.common.vo.PageInfo;
 import com.kh.final3.member.model.vo.CustomUserDetails;
@@ -44,18 +45,19 @@ public class FreeForumController {
 
 	@GetMapping("/list.fr")
 	public String freeForumList(@RequestParam(value = "currentPage", defaultValue = "1") int currentPage, Model model,
-								String category, String searchWord) {
+								String category, String searchWord, String currentStatus) {
 		
 		Map<String, String> map = new HashMap<>();
 		map.put("category", category);
 		map.put("searchWord", searchWord);
+		map.put("currentStatus", currentStatus);
 		
 		int listCount = freeForumService.selectListCount(map);
 		int pageLimit = 5;
 		int boardLimit = 3;
 
 		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
-		ArrayList<Board> list = freeForumService.forumList(pi);
+		ArrayList<Board> list = freeForumService.forumList(pi, map);
 
 		model.addAttribute("list", list);
 		model.addAttribute("pi", pi);
@@ -71,11 +73,15 @@ public class FreeForumController {
 		if (result > 0) {
 			Board board = freeForumService.findForumDetails(boardNo);
 			ArrayList<BoardAttachment> attachmentList = freeForumService.findAttachmentList(boardNo);
+			ArrayList<Reply> replyList = freeForumService.selectReplyList(boardNo);
+			int replyCount = freeForumService.replyCount(boardNo);
 			int recommend = freeForumService.selectRecommendCount(boardNo);
 			int deprecated = freeForumService.selectDeprecatedCount(boardNo);
 			
 			mv.setViewName("board/freeForum/freeForumDetailView");
 			mv.addObject("board", board);
+			mv.addObject("replyList", replyList);
+			mv.addObject("replyCount", replyCount);
 			mv.addObject("recommend", recommend);
 			mv.addObject("deprecated", deprecated);
 			mv.addObject("attachmentList", attachmentList);
@@ -91,7 +97,7 @@ public class FreeForumController {
 	}
 
 	@PostMapping("/insert.fr")
-	public ModelAndView forumAdd(Board board, String role, Principal p, ModelAndView mv) {
+	public ModelAndView forumAdd(Board board, ModelAndView mv) {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal(); 
 		CustomUserDetails userDetails = (CustomUserDetails)principal;
 		
@@ -108,7 +114,48 @@ public class FreeForumController {
 		
 		return mv;
 	}
+	
+	@GetMapping("/updateForm.fr")
+	public String updateForm(int boardNo, Model model) {
+		
+		Board board = freeForumService.findForumDetails(boardNo);
+		
+		model.addAttribute("board", board);
+		
+		return "board/freeForum/freeForumUpdateForm";
+	}
 
+	@PostMapping("/update.fr")
+	public ModelAndView update(Board board, int boardNo, HttpSession session, ModelAndView mv) {
+		
+		board.setBoardNo(boardNo);
+		
+		int result = freeForumService.updateForum(board);
+		if(result>0) {
+			mv.setViewName("redirect:detailList.fr?boardNo="+boardNo);
+			session.setAttribute("alertMsg", "수정하였습니다.");
+		}else {
+			
+		}
+		
+		return mv;
+	}
+	
+	@GetMapping("/delete.fr")
+	public ModelAndView delete(int boardNo, ModelAndView mv, HttpSession session) {
+		
+		int result = freeForumService.deleteForum(boardNo);
+		
+		if(result>0) {
+			mv.setViewName("redirect:list.fr");
+			session.setAttribute("alertMsg", "삭제하였습니다.");
+		}else {
+			
+		}
+		
+		return mv;
+	}
+	
 	@PostMapping("/ckupload")
 	public void postCKEditorImgUpload(HttpServletRequest req, HttpServletResponse res,
 			@RequestParam MultipartFile upload, HttpSession session) throws Exception {
@@ -220,5 +267,55 @@ public class FreeForumController {
 			
 			return new Gson().toJson("이미 싫어요를 누른 게시물입니다.");
 		}
-	}	
+	}
+	
+	@ResponseBody
+	@PostMapping(value="/insertReply.fr", produces = "application/json; charset=UTF-8")
+	public String insertReply(int boardNo, String replyContent, ModelAndView mv) {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		CustomUserDetails userDetails = (CustomUserDetails)principal;
+		
+		Reply reply = Reply.builder().refBno(boardNo).replyWriter(Integer.toString(userDetails.getUserNo())).replyContent(replyContent).build();
+		
+		int result = freeForumService.insertReply(reply);
+			
+		if(result>0) {
+			mv.addObject("result", "RRRRY");
+		}else {
+			mv.addObject("result", "RRRRN");
+		}
+		
+		return new Gson().toJson(mv);
+	}
+	
+	@PostMapping("updateReply.fr")
+	public String updateReply(int replyNo, String replyContent, int boardNo, HttpSession session) {
+		
+		Reply reply = Reply.builder().replyNo(replyNo).replyContent(replyContent).build();
+		
+		int result = freeForumService.updateReply(reply);
+		
+		if(result>0) {
+			session.setAttribute("alertMsg", "댓글을 수정하였습니다.");
+		}else {
+			session.setAttribute("alertMsg", "댓글 수정에 오류가 발생했습니다.");
+		}
+		
+		return "redirect:detailList.fr?boardNo="+boardNo;
+	}
+	
+	@PostMapping("deleteReply.fr")
+	public String deleteReply(int replyNo, int boardNo, HttpSession session) {
+		
+		int result = freeForumService.deleteReply(replyNo);
+		
+		if(result>0) {
+			session.setAttribute("alertMsg", "댓글을 삭제하였습니다.");
+		}else {
+			session.setAttribute("alertMsg", "댓글 삭제에 오류가 발생했습니다.");
+		}
+		
+		return "redirect:detailList.fr?boardNo="+boardNo;
+	}
+	
 }

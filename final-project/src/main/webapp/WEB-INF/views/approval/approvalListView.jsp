@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="/final3/resources/css/Approval_List.css" >
 </head>
-<body id="body-pd">
+<body>
 	<%@ include file="../common/menubar.jsp" %>
 	<br><br>
         <div class="approval">
@@ -66,7 +66,7 @@
 			</c:if>	
 			<br><br>
 			<div id="approvalEnroll-btn">
-		    	<button class="btn btn-sm" onclick="location.href='enrollList.ap'">결재문서 작성</button>
+		    	<a class="btn btn-success"  href="enrollList.ap">결재문서 작성</a>
 		    </div>	
             </div>
             <div id="approval-list-area">
@@ -78,9 +78,7 @@
                             <th>문서종류</th>
                             <th>제목</th>
                             <th>작성일</th>
-                            <c:if test="${!empty 'a.secondDate' ||!empty 'a.lastDate'}">
                             <th>승인/반려날짜 </th>
-                            </c:if>
                             <th>상태</th>
                         </tr>
                     </thead>
@@ -118,13 +116,13 @@
 			                       		</c:choose>
 			                       		<c:choose>
 			                       			<c:when test="${list[i-1].status eq 'P' }">
-			                       				<td><button type="button" class="btn btn-primary" style="border:0;" disabled>신청</button><td>
+			                       				<td><button type="button" class="btn btn-primary" style="border:0;" disabled>신청</button></td>
 			                       			</c:when>
 			                       			<c:when test="${list[i-1].status eq 'Y' }">
-			                       				<td><button type="button" class="btn btn-success" style="border:0;" disabled>승인</button><td>
+			                       				<td><button type="button" class="btn btn-success" style="border:0;" disabled>승인</button></td>
 			                       			</c:when>
 			                       			<c:when test="${list[i-1].status eq 'R' }">
-			                       				<td><button type="button" class="btn btn-success" style="background-color: #f87428;color:white;border:0;" disabled>반려</button><td>
+			                       				<td><button type="button" class="btn btn-success" style="background-color: #f87428;color:white;border:0;" disabled>반려</button></td>
 			                       			</c:when>
 			                       		</c:choose>
 				                    </tr>
@@ -152,6 +150,17 @@
 			                        			<td>${list[i-1].lastDate}</td>
 			                        		</c:otherwise>
 			                        	</c:choose>
+			                        	<c:choose>
+			                       			<c:when test="${list[i-1].status eq 'P' }">
+			                       				<td><button type="button" class="btn btn-primary" style="border:0;" disabled>신청</button><td>
+			                       			</c:when>
+			                       			<c:when test="${list[i-1].status eq 'Y' }">
+			                       				<td><button type="button" class="btn btn-success" style="border:0;" disabled>승인</button><td>
+			                       			</c:when>
+			                       			<c:when test="${list[i-1].status eq 'R' }">
+			                       				<td><button type="button" class="btn btn-success" style="background-color: #f87428;color:white;border:0;" disabled>반려</button><td>
+			                       			</c:when>
+			                       		</c:choose>
 			                        </tr>
 		                    	</c:otherwise>
 	                    	</c:choose>
