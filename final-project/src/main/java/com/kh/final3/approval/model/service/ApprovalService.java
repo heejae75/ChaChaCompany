@@ -33,10 +33,7 @@ public interface ApprovalService {
 		ArrayList<DocType> selectEnrollList(HashMap<String, String> map, PageInfo pi);
 		
 		//결재자 조회
-		ArrayList<Member> selectApproverList(String deptCode);
-		
-		//결재자 검색 조회
-		ArrayList<Member> searchApproverList(HashMap<String, String> map);
+		ArrayList<Member> selectApproverList(HashMap<String, String> map);
 		
 		//구매 품의서 
 		int insertItem(ArrayList<Item> iList, ArrayList<ApprovalAttachment> atList, ApprovalDoc ad, Approval a);

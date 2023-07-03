@@ -62,7 +62,9 @@
             <div id="email-header">
                 <nav class="navbar navbar-default">
                     <ul class="nav navbar-nav">
-                        <li style="top: 10px;left:10px;margin-right: 25px;height:50px;"><button type="submit" class="btn btn-success">보내기</button></li>
+                        <li style="top: 10px;left:10px;margin-right: 25px;height:50px;">
+                        	<button type="submit" class="btn btn-success" style="border:0;background-color: #0E6251;">보내기</button>
+                        </li>
                     </ul>
                 </nav>
             </div>
@@ -93,23 +95,5 @@
             </div>
         </div>
     </form>
-        <!-- 받는사람 선택 -->
-        <div class="modal fade" id="email-address" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-              </div>
-              <div class="modal-body">
-                
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-              </div>
-            </div>
-          </div>
-        </div>
 </body>
 </html>

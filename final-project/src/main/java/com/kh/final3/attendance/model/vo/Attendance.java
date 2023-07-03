@@ -15,10 +15,13 @@ import lombok.ToString;
 public class Attendance {
 	private int attRecordNo;
 	private int userNo;
+	private String userName;
+	private String deptName;
+	private String workDate;
 	private String onTime;
 	private String offTime;
 	private String leaveType;
-	
+	private String leaveCode;
 	private String currDate;
 	private String todoContent;
 	private int todoNo;

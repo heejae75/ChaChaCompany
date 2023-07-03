@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -94,6 +95,67 @@
     	width : 100px;
     	text-align : center;
     }
+    #reply_hr{
+    	background:rgb(87, 154, 64);
+    	border:0;
+    	height:3px;
+    }
+    .reply_div{
+    	width:100%;
+		overflow:hidden;
+		height:auto;
+		margin-bottom : 20px;
+		padding-bottom : 20px;
+    }
+    .reply_div:hover{
+    	background-color : rgb(198, 247, 190);
+    	cursor : pointer;
+    }
+    .reply_div div{
+    	float:left;
+    	font-weight : 900;		
+    }
+    .replyWriter_div{
+    	width:15%;
+    }
+    .replyContent_div{
+    	width:70%;
+    	height:auto;
+    }
+    .replyDate_div{
+    	width:15%;
+    }
+    #replyWrite_div{
+    	width:100%;
+    	height:100px;
+    	border:1px solid rgb(87, 154, 64);
+    	margin-top : 30px;
+    }
+    #replyWrite_div textarea{
+    	height:100%;
+    	width:90%;
+    	box-sizing : border-box;
+    	resize:none;
+    	float:left;
+    }
+    #replyWrite_div button{
+    	float:left;
+    	width:10%;
+    	height:100%;
+    	box-sizing:border-box;
+    	background-color : rgb(87, 154, 64);
+    	color:white;
+    }
+    .modal-body textarea{
+    	height:100%;
+    	width:100%;
+    	box-sizing : border-box;
+    	resize:none;
+    	float:left;
+    }
+    #reply_modal_body button{
+    	float:left;
+    }
 </style>
 </head>
 <body id="body-pd">
@@ -141,7 +203,7 @@
 								<tr>
 									<th>${board.count}</th>
 									<th>${recommend}</th>
-									<th>234</th>
+									<th>${replyCount}</th>
 								</tr>
 							</tbody>
 						</table>
@@ -156,25 +218,144 @@
 			<br>
 			<div id="like_div">
 				<button id="recommend_btn" type="button" class="btn btn-info" onclick="recommend()">좋아요[${recommend}]</button>
-				<button id="deprecated_btn" type="button" class="btn btn-danger" onclick="deprecated()">싫어요[0]</button>
+				<button id="deprecated_btn" type="button" class="btn btn-danger" onclick="deprecated()">싫어요[${deprecated}]</button>
 			</div>
+			<br><br><br>
+			<sec:authentication property="principal.Username" var="loginId"/>
+			<c:if test="${loginId eq board.boardWriter}">
+				<div>
+					<button class="btn btn-secondary" onclick="update();">수정하기</button>
+					<button class="btn btn-secondary" onclick="deleteForum();">삭제하기</button>
+				</div>		
+			</c:if>
+			<hr id="reply_hr">
+			<c:forEach var="reply" items="${replyList}">
+				<div class="reply_div">
+					<div class="replyWriter_div">
+						${reply.replyWriter}
+					</div>
+					<div class="replyContent_div">
+						${reply.replyContent}
+					</div>
+					<div class="replyDate_div">
+						${reply.createDate}
+					</div>
+					<input type="hidden" value="${reply.replyNo}">
+				</div>
+				<hr>
+			</c:forEach>
+			<div id="replyWrite_div">
+					<textarea id="replyText" name="replyText" class="replyText" required></textarea>
+					<button id="reply_btn" type="button" onclick="reply_insert();">등록하기</button>						
+			</div>
+			<br><br><br><br><br>
 		</div>
 	</div>
-	
-<script>
+<!-- ===================modal======================= -->
+<div class="modal" id="reply_modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
 
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">댓글 수정 삭제</h4>
+       
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body" id="reply_modal_body">
+		<button class="btn btn-info" onclick="reply_update_view();">수정하기</button>
+      	<form action="deleteReply.fr" method="post">
+      		<input type="hidden" class="replyNo" name="replyNo">
+      		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+      		<input type="hidden" name="boardNo" value="${board.boardNo}">
+			<button class="btn btn-danger">삭제하기</button>
+      	</form>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer"> 
+        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="close_reply_modal();">취소</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<form action="updateReply.fr" method="post">
+	<input type="hidden" class="replyNo" name="replyNo">
+	<input type="hidden" name="boardNo" value="${board.boardNo}">
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+	<div class="modal" id="reply_update_modal">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
 	
+	      <!-- Modal Header -->
+	      <div class="modal-header">
+	        <h4 class="modal-title">댓글 수정 삭제</h4>
+	       
+	      </div>
+	
+	      <!-- Modal body -->
+	      <div class="modal-body">
+			<textarea rows="20" name="replyContent"></textarea>
+	      </div>
+	
+	      <!-- Modal footer -->
+	      <div class="modal-footer">
+	        <button type="submit" class="btn btn-success" data-dismiss="modal">수정</button>
+	        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="close_update_modal()">취소</button>
+	      </div>
+	
+	    </div>
+	  </div>
+	</div>
+</form>
+
+<sec:authentication property="principal.userName" var="userName"/>
+
+<script>
 	$(function(){
 		$(".page-link").eq(${pi.currentPage}).css('color', 'red');
 	});
 	
-	$(".table>tbody>tr").click(function(){
-		var dv = event.currentTarget;
-		var boardNo = dv.children[0].innerText
-		location.href = "/final3/${role}/detailList.fr?boardNo=" + boardNo;
-	});
+// 	$(".table>tbody>tr").click(function(){
+// 		var dv = event.currentTarget;
+// 		var boardNo = dv.children[0].innerText
+// 		location.href = "/final3/${role}/detailList.fr?boardNo=" + boardNo;
+// 	});
 	
-	function recommend(){
+	function update(){
+ 		location.href = "updateForm.fr?boardNo=${board.boardNo}";
+	}
+	
+	function deleteForum(){
+		location.href = "delete.fr?boardNo=${board.boardNo}";
+	}
+	
+	function reply_insert(){ //댓글 삽입 ajax
+		$.ajax({
+			url:"insertReply.fr",
+			type:"post",
+			data : {
+				boardNo : "${board.boardNo}",
+				replyContent : $("#replyText").val()
+			},
+			beforeSend : function(xhr)
+            {   
+                xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+            },
+            success : function(result){
+            	if(result.model.result == 'RRRRY'){
+            		location.reload();            	
+            	}else{
+            		alert("오류발생");
+            	}
+            }
+		});
+	}
+	
+	function recommend(){ //좋아요 ajax
 		$.ajax({
 			url : "recommend.fr",
 			type : "post",
@@ -195,7 +376,7 @@
 		});
 	}
 	
-	function deprecated(){
+	function deprecated(){ //싫어요 ajax
 		$.ajax({
 			url : "deprecated.fr",
 			type : "post",
@@ -214,6 +395,33 @@
 				}
 			}
 		});		
+	}
+	
+	var replyWriter;
+	var replyNo;
+	$(".reply_div").click(function(){
+		$("#reply_modal").show();
+		
+		var dv = event.currentTarget;
+		replyWriter = dv.children[0].innerText;
+		replyNo = dv.children[3].value;
+		$(".replyNo").val(replyNo);
+	});
+	
+	function reply_update_view(){
+		if(replyWriter == "${userName}"){
+			$("#reply_update_modal").show();
+		}else{
+			alert("로그인 정보가 일치하지 않습니다.");
+		}
+	}
+	
+	function close_update_modal(){
+		$("#reply_update_modal").hide();
+	}
+	
+	function close_reply_modal(){
+		$("#reply_modal").hide();
 	}
 </script>	
 </body>

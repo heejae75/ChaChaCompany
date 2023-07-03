@@ -45,12 +45,8 @@ public class ApprovalDao {
 		return (ArrayList)ss.selectList("approvalMapper.selectEnrollList",map,rowBounds);
 	}
 
-	public ArrayList<Member> selectApproverList(SqlSessionTemplate ss, String deptCode) {
-		return (ArrayList)ss.selectList("approvalMapper.selectApproverList",deptCode);
-	}
-
-	public ArrayList<Member> searchApproverList(SqlSessionTemplate ss, HashMap<String, String> map) {
-		return (ArrayList)ss.selectList("approvalMapper.searchApproverList",map);
+	public ArrayList<Member> selectApproverList(SqlSessionTemplate ss, HashMap<String, String> map) {
+		return (ArrayList)ss.selectList("approvalMapper.selectApproverList",map);
 	}
 
 	public Approval selectApproval(SqlSessionTemplate ss, int docNo) {

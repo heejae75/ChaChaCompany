@@ -1,11 +1,10 @@
 @charset "UTF-8";
 
-div{
+		div{
 		    box-sizing: border-box;
 		}
 		.approval-home{
-		    width: 1000px;
-		    height: 1000px;
+		    width: 1570px;
 		    margin: auto;
 		}
 		.approval-home>div{
@@ -23,18 +22,24 @@ div{
 		    padding-top: 25px;
 		    padding-right: 100px;
 		}
-		.table{
+		#approval-main-list{
 			table-layout: fixed;
 			text-align : center;
 		}
-		.table>tbody>tr>td {
+		#approval-main-list>tbody>tr>td {
 			word-break:break-all;
 		}
-	    .table>tbody>tr:hover{
+	    #approval-main-list>tbody>tr:hover{
 		    background-color: rgb(209, 207, 207);
 		    cursor: pointer;
 		}
-	 	#approval-tap-area{
+		#approval-main-list th, td{
+        text-align:center;
+	    }
+		#approval-main-list>tbody tr{
+			cursor: pointer; 
+		} 
+		 #approval-tap-area{
 			width: 100%;
 		}
 			

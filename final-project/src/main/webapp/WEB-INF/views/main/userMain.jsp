@@ -330,7 +330,7 @@ a{
 				<p style="font-size: 30px; margin: 0 0 0 0;">${loginUser.userName }</p>
 				<p>${loginUser.deptName } / ${loginUser.jobName }</p>
 				<div style="float:left; margin-left: 80px;">
-					<a href="#" id="profileMypage">마이페이지</a>
+					<a href="myPage.me" id="profileMypage">마이페이지</a>
 				</div>
 				<div style="float:left; margin-left: 20px;  ">
 					<form action="/final3/logout" method="post">
@@ -346,8 +346,8 @@ a{
 				<c:choose>
 					<c:when test="${loginUser.auth eq 'ROLE_ADMIN' }">
 				<div style="float: left; margin: 0 0 0 65px;">
-					<a href="#"> <i class="fa-sharp fa-solid fa-address-card"
-						style="color: #000000; font-size: 70px; margin: 20px 10px 0 0;"></i>
+					<a href="memberEnroll.me"> <i class="fa-sharp fa-solid fa-address-card"
+						style="color: #000000; font-size: 70px;  margin: 20px 10px 0 0;"></i>
 						<p style="margin: 0 10px 0 0;">회원 등록 </p>
 					</a>
 				</div>

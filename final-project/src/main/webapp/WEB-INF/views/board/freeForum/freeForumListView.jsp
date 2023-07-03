@@ -137,7 +137,7 @@
 				</ul>
             </div>
 	    <div class="table-responsive"> 	
-	    	<h1>자유게시판(미완성)</h1>
+	    	<h1>자유게시판</h1>
 	    	<br>
             <table class="table">
 				<thead>
@@ -160,14 +160,14 @@
 							<th>${b.boardWriter}</th>
 							<th>${b.createDate}</th>
 							<th>${b.count}</th>
-							<th>25</th>
+							<th>${b.recommendCount}</th>
 						</tr>
 					</c:forEach>
 				</tbody>
 			</table>
 			<div id="button_div">
 			<button type="button" class="btn btn-primary" id="all_btn" onclick="boardAll()">전체글</button>
-			<button type="button" class="btn btn-primary" id="popularity_btn">인기글</button>
+			<button type="button" class="btn btn-primary" id="popularity_btn" onclick="boardPopularity()">인기글</button>
 			<button type="button" class="btn btn-primary" id="write_btn" onclick="writing()">글쓰기</button>
 			</div>
 			<br><br>
@@ -230,6 +230,10 @@
 	
 	function boardAll(){
 		location.href = "/final3/${role}/list.fr?currentPage=1";
+	}
+	
+	function boardPopularity(){
+		location.href = "list.fr?currentStatus=popularity"
 	}
 	
 	$(".table>tbody>tr").click(function(){

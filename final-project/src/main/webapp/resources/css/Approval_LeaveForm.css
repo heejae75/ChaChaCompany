@@ -35,6 +35,12 @@
         #leave-content>div{
             width: 100%;
         }
+        #member-info-table{
+        	border-collapse: collapse;
+        }
+        #member-info-table th,td {
+        	vertical-align: middle;
+        }
         #leave-content1{
             height: 15%;
         }
@@ -57,17 +63,22 @@
         }
         #approver-signature {
             border-collapse: collapse;
-            width: 15%;
-            text-align: center;
+            width: 20%;
             margin-top: 10px;
             float: right;
             line-height:20px;
-            vertical-align: middle;
     
         }
-        #approver-signature>tr, td{
+        #approver-signature th,td{
             border-collapse: collapse;
-            padding: 8px;
+            padding: 10px;
+            vertical-align: middle;
+            text-align: center;
+        }
+        #approver-signature input{
+        	padding:0px;
+        	vertical-align: middle;
+            text-align: center;
         }
         #file-area{
             height: 100%;

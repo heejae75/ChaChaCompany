@@ -23,6 +23,15 @@
 	 	<result column="DEPT_NAME" property="deptName"/>
 	 	<result column="JOB_Name" property="jobName"/>
 	</resultMap>
+	
+	<resultMap type="memberAttachment" id="memberAttachmentResultSet">
+		<result column="MEM_ATTACHMENT_NO" property="memAttachmentNo"/>
+		<result column="REF_UNO" property="refUno"/>
+		<result column="ORIGIN_NAME" property="originName"/>
+		<result column="CHANGE_NAME" property="changeName"/>
+		<result column="FILE_PATH" property="filePath"/>
+		<result column="STATUS" property="status"/>
+	</resultMap>
 
 	<insert id="insertAdmin" parameterType="member">
 		INSERT INTO MEMBER(USER_NO, USER_ID, USER_NAME, USER_PWD, PHONE, EMAIL, ADDRESS, BIRTH, DEPT_CODE, JOB_CODE,
@@ -41,7 +50,7 @@
 		AND STATUS = 'Y'
 	</select>
 	
-	<!-- 게시글 총 개수 -->
+	<!-- 회원 총 개수 -->
 	<select id="selectListCount" resultType="_int">
 		SELECT COUNT(*)
 		FROM MEMBER
@@ -64,7 +73,7 @@
 		</choose>
 	</select>
 	
-	<!-- 게시글 조회 -->
+	<!-- 회원 조회 -->
 	<select id="selectList" resultMap="memberResultSet">
 		SELECT *
 		FROM MEMBER
@@ -90,8 +99,8 @@
 	
 	<!-- 회원 번호로 회원 찾기 -->
 	<select id="selectMemberByUserNo" resultMap="memberResultSet">
-		SELECT USER_NO, USER_ID, USER_NAME, USER_PWD, PHONE, EMAIL, ADDRESS, TO_CHAR(BIRTH, 'YYMMDD') AS BIRTH, DEPT_NAME, JOB_NAME,
-												EMPOLYMENT_DATE, DEPATURE_DATE, AUTH, ENABLED
+		SELECT USER_NO, USER_ID, USER_NAME, USER_PWD, PHONE, EMAIL, ADDRESS, TO_CHAR(BIRTH, 'YYYY-MM-DD') AS BIRTH, DEPT_NAME, JOB_NAME,
+												TO_CHAR(EMPOLYMENT_DATE, 'YYYY-MM-DD') AS EMPOLYMENT_DATE, DEPATURE_DATE, AUTH, ENABLED
 		FROM MEMBER
 		JOIN DEPARTMENT USING(DEPT_CODE)
 		JOIN JOB USING(JOB_CODE)
@@ -100,9 +109,20 @@
 	</select>
 	
 	<update id="updateMember" parameterType="member">
-<!-- 		UPDATE MEMBER -->
-<!-- 		SET USER_NAME = #{userName}, PHONE = #{phone}, EMAIL = #{email}, ADDRESS = #{address},  -->
+		UPDATE MEMBER
+		SET USER_NAME = #{userName}, PHONE = #{phone}, EMAIL = #{email}, ADDRESS = #{address}, BIRTH = #{birth}
+		WHERE USER_NO = #{userNo}
 	</update>
+	
+	<update id="updateMemberAttachment" parameterType="memberAttachment">
+		UPDATE MEMBER_ATTACHMENT
+		SET ORIGIN_NAME = #{originName}, CHANGE_NAME = #{changeName}, FILE_PATH = #{filePath}
+	</update>
+	
+	<insert id="insertMemberAttachment">
+		INSERT INTO MEMBER_ATTACHMENT(MEM_ATTACHMENT_NO, REF_UNO, ORIGIN_NAME, CHANGE_NAME, FILE_PATH)
+		VALUES(SEQ_MANO.NEXTVAL, #{refUno}, #{originName}, #{changeName}, #{filePath})
+	</insert>
 	
 	<!-- 회원가입 -->
 	<insert id="insertMember" parameterType="member">
@@ -111,6 +131,18 @@
 		VALUES(SEQ_UNO.NEXTVAL, #{userId}, #{userName}, #{userPwd}, #{phone}, #{email}, #{address}, #{birth}, #{deptCode}, #{jobCode},
 								#{empolymentDate}, #{depatureDate}, #{auth}, 1)
 	</insert>
+	
+	<select id="selectMemberAttachment" resultMap="memberAttachmentResultSet">
+		SELECT *
+		FROM MEMBER_ATTACHMENT
+		WHERE REF_UNO = #{userNo}
+	</select>
+	
+	<update id="updatePwd">
+		UPDATE MEMBER
+		SET USER_PWD = #{userPwd}
+		WHERE USER_NO = #{userNo}
+	</update>
 	
 	<!-- customUserDetails 관련 -->
 	<resultMap type="com.kh.final3.member.model.vo.CustomUserDetails" id="customUserSet">

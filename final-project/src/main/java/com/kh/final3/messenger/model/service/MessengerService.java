@@ -68,6 +68,9 @@ public interface MessengerService {
 
 	ArrayList<Messenger> trashSearchList(HashMap<String, Object> key, PageInfo pi);
 	
+	//읽지않은 쪽지 개수 조회(받은쪽지) 
+	int selectCountRecvMsg(int userNo);
+	
 
 	
 

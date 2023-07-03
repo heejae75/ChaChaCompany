@@ -34,6 +34,10 @@
     #searchMember{
     	float : right;
     }
+    #searchMember input{
+    	height : 27px;
+    	font-size:15px;
+    }
     .table>tbody>tr:hover{
     	background-color : rgb(198, 247, 190);
     }
@@ -45,8 +49,8 @@
 	    <div id="empInquiry">
 	    	<h1 id="title">임직원 조회</h1> <br><br><br>
 	        <div class="table-responsive">
-		    	<button type="button" class="btn btn-outline-secondary" onclick="location.href='/final3/${role}/list.me?currentStatus=JOB_CODE'">직책</button>
-		        <button type="button" class="btn btn-outline-secondary" onclick="location.href='/final3/${role}/list.me'">전체</button>
+		    	<button type="button" id="job_button" class="btn btn-outline-secondary" onclick="orderByJob();">직책</button>
+		        <button type="button" id="all_button" class="btn btn-outline-secondary" onclick="memberAll();">전체</button>
 		    	<br><br>
 		    	<div id="searchMember">
 		    		<form action="/final3/${role}/list.me" method="get">
@@ -158,11 +162,26 @@
 		if("${role}" == 'admin'){
 			$(".table>tbody>tr").click(function(){
 				var dv = event.currentTarget;
-				var userNo = dv.children[0].innerText
+				var userNo = dv.children[0].innerText;
 				location.href = "/final3/admin/detailList.me?userNo=" + userNo;
 			});
 		}
 		
+		function orderByJob(){
+			location.href='/final3/${role}/list.me?currentStatus=JOB_CODE';
+		}
+		
+		function memberAll(){
+			location.href='/final3/${role}/list.me';
+		}
+		
+		$(function(){
+			if("${currentStatus}" == 'JOB_CODE'){
+				$("#job_button").css({"background-color":"rgb(198, 247, 190)"});
+			}else{
+				$("#all_button").css({"background-color":"rgb(198, 247, 190)"});
+			}
+		});
 	</script>
 </body>
 </html>

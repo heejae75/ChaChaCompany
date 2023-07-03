@@ -164,7 +164,7 @@
 	            </table>
             </div>
             <div align="center">
-                <c:if test="${loginUser.userNo eq b.boardWriter }">
+                <c:if test="${loginUser.userNo eq b.boardWriter or loginUser.auth eq 'ROLE_MANAGER' }">
                     <a class="btn btn-default" onclick="formSubmit(1);">수정하기</a>
                    <a class="btn btn-default" onclick="formSubmit(2);">삭제하기</a>
                </c:if>
