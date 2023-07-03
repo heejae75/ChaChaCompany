@@ -136,7 +136,7 @@
   		</div>
 		<!-- 검색창 영역  -->
 		<div id="board-search-area">
-			<form action="accountSearch.ad" method="get">
+			<form action="#" method="get">
 				<div id="option-box" align="right" >
                 	<select name="accountStatus" class="btn btn-secondary dropdown-toggle" style="border: 1px solid #ccc; background-color: white; color:#0c0d0d; height: 34px; margin-right: 5px; margin-top: 15px;">
 	                    <option value="전체">전체</option>
@@ -147,11 +147,21 @@
 				</div>
 				<div id="search-box">
 					<input type="text" name="keyword" class="form-control" id="search-input" value="${keyword}" style=" margin-top: 15px;" > 
-					<button type="submit" class="btn btn-secondary" style="background-color: #0E6251; margin-left: 5px;  margin-top: 15px;">
+					<button type="submit" id="account-btn" class="btn btn-secondary" style="background-color: #0E6251; margin-left: 5px;  margin-top: 15px;">
 					<i id="search-icon" class="fa-solid fa-magnifying-glass fa-lg" style="color:white;"></i></button>
            		</div>
 			</form>
 		</div>
+		<script>
+			//검색 이동 
+			$(function(){
+				$("#account-btn").on("click",function(){
+					location.href="account.ad"
+				});
+			})
+		
+		</script>
+		
 		<!-- 검색한 부서 고정 script -->
 		<c:if test="${not empty accountStatus }">
 		<script>
@@ -282,18 +292,18 @@
 		                        <li class="page-item disabled"><a class="page-link">이전</a></li>
 	                   		</c:when>
 	                   		<c:otherwise>
-		                        <li class="page-item"><a class="page-link" href="account.ad?currentPage=${pi.currentPage-1}">이전</a></li>
+		                        <li class="page-item"><a class="page-link" href="account.ad?currentPage=${pi.currentPage-1}&accountStatus=${accoutStatus}&keyword=${keyword}">이전</a></li>
 	                   		</c:otherwise>
 	                   	</c:choose>
 	                   	<c:forEach var="p" begin="${pi.startPage}" end="${pi.endPage}">
-	                        <li class="page-item"><a class="page-link" href="account.ad?currentPage=${p}">${p}</a></li>
+	                        <li class="page-item"><a class="page-link" href="account.ad?currentPage=${p}&accountStatus=${accoutStatus}&keyword=${keyword}">${p}</a></li>
 	                   	</c:forEach>
 	                   	<c:choose>
 	                   		<c:when test="${pi.maxPage eq pi.currentPage}">
 		                        <li class="page-item disabled"><a class="page-link">다음</a></li>
 	                   		</c:when>
 	                   		<c:otherwise>
-		                        <li class="page-item"><a class="page-link" href="account.ad?currentPage=${pi.currentPage+1}">다음</a></li>
+		                        <li class="page-item"><a class="page-link" href="account.ad?currentPage=${pi.currentPage+1}&accountStatus=${accoutStatus}&keyword=${keyword}">다음</a></li>
 	                   		</c:otherwise>
 	                   	</c:choose>
 					</ul>

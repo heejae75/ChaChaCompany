@@ -326,4 +326,13 @@
 		</choose>	
 		ORDER BY SEND_DATE DESC
 	</select>
+	
+	<!-- 읽지않은 쪽지 조회(받은 쪽지함) -->
+	<select id="selectCountRecvMsg" resultType="_int">
+		SELECT COUNT(*)
+		FROM MESSENGER
+		WHERE RECEIVER = 7
+		AND RECV_DELETE ='N'
+		AND READ_STATUS ='N'
+	</select>
 </mapper>

@@ -29,7 +29,7 @@
 <%@ include file="../common/menubar.jsp"  %> 
 <div class="content">
 	<div id="title-area">
-		<h1 id="title"> SCHEDULE </h1>
+		<h1 id="title"> ${loginUser.deptName} SCHEDULE </h1>
 		<!-- ROLE_ADMIN이고 부서가 'D9'이면서 직급은 'J5'이상 직급만 전체 일정 관리 가능  -->
 		<input type="hidden" id="companySchedule" value="AS">
 		<div id="select-area">
@@ -60,7 +60,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h3 class="modal-title" id="exampleModalLabel" style="padding-top: 20px;">인사팀 일정<!-- 로그인 회원 부서로 바꿔줄것  --></h3>
+                    <h3 class="modal-title" id="exampleModalLabel" style="padding-top: 20px;">${loginUser.deptName} 일정</h3>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
@@ -95,7 +95,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h3 class="modal-title" id="exampleModalLabel" style="padding-top: 20px;">인사팀 일정<!-- 로그인 회원 부서로 바꿔줄것  --></h3>
+                    <h3 class="modal-title" id="exampleModalLabel" style="padding-top: 20px;">${loginUser.deptName } 일정</h3>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
@@ -284,6 +284,7 @@
 								e.stopPropagation(); // 상위 요소로 이벤트 결과 전달 막기 
 								location.reload();
 							}
+							e.stopPropagation(); // 상위 요소로 이벤트 결과 전달 막기 
 						});
 				},
 		        
@@ -421,6 +422,7 @@
 									e.stopPropagation(); // 상위 요소로 이벤트 결과 전달 막기
 									location.reload();
 								}
+								e.stopPropagation(); // 상위 요소로 이벤트 결과 전달 막기
 							}
 						});	//수정 이벤트 끝 
 					}
