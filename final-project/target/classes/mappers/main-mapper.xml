@@ -57,7 +57,11 @@
 		<result column="STATUS" property="status"/>
 	</resultMap>
 	
-	<resultMap type="attendance" id="attendanceResultSet">
+	<resultMap type="attendance" id="mainAttendanceResultSet">
+		<result column="ATT_RECORD_NO" property="attRecordNo"/>
+		<result column="USER_NO" property="userNo"/>
+		<result column="ON_TIME" property="onTime"/>
+		<result column="OFF_TIME" property="offTime"/>
 		<result column="LEAVE_CODE" property="leaveType"/>
 	</resultMap>
 	
@@ -171,8 +175,8 @@
 	
 	<!-- 팀 임직원 조회  -->
 	<select id="mainOthersTeamList" resultMap="mainMemberResultset">
-		SELECT USER_NO, USER_NAME, JOB_NAME, DEPT_NAME, PHONE, EMAIL, EMPOLYMENT_DATE
-		FROM ( SELECT USER_NO, USER_NAME, J.JOB_NAME, M.JOB_CODE, D.DEPT_NAME, PHONE, EMAIL, TO_CHAR(EMPOLYMENT_DATE, 'YYYY-MM-DD') EMPOLYMENT_DATE
+		SELECT USER_NO, USER_ID, USER_NAME, JOB_NAME, DEPT_NAME, PHONE, EMAIL, EMPOLYMENT_DATE
+		FROM ( SELECT USER_NO, USER_ID, USER_NAME, J.JOB_NAME, M.JOB_CODE, D.DEPT_NAME, PHONE, EMAIL, TO_CHAR(EMPOLYMENT_DATE, 'YYYY-MM-DD') EMPOLYMENT_DATE
 			    FROM MEMBER M
 			    JOIN JOB J ON (M.JOB_CODE = J.JOB_CODE)
 			    JOIN DEPARTMENT D ON (M.DEPT_CODE = D.DEPT_CODE)
@@ -184,8 +188,8 @@
 	
 	<!-- 전체 임직원 조회  -->
 	<select id="mainOthersAllList" resultMap="mainMemberResultset">
-		SELECT USER_NO, USER_NAME, JOB_NAME, DEPT_NAME, PHONE, EMAIL, EMPOLYMENT_DATE
-		FROM ( SELECT USER_NO, USER_NAME, M.JOB_CODE, J.JOB_NAME, D.DEPT_NAME, PHONE, EMAIL ,TO_CHAR(EMPOLYMENT_DATE, 'YYYY-MM-DD') EMPOLYMENT_DATE
+		SELECT USER_NO, USER_ID, USER_NAME, JOB_NAME, DEPT_NAME, PHONE, EMAIL, EMPOLYMENT_DATE
+		FROM ( SELECT USER_NO, USER_ID, USER_NAME, M.JOB_CODE, J.JOB_NAME, D.DEPT_NAME, PHONE, EMAIL ,TO_CHAR(EMPOLYMENT_DATE, 'YYYY-MM-DD') EMPOLYMENT_DATE
 			    FROM MEMBER M
 			    JOIN JOB J ON (M.JOB_CODE = J.JOB_CODE)
 			    JOIN DEPARTMENT D ON (M.DEPT_CODE = D.DEPT_CODE)
@@ -207,14 +211,17 @@
 	<!-- 해당 날짜 선택시 일정 조회 -->
 	<select id="mainDailyEvents" resultMap="mainScheduleResultset">
 		<![CDATA[
-			SELECT SCHEDULE_NO, SCHEDULE_TITLE
-			FROM SCHEDULE
+			SELECT DISTINCT SCHEDULE_NO, SCHEDULE_TITLE
+			FROM SCHEDULE S
+			JOIN MEMBER M ON (S.DEPT_CODE = M.DEPT_CODE)
 			WHERE TRUNC(START_DATE) <= TO_DATE(#{year} || '-' || #{month} || '-' || #{date}, 'YYYY-MM-DD')
 			AND TRUNC(END_DATE) >= TO_DATE(#{year} || '-' || #{month} || '-' || #{date}, 'YYYY-MM-DD')
+			AND S.DEPT_CODE = #{deptCode}
+			AND ROWNUM <= 5
 		]]>
 	</select>
 	<!-- 근태기록조회 -->
-	<select id="selectLeaveType" resultMap="attendanceResultSet">
+	<select id="selectLeaveType" resultMap="mainAttendanceResultSet">
 	<![CDATA[
 		  SELECT LEAVE_CODE
 			FROM (
@@ -234,33 +241,43 @@
 	<!-- 전자결재 승인여부 리스트 조회 -->
 	<select id="mainApprovalStatus" resultMap="mainApprovalResultSet">
 		SELECT ROWNUM, A.*
-		FROM ( SELECT APP_NO, A.DOC_NO, D.DOC_NAME, AD.DOC_TITLE, TO_CHAR(AD.CREATE_DATE,'YYYY-MM-DD') CREATE_DATE,
-				  CASE
-			   		 WHEN A.SECOND_SIGNATURE = '반려' THEN
-				      CASE
-				        WHEN A.LAST_SIGNATURE = '반려' THEN '반려'
-				        WHEN A.LAST_SIGNATURE = '어문경' THEN '승인'
-				        WHEN A.LAST_SIGNATURE IS NULL THEN '2차 대기'
-				      END
-			      
-			   		 WHEN A.SECOND_APPROVER = A.SECOND_SIGNATURE THEN 
-				      CASE
-				        WHEN A.LAST_SIGNATURE = '반려' THEN '반려'
-				        WHEN A.LAST_SIGNATURE = '어문경' THEN '승인'
-				        WHEN A.LAST_SIGNATURE IS NULL THEN '2차 대기'
-				      END
-			      
-			    	WHEN A.SECOND_SIGNATURE IS NULL THEN '대기'
-			    
-				    WHEN A.LAST_SIGNATURE = '반려' THEN '반려'
-				    WHEN A.LAST_SIGNATURE = '어문경' THEN '승인'
-				    WHEN A.LAST_SIGNATURE IS NULL THEN '2차 대기'
-			 	 END AS LAST_SIGNATURE
-				FROM APPROVAL A
-				JOIN APPROVAL_DOC AD ON (A.DOC_NO = AD.DOC_NO)
-				JOIN DOC_TYPE D ON (AD.DOC_TYPE = D.DOC_TYPE)
-				ORDER BY APP_NO DESC ) A
-		WHERE ROWNUM BETWEEN 1 AND 6 		
+		FROM (SELECT
+			    APP_NO,
+			    A.DOC_NO,
+			    D.DOC_NAME,
+			    AD.DOC_TITLE,
+			    TO_CHAR(AD.CREATE_DATE, 'YYYY-MM-DD') CREATE_DATE,
+			    CASE
+			        WHEN A.SECOND_SIGNATURE = '반려' THEN
+			            CASE
+			                WHEN A.LAST_SIGNATURE = '반려' THEN '반려'
+			                WHEN A.LAST_SIGNATURE = #{userName} THEN '승인'
+			                WHEN A.LAST_SIGNATURE IS NULL THEN '2차 대기'
+			            END
+			        WHEN A.SECOND_APPROVER = A.SECOND_SIGNATURE THEN
+			            CASE
+			                WHEN A.LAST_SIGNATURE = '반려' THEN '반려'
+			                WHEN A.LAST_SIGNATURE =  #{userName} THEN '승인'
+			                WHEN A.LAST_SIGNATURE IS NULL THEN '2차 대기'
+			            END
+			        WHEN A.SECOND_SIGNATURE IS NULL THEN
+			            CASE
+			                WHEN A.LAST_SIGNATURE = '반려' THEN '반려'
+			                WHEN A.LAST_SIGNATURE =  #{userName} THEN '승인'
+			                WHEN A.LAST_SIGNATURE IS NULL THEN '대기'
+			            END
+			        ELSE
+			            CASE
+			                WHEN A.LAST_SIGNATURE = '반려' THEN '반려'
+			                WHEN A.LAST_SIGNATURE =  #{userName} THEN '승인'
+			                WHEN A.LAST_SIGNATURE IS NULL THEN '대기'
+			            END
+			    END AS LAST_SIGNATURE
+    FROM APPROVAL A
+        JOIN APPROVAL_DOC AD ON (A.DOC_NO = AD.DOC_NO)
+        JOIN DOC_TYPE D ON (AD.DOC_TYPE = D.DOC_TYPE)
+    ORDER BY APP_NO DESC) A
+	WHERE ROWNUM BETWEEN 1 AND 6
 	</select>
 	
 	<!-- 투두리스트 등록 -->
@@ -274,6 +291,7 @@
 	 	FROM TODO
 	 	WHERE USER_NO = #{userNo}
 	 	AND STATUS IN ('N' ,'C')
+	 	ORDER BY TODO_NO DESC
 	</select>
 	
 	<!-- 투두리스트 수정 -->
@@ -375,4 +393,69 @@
 		DELETE FROM ALERT
 		WHERE RECEIVER = #{userNo}
 	</delete>
+
+	<insert id="insertOnTime">
+		<choose>
+			<when test="leaveType != null">
+			INSERT INTO ATTENDANCE_RECORD (ATT_RECORD_NO, USER_NO, ON_TIME, LEAVE_CODE)
+			VALUES (SEQ_ATNO.NEXTVAL,#{userNo}, TO_DATE(TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS'), #{leaveType})
+			</when>
+			<otherwise>
+			INSERT INTO ATTENDANCE_RECORD (ATT_RECORD_NO, USER_NO, ON_TIME, LEAVE_CODE)
+			VALUES (SEQ_ATNO.NEXTVAL,#{userNo}, TO_DATE(TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS'), 'L1')
+			</otherwise>
+		</choose>
+
+	</insert>
+	
+	<insert id="insertOffTime">
+		UPDATE ATTENDANCE_RECORD 
+		SET OFF_TIME = SYSDATE 
+		WHERE USER_NO = #{userNo} 
+		AND ATT_RECORD_NO = (SELECT MAX(ATT_RECORD_NO) 
+								FROM ATTENDANCE_RECORD)
+	</insert>
+	
+	<select id="selectOnTime" resultMap="mainAttendanceResultSet">
+		SELECT *
+		FROM ( SELECT ATT_RECORD_NO, ATT.USER_NO, TO_CHAR(ON_TIME, 'HH24:MI') AS ON_TIME
+			  FROM ATTENDANCE_RECORD ATT
+			  JOIN MEMBER M ON (M.USER_NO = ATT.USER_NO)
+			  WHERE ATT.USER_NO = #{userNo}
+			    AND TO_DATE(TO_CHAR(ON_TIME, 'YYYY-MM-DD')) = TO_DATE(TO_CHAR(SYSDATE, 'YYYY-MM-DD'))
+			  ORDER BY ON_TIME DESC)
+		WHERE ROWNUM = 1
+	</select>
+	
+	<select id="mainSelectOffTime" resultMap="mainAttendanceResultSet">
+		SELECT *
+		FROM ( SELECT ATT_RECORD_NO, ATT.USER_NO, TO_CHAR(OFF_TIME, 'HH24:MI') AS OFF_TIME
+			  FROM ATTENDANCE_RECORD ATT
+			  JOIN MEMBER M ON (M.USER_NO = ATT.USER_NO)
+			  WHERE ATT.USER_NO = #{userNo}
+			    AND TO_DATE(TO_CHAR(ON_TIME, 'YYYY-MM-DD')) = TO_DATE(TO_CHAR(SYSDATE, 'YYYY-MM-DD'))
+			  ORDER BY ON_TIME DESC)
+		WHERE ROWNUM = 1
+	</select>
+	
+	<update id="mainUpdateOnTime">
+	 	UPDATE ATTENDANCE_RECORD
+		SET ON_TIME = SYSDATE
+		WHERE USER_NO = #{userNo}
+		AND ATT_RECORD_NO = (
+		    SELECT ATT_RECORD_NO
+		    FROM (SELECT ATT_RECORD_NO
+		        FROM ATTENDANCE_RECORD
+		        WHERE USER_NO = #{userNo}
+		        ORDER BY ATT_RECORD_NO DESC )
+		    WHERE ROWNUM = 1)
+	</update>
+	
+	<select id="selectCount" resultType="_int">
+		SELECT COUNT (ON_TIME)
+		FROM (SELECT TO_DATE(TO_CHAR(SYSDATE, 'YYYY-MM-DD')) AS ON_TIME
+				FROM ATTENDANCE_RECORD
+				WHERE USER_NO = #{userNo})
+		WHERE ON_TIME LIKE SYSDATE
+	</select>
 </mapper>
