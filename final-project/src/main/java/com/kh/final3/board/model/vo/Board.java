@@ -28,4 +28,5 @@ public class Board {
 	private String attachmentNo; // 첨부파일 여부
 	private int refUno; // 즐겨찾기여부
 	private String categoryName; //카테고리 이름
+	private int recommendCount; //추천개수
 }

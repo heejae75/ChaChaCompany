@@ -26,6 +26,7 @@
   			<typeAlias type="com.kh.final3.chatting.model.vo.ChatRoom" alias="chatRoom"/>
   			<typeAlias type="com.kh.final3.todo.model.vo.Todo" alias="todo"/>
   			<typeAlias type="com.kh.final3.payment.model.vo.Payment" alias="payment"/>
+  			<typeAlias type="com.kh.final3.member.model.vo.MemberAttachment" alias="memberAttachment"/>
   		</typeAliases>
   		
   		<mappers>
