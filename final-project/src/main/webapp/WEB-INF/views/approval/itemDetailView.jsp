@@ -21,7 +21,6 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Song+Myung&display=swap" rel="stylesheet">
 </head>
-
 <body>
 	<%@ include file="../common/menubar.jsp" %>
     <br><br><br><br>

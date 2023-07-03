@@ -31,6 +31,12 @@
             margin-top: 13px;
             margin-left: 7px;
         }
+        #member-info-table{
+        	border-collapse: collapse;
+        }
+        #member-info-table th,td {
+        	vertical-align: middle;
+        }
         #item-content1{
             height: 15%;
         }
@@ -128,3 +134,4 @@
         	word-break:break-all;
             height: auto;
         }
+        

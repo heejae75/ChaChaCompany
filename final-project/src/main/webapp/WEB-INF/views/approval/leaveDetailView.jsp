@@ -245,9 +245,7 @@
 		var docTitle = "${ad.docTitle}";
 		var docType = "${dt}";
 		
-		console.log("최종결제자 : "+lastSignature+"중간 결제자 : "+secondSignature+"전자결재 작성자 : "+docWriter+"전자결재 제목 : "+docTitle+ "전자결재 타입: "+docType);
-			
-		if(loginUserNo === secondApprover){
+		if(loginUserNo == secondApprover){
 			$.ajax({
 				url : "updateSecondApprover.ap",
 				type : "POST",
@@ -264,6 +262,7 @@
 						$("#secondSignature").attr("value",loginUserName);
 						$("#secondDate").attr("value",secondDate);
     					location.reload();
+    					alert("승인이 완료되었습니다.");
 						
 						//실시간 알림 서버에 보내기 
 						if(secondSignature != docWriter){
@@ -274,16 +273,13 @@
 							}
 						}
 						
-    					alert("승인이 완료되었습니다.");
 					}
-					
-					
 				},
 				error : function(){
 					console.log("통신오류")
 				}
 			});
-		}else if(loginUserNo===lastApprover){
+		}else if(loginUserNo==lastApprover){
 			if("${a.secondApprover}" ==null){
 				alert("중간결재자의 승인이 누락되었습니다.");
 			}else{
@@ -306,6 +302,7 @@
     						$("#reject-btn").attr("disabled",true);
     						$("#emergency-btn").attr("checked",false);
     						$("#lastDate").attr("value",lastDate);
+    						alert("승인이 완료되었습니다.");
     						location.reload();
     						
     						//실시간 알림 서버에 보내기 
@@ -316,8 +313,6 @@
     							    socket.send(message);
     							}
     						}
-    						
-    						alert("승인이 완료되었습니다.");
     					}
     				},
     				error : function(){
