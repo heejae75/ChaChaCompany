@@ -31,7 +31,6 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 	-->	
 <style>
-	<style>
 /* 폰트 */	
 @font-face {
     font-family: 'KimjungchulGothic-Bold';
@@ -56,7 +55,6 @@
 	--body-font: ; /*폰트*/
 	--normal-font-size: 1.7rem; /*기본 글씨 크기*/
 	--z-fixed: 100; /*?*/
-	--main_profile_height: ;
 }*,
 
 ::before, ::after{
@@ -126,6 +124,7 @@ a{
     padding: .5rem 1rem 0 0;
     transition: .5s;
     z-index: var(--z-fixed);
+    font-family: 'HallymGothic-Regular';
 }
 
 .nav{
@@ -349,12 +348,13 @@ a{
 .header_profile_menu .header_profile_submenu a {
     display: block;
     padding: 5px;
-    font-size: 18px;
+    font-size: 17px;
     background-color: #0E6251;
     color: white;
     width: 100px;
     height: 40px;
     padding: 10px 0;
+    font-family: 'HallymGothic-Regular';
     
 }
    
@@ -420,15 +420,18 @@ a{
 }
 
 #menuAlertAllTitle{
+	
 	font-size: 27px;
 	font-weight: bold;
+	font-family: 'KimjungchulGothic-Bold';
 }
 
 .menuAlertHeader button{
-	margin-left: 117px;
 	border: none;
 	background-color: #0E6251;
 	color: white;
+	font-family: 'HallymGothic-Regular';
+	margin-left: 105px;
 }
 
 /* 알림 내역구간 */
@@ -436,6 +439,7 @@ a{
 	list-style-type: none;
 	margin: 10px 0 0 0;
 	padding: 0 0 0 10px;
+	font-family: 'HallymGothic-Regular';
 }
 
 .menuAlertList a{
@@ -450,27 +454,6 @@ a{
 
 .menuAlertList span{
 	font-size: 16px;
-}
-
-.menuAlertList
-   
-/* 채팅  */
-.header_chat{
- 
-}
-
-#alarm{
-	margin-left:20px;
-	position:absolute;
-	text-align:center;
-	background-color:red;
-	color:#fff;
-	border-radius:200px;
-	width:18px;
-	height:17px;
-	font-size:12px;
-	font-weight:400;
-	line-height:15px;
 }
 
 /* 토스트 css */
@@ -489,6 +472,7 @@ a{
     background: rgba(0, 0, 0, .35);
     color: #fff;
     z-index: 100000;
+    font-family: 'HallymGothic-Regular';
 }
 
 #toast.reveal {

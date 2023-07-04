@@ -22,6 +22,7 @@
 	border-radius: 20px;
 	background-color: rgb(203, 235, 216);
 	float: left;
+	font-family: 'HallymGothic-Regular';
 }
 
 #main_profile a {
@@ -42,6 +43,7 @@
 	text-decoration: none;
 	color: black;
 	cursor: pointer;
+	font-family: 'KimjungchulGothic-Bold';
 }
 
 #main_logout {
@@ -52,6 +54,7 @@
 	float: left;
 	font-size: 20px;
 	font-weight: bold;
+	font-family: 'KimjungchulGothic-Bold';
 }
 
 /* 출퇴근 기록하는 div */
@@ -150,7 +153,6 @@
 	font-size: 20px;
 }
 
-/* 이름 바꿀예정 */
 .main_others {
 	border: 2px solid black;
 	border-radius: 20px;
@@ -215,26 +217,29 @@
 }
 
 #mainOthersList {
-	/* border: 1px solid black;  */
 	width: 750px;
 	height: 80px;
 	margin: auto;
 	text-align: center;
+	font-family: 'HallymGothic-Regular';
 }
 
 #mainApprovalList {
 	width: 750px;
 	margin: auto;
 	font-size: 20px;
+	font-family: 'HallymGothic-Regular';
 }
 
 #others_profile_table {
 	margin: auto;
+	font-family: 'HallymGothic-Regular';
 }
 
 #calendar {
 	width: 350px; /* 원하는 너비 값으로 변경 */
 	margin: 55px auto 10px auto; /* 가운데 정렬을 위해 추가 */
+	font-family: 'HallymGothic-Regular';
 }
 
 .fc-left h2 {
@@ -257,12 +262,14 @@
 .main_todo_input_box{
     text-align: center;
     margin-bottom: 20px;
+    font-family: 'HallymGothic-Regular';
 }
 
 #main_todo_value{
     width: 300px;
     height: 50px;
     font-size: 18px;
+    font-family: 'HallymGothic-Regular';
 }
 #main_todo_add {
     width: 50px;
@@ -273,6 +280,7 @@
 .mainToDoList{
     list-style: none;
     font-size: 20px;
+    font-family: 'HallymGothic-Regular';
 }
 
 #mainAddTodo {
@@ -312,6 +320,7 @@
 
 table tr {
 	cursor: pointer;
+	font-family: 'HallymGothic-Regular';
 }
 
 a{
