@@ -142,5 +142,10 @@ public class MainDao {
 	public int selectCount(SqlSessionTemplate sqlSession, int userNo) {
 		return sqlSession.selectOne("mainMapper.selectCount", userNo);
 	}
+
+	//프로필 조회 
+	public ArrayList<Member> selectProfile(SqlSessionTemplate sqlSession, int userNo) {
+		return (ArrayList)sqlSession.selectList("mainMapper.selectProfile", userNo);
+	}
 	
 }

@@ -37,20 +37,38 @@
             width: 100%;
             height: 100%;
         }
+        
+        #indexLogoDiv{
+        	text-align: center;
+        	margin-top: 7%;
+        }
+        
+        #indexLogoDiv button{
+        	border: none;
+        	background-color: white;
+        }
+        
+        #indexLogo{
+        	width: 500px;
+        	height: 500px;
+        	border-radius: 50px;
+        }
     </style>
 </head>
 <body>
     <div class="outer">
         <a href="adminEnroll">관리자 회원가입(임시)</a>
-        <div id="memberLogin">
-            <button onclick="memberLogin()">일반사원</button>
-        </div>
-        <div id="adminLogin">
-            <button onclick="adminLogin()">관리자</button>
-        </div>
-	    <div>
-	    	<a href="/final3/admin/adminHome.ma">관리자 메인페이지 </a>
-	    </div>
+<!--         <div id="memberLogin"> -->
+<!--             <button onclick="memberLogin()">일반사원</button> -->
+<!--         </div> -->
+<!--         <div id="adminLogin"> -->
+<!--             <button onclick="adminLogin()">관리자</button> -->
+<!--         </div> -->
+	   	<div id="indexLogoDiv">
+	   		<button onclick="memberLogin()" type="button">
+	   			<img src="/final3/resources/image/logoGreen.png" id="indexLogo">
+	   		</button>
+	   	</div>
     </div>
 <script>
 	function memberLogin(){
