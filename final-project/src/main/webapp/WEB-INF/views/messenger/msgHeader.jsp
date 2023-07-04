@@ -20,7 +20,7 @@
 	}
 	.innerOuter {
 	    border:1px solid lightgray;
-	    width:80%;
+	    width:970px;
 	    height:100%;
 	    margin:auto;
 	    padding:3% 7%;

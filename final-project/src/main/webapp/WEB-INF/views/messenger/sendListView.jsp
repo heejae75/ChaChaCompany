@@ -69,6 +69,15 @@
    		margin:0px 10px 0px 5px;
    		height:37.99px; 
    	}
+   	
+   	#sendMsgList{
+   		table-layout:fixed; /* 테이블 고정 */
+   	}
+   #sendMsgList td {
+   		overflow: hidden; 
+   		text-overflow: ellipsis; /* 말줄임 css  */
+   		white-space: nowrap; /* 글자를 한줄로 모아준다 */ 
+   	}
       
 </style>
 </head>
@@ -141,11 +150,11 @@
             <table id="sendMsgList" class="table table-hover">
                 <thead>
                     <tr>
-                        <th width="10%">선택</th>
-                        <th width="10%">받는사람</th>
-                        <th width="40%">제목</th>
-                        <th width="15%"></th>
-                        <th width="25%">날짜</th>
+                        <th width="80">선택</th>
+                        <th width="100">받는사람</th>
+                        <th width="300">제목</th>
+                        <th width="120"></th>
+                        <th width="190">날짜</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -158,10 +167,10 @@
                 		<c:otherwise>
                 			<c:forEach var="m" items="${msgList}">
                 				<tr>
-                					<td onclick="event.cancelBubble=true"><input type="checkbox" style="width:15px; height:15px;"></td>
-			                        <td>${m.receiver}<input type="hidden" value="${m.messengerNo}"></td>
-	                        		<td style="text-align:left;">${m.msgTitle}</td>
-			                        <td><c:choose>
+                					<td width="80" onclick="event.cancelBubble=true" ><input type="checkbox" style="width:15px; height:15px;"></td>
+			                        <td width="100">${m.receiver}<input type="hidden" value="${m.messengerNo}"></td>
+	                        		<td width="300" style="text-align:left;" >${m.msgTitle}</td>
+			                        <td width="120"><c:choose>
 			                        		<c:when test="${m.readStatus eq 'Y' }">
 			                        		 	읽음
 			                        		</c:when>
@@ -170,7 +179,7 @@
 			                        		</c:otherwise>
 			                        	</c:choose>
 			                        </td>
-			                        <td>${m.sendDate}</td>
+			                        <td width="190">${m.sendDate}</td>
                 				</tr>
                 			</c:forEach>
                 		</c:otherwise>

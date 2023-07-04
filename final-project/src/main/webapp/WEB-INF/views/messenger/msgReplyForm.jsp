@@ -72,14 +72,17 @@
 	    margin:5px;
 	}
 	
-	/* 긴급 체크박스 관련 style */
-	#msg-table div{
-		width:12%; 
-		height:100%;
-		float:left; 
+	/* modal style  */
+	.modal-content{
+		width:550px;
+	}
+	#msg-searchNameList{
+		table-layout:fixed;
 	}
 	
-    
+	#msg-searchNameList th, #msg-searchNameList td{
+		text-align: center;
+	}
         
 </style>
 </head>
@@ -124,36 +127,36 @@
 	                <!-- 쪽지 작성 영역 -->
 	                <table id="msg-table" align="center">
 	                    <tr>
-	                        <th width="15%">제목</th>
-	                        <td width="70%">
-	                        	<div id="chk_area">
+	                        <th width="120">제목</th>
+	                        <td width="80">
        	                			<input id="emcChk" type="checkbox" style="width:15px; height:15px;" > 긴급
 	       	                		<input type="hidden" name="emcStatus" value="N">
-	                        	</div>
-		                    	<input name="msgTitle" type="text" class="form-control" style="width:86%; margin-right:0px;" required >
+                    		</td>
+                    		<td width="500">
+                    			<input name="msgTitle" type="text" class="form-control" style="width:100%; margin-right:0px;" maxlength="30" placeholder="제목을 입력해주세요" required >
                     		</td>
 	                    </tr>
 	                    <tr>
 	                        <th>보낸사람</th>
-	                        <td>
+	                        <td colspan="2">
 	                        	<input type="text" class="form-control" value="${loginUser.userId} (${loginUser.userName})" readonly>
 	                        	<input type="hidden" name="sender" value="${loginUser.userNo }"> <!-- controller에 보낼 보낸사람 번호  -->
 	                        </td>
 	                    </tr>
 	                    <tr>
 	                        <th>받는사람</th>
-	                        <td>
+	                        <td colspan="2">
 	                        	<input type="text" id="recUser" class="form-control" value="${m.senderId} (${m.sender})" readonly>
 	                         	<input type="hidden" id="recvUno" name="recvUno" value="${m.senderUno}"> <!-- controller에 보낼 받는사람 번호 --> 
 	                        </td>
-	                        <td>
+	                        <td colspan="2">
 	                        	<button type="button" class="btn btn-secondary" id="address" style="margin-left:20px;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">주소록</button>
                         	</td>
 	                    </tr>
 	                    <tr>
 	                        <th>내용</th>
-	                        <td>
-	                        	<textarea name="msgContent" id="content" class="form-control" rows="8" style="resize:none;" required></textarea>
+	                        <td colspan="2">
+	                        	<textarea name="msgContent" id="content" class="form-control" rows="8" style="resize:none;" maxlength="320" placeholder="내용을 입력해주세요" required></textarea>
 	                        </td>
 	                    </tr>
 	                </table>
@@ -178,7 +181,7 @@
 	      				<th>검색</th>
 						<td>
 							<select id="deptCode" name="deptCode" class="form-control"  style="width:30%; float:left; margin-right:5px; text-align:center">
-								<option value="">전체</option>
+								<option value="전체">전체</option>
 								<option value="D1">기타</option>
 	                            <option value="D2">회계관리부</option>
 	                            <option value="D3">마케팅부</option>
@@ -197,17 +200,17 @@
 	      	</table>
 	      	
 	      	<table id="msg-searchNameList" class="table table">
-	      		<thead>
+	      		<thead style="display: block;">
 	      			<tr>
-	      				<th align="center">NO.</th>
-	      				<th>선택</th> 
-						<th>아이디</th>
-						<th>이름</th>
-						<th>부서</th>
-						<th>직급</th>
+	      				<th width="40">NO.</th>
+	      				<th width="60">선택</th> 
+						<th width="120">아이디</th>
+						<th width="100">이름</th>
+						<th width="120">부서</th>
+						<th width="80">직급</th>
 	      			</tr>
 	      		</thead>
-				<tbody>
+				<tbody style= " display: block; height: 300px; width:100%; overflow:auto;">
 				<!-- 검색 결과를 담아줄 곳  -->
 				</tbody>	      			
 	      	</table>
@@ -245,18 +248,18 @@
 					if(result.length != 0){ //list가 비어있는지 유무는 length로 판단 
 						for(var i in result){
 							str += "<tr>"
-								+"<td>"+ result[i].userNo +"</td>"
-								+"<td><input name='searchChk' type='checkbox' style='width:15px; height:15px'></td>"
-								+"<td>" + result[i].userId + "</td>"
-								+"<td>" + result[i].userName + "</td>"
-								+"<td>" + result[i].deptName + "</td>"
-								+"<td>" + result[i].jobName + "</td>"
+								+"<td width='40'>"+ result[i].userNo +"</td>"
+								+"<td width='60'><input name='searchChk' type='checkbox' style='width:15px; height:15px'></td>"
+								+"<td width='120'>" + result[i].userId + "</td>"
+								+"<td width='100'>" + result[i].userName + "</td>"
+								+"<td width='120'>" + result[i].deptName + "</td>"
+								+"<td width='80'>" + result[i].jobName + "</td>"
 								+"</tr>";
 						}
 	      			
 					}else{
 						str +="<tr>"
-							+"<td colspan='6'> 검색 결과가 존재하지 않습니다. </td>"
+							+"<td width='520'colspan='6'> 검색 결과가 존재하지 않습니다. </td>"
 							+ "</tr>";
 					}
 					
