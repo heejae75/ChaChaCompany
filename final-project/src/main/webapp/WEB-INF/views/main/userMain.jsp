@@ -22,6 +22,7 @@
 	border-radius: 20px;
 	background-color: rgb(203, 235, 216);
 	float: left;
+	font-family: 'HallymGothic-Regular';
 }
 
 #main_profile a {
@@ -32,7 +33,6 @@
 }
 
 #main_profile img {
-	border: 1px solid black;
 	width: 200px;
 	height: 200px;
 	border-radius: 100px;
@@ -43,6 +43,7 @@
 	text-decoration: none;
 	color: black;
 	cursor: pointer;
+	font-family: 'KimjungchulGothic-Bold';
 }
 
 #main_logout {
@@ -53,6 +54,7 @@
 	float: left;
 	font-size: 20px;
 	font-weight: bold;
+	font-family: 'KimjungchulGothic-Bold';
 }
 
 /* 출퇴근 기록하는 div */
@@ -151,7 +153,6 @@
 	font-size: 20px;
 }
 
-/* 이름 바꿀예정 */
 .main_others {
 	border: 2px solid black;
 	border-radius: 20px;
@@ -216,26 +217,29 @@
 }
 
 #mainOthersList {
-	/* border: 1px solid black;  */
 	width: 750px;
 	height: 80px;
 	margin: auto;
 	text-align: center;
+	font-family: 'HallymGothic-Regular';
 }
 
 #mainApprovalList {
 	width: 750px;
 	margin: auto;
 	font-size: 20px;
+	font-family: 'HallymGothic-Regular';
 }
 
 #others_profile_table {
 	margin: auto;
+	font-family: 'HallymGothic-Regular';
 }
 
 #calendar {
 	width: 350px; /* 원하는 너비 값으로 변경 */
 	margin: 55px auto 10px auto; /* 가운데 정렬을 위해 추가 */
+	font-family: 'HallymGothic-Regular';
 }
 
 .fc-left h2 {
@@ -258,12 +262,14 @@
 .main_todo_input_box{
     text-align: center;
     margin-bottom: 20px;
+    font-family: 'HallymGothic-Regular';
 }
 
 #main_todo_value{
     width: 300px;
     height: 50px;
     font-size: 18px;
+    font-family: 'HallymGothic-Regular';
 }
 #main_todo_add {
     width: 50px;
@@ -274,6 +280,7 @@
 .mainToDoList{
     list-style: none;
     font-size: 20px;
+    font-family: 'HallymGothic-Regular';
 }
 
 #mainAddTodo {
@@ -313,6 +320,7 @@
 
 table tr {
 	cursor: pointer;
+	font-family: 'HallymGothic-Regular';
 }
 
 a{
@@ -327,7 +335,9 @@ a{
 	<div class="content">
 		<div class="main_profile_area" align="center">
 			<div id="main_profile">
-				<img src="https://i.imgur.com/hczKIze.jpg" alt="">
+				<div id="mainProfileImg">
+					
+				</div>
 				<p style="font-size: 30px; margin: 0 0 0 0;">${loginUser.userName }</p>
 				<p>${loginUser.deptName } / ${loginUser.jobName }</p>
 				<div style="float:left; margin-left: 80px;">
@@ -646,6 +656,7 @@ a{
 			selectTodoList(); //투두리스트 호출 
 			selectOnTime(); //출근시간 조회
 			selectOffTime(); //퇴근시간 조회
+			selectProfile(); //프로필 조회
 
 			//공지사항 상세보기 가기 
 			$("#mainNoticeList>tbody").on("click", "tr", function() {
@@ -816,9 +827,25 @@ a{
 								rowCount++;
 							}
 
-							console.log("회원 번호 : "+result[i].userNo);
-							
-							str += "<td>"
+							//console.log("회원 번호 : "+result[i].userNo);
+							console.log(result[i].changeName);
+							if(result[i].changeName == null) {
+								str += "<td>"
+										+ "<img style='border-radius: 50px; width: 50px; height: 50px;' src='/final3/resources/image/청록이.jpg'>"
+										+ "<p data-target='#others_profile' data-toggle='modal'>"
+										+ result[i].userName
+										+ " "
+										+ result[i].jobName
+										+ "<input type = 'hidden' value='"+result[i].deptName+"'>"
+										+ "<input type = 'hidden' value='"+result[i].phone+"'>"
+										+ "<input type = 'hidden' value='"+result[i].email+"'>"
+										+ "<input type = 'hidden' value='"+result[i].empolymentDate+"'>";
+										+ "<input type = 'hidden' value='"+result[i].userNo+"'>";
+										+ "<input type = 'hidden' value='"+result[i].userId+"'>";
+										+"</p></td>";
+							}else{
+								str += "<td>"
+									+ "<img style='border-radius: 50px; width: 50px; height: 50px;' src='/final3/"+result[i].changeName+"'>"
 									+ "<p data-target='#others_profile' data-toggle='modal'>"
 									+ result[i].userName
 									+ " "
@@ -830,6 +857,7 @@ a{
 									+ "<input type = 'hidden' value='"+result[i].userNo+"'>";
 									+ "<input type = 'hidden' value='"+result[i].userId+"'>";
 									+"</p></td>";
+							}
 
 							if (i % 5 == 4 || i == result.length - 1) {
 								str += "</tr>";
@@ -851,28 +879,58 @@ a{
 							var empolymentDate = userData.empolymentDate;
 							var userId = userData.userId;
 							var userNo = userData.userNo;
+							var changeName = userData.changeName;
 
-							//console.log("찍히니?"+userNo);
-							$("#others_profile_table tbody").html("<tr><td>이름</td><td>"
-																	+ userName
-																	+ "</td></tr>"
-																	+ "<tr><td>직급</td><td>"
-																	+ jobName
-																	+ "</td></tr>"
-																	+ "<tr><td>부서</td><td>"
-																	+ deptName
-																	+ "</td></tr>"
-																	+ "<tr><td>전화번호</td><td id='tbPhone'>"
-																	+ phone
-																	+ "</td></tr>"
-																	+ "<tr><td>이메일</td><td id='tbEmail'>"
-																	+ email
-																	+ "</td></tr>"
-																	+ "<tr><td>입사일 </td><td>"
-																	+ empolymentDate
-																	+ "</td></tr>");
-							
-							$("#otherProfileMsg").html("<button class='btn btn-success' style='margin-top: 20px' data-value1='"+userId+"' data-value2='"+userName+"' data-value3='"+userNo+"'>쪽지 쓰기 </button>");
+							console.log("찍히니?"+changeName);
+							if(changeName == null) {
+								$("#others_profile_table tbody").html("<tr><td colspan='2'>"
+																		+ "<img style='border-radius: 100px; width: 200px; height: 200px;' src='/final3/resources/image/청록이.jpg'>"
+																		+ "</td></tr>"
+																		+ "<tr><td>이름</td><td>"
+																		+ userName
+																		+ "</td></tr>"
+																		+ "<tr><td>직급</td><td>"
+																		+ jobName
+																		+ "</td></tr>"
+																		+ "<tr><td>부서</td><td>"
+																		+ deptName
+																		+ "</td></tr>"
+																		+ "<tr><td>전화번호</td><td id='tbPhone'>"
+																		+ phone
+																		+ "</td></tr>"
+																		+ "<tr><td>이메일</td><td id='tbEmail'>"
+																		+ email
+																		+ "</td></tr>"
+																		+ "<tr><td>입사일 </td><td>"
+																		+ empolymentDate
+																		+ "</td></tr>");
+
+								$("#otherProfileMsg").html("<button class='btn btn-success' style='margin-top: 20px' data-value1='"+userId+"' data-value2='"+userName+"' data-value3='"+userNo+"'>쪽지 쓰기 </button>");
+							}else {
+								$("#others_profile_table tbody").html("<tr><td colspan='2'>"
+																		+ "<img style='border-radius: 100px; width: 200px; height: 200px;' src='/final3/"+changeName+"'>"
+																		+ "</td></tr>"
+																		+ "<tr><td>이름</td><td>"
+																		+ userName
+																		+ "</td></tr>"
+																		+ "<tr><td>직급</td><td>"
+																		+ jobName
+																		+ "</td></tr>"
+																		+ "<tr><td>부서</td><td>"
+																		+ deptName
+																		+ "</td></tr>"
+																		+ "<tr><td>전화번호</td><td id='tbPhone'>"
+																		+ phone
+																		+ "</td></tr>"
+																		+ "<tr><td>이메일</td><td id='tbEmail'>"
+																		+ email
+																		+ "</td></tr>"
+																		+ "<tr><td>입사일 </td><td>"
+																		+ empolymentDate
+																		+ "</td></tr>");
+								
+								$("#otherProfileMsg").html("<button class='btn btn-success' style='margin-top: 20px' data-value1='"+userId+"' data-value2='"+userName+"' data-value3='"+userNo+"'>쪽지 쓰기 </button>");
+							}
 						
 							$("#otherProfileMsg button").click(function() {
 								var userId = $(this).data("value1");
@@ -917,8 +975,10 @@ a{
 								str += "<tr id='mainTeamTr" + rowCount + "'>";
 								rowCount++;
 							}
-
-							str += "<td>"
+							
+							if(result[i].changeName == null) {
+								str += "<td>"
+									+ "<img style='border-radius: 50px; width: 38px; height: 38px;' src='/final3/resources/image/청록이.jpg'>"
 									+ "<p data-target='#others_profile' data-toggle='modal'>["
 									+ result[i].deptName
 									+ "]<br>"
@@ -931,6 +991,22 @@ a{
 									+ "<input type = 'hidden' value='"+result[i].userNo+"'>";
 									+ "<input type = 'hidden' value='"+result[i].userId+"'>";
 									+ "</p></td>";
+							}else {
+								str += "<td>"
+									+ "<img style='border-radius: 50px; width: 38px; height: 38px;' src='/final3/"+result[i].changeName+"'>"
+									+ "<p data-target='#others_profile' data-toggle='modal'>["
+									+ result[i].deptName
+									+ "]<br>"
+									+ result[i].userName
+									+ " "
+									+ result[i].jobName
+									+ "<input type = 'hidden' value='"+result[i].phone+"'>"
+									+ "<input type = 'hidden' value='"+result[i].email+"'>"
+									+ "<input type = 'hidden' value='"+result[i].empolymentDate+"'>"
+									+ "<input type = 'hidden' value='"+result[i].userNo+"'>";
+									+ "<input type = 'hidden' value='"+result[i].userId+"'>";
+									+ "</p></td>";
+							}
 
 							if (i % 5 == 4 || i == result.length - 1) {
 								str += "</tr>";
@@ -951,27 +1027,58 @@ a{
 							var empolymentDate = userData.empolymentDate;
 							var userId = userData.userId;
 							var userNo = userData.userNo;
+							var changeName = userData.changeName;
 
-							$("#others_profile_table tbody").html("<tr><td>이름</td><td>"
-																	+ userName
-																	+ "</td></tr>"
-																	+ "<tr><td>직급</td><td>"
-																	+ jobName
-																	+ "</td></tr>"
-																	+ "<tr><td>부서</td><td>"
-																	+ deptName
-																	+ "</td></tr>"
-																	+ "<tr><td>전화번호</td><td>"
-																	+ phone
-																	+ "</td></tr>"
-																	+ "<tr><td>이메일</td><td>"
-																	+ email
-																	+ "</td></tr>"
-																	+ "<tr><td>입사일 </td><td>"
-																	+ empolymentDate
-																	+ "</td></tr>");
+							if(changeName == null) {
+								$("#others_profile_table tbody").html("<tr><td colspan='2'>"
+																		+ "<img style='border-radius: 100px; width: 200px; height: 200px;' src='/final3/resources/image/청록이.jpg'>"
+																		+ "</td></tr>"
+																		+ "<tr><td>이름</td><td>"
+																		+ userName
+																		+ "</td></tr>"
+																		+ "<tr><td>직급</td><td>"
+																		+ jobName
+																		+ "</td></tr>"
+																		+ "<tr><td>부서</td><td>"
+																		+ deptName
+																		+ "</td></tr>"
+																		+ "<tr><td>전화번호</td><td>"
+																		+ phone
+																		+ "</td></tr>"
+																		+ "<tr><td>이메일</td><td>"
+																		+ email
+																		+ "</td></tr>"
+																		+ "<tr><td>입사일 </td><td>"
+																		+ empolymentDate
+																		+ "</td></tr>");
+								
+								$("#otherProfileMsg").html("<button class='btn btn-success' style='margin-top: 20px' data-value1='"+userId+"' data-value2='"+userName+"' data-value3='"+userNo+"'>쪽지 쓰기 </button>");
+							}else{
+								$("#others_profile_table tbody").html("<tr><td colspan='2'>"
+																		+ "<img style='border-radius: 100px; width: 200px; height: 200px;' src='/final3/"+changeName+"'>"
+																		+ "</td></tr>"
+																		+ "<tr><td>이름</td><td>"
+																		+ userName
+																		+ "</td></tr>"
+																		+ "<tr><td>직급</td><td>"
+																		+ jobName
+																		+ "</td></tr>"
+																		+ "<tr><td>부서</td><td>"
+																		+ deptName
+																		+ "</td></tr>"
+																		+ "<tr><td>전화번호</td><td>"
+																		+ phone
+																		+ "</td></tr>"
+																		+ "<tr><td>이메일</td><td>"
+																		+ email
+																		+ "</td></tr>"
+																		+ "<tr><td>입사일 </td><td>"
+																		+ empolymentDate
+																		+ "</td></tr>");
+
+								$("#otherProfileMsg").html("<button class='btn btn-success' style='margin-top: 20px' data-value1='"+userId+"' data-value2='"+userName+"' data-value3='"+userNo+"'>쪽지 쓰기 </button>");
+							}
 							
-							$("#otherProfileMsg").html("<button style='align:center;' data-value1='"+userId+"' data-value2='"+userName+"' data-value3='"+userNo+"'>쪽지 쓰기 </button>");
 							
 							$("#otherProfileMsg button").click(function() {
 								var userId = $(this).data("value1");
@@ -1538,6 +1645,35 @@ a{
 // 				}
 // 			})
 // 		}
+
+	function selectProfile() {
+		$.ajax({
+			url: "selectProfile.ma",
+			type : "POST",
+			beforeSend : function(xhr) {
+				xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+			},
+			success : function(result) {
+				console.log(result);
+				var str = "";
+				
+				if(result.length == 0) {
+					str += "<img src='/final3/resources/image/청록이.jpg' id='member_photo'>"
+					
+					$("#mainProfileImg").html(str);
+				}else {
+					str += "<img src='/final3/"+result[0].changeName+"' id='member_photo'>"
+					
+					$("#mainProfileImg").html(str);
+				}
+			},
+			error : function(){
+				console.log("프로필 사진 오류");
+			}
+			
+		})
+		
+	}
 	</script>
 </body>
 </html>

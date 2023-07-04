@@ -42,6 +42,7 @@
 	 	<result column="STATUS" property="status"/>
 	 	<result column="JOB_NAME" property="jobName"/>
 	 	<result column="DEPT_NAME" property="deptName"/>
+	 	<result column="CHANGE_NAME" property="changeName"/>
 	</resultMap>
 	
 	<resultMap type="schedule" id="mainScheduleResultset">
@@ -105,6 +106,15 @@
 		<result column="URL" property="url"/>
 		<result column="STATUS" property="status"/>
 		<result column="LAST_SIGNATURE" property="lastSignature"/>
+	</resultMap>
+	
+	<resultMap type="memberAttachment" id="mainAttachmentResultSet">
+		<result column="MEM_ATTACHMENT_NO" property="memAttachmentNo"/>
+		<result column="REF_UNO" property="refUno"/>
+		<result column="ORIGIN_NAME" property="originName"/>
+		<result column="CHANGE_NAME" property="changeName"/>
+		<result column="FILE_PATH" property="filePath"/>
+		<result column="STATUS" property="status"/>
 	</resultMap>
 	
 	<!-- 최신 공지사항 조회  -->
@@ -175,11 +185,12 @@
 	
 	<!-- 팀 임직원 조회  -->
 	<select id="mainOthersTeamList" resultMap="mainMemberResultset">
-		SELECT USER_NO, USER_ID, USER_NAME, JOB_NAME, DEPT_NAME, PHONE, EMAIL, EMPOLYMENT_DATE
-		FROM ( SELECT USER_NO, USER_ID, USER_NAME, J.JOB_NAME, M.JOB_CODE, D.DEPT_NAME, PHONE, EMAIL, TO_CHAR(EMPOLYMENT_DATE, 'YYYY-MM-DD') EMPOLYMENT_DATE
+		SELECT USER_NO, USER_ID, USER_NAME, JOB_NAME, DEPT_NAME, PHONE, EMAIL, EMPOLYMENT_DATE, CHANGE_NAME
+		FROM ( SELECT USER_NO, USER_ID, USER_NAME, J.JOB_NAME, M.JOB_CODE, D.DEPT_NAME, PHONE, EMAIL, TO_CHAR(EMPOLYMENT_DATE, 'YYYY-MM-DD') EMPOLYMENT_DATE, MA.CHANGE_NAME
 			    FROM MEMBER M
 			    JOIN JOB J ON (M.JOB_CODE = J.JOB_CODE)
 			    JOIN DEPARTMENT D ON (M.DEPT_CODE = D.DEPT_CODE)
+			    FULL OUTER JOIN MEMBER_ATTACHMENT MA ON (M.USER_NO = MA.REF_UNO)
 			    WHERE M.DEPT_CODE = #{deptCode} 
 			    AND USER_ID != #{userId}
 			    ORDER BY JOB_CODE )  
@@ -188,11 +199,12 @@
 	
 	<!-- 전체 임직원 조회  -->
 	<select id="mainOthersAllList" resultMap="mainMemberResultset">
-		SELECT USER_NO, USER_ID, USER_NAME, JOB_NAME, DEPT_NAME, PHONE, EMAIL, EMPOLYMENT_DATE
-		FROM ( SELECT USER_NO, USER_ID, USER_NAME, M.JOB_CODE, J.JOB_NAME, D.DEPT_NAME, PHONE, EMAIL ,TO_CHAR(EMPOLYMENT_DATE, 'YYYY-MM-DD') EMPOLYMENT_DATE
+		SELECT USER_NO, USER_ID, USER_NAME, JOB_NAME, DEPT_NAME, PHONE, EMAIL, EMPOLYMENT_DATE, CHANGE_NAME
+		FROM ( SELECT USER_NO, USER_ID, USER_NAME, M.JOB_CODE, J.JOB_NAME, D.DEPT_NAME, PHONE, EMAIL ,TO_CHAR(EMPOLYMENT_DATE, 'YYYY-MM-DD') EMPOLYMENT_DATE, MA.CHANGE_NAME
 			    FROM MEMBER M
 			    JOIN JOB J ON (M.JOB_CODE = J.JOB_CODE)
 			    JOIN DEPARTMENT D ON (M.DEPT_CODE = D.DEPT_CODE)
+			    LEFT OUTER JOIN MEMBER_ATTACHMENT MA ON (M.USER_NO = MA.REF_UNO)
 			    AND USER_ID != #{userId}
 			    ORDER BY JOB_CODE )  
 		WHERE ROWNUM BETWEEN 1 AND 10
@@ -453,9 +465,15 @@
 	
 	<select id="selectCount" resultType="_int">
 		SELECT COUNT (ON_TIME)
-		FROM (SELECT TO_DATE(TO_CHAR(SYSDATE, 'YYYY-MM-DD')) AS ON_TIME
+		FROM (SELECT TO_DATE(TO_CHAR(ON_TIME, 'YYYY-MM-DD')) AS ON_TIME
 				FROM ATTENDANCE_RECORD
 				WHERE USER_NO = #{userNo})
 		WHERE ON_TIME LIKE SYSDATE
+	</select>
+	
+	<select id="selectProfile" resultMap="mainAttachmentResultSet">
+		SELECT *
+		FROM MEMBER_ATTACHMENT
+		WHERE REF_UNO = #{userNo}
 	</select>
 </mapper>

@@ -85,6 +85,8 @@ public interface MainService {
 	int mainUpdateOnTime(int userNo);
 
 	int selectCount(int userNo);
+
+	ArrayList<Member> selectProfile(int userNo);
 	
 
 }
