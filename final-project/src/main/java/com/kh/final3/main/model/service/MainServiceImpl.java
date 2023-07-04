@@ -176,4 +176,10 @@ public class MainServiceImpl implements MainService {
 		return mainDao.selectCount(sqlSession, userNo);
 	}
 
+	//프로필 조회 
+	@Override
+	public ArrayList<Member> selectProfile(int userNo) {
+		return mainDao.selectProfile(sqlSession, userNo);
+	}
+
 }
