@@ -342,5 +342,19 @@
 		});
 			
 	</script>
+	
+	<!-- 프로필에서 쪽지 보내기 스크립 -->
+	<script> 
+ 		$(document).ready(function() {
+ 			var userNo = "<%= request.getParameter("userNo") %>";
+ 			var userId = "<%= request.getParameter("userId") %>";  
+ 			var userName = "<%= request.getParameter("userName") %>"; 
+			  console.log(userNo);
+			  console.log(userId);
+			  console.log(userName);
+			$("#recUser").val(userId + " (" + userName + ")");
+			$("#recvUno").val(userNo);
+		});
+ 	</script> 
 </body>
 </html>

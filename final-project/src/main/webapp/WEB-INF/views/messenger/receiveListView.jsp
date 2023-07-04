@@ -171,19 +171,19 @@
 		                        <td width="80" onclick="event.cancelBubble=true"><input type="checkbox" style="width:15px; height:15px;"></td>
 		                        <td>${m.sender}<input type="hidden" value="${m.messengerNo}"></td>
 		                        <c:choose>
-		                        	<c:when test="${m.readStatus eq 'N'}">
+		                        	<c:when test="${m.readStatus eq 'N'} ">
 		                        		<c:choose>
 		                        			<c:when test="${m.emcStatus eq 'Y' }">
-			                        			<td width="120" style="text-align:left; font-weight:700; "><i class="fa-solid fa-circle-exclamation fa-xl" style="color: #f4c92f; overflow:hidden; text-overflow : ellipsis"></i> &nbsp;${m.msgTitle}</td>
+			                        			<td width="120" style="text-align:left; font-family: 'HallymGothic-Regular'; font-weight:700;"><i class="fa-solid fa-circle-exclamation fa-xl" style="color: #f4c92f; overflow:hidden; text-overflow : ellipsis"></i> &nbsp;${m.msgTitle}</td>
 		                        			</c:when>
 		                        			<c:otherwise>
-		                        			<td width="120" style="text-align:left; font-weight:700; overflow:hidden; text-overflow : ellipsis">${m.msgTitle}</td>
+		                        			<td width="120" style="text-align:left;overflow:hidden; text-overflow : ellipsis; font-family: 'HallymGothic-Regular'; font-weight:700;">${m.msgTitle}</td>
 		                        			</c:otherwise>
 		                        		</c:choose>
 		                        	</c:when>
 		                        	<c:otherwise>
 		                        		<c:choose>
-			                        		<c:when test="${m.readStatus eq 'Y'}">
+			                        		<c:when test="${m.emcStatus eq 'Y'}">
 			                        			<td width="400" style="text-align:left;"><i class="fa-solid fa-circle-exclamation fa-xl" style="color: #f4c92f;"></i> &nbsp;${m.msgTitle}</td>
 			                        		</c:when>
 			                        		<c:otherwise>
