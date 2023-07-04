@@ -30,7 +30,7 @@
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 	-->	
-	<style>
+<style>
 :root{
 	--header-height: 5.4rem;
 	--nav-width: 80px;
@@ -64,7 +64,7 @@ a{
     height: var(--header-height);
     position: fixed;
     top: 0;
- left: 0;
+ 	left: 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -90,9 +90,9 @@ a{
 }
 
 .header_profile img{
-    border: 1px solid black;
-    width: 35px;
-    height: 35px;
+/*     border: 1px solid black; */
+    width: 40px;
+    height: 40px;
     display: flex;
     justify-content: center;
     border-radius: 50%;
@@ -121,7 +121,7 @@ a{
 }
 
 .nav_logo{
- 	margin-top: 10px;
+/*  	margin-top: 10px; */
 
 }
 
@@ -531,12 +531,10 @@ a{
             </div>
 
 			<!-- 실시간 채팅  -->
-            <div class="header_chat">
-            <div id="alarm">7</div>
-            	<a href="${pageContext.request.contextPath}/talk.do" onclick="chatList();">
-                	<i class="fa-sharp fa-solid fa-comments fa-lg" style="color: #0E6251;"></i>
-                </a>
-            </div>
+<!--             <div class="header_chat"> -->
+<!--             <div id="alarm">7</div> -->
+<!--                 	<i class="fa-sharp fa-solid fa-comments fa-lg" style="color: #0E6251;"></i> -->
+<!--             </div> -->
        
 
 			<!-- 알림  -->
@@ -565,7 +563,9 @@ a{
             <div class="header_profile">
             	<ul class="header_profile_menu">
                     <li>
-                        <a href="#"><img src="https://i.imgur.com/hczKIze.jpg" alt="" ></a>
+                        <a href="#" id="menuProfileImg">
+<!--                         	<img src="https://i.imgur.com/hczKIze.jpg" alt="" > -->
+                        </a>
 
                         <div class="hd_pro_con">
                             <ul class="header_profile_submenu">
@@ -593,8 +593,8 @@ a{
             <div>
             	<!--로고 부분-->
                 <a href="#" class="nav_logo"> 
-                    <img src="" alt="">
-                    <span class="nav_logo_name">로고</span>
+                    <img style="width: 50px; height: 50px; margin-left:3px" src="/final3/resources/image/logoWhite.png">
+<!--                     <span class="nav_logo_name">로고</span> -->
                 </a>
 
                 <div class="sidebar-nav">
@@ -726,6 +726,10 @@ a{
 	</div>
 	
     <script>
+    	$(function() {
+    		menuSelectProfileImg();
+    	});	
+    	
     	document.addEventListener("DOMContentLoaded", function(event) {
         const showNavbar = (toggleId, navId, bodyId, headerId) =>{
 		const toggle = document.getElementById(toggleId),
@@ -977,59 +981,35 @@ a{
 	       toast.classList.remove("reveal");
 	     }, 10000);
    	}
+   	
+   	function menuSelectProfileImg() {
+		$.ajax({
+			url: "selectProfile.ma",
+			type : "POST",
+			beforeSend : function(xhr) {
+				xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+			},
+			success : function(result) {
+				console.log(result);
+				var str = "";
+				
+				if(result.length == 0) {
+					str += "<img src='/final3/resources/image/청록이.jpg' id='member_photo'>"
+					
+					$("#menuProfileImg").html(str);
+				}else {
+					str += "<img src='/final3/"+result[0].changeName+"' id='member_photo'>"
+					
+					$("#menuProfileImg").html(str);
+				}
+			},
+			error : function(){
+				console.log("프로필 사진 오류");
+			}
+			
+		})
+		
+	}
 </script>
-
-
-<!-- 채킹 웹소켓 -->
-<script>    
-function chatList(){
-    connect();
-	$("#header_chat").click(function(){
-	 var pop = $(this).siblings('#plz');
-
-	    $(pop)
-	        .css('opacity',0)
-	        .slideToggle(380 , 'swing')
-	        .animate(
-	        { opacity : 1 }
-	        ,{ queue : false , duration : 700}
-	        ,'swing');
-	    });
-	};
-
-    //웹소켓 = 전역변수 설정 -> 다른 곳에서도 알림기능 채팅기능 이용가능
-    var socket;
-    //연결 함수
-    function connect() {
-    	console.log(socket);
-    	
-    	if(!socket) { //접속을 아무리 반복해도 접속자 수 안 늘어남(중복접속 막음 )
-    		var url = "ws://${pageContext.request.serverName}:"
-        		+"${pageContext.request.serverPort}${pageContext.request.contextPath}/websocket/echo.do";
-
-        	//소켓 객체 생성	
-    		socket = new WebSocket(url);
-
-        	//웹 소켓에 이벤트 발생시 호출될 함수 선언
-    	    socket.onopen = onOpen;
-    	    socket.onmessage = onMessage;
-    	}
-    	
-    	 //웹 소켓에 연결되었을 때 호출될 함수
-        function onOpen() {
-            console.log("서버와 연결됨 ");
-        }
-        
-       // * 1 메시지 전송
-       function sendMessage(message){
-       }
-       
-        // * 2 메세지 수신
-        function onMessage(evt) {
-        	console.log("메세지 도착  : "+evt);
-       }
-
-    }
-    </script>
 </body>
 </html>

@@ -144,7 +144,7 @@ public class MainController {
 		Member m = ((Member)session.getAttribute("loginUser"));
 
 		ArrayList<Member> mainMemberTeam = mainService.mainOthersTeamList(m);
-		
+		System.out.println(mainMemberTeam);
 		return new Gson().toJson(mainMemberTeam);
 	}
 	
@@ -389,5 +389,15 @@ public class MainController {
 		System.out.println(userName);
 		System.out.println(userNo);
 		return "messenger/msgEnrollForm";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "selectProfile.ma", produces = "application/json; charset=UTF-8")
+	public String selectProfile(HttpSession session) {
+		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
+		
+		ArrayList<Member> mList = mainService.selectProfile(userNo);
+		//System.out.println(mList);
+		return new Gson().toJson(mList);
 	}
 }
