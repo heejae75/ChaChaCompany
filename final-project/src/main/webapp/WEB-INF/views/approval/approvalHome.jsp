@@ -18,19 +18,19 @@
             <div id="approval-tap-area">
                 <ul class="nav-tabs">
                 	<li role="presentation" class="nav active">
-                      <a role="presentation" onclick="approvalList();">전체</a>
+                      <a href="#" onclick="approvalList();">전체</a>
                     </li>
                     <li role="presentation" class="nav">
-                      <a onclick="approvalList('P');">진행함</a>
+                      <a href="#" onclick="approvalList('P');">진행함</a>
                     </li>
                     <li role="presentation" class="nav">
-                      <a onclick="approvalList('Y');">완료함</a>
+                      <a href="#" onclick="approvalList('Y');">완료함</a>
                     </li>
                     <li role="presentation" class="nav">
-                      <a onclick="approvalList('R');">반려함</a>
+                      <a href="#" onclick="approvalList('R');">반려함</a>
                     </li>
-                    <li role="presentation"style="float:right;margin:0">
-                      <a style="background-color:#0E6251;color: white;" href = "list.ap">결재함</a>
+                    <li role="presentation" class="nav active" style="float:right;margin:0;">
+                      <a style="cursor: pointer;" href="list.ap">결재함</a>
                     </li>
                 </ul>
             </div>

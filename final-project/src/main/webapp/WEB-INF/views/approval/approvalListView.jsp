@@ -18,16 +18,16 @@
             <div id="approval-tap-area">
                 <ul class="nav-tabs" class="nav-tabs nav-pills">
                 	<li role="presentation" class="nav1">
-                      <a href="list.ap">전체</a>
+                      <a href="#" href="list.ap">전체</a>
                     </li>
                     <li role="presentation" class="nav2">
-                      <a href="list.ap?status=P">진행함</a>
+                      <a href="#" href="list.ap?status=P">진행함</a>
                     </li>
                     <li role="presentation" class="nav3">
-                      <a href="list.ap?status=Y">완료함</a>
+                      <a href="#" href="list.ap?status=Y">완료함</a>
                     </li>
                     <li role="presentation" class="nav4">
-                      <a href="list.ap?status=R">반려함</a>
+                      <a href="#" href="list.ap?status=R">반려함</a>
                     </li>
                 </ul>
             </div>

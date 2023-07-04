@@ -87,20 +87,9 @@
                         </tr>
                     </table>
                 </div>
-                <br><br><br>
+                <br>
                 <div id="leave-content2">
-                    <table class="table table-bordered" style="text-align: center;">
-                    	<tbody>
-                            <th width="15%">연차현황</th>
-                            <th width="15%">발생현황</th>
-                            <td><input type="text" value="" id="total-leave" readonly></td>
-                            <th width="15%">사용현황</th>
-                            <td><input type="text" value="" id="use-leave" readonly></td>
-                            <th width="15%">잔여현황</th>
-                            <td><input type="text" value="" id="remain-leave" readonly></td>
-                        </tbody>
-                    </table>
-                    <table class="table table-bordered" style="text-align: center;" id="leave-table">
+                   <table class="table table-bordered" id="leave-table">
                         <thead>
                             <tr>
                                 <th width="16%">휴가신청구분</th>
@@ -112,7 +101,7 @@
                         </thead>
                         <tbody>
                         	<c:set var="arrayLength" value='${fn:length(lList)}' />
-                        	<c:forEach var="l" items="${lList }">
+                        	<c:forEach var="l" items="${lList }" varStatus="i">
 	                            <tr>
 	                                <td>
 	                                     ${l.leaveStatus}
@@ -121,12 +110,12 @@
 	                                     ${l.leaveCode}
 	                                </td>
 	                                <td>
-	                                	<input type="text" id="start-date" value="${l.startDate}" readonly>
+	                                	<input type="text" id="start-date${i.count}" value="${l.startDate}" readonly>
 	                                </td>
 	                                <td>
-	                                    <input type="text" id="end-date" value="${l.endDate}" readonly>
+	                                    <input type="text" id="end-date${i.count}" value="${l.endDate}" readonly>
 	                                <td>
-	                                    <input type="text" id="total-date" value="" readonly>
+	                                    <input type="text" id="total-date${i.count}" value="" readonly>
 	                                </td>
 	                            </tr>
                         	</c:forEach>
@@ -206,15 +195,15 @@
 	<script>
 	//시간 계산
 	$(function(){
-		for(var i=0;i<"${arrayLength}";i++){
-		var startDate = new Date($("#start-date").val());
-		var endDate = new Date($("#end-date").val());
-		
-		var timeDiff = endDate.getTime()-startDate.getTime();
-		
-		var dayDiff = Math.floor(timeDiff/(1000*60*60*24));
-		
-		$("#total-date").attr("value",dayDiff);
+		for(var i=1;i<"${arrayLength}"+1;i++){
+			var startDate = new Date($("#start-date"+i).val());
+			var endDate = new Date($("#end-date"+i).val());
+			
+			var timeDiff = endDate.getTime()-startDate.getTime();
+			
+			var dayDiff = Math.floor(timeDiff/(1000*60*60*24));
+			
+			$("#total-date"+i).attr("value",dayDiff+"일");
 		}
 	});
 		
