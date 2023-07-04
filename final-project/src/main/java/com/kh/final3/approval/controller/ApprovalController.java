@@ -46,12 +46,13 @@ import lombok.extern.slf4j.Slf4j;
 public class ApprovalController {
 	@Autowired
 	private ApprovalService as;
-	
+	//결재 홈으로
 	@RequestMapping("home.ap")
 	public String approvalHome() {
 		return "approval/approvalHome";
 	}
 	
+	//결재함
 	@RequestMapping("list.ap")
 	public String approvalList(@RequestParam(value="currentPage",defaultValue="1")int currentPage
 							  ,String status,HttpSession session, Model m
@@ -76,6 +77,8 @@ public class ApprovalController {
 		.addAttribute("keyword",keyword).addAttribute("option", option);
 		return "approval/approvalListView";
 	}
+	
+	//결재 홈 리스트
 	@ResponseBody
 	@RequestMapping(value="approvalMainList.ap", produces="application/json; charset=UTF-8")
 	public String approvalMainList(String status) {
@@ -84,6 +87,7 @@ public class ApprovalController {
 		return new Gson().toJson(list);
 	}
 	
+	//결재 작성 리스트
 	@RequestMapping("enrollList.ap")
 	public String enrollList(@RequestParam(value="currentPage",defaultValue = "1")int currentPage
 							 ,Model m, String docCategory,String keyword) {
@@ -104,16 +108,18 @@ public class ApprovalController {
 		return "approval/enrollListView";
 	}
 	
+	//결재 문서로 이동
 	@RequestMapping("enrollForm.ap")
-	public ModelAndView enrollForm(HttpServletRequest request, ModelAndView mv) {
+	public ModelAndView enrollForm(HttpServletRequest request, HttpSession session, ModelAndView mv) {
 		int appNo = Integer.parseInt(request.getParameter("appNo"));
 		
 		if(appNo==1) {
 			mv.setViewName("approval/leaveForm");
 		}else if(appNo==2) {
 			mv.setViewName("approval/itemForm");
-		}else if(appNo==3) {
-			mv.setViewName("approval/minutes");
+		}else {
+			session.setAttribute("alertMsg", "결재문서 생성중입니다.");
+			mv.setViewName("redirect:/member/enrollList.ap");
 		}
 		return mv;
 	}
@@ -122,22 +128,14 @@ public class ApprovalController {
 	@ResponseBody
 	@PostMapping(value="selectApproverList.ap",produces = "application/json; charset=UTF-8")
 //	@RequestMapping(value="selectApproverList.ap", method = {RequestMethod.GET,RequestMethod.POST}, produces = "application/json; charset=UTF-8")
-	public String selectApproverList(String deptCode) {
-		ArrayList<Member> list = as.selectApproverList(deptCode);
-		return new Gson().toJson(list);
-	}
-	//결재자 검색
-	@ResponseBody
-	@PostMapping(value="searchApprover.ap",produces = "application/json; charset=UTF-8")
-//	@RequestMapping(value="searchApprover.ap",method = {RequestMethod.GET,RequestMethod.POST},produces="application/json; charset=UTF-8")
-	public String searchApprover(String status, String keyword){
+	public String selectApproverList(String deptCode, String status, String keyword) {
 		HashMap<String, String> map = new HashMap<>();
-		
+		map.put("deptCode", deptCode);
 		map.put("status", status);
 		map.put("keyword", keyword);
 		
-		ArrayList<Member> list = as.searchApproverList(map);
-
+		ArrayList<Member> list = as.selectApproverList(map);
+		
 		return new Gson().toJson(list);
 	}
 	

@@ -30,18 +30,20 @@
                       <a onclick="approvalList('R');">반려함</a>
                     </li>
                     <li role="presentation"style="float:right;margin:0">
-                      <a style="background-color:#0E6251;color: white;" onclick="approvalListView();">결재함</a>
+                      <a style="background-color:#0E6251;color: white;" href = "list.ap">결재함</a>
                     </li>
                 </ul>
             </div>
             <table id="approval-main-list" class="table table-hover" align="center">
                 <thead>
                     <tr>
-                        <td width="100px">문서번호</td>
-                        <td width="110px">부서</td>
-                        <td>문서종류</td>
-                        <td colspan="2">제목</td>
-                        <td>작성일</td>
+                        <th width="100px">문서번호</th>
+                        <th width="110px">부서</th>
+                        <th>문서종류</th>
+                        <th colspan="2">제목</th>
+                        <th>작성일</th>
+                        <th>승인/반려날짜 </th>
+                        <th>상태</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -84,6 +86,22 @@
 						str	+= list[i].docTitle
 							 + "</td>"
 							 + "<td>"+list[i].createDate+"</td>"
+							 if(list[i].lastDate != null){
+						str += "<td>"+list[i].lastDate +"</td>"
+							 }else{
+								 if(list[i].secondDate !=null){
+						str += "<td>"+list[i].secondDate +"</td>"
+								 }else{
+						str += "<td></td>"
+								 }
+							 }
+							 if(list[i].status == 'P'){
+						str += "<td><button type='button' class='btn btn-primary' style='border:0;' disabled>신청</button></td>" 		 
+							 }else if(list[i].status == 'Y'){
+						str += "<td><button type='button' class='btn btn-success' style='border:0;' disabled>승인</button></td>"		 
+							 }else if(list[i].status == 'R'){
+						str += "<td><button type='button' class='btn btn-success' style='background-color: #f87428;color:white;border:0;' disabled>반려</button></td>"	 
+							 }
 							 + "</tr>"
 						}
 					}
@@ -108,11 +126,6 @@
     		$(".nav").removeClass("active");
     		$(this).addClass("active");
     	})
-    	
-    	//더보기 결재함 이동
-		function approvalListView(){
-			location.href = "list.ap"
-		}
 		
 		//월별 데이터
 		function monthData(){
@@ -165,7 +178,7 @@
 						    	  ticks:{
 						    		  beginAtZero : true, // 0부터 시작하게 합니다.
 										stepSize: 1,   // 1 씩 증가하도록 설정합니다.
-										max : 20 //
+										max : 10 //
 						    	  },
 						    	  gridLines :{
 						    		  borderDash : [2,2],

@@ -72,6 +72,19 @@ public interface MainService {
 	//알림 전체 삭제
 	int menuAlertAllDelete(Member m);
 
+	ArrayList<Attendance> selectOnTime(int userNo);
 
+	//Attendance userMain(int userNo);
+
+	int insertOnTime(Attendance at2);
+
+	int insertOffTime(int userNo);
+
+	ArrayList<Attendance> mainSelectOffTime(int userNo);
+
+	int mainUpdateOnTime(int userNo);
+
+	int selectCount(int userNo);
+	
 
 }

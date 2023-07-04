@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.final3.board.model.vo.Board;
 import com.kh.final3.board.model.vo.BoardAttachment;
+import com.kh.final3.board.model.vo.Reply;
 import com.kh.final3.common.vo.PageInfo;
 
 @Repository
@@ -21,14 +22,14 @@ public class FreeForumDao {
 	}
 	
 	//게시글 조회
-	public ArrayList<Board> forumList(SqlSession sqlSession, PageInfo pi) {
+	public ArrayList<Board> forumList(SqlSession sqlSession, PageInfo pi, Map<String, String> map) {
 		
 		int limit = pi.getBoardLimit();
 		int offset = (pi.getCurrentPage()-1)*limit;
 		
 		RowBounds rowBounds = new RowBounds(offset, limit);
 		
-		return (ArrayList)sqlSession.selectList("freeForumMapper.selectList", null, rowBounds);
+		return (ArrayList)sqlSession.selectList("freeForumMapper.selectList", map, rowBounds);
 	}
 
 	public Board selectForumDetails(SqlSession sqlSession, int boardNo) {
@@ -79,6 +80,41 @@ public class FreeForumDao {
 	public int selectDeprecatedCount(SqlSession sqlSession, int boardNo) {
 		
 		return sqlSession.selectOne("freeForumMapper.selectDeprecatedCount", boardNo);
+	}
+
+	public int insertReply(SqlSession sqlSession, Reply reply) {
+		
+		return sqlSession.insert("freeForumMapper.insertReply", reply);
+	}
+
+	public ArrayList<Reply> selectReplyList(SqlSession sqlSession, int boardNo) {
+		
+		return (ArrayList)sqlSession.selectList("freeForumMapper.selectReplyList", boardNo);
+	}
+
+	public int selectReplyCount(SqlSession sqlSession, int boardNo) {
+		
+		return sqlSession.selectOne("freeForumMapper.selectReplyCount", boardNo);
+	}
+
+	public int updateForum(SqlSession sqlSession, Board board) {
+		
+		return sqlSession.update("freeForumMapper.updateForum", board);
+	}
+
+	public int deleteForum(SqlSession sqlSession, int boardNo) {
+		
+		return sqlSession.delete("freeForumMapper.deleteForum", boardNo);
+	}
+
+	public int updateReply(SqlSession sqlSession, Reply reply) {
+		
+		return sqlSession.update("freeForumMapper.updateReply", reply);
+	}
+
+	public int deleteReply(SqlSession sqlSession, int replyNo) {
+		
+		return sqlSession.delete("freeForumMapper.deleteReply", replyNo);
 	}
 
 

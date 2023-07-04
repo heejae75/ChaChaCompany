@@ -16,6 +16,7 @@
 	  	<result column="IMPORTANCE_LEVEL" property="importanceLevel"/>
 	  	<result column="ATTACHMENT_NO" property="attachmentNo"/>
 	  	<result column="CATEGORY_NAME" property="categoryName"/>
+	  	<result column="RECOMMEND_COUNT" property="recommendCount"/>
  	</resultMap>
  	
 	<resultMap type="attachment" id="attachmentResultSet">
@@ -25,42 +26,111 @@
 		<result column="CHANGE_NAME" property="changeName"/>
 		<result column="FILE_PATH" property="filePath"/>
 	</resultMap>
+	
+	<resultMap type="reply" id="replyResultSet">
+		<result column="REPLY_NO" property="replyNo"/>
+		<result column="REF_BNO" property="refBno"/>
+		<result column="REPLY_WRITER" property="replyWriter"/>
+		<result column="REPLY_CONTENT" property="replyContent"/>
+		<result column="CREATE_DATE" property="createDate"/>
+	</resultMap>
  	
  	<select id="selectListCount" resultType="_int">
- 		SELECT COUNT(*)
- 		FROM BOARD
- 		WHERE STATUS = 'Y'
-<!--  		<choose> -->
-<!-- 			<when test="category == 'title'"> -->
-<!-- 				AND BOARD_TITLE -->
-<!-- 				LIKE '%'||#{searchWord}||'%' -->
-<!-- 			</when> -->
-<!-- 			<when test="category == 'content'"> -->
-<!-- 				AND BOARD_CONTENT -->
-<!-- 				LIKE '%'||#{searchWord}||'%' -->
-<!-- 			</when> -->
-<!-- 			<when test="category == 'title_content'"> -->
-<!-- 				AND JOB_NAME -->
-<!-- 				LIKE '%'||#{searchWord}||'%' -->
-<!-- 			</when> -->
-<!-- 			<when test="category == 'writer'"> -->
-<!-- 				AND  -->
-<!-- 				LIKE '%'||#{searchWord}||'%' -->
-<!-- 			</when> -->
-<!-- 		</choose> -->
+ 		<choose>
+ 			<when test="currentStatus == 'popularity'">
+		 		SELECT COUNT(*)
+		 		FROM (SELECT REF_BNO, COUNT(*)
+		              FROM RECOMMEND R
+		              JOIN BOARD B ON(B.BOARD_NO = R.REF_BNO)
+		              WHERE B.STATUS = 'Y'
+		              GROUP BY R.REF_BNO
+		              <![CDATA[HAVING COUNT(*) > 1]]>)
+ 			</when>
+ 			<otherwise>
+		 		SELECT COUNT(*)
+		 		FROM BOARD
+		 		WHERE STATUS = 'Y'
+		 		<choose>
+					<when test="category == 'title'">
+						AND BOARD_TITLE
+						LIKE '%'||#{searchWord}||'%'
+					</when>
+					<when test="category == 'content'">
+						AND BOARD_CONTENT
+						LIKE '%'||#{searchWord}||'%'
+					</when>
+					<when test="category == 'title_content'">
+						AND JOB_NAME
+						LIKE '%'||#{searchWord}||'%'
+					</when>
+					<when test="category == 'writer'">
+						AND 
+						LIKE '%'||#{searchWord}||'%'
+					</when>
+				</choose>
+				<choose>
+					<when test="currentWriterNo != null">
+						AND BOARD_WRITER = #{currentWriterNo}
+					</when>
+				</choose>
+ 			</otherwise>
+ 		</choose>
  	</select>
  	
  	<select id="selectList" resultMap="boardResultSet">
-		SELECT BOARD_NO, BOARD_TITLE, CREATE_DATE, COUNT, CATEGORY_NAME, USER_ID AS BOARD_WRITER
-		FROM BOARD B
-		JOIN BOARD_CATEGORY USING(CATEGORY_CODE)
-        JOIN MEMBER M ON(B.BOARD_WRITER = M.USER_NO)
-		WHERE B.STATUS = 'Y'
-		ORDER BY BOARD_NO DESC
+ 		<choose>
+ 			<when test="currentStatus == 'popularity'">
+		        SELECT BOARD_NO, BOARD_TITLE, CREATE_DATE, COUNT, CATEGORY_NAME, USER_ID AS BOARD_WRITER, COUNT(*) AS RECOMMEND_COUNT
+		        FROM (SELECT *
+		              FROM RECOMMEND R
+		              JOIN BOARD B ON(R.REF_BNO = B.BOARD_NO)
+		              JOIN MEMBER M ON(B.BOARD_WRITER = M.USER_NO)
+		              JOIN BOARD_CATEGORY BC ON(B.CATEGORY_CODE = BC.CATEGORY_CODE)
+		              WHERE B.STATUS='Y'
+		              ORDER BY BOARD_NO DESC)
+		        GROUP BY BOARD_NO, BOARD_TITLE, CREATE_DATE, COUNT, CATEGORY_NAME, USER_ID
+		        <![CDATA[HAVING COUNT(*) > 1]]>
+ 			</when>
+ 			<otherwise>
+		        SELECT BOARD_NO, BOARD_TITLE, CREATE_DATE, COUNT, CATEGORY_NAME, USER_ID AS BOARD_WRITER, COUNT(REF_BNO) AS RECOMMEND_COUNT
+		        FROM (SELECT *
+		              FROM RECOMMEND R
+		              RIGHT JOIN BOARD B ON(R.REF_BNO = B.BOARD_NO)
+		              JOIN MEMBER M ON(B.BOARD_WRITER = M.USER_NO)
+		              JOIN BOARD_CATEGORY BC ON(B.CATEGORY_CODE = BC.CATEGORY_CODE)
+		              WHERE B.STATUS='Y'
+					  <choose>
+					  	<when test="currentWriter != null">
+					  		AND M.USER_ID = #{currentWriter}
+					  	</when>
+					  </choose>
+		              )
+				<choose>
+					<when test="category == 'title'">
+						AND BOARD_TITLE
+						LIKE '%'||#{searchWord}||'%'
+					</when>
+					<when test="category == 'content'">
+						AND BOARD_CONTENT
+						LIKE '%'||#{searchWord}||'%'
+					</when>
+					<when test="category == 'title_content'">
+						AND JOB_NAME
+						LIKE '%'||#{searchWord}||'%'
+					</when>
+					<when test="category == 'writer'">
+						AND 
+						LIKE '%'||#{searchWord}||'%'
+					</when>
+				</choose>
+		        GROUP BY BOARD_NO, BOARD_TITLE, CREATE_DATE, COUNT, CATEGORY_NAME, USER_ID
+                ORDER BY BOARD_NO DESC
+ 			</otherwise>
+ 		</choose>
  	</select>
  	
  	<select id="selectForumDetailsByNo" resultMap="boardResultSet">
-		SELECT BOARD_NO, BOARD_TITLE, BOARD_CONTENT, CREATE_DATE, COUNT, CATEGORY_NAME, USER_ID AS BOARD_WRITER
+		SELECT BOARD_NO, BOARD_TITLE, BOARD_CONTENT, CREATE_DATE, COUNT, CATEGORY_CODE, CATEGORY_NAME, USER_ID AS BOARD_WRITER
 		FROM BOARD B
 		JOIN BOARD_CATEGORY USING(CATEGORY_CODE)
         JOIN MEMBER M ON(B.BOARD_WRITER = M.USER_NO)
@@ -120,4 +190,47 @@
  		FROM DEPRECATED
  		WHERE REF_BNO = #{boardNo}
  	</select>
+ 	
+ 	<insert id="insertReply" parameterType="reply">
+ 		INSERT INTO REPLY(REPLY_NO, REF_BNO, REPLY_WRITER, REPLY_CONTENT)
+ 		VALUES(SEQ_RNO.NEXTVAL, #{refBno}, #{replyWriter}, #{replyContent})
+ 	</insert>
+ 	
+ 	<select id="selectReplyList" resultMap="replyResultSet">
+ 		SELECT REPLY_NO, REF_BNO, USER_NAME AS REPLY_WRITER, REPLY_CONTENT, CREATE_DATE
+ 		FROM REPLY R
+        JOIN MEMBER M ON(R.REPLY_WRITER = M.USER_NO)
+ 		WHERE R.STATUS = 'Y'
+ 		AND REF_BNO = #{refBno}
+ 	</select>
+ 	
+ 	<select id="selectReplyCount" resultType="_int">
+ 		SELECT COUNT(*)
+ 		FROM REPLY
+ 		WHERE REF_BNO = #{boardNo}
+ 	</select>
+ 	
+ 	<update id="updateForum">
+ 		UPDATE BOARD
+ 		SET CATEGORY_CODE = #{categoryCode}, BOARD_TITLE = #{boardTitle}, BOARD_CONTENT = #{boardContent}, MODIFY_DATE = SYSDATE
+ 		WHERE BOARD_NO = #{boardNo}
+ 	</update>
+ 	
+	<update id="deleteForum">
+		UPDATE BOARD
+		SET STATUS = 'N'
+		WHERE BOARD_NO = #{boardNo}
+	</update>
+	
+	<update id="updateReply">
+		UPDATE REPLY
+		SET REPLY_CONTENT = #{replyContent}, MODIFY_DATE = SYSDATE
+		WHERE REPLY_NO = #{replyNo}
+	</update>
+	
+	<update id="deleteReply">
+		UPDATE REPLY
+		SET STATUS = 'N'
+		WHERE REPLY_NO = #{replyNo}
+	</update>
 </mapper>

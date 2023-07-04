@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.kh.final3.board.model.dao.FreeForumDao;
 import com.kh.final3.board.model.vo.Board;
 import com.kh.final3.board.model.vo.BoardAttachment;
+import com.kh.final3.board.model.vo.Reply;
 import com.kh.final3.common.vo.PageInfo;
 
 @Service
@@ -28,9 +29,9 @@ public class FreeForumServiceImpl implements FreeForumService{
 	}
 	
 	@Override
-	public ArrayList<Board> forumList(PageInfo pi) {
+	public ArrayList<Board> forumList(PageInfo pi, Map<String, String> map) {
 		
-		return freeForumDao.forumList(sqlSession, pi);
+		return freeForumDao.forumList(sqlSession, pi, map);
 	}
 
 	@Override
@@ -91,6 +92,48 @@ public class FreeForumServiceImpl implements FreeForumService{
 	public int selectDeprecatedCount(int boardNo) {
 		
 		return freeForumDao.selectDeprecatedCount(sqlSession, boardNo);
+	}
+
+	@Override
+	public int insertReply(Reply reply) {
+		
+		return freeForumDao.insertReply(sqlSession, reply);
+	}
+
+	@Override
+	public ArrayList<Reply> selectReplyList(int boardNo) {
+		
+		return freeForumDao.selectReplyList(sqlSession, boardNo);
+	}
+
+	@Override
+	public int replyCount(int boardNo) {
+		
+		return freeForumDao.selectReplyCount(sqlSession, boardNo);
+	}
+
+	@Override
+	public int updateForum(Board board) {
+		
+		return freeForumDao.updateForum(sqlSession, board);
+	}
+
+	@Override
+	public int deleteForum(int boardNo) {
+		
+		return freeForumDao.deleteForum(sqlSession, boardNo);
+	}
+
+	@Override
+	public int updateReply(Reply reply) {
+		
+		return freeForumDao.updateReply(sqlSession, reply);
+	}
+
+	@Override
+	public int deleteReply(int replyNo) {
+		
+		return freeForumDao.deleteReply(sqlSession, replyNo);
 	}
 
 
