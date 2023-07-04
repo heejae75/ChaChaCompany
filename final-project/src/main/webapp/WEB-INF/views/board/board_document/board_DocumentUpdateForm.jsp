@@ -7,7 +7,9 @@
    <title>자료실 수정페이지</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <style>
-	  
+	*{
+		font-family: 'KimjungchulGothic-Bold';
+	}	  
 	.content{
 	  	width: 1570px;
 		margin-top:-105px;
@@ -113,8 +115,8 @@
 			<li role="presentation">
 				<a href="list.no">공지사항</a>
 			</li>
-			<li role="presentation">
-	 			<a href="list.dc" class="active" >자료실</a>
+			<li role="presentation" class="active">
+	 			<a href="list.dc" >자료실</a>
 			</li>
 			<li role="presentation">
 				<a href="list.re">대여</a>
@@ -211,7 +213,7 @@
                </tr>
               	
               	<tr>
-                   <td colspan="6"><textarea name ="boardContent" style="resize: none; width: 100%; height: 300px; padding: 0;" required>${b.boardContent}</textarea></td>
+                   <td colspan="6"><textarea name ="boardContent" style="resize: none; width: 100%; height: 300px; padding: 0;  font-family: 'HallymGothic-Regular'; " required>${b.boardContent}</textarea></td>
                	</tr>
                
            </tbody>

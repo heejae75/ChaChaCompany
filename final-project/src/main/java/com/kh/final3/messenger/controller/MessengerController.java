@@ -328,8 +328,8 @@ public class MessengerController {
 		Messenger m = msgService.selectMessage(msgNo);
 		
 		if(m != null) {
-
 			mv.addObject("m", m).setViewName("messenger/msgReplyForm");
+			
 		}else {
 			session.setAttribute("errorMsg", "답장하기 페이지로 이동이 실패하였습니다 다시 시도해주세요");
 			mv.setViewName("redirect:/member/list.mg");

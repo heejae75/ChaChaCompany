@@ -9,6 +9,9 @@
    <link href="/final3/resources/css/document-modal.css" rel="stylesheet">
   <style>
 	
+	*{
+		font-family: 'KimjungchulGothic-Bold';
+	}
 	.content{
         width: 1570px;
     }

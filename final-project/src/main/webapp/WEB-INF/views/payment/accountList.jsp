@@ -7,7 +7,9 @@
    <title> 급여 관리  </title>
    <link href="/final3/resources/css/document-modal.css" rel="stylesheet">
   <style>
-	
+	*{
+		font-family: 'KimjungchulGothic-Bold';
+	}
 	.content{
         width: 1570px;
     }
@@ -34,7 +36,7 @@
 	}
 	
     #payment-tap-area>ul li{
-    	width :98px;
+    	width :110px;
     	margin-right: 5px;
     	float : left;
     }
@@ -250,35 +252,39 @@
    					});
    					
    					$("#submit-account").on("click",function(){
-						if(confirm('선택한 계좌를 등록하시겠습니까?')){
-							$.ajax({
-								url : "updateAccount.ad",
-								type : "post",
-								beforeSend : function(xhr)
-					            {
-					                xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
-					            },
-								traditional: true,
-								
-								data : {noArr : noArr},
-								
-								success : function(result){
-									if(result == "YYYY"){
-										alert("계좌등록에 성공하였습니다.");
-									}else{
-										alert("계좌 등록에 실패하였습니다. 다시 시도해주세요.")
+   						if(noArr.length != 0){
+							if(confirm('선택한 계좌를 등록하시겠습니까?')){
+								$.ajax({
+									url : "updateAccount.ad",
+									type : "post",
+									beforeSend : function(xhr)
+						            {
+						                xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+						            },
+									traditional: true,
+									
+									data : {noArr : noArr},
+									
+									success : function(result){
+										if(result == "YYYY"){
+											alert("계좌등록에 성공하였습니다.");
+										}else{
+											alert("계좌 등록에 실패하였습니다. 다시 시도해주세요.")
+										}
+										
+										location.reload();
+									},
+									
+									error : function(){
+										console.log("통신실패");
 									}
 									
-									location.reload();
-								},
-								
-								error : function(){
-									console.log("통신실패");
-								}
-								
-							})
-						}
+								})
+							}
    						
+   						}else{
+   							alert("등록할 회원을 한명이상 선택해주세요.");
+   						}
    						
    					});
    				});
