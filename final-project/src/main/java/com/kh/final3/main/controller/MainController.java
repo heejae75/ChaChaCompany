@@ -388,6 +388,6 @@ public class MainController {
 		System.out.println(userId);
 		System.out.println(userName);
 		System.out.println(userNo);
-		return "messenger/msgEnrollForm";
+		return "messenger/msgReplyForm";
 	}
 }

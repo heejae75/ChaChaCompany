@@ -21,7 +21,7 @@
 	}
 	.innerOuter {
 	    border:1px solid lightgray;
-	    width:80%;
+	    width:970px;
 	    height:100%;
 	    margin:auto;
 	    padding:3% 7%;
@@ -72,15 +72,17 @@
 	    margin:5px;
 	}
 	
-	/* 긴급 체크박스 관련 style */
-	#msg-table div{
-		width:12%; 
-		height:100%;
-		float:left; 
+	/* modal style  */
+	.modal-content{
+		width:550px;
+	}
+	#msg-searchNameList{
+		table-layout:fixed;
 	}
 	
-    
-        
+	#msg-searchNameList th, #msg-searchNameList td{
+		text-align: center;
+	}
 </style>
 </head>
 <body>
@@ -126,25 +128,25 @@
 	                <!-- 쪽지 작성 영역 -->
 	                <table id="msg-table" align="center">
 	                    <tr>
-	                        <th width="15%">제목</th>
-	                        <td width="70%">
-	                        	<div id="chk_area">
+	                        <th width="120">제목</th>
+	                        <td width="80">
        	                			<input id="emcChk" type="checkbox" style="width:15px; height:15px;" > 긴급
 	       	                		<input type="hidden" name="emcStatus" value="N">
-	                        	</div>
-		                    	<input name="msgTitle" type="text" class="form-control" style="width:86%; margin-right:0px;" required >
+                    		</td>
+                    		<td width="500">
+                    			<input name="msgTitle" type="text" class="form-control" style="width:100%; margin-right:0px;" maxlength="30" placeholder="제목을 입력해주세요" required >
                     		</td>
 	                    </tr>
 	                    <tr>
 	                        <th>보낸사람</th>
-	                        <td>
+	                        <td colspan="2">
 	                        	<input type="text" class="form-control" value="${loginUser.userId} (${loginUser.userName})" readonly>
 	                        	<input type="hidden" name="sender" value="${loginUser.userNo }"> <!-- controller에 보낼사람 번호  -->
 	                        </td>
 	                    </tr>
 	                    <tr>
 	                        <th>받는사람</th>
-	                        <td>
+	                        <td colspan="2">
 	                        	<input type="text" id="recvUser" class="form-control" readonly>
 	                         	<input type="hidden" id="recvUno" name="recvUno"> <!-- controller에 받는사람 번호 --> 
 	                        </td>
@@ -154,8 +156,8 @@
 	                    </tr>
 	                    <tr>
 	                        <th>내용</th>
-	                        <td>
-	                        	<textarea name="msgContent" id="content" class="form-control" rows="8" style="resize:none;" required></textarea>
+	                        <td colspan="2">
+	                        	<textarea name="msgContent" id="content" class="form-control" rows="8" style="resize:none;" maxlength="320" placeholder="내용을 입력해주세요"required></textarea>
 	                        </td>
 	                    </tr>
 	                </table>
@@ -198,18 +200,18 @@
 	      		</thead>
 	      	</table>
 	      	
-	      	<table id="msg-searchNameList" class="table table">
-	      		<thead style="display:block;  ">
+	      	<table id="msg-searchNameList" class="table table" >
+	      		<thead style="display: block;">
 	      			<tr>
-	      				<th width="5%" align="center">NO.</th>
-	      				<th width="15%">선택</th> 
-						<th width="20%">아이디</th>
-						<th width="20%">이름</th>
-						<th width="20%">부서</th>
-						<th width="20%">직급</th>
+	      				<th width="40">NO.</th>
+	      				<th width="60">선택</th> 
+						<th width="120">아이디</th>
+						<th width="100">이름</th>
+						<th width="120">부서</th>
+						<th width="80">직급</th>
 	      			</tr>
 	      		</thead>
-				<tbody style="display:block; height: 300px; width:100%; overflow:auto;">
+				<tbody style= " display: block; height: 300px; width:100%; overflow:auto;">
 					<!-- 검색 결과를 담아줄 곳  -->
 				</tbody>	      			
 	      	</table>
@@ -255,19 +257,19 @@
 						for(var i in result){
 							if(result[i].userNo != '${loginUser.userNo}' ){
 								str += "<tr>"
-									+"<td width='5%'>"+ result[i].userNo +"</td>"
-									+"<td width='15%'><input name='searchChk' type='checkbox' style='width:15px; height:15px'></td>"
-									+"<td width='20%'>" + result[i].userId + "</td>"
-									+"<td width='20%'>" + result[i].userName + "</td>"
-									+"<td width='20%'>" + result[i].deptName + "</td>"
-									+"<td width='20%'>" + result[i].jobName + "</td>"
+									+"<td width='40'>"+ result[i].userNo +"</td>"
+									+"<td width='60'><input name='searchChk' type='checkbox' style=' margin:auto; width:15px; height:15px'></td>"
+									+"<td width='120'>" + result[i].userId + "</td>"
+									+"<td width='100'>" + result[i].userName + "</td>"
+									+"<td width='120'>" + result[i].deptName + "</td>"
+									+"<td width='80'>" + result[i].jobName + "</td>"
 									+"</tr>";
 							}
 						}
 	      			
 					}else{
 						str +="<tr>"
-							+"<td colspan='6'> 검색 결과가 존재하지 않습니다. </td>"
+							+"<td width='520' colspan='6'> 검색 결과가 존재하지 않습니다. </td>"
 							+ "</tr>";
 					}
 					
@@ -287,17 +289,16 @@
 		$(function(){
 			//체크박스 클릭시 발생할 이벤트 함수
 			$("#msg-searchNameList>tbody").on("change","tr input[type=checkbox]",function(){
-					console.log($(this));
 					
-					//객체 배열에 담을 변수 
-					var $uno = $(this).parent().siblings().eq(0).text(); 	//console.log($uno); 
-					var $uId = $(this).parent().siblings().eq(1).text(); 	//console.log($uId);
-					var $uName = $(this).parent().siblings().eq(2).text(); 	//console.log($uName);  	
+					//객체 배열(objArray)에 담을 변수 
+					var $uno = $(this).parent().siblings().eq(0).text(); 	//받는사람 회원번호  
+					var $uId = $(this).parent().siblings().eq(1).text(); 	//받는사람 아이디 
+					var $uName = $(this).parent().siblings().eq(2).text(); 	//받는사람 이름 
 					
 					//클릭한 체크박스가 체크되어 있다면 배열에 담기 
 					if($(this).prop("checked") == true){
-						for(let i = 0 ; i<objArray.length; i++){
-            				if(objArray[i].userNo === $uno){
+						for(var i = 0 ; i<objArray.length; i++){ 
+            				if(objArray[i].userNo === $uno){ // 두번 선택되는것을 방지 
             					alert("이미 선택되었습니다. ")
 		            			return false;
             				}
@@ -309,13 +310,9 @@
             					objArray.splice(i,1);
             					console.log("확인")            					
             				}
-            					
             			}
 					}
-					
-					// 확인용 
-					console.log(objArray);
-					
+					//console.log(objArray);
 			});
 			
 			//모달창에서 확인 클릭시 검색 내역 -> 보낸사람 value에 담고 기존 검색 내역 삭제 
@@ -323,39 +320,27 @@
 			 	var str="";
 			 	var unoStr ="";
 				for(var i = 0 ; i <objArray.length ; i++){
+					//input창에 띄워줄 받는사람 목록 
 					str += objArray[i].userId+"("+objArray[i].userName+")" + ",";
 					
+					//controller로 넘겨줄 hidden의 value값에 담아줄 받는사람 번호 배열 
 					unoStr +=objArray[i].userNo + ","
 				}
-					//str에 담은 userId 맨 마직막에 붙은 구분자 ',' 잘라주기 
+					// 맨 마직막에 붙은 구분자 ',' 잘라주기 
 					var resultStr = str.slice(0,-1);
-					
 					var resultUno = unoStr.slice(0,-1);
 					
-					//console.log(resultStr);
-					
-					//받는사람 input에 넣어주기 
+					//받는사람 input, hidden value 에 넣어주기 
 					$("#recvUser").val(resultStr);
 					$("#recvUno").val(resultUno);
 				
-					$("#searchName").val("");
-					
+					$("#searchName").val(""); //주소록에 검색 내역 삭제 
 			});
 			
 		});
 			
 	</script>
 	
-	<!-- 프로필에서 쪽지 보내기 스크립 -->
-	<script> 
- 		$(document).ready(function() {
- 			var userNo = "<%= request.getParameter("userNo") %>";
- 			var userId = "<%= request.getParameter("userId") %>";  
- 			var userName = "<%= request.getParameter("userName") %>"; 
-			  
-			$("#recvUser").val(userId + " (" + userName + ")");
-			$("#recvUno").val(userNo);
-		});
- 	</script> 
+	
 </body>
 </html>
