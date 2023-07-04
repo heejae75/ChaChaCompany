@@ -70,7 +70,16 @@
    		margin:0px 10px 0px 5px;
    		height:37.99px; 
    	}
-      
+    
+    #trashList{
+    	table-layout:fixed; /* 테이블 고정 */
+    }
+    
+    #trashList td {
+    	overflow: hidden; 
+   		text-overflow: ellipsis; /* 말줄임 css  */
+   		white-space: nowrap; /* 글자를 한줄로 모아준다 */ 
+    }
 </style>
 </head>
 <%@ include file="../messenger/msgHeader.jsp" %>
@@ -147,10 +156,10 @@
             <table id="trashList" class="table table-hover" align="center">
                 <thead>
                     <tr>
-                        <th width="10%">선택</th>
-                        <th width="20%">보낸사람/받는사람</th>
-                        <th width="40%">제목</th>
-                        <th width="30%">날짜</th>
+                        <th width="80">선택</th>
+                        <th width="170">보낸사람/받는사람</th>
+                        <th width="350">제목</th>
+                        <th width="190">날짜</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -163,26 +172,26 @@
                 		<c:otherwise>
                			<c:forEach var='t' items="${tList}">
                				<tr>
-               					<td onclick="event.cancelBubble=true"><input type="checkbox" style="width:15px; height:15px;">
+               					<td width="80" onclick="event.cancelBubble=true"><input type="checkbox" style="width:15px; height:15px;">
                						<input type="hidden" value="${t.recvDelete}">
                					</td>
                					<c:choose>
                 					<c:when test="${t.recvrUno eq loginUser.userNo}">
-                						<td><label style="font-weight: 600; margin-bottom:0px;">[받은쪽지]</label> ${t.sender}</td>
+                						<td width="170"><label style="font-weight: 600; margin-bottom:0px;">[받은쪽지]</label> ${t.sender}</td>
                 					</c:when>
                						<c:otherwise>
-               							<td><label style="font-weight: 600; margin-bottom:0px;">[보낸쪽지]</label> ${t.receiver}</td>
+               							<td width="170"><label style="font-weight: 600; margin-bottom:0px;">[보낸쪽지]</label> ${t.receiver}</td>
                						</c:otherwise>
                					</c:choose>
                					<c:choose>
                						<c:when test="${t.readStatus eq 'Y'}">
-                       					<td style="text-align: left;">${t.msgTitle}</td>
+                       					<td width="350" style="text-align: left;">${t.msgTitle}</td>
                        				</c:when>
                        				<c:otherwise>
-                       						<td style="text-align: left; font-weight:700;">${t.msgTitle}</td>
+                       						<td width="350" style="text-align: left; font-weight:700;">${t.msgTitle}</td>
                        				</c:otherwise>
                        			</c:choose>
-                       			<td>${t.sendDate}<input type="hidden" value="${t.messengerNo}"></td>
+                       			<td width="190">${t.sendDate}<input type="hidden" value="${t.messengerNo}"></td>
                				</tr>
                			</c:forEach>
                		</c:otherwise>

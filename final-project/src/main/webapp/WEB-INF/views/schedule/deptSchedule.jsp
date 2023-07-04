@@ -24,12 +24,27 @@
 		font-size : 1.1em;
     }
     
+    #title-area{
+    	width:80%;
+    	margin: auto;
+    	margin-bottom : 20px;
+    	
+    	
+    }
+    
+   	#calendar-container{
+   		width:80%;
+   		margin:auto;
+   	}
+   	
+   	
+    
 </style>
 
 <%@ include file="../common/menubar.jsp"  %> 
 <div class="content">
 	<div id="title-area">
-		<h1 id="title"> ${loginUser.deptName} SCHEDULE </h1>
+		<h1 id="title" style="margin-bottom : 20px;"> ${loginUser.deptName} SCHEDULE </h1>
 		<!-- ROLE_ADMIN이고 부서가 'D9'이면서 직급은 'J5'이상 직급만 전체 일정 관리 가능  -->
 		<input type="hidden" id="companySchedule" value="AS">
 		<div id="select-area">
@@ -226,29 +241,30 @@
 		       //일정 조회 이벤트 끝 
 		        
 		        //날짜 클릭 이벤트 
-		        dayClick : function(start,e){
+		        dayClick : function(start,end, e){
 		        	$("#schedule-modal").modal("show"); // 정보 입력 모달 띄워주기 
-		        	
+		        		//시작,종료날짜 포맷지정 
 		        		var startDate = moment(start).format('YYYY-MM-DD');
+		        		var endDate = moment(end).format('YYYY-MM-DD');
 		        		
-		        		$startDate = $("#startDate").val(startDate); // 선택한 날짜 value에 담아서 보여주기 
+		        		$startDate = $("#startDate").val(startDate); // 선택한 날짜 value에 담아서 시작날짜로 보여주기  
 						
 		        		$("#addSchedule").on("click", function(){
 				        	
 		        			var $title = $("#scheduleTitle").val();
 							var $content = $("#scheduleContent").val();
-							var $endDate = $("#endDate").val();
 							var userNo = '${loginUser.userNo}';
 							var deptCode = '${loginUser.deptCode}';
+								endDate = $("#endDate").val();
 							
 							if($title == ""){
 								alert("일정 제목을 입력해주세요");
 								$("#scheduleTitle").focus();
 								
-							}else if($startDate == "" || $endDate == ""){
+							}else if($startDate == "" || endDate == ""){
 								alert("날짜를 입력해주세요");
 								
-							}else if(new Date($endDate) - new Date($startDate) < 0){
+							}else if(new Date(endDate) - new Date(startDate)< 0){
 								alert("종료일이 시작일보다 빠를 수 없습니다.");
 								
 							}else{
@@ -263,7 +279,7 @@
 										scheduleTitle : $title,
 										scheduleContent : $content,
 										startDate : $startDate.val(),
-										endDate : $endDate,
+										endDate : endDate,
 										userNo : userNo,
 										deptCode : deptCode
 									},
@@ -277,12 +293,10 @@
 										}else{
 											alert("일정 등록에 실패하였습니다. ")
 										}
-										
+										location.reload(); 
 										$("#schedule-modal").modal("hide") //모달창 닫기 
 									}
 								});
-								e.stopPropagation(); // 상위 요소로 이벤트 결과 전달 막기 
-								location.reload();
 							}
 							e.stopPropagation(); // 상위 요소로 이벤트 결과 전달 막기 
 						});
@@ -294,34 +308,30 @@
 					addEventButton : {
 						text : "일정 추가",
 	
-						click : function(e){
+						click : function(start,end,e){
 							$("#schedule-modal").modal("show");
-								//현재 날짜 입력을 위해 년도,월,일 쪼개기 
-								var today = new Date();
-								var year = today.getFullYear();
-								var month = ("0" + (today.getMonth() + 1)).slice(-2);
-								var day = ("0" + (today.getDate())).slice(-2);
-								var todayString = year + "-" + month +"-" + day;
+								var startDate = moment(start).format('YYYY-MM-DD');
+								var endDate = moment(end).format('YYYY-MM-DD');
 								
 								//시작 날짜에 value값에 조합한 오늘 날짜 넣어주기 
-								var $startDate = $("#startDate").val(todayString);  
+								var $startDate = $("#startDate").val(startDate);  
 							
 								$("#addSchedule").on("click", function(){
 								
 								var $title = $("#scheduleTitle").val();
 								var $content = $("#scheduleContent").val();
-								var $endDate = $("#endDate").val();
 								var userNo = '${loginUser.userNo}';
 								var deptCode = '${loginUser.deptCode}';
+								endDate = $("#endDate").val();
 								
 								if($title == ""){
 									alert("일정 제목을 입력해주세요");
 									$("#scheduleTitle").focus();
 									
-								}else if($startDate == "" || $endDate == ""){
+								}else if($startDate == "" || endDate == ""){
 									alert("날짜를 입력해주세요");
 									
-								}else if(new Date($endDate) - new Date($startDate) < 0){
+								}else if(new Date(endDate) - new Date(startDate) < 0){
 									alert("종료일이 시작일보다 빠를 수 없습니다.");
 									
 								}else{
@@ -334,7 +344,7 @@
 											scheduleTitle : $title,
 											scheduleContent : $content,
 											startDate : $startDate.val(),
-											endDate : $endDate,
+											endDate : endDate,
 											userNo : userNo,
 											deptCode : deptCode
 										},
@@ -345,13 +355,12 @@
 											}else{
 												alert("일정 등록에 실패하였습니다. ")
 											}
+											location.reload();
 											$("#schedule-modal").modal("hide") //모달창 닫기 
 										}
 									});
-									e.stopPropagation(); // 상위 요소로 이벤트 결과 전달 막기 
-									location.reload();
 								}
-								
+								e.stopPropagation(); // 상위 요소로 이벤트 결과 전달 막기 
 							})
 						}
 					}
@@ -416,11 +425,10 @@
 											}else{
 												alert("일정 수정에 실패하였습니다.");
 											}
+											location.reload();
 											$("#schedule-update").modal("hide");
 										}
 									}); 
-									e.stopPropagation(); // 상위 요소로 이벤트 결과 전달 막기
-									location.reload();
 								}
 								e.stopPropagation(); // 상위 요소로 이벤트 결과 전달 막기
 							}
@@ -462,14 +470,13 @@
 										}else{
 											alert("일정 삭제에 실패하였습니다. 다시 시도해주세요")
 										}
+										location.reload();
 										$("#schedule-update").modal("hide");
 									}
 								});
 							}
 						}
 						e.stopPropagation(); // 상위 요소로 이벤트 결과 전달 막기
-						location.reload();
-						
 					})
 				},
 				

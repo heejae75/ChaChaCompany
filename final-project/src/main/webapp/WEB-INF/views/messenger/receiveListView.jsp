@@ -72,6 +72,16 @@
    		height:37.99px; 
    	}
    	
+   	#recMsgList{
+   		table-layout:fixed; /* 테이블 고정 */
+   	}
+   	
+   	#recMsgList td {
+   		overflow: hidden; 
+   		text-overflow: ellipsis; /* 말줄임 css  */
+   		white-space: nowrap; /* 글자를 한줄로 모아준다 */ 
+   	}
+   	
 </style>
 </head>
 <%@ include file="../messenger/msgHeader.jsp" %>
@@ -147,10 +157,10 @@
             <table id="recMsgList" class="table table-hover">
                 <thead>
                     <tr>
-                        <th width="10%">선택</th>
-                        <th width="15%">보낸사람</th>
-                        <th width="45%">제목</th>
-                        <th width="30%">날짜</th>
+                        <th width="80">선택</th>
+                        <th width="120">보낸사람</th>
+                        <th width="400">제목</th>
+                        <th width="190">날짜</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -158,31 +168,31 @@
 	                	<c:when test="${not empty msgList}">
 	                		<c:forEach var="m" items="${msgList}">
                     		<tr>
-		                        <td onclick="event.cancelBubble=true"><input type="checkbox" style="width:15px; height:15px;"></td>
+		                        <td width="80" onclick="event.cancelBubble=true"><input type="checkbox" style="width:15px; height:15px;"></td>
 		                        <td>${m.sender}<input type="hidden" value="${m.messengerNo}"></td>
 		                        <c:choose>
-		                        	<c:when test="${m.readStatus eq 'N'}">
+		                        	<c:when test="${m.readStatus eq 'N'} ">
 		                        		<c:choose>
 		                        			<c:when test="${m.emcStatus eq 'Y' }">
-			                        			<td style="text-align:left; font-weight:700; "><i class="fa-solid fa-circle-exclamation fa-xl" style="color: #f4c92f;"></i> &nbsp;${m.msgTitle}</td>
+			                        			<td width="120" style="text-align:left; font-family: 'HallymGothic-Regular'; font-weight:700;"><i class="fa-solid fa-circle-exclamation fa-xl" style="color: #f4c92f; overflow:hidden; text-overflow : ellipsis"></i> &nbsp;${m.msgTitle}</td>
 		                        			</c:when>
 		                        			<c:otherwise>
-		                        			<td style="text-align:left; font-weight:700;">${m.msgTitle}</td>
+		                        			<td width="120" style="text-align:left;overflow:hidden; text-overflow : ellipsis; font-family: 'HallymGothic-Regular'; font-weight:700;">${m.msgTitle}</td>
 		                        			</c:otherwise>
 		                        		</c:choose>
 		                        	</c:when>
 		                        	<c:otherwise>
 		                        		<c:choose>
-			                        		<c:when test="${m.readStatus eq 'Y'}">
-			                        			<td style="text-align:left;"><i class="fa-solid fa-circle-exclamation fa-xl" style="color: #f4c92f;"></i> &nbsp;${m.msgTitle}</td>
+			                        		<c:when test="${m.emcStatus eq 'Y'}">
+			                        			<td width="400" style="text-align:left;"><i class="fa-solid fa-circle-exclamation fa-xl" style="color: #f4c92f;"></i> &nbsp;${m.msgTitle}</td>
 			                        		</c:when>
 			                        		<c:otherwise>
-			                        			<td style="text-align:left;">${m.msgTitle}</td>
+			                        			<td width="400" style="text-align:left;">${m.msgTitle}</td>
 			                        		</c:otherwise>
 		                        		</c:choose>
 		                        	</c:otherwise>
 		                        </c:choose>
-		                        <td>${m.recvDate}</td>
+		                        <td width="190">${m.recvDate}</td>
                     		</tr>
 	                		</c:forEach>
     	            	</c:when>

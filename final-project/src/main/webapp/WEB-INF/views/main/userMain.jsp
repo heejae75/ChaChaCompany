@@ -164,6 +164,7 @@
 	margin: 12px 0 0 25px;
 	font-size: 30px;
 	font-weight: bold;
+	font-family: 'KimjungchulGothic-Bold';
 }
 
 /* 플러스 아이콘 */

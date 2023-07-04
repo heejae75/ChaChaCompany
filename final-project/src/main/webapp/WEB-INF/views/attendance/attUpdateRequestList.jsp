@@ -80,7 +80,7 @@
     	margin-top: 20px;
     	margin-bottom: 20px;
     }
-    #table-area  *{
+    #table-area td, #table-area th{
     	text-align: center;
     	vertical-align: middle;
     }
@@ -144,7 +144,7 @@
 					<tbody>
 						<c:if test="${empty list }">
 							<tr>
-								<td colspan="6">근태 정정 신청하신 내역이 없습니다.</td>
+								<td colspan="9">근태 정정 신청하신 내역이 없습니다.</td>
 							</tr>
 						</c:if>
 					
