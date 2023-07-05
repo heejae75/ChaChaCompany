@@ -7,9 +7,6 @@
 <title>급여 명세서 조회 </title>
 <style>
 	
-	*{
-		font-family: 'KimjungchulGothic-Bold';
-	}
 	.content{
         width: 1570px;
     }
@@ -50,6 +47,10 @@
 	
 	#payment_table>thead td, #payment_table>thead th{
 		border-bottom : 3px solid #ddd;
+	}
+	
+	.payment_content *{
+		font-family: 'KimjungchulGothic-Bold';
 	}
 	
 </style>

@@ -381,13 +381,13 @@ a{
 				</div>
 
 				<div id="mp_work_output">
-					<div id="begin_time" style="margin-bottom: 4px;">
-						<div id="mainOnTimeDiv">출근 시간 : </div>
-					</div>
-					<div style="border: 1px solid black; width: 280px;"></div>
-					<div id="end_time" style="margin: 6px 0 12px 0;">
-						<div id="mainOffTimeDiv">퇴근 시간 : </div>
-					</div>
+<!-- 					<div id="begin_time" style="margin-bottom: 4px;"> -->
+<!-- 						<div id="mainOnTimeDiv"></div> -->
+<!-- 					</div> -->
+<!-- 					<div style="border: 1px solid black; width: 280px;"></div> -->
+<!-- 					<div id="end_time" style="margin: 6px 0 12px 0;"> -->
+<!-- 						<div id="mainOffTimeDiv">퇴근 시간 : </div> -->
+<!-- 					</div> -->
 				</div>
 				<div id="mp_work_input">
 					<button id="onTimeBtn" class="btn btn-primary" onclick="insertOnTime();">출근</button>
@@ -641,7 +641,6 @@ a{
 			mainApprovalStatusList(); //전자결재 호출 
 			selectTodoList(); //투두리스트 호출 
 			selectOnTime(); //출근시간 조회
-			selectOffTime(); //퇴근시간 조회
 			selectProfile(); //프로필 조회
 
 			//공지사항 상세보기 가기 
@@ -1498,7 +1497,7 @@ a{
 				success : function(result) {
 					if(result == "success") {
 						alert("퇴근 시간이 등록되었습니다.");
-						selectOffTime(); //퇴근 시간 조회
+						selectOnTime(); //퇴근 시간 조회
 					}
 				},
 				error : function() {
@@ -1516,30 +1515,37 @@ a{
 					xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
 				},
 				success : function(result) {
-					//console.log(result);
+					var str = "";
 					
-					for(var i in result){
-						//console.log(result[i].onTime);
+					if(result.length == 0) {
+						str += "<div id='begin_time' style='margin-bottom: 4px;'>"
+						 	+ "<div id='mainOnTimeDiv'>출근 시간 : </div>"
+							+ "<div style='border: 1px solid black; width: 280px;'></div>"
+							+ "<div id='end_time' style='margin: 6px 0 12px 0;'>"
+							+ "<div id='mainOffTimeDiv'>퇴근 시간 : </div>"
+							+ "</div>";
 						
-						var str = "<div id='mainOnTimeDiv'>출근 시간 : "+result[i].onTime+"</div>";
-						$("#onTimeBtn").prop("disabled", true);
-	                    break;
+					}else {
+						if(result[0].offTime == null && result[0].onTime != null){
+							str += "<div id='begin_time' style='margin-bottom: 4px;'>"
+							 	+ "<div id='mainOnTimeDiv'>출근 시간 : "+result[0].onTime+"</div>"
+								+ "<div style='border: 1px solid black; width: 280px;'></div>"
+								+ "<div id='end_time' style='margin: 6px 0 12px 0;'>"
+								+ "<div id='mainOffTimeDiv'>퇴근 시간 : </div>"
+								+ "</div>";
+						}else if(result[0].offTime != null && result[0].onTime != null) {
+							str += "<div id='begin_time' style='margin-bottom: 4px;'>"
+							 	+ "<div id='mainOnTimeDiv'>출근 시간 : "+result[0].onTime+"</div>"
+								+ "<div style='border: 1px solid black; width: 280px;'></div>"
+								+ "<div id='end_time' style='margin: 6px 0 12px 0;'>"
+								+ "<div id='mainOffTimeDiv'>퇴근 시간 : "+result[0].offTime+"</div>"
+								+ "</div>";
+						}
+					
 					}
 					
-					$("#mainOnTimeDiv").html(str);
+					$("#mp_work_output").html(str);
 					
-// 					var userData = result[0].onTime;
-// 					var onTime = userData.slice(0,10);
-// 					console.log(onTime);
-// 					var currentDate = new Date().toISOString().slice(0, 10);
-					
-// 					console.log("오늘 날짜 :" +currentDate);
-					
-// 		            if (onTime == currentDate) {
-// 		                updateOnTime();
-// 		            }else {
-// 		            	insertOnTime();
-// 		            }
 				},
 				error : function() {
 					console.log("출근 시간 조회 오류");
@@ -1547,37 +1553,7 @@ a{
 			});	
 		}
 		
-		//퇴근 시간 조회
-	 	function selectOffTime() {
-	 		$.ajax({
-				url: "mainSelectOffTime.ma",
-				type : "POST",
-				beforeSend : function(xhr) {
-					xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
-				},
-				success : function(result) {
-					var str = "";
-					for(var i in result){
-						console.log(result[i].offTime);
-						if(result[i].offTIme != 'undefined') {
-							str += "<div id='mainOffTimeDiv'>퇴근 시간 : "+result[i].offTime+"</div>";
-						}else {
-							str +=  "";
-						}
-						//$("#onTimeBtn").prop("disabled", false);
-						//$("#offTimeBtn").prop("disabled", true); //퇴근 시간이 조회가 되면 퇴근 비활성화
-	                    //break;
-					}
-					
-					$("#mainOffTimeDiv").html(str);
-				},
-				error : function() {
-					console.log("퇴근 시간 조회 오류");
-				}
-			});	
 
-	 	}
-		
 // 		//한번 더 눌렀을 때 업데이트(나중에 하기)
 // 		function updateOnTime() {
 // 			$.ajax({
@@ -1607,7 +1583,7 @@ a{
 				xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
 			},
 			success : function(result) {
-				console.log(result);
+				//console.log("랄라라라라 : ",result);
 				var str = "";
 				
 				if(result.length == 0) {

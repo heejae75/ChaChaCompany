@@ -64,18 +64,15 @@ public class DocumentController {
 		
 		HashMap<String, String> searchMap = new HashMap<>();
 		
-		
 		searchMap.put("keyword", keyword);
 		searchMap.put("deptCode", deptCode);
 		
-		
-		
-		System.out.println("deptCode: " + deptCode + ", keyword: "+keyword);
+		//System.out.println("deptCode: " + deptCode + ", keyword: "+keyword);
 		
 		//조회된 결과물 숫자 구해오기 
 		int searchCount = documentService.selectSearchCount(searchMap);
 		
-		System.out.println(searchCount);
+		//System.out.println(searchCount);
 		
 		int pageLimit = 5;
 		int boardLimit = 10;
@@ -261,7 +258,7 @@ public class DocumentController {
 				
 		}
 		
-		System.out.println(atList); // 확인용 
+		//System.out.println(atList); // 확인용 
 		
 		//게시글과 첨부파일 수정 
 		int result2 = documentService.updateDocument(b, atList);

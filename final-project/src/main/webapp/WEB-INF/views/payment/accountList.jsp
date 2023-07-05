@@ -7,9 +7,6 @@
    <title> 급여 관리  </title>
    <link href="/final3/resources/css/document-modal.css" rel="stylesheet">
   <style>
-	*{
-		font-family: 'KimjungchulGothic-Bold';
-	}
 	.content{
         width: 1570px;
     }
@@ -121,11 +118,22 @@
         margin:auto;
     }
 	
+	#option-box, #search-box, #payment-tap-area,#account-btn-area>button  {
+		font-family: 'KimjungchulGothic-Bold';
+	}
+	
+	th{
+		font-family: 'KimjungchulGothic-Bold';
+	}
+	
+	td{
+		 font-family: 'HallymGothic-Regular';
+	}
     </style>
 </head>
 <%@ include file="../common/menubar.jsp" %>
     <div class="content">
-    	<h1>급여 관리</h1>
+    	<h1 style ="font-family: 'KimjungchulGothic-Bold'; ">급여 관리</h1>
     	  <div id="payment-tap-area">
    			<ul id="nav-tabs"  class="nav-tabs nav-pills">
 				<li role="presentation" >
@@ -175,7 +183,7 @@
 		</c:if>
 		<!-- 버튼 영역 -->
 		<div id="account-btn-area">
-			<button type="button" id="submit-account" class="btn btn-success" style="margin-bottom : 20px;">등록하기</button>
+			<button type="button" id="submit-account" class="btn btn-success" style="margin-bottom : 20px; background-color:#0E6251">등록하기</button>
 		</div>
      	<!-- 게시글 리스트 영역 -->
      	<div id="account-list-area">

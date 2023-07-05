@@ -119,11 +119,6 @@ public class MainDao {
 		return (ArrayList)sqlSession.selectList("mainMapper.selectOnTime", userNo);
 	}
 
-	//퇴근 조회 
-	public ArrayList<Attendance> mainSelectOffTime(SqlSessionTemplate sqlSession, int userNo) {
-		return (ArrayList)sqlSession.selectList("mainMapper.mainSelectOffTime", userNo);
-	}
-
 	//출근 수정(나중에 완료하기)
 	public int mainUpdateOnTime(SqlSessionTemplate sqlSession, int userNo) {
 		return sqlSession.update("mainMapper.mainUpdateOnTime", userNo);
