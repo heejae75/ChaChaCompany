@@ -88,7 +88,7 @@
     }
 	.table>tbody>tr:hover{
     	cursor : pointer;
-    	background-color : lightgray;
+    	
     }
     #input_search{
     	width : 400px;
@@ -150,7 +150,7 @@
             </div>
 	    <div class="table-responsive">
 	    	<br>
-            <table class="table">
+            <table class="table table-hover">
 				<thead>
 					<tr>
 						<th style="width:70px;">번호</th>
@@ -187,8 +187,6 @@
 						<div id="footer_inner">
 							<select name="category">
 						    	<option value="title">제목</option>
-						    	<option value="content">내용</option>
-						    	<option value="title_content">제목+내용</option>
 						    	<option value="writer">글쓴이</option>
 						    </select>
 						    	
@@ -236,7 +234,7 @@
 	
 <script>
 	$(function(){
-		$(".page-link").eq(${pi.currentPage}).css('color', 'red');
+		$(".page-link").eq(${pi.currentPage}).css('color', 'gray');
 	});
 	
 	function boardAll(){
