@@ -109,6 +109,12 @@
         width:fit-content; 
         margin:auto;
     }
+    #board-list button:hover{
+    	cursor: default;
+    }
+    #board-list button{
+    	background-color: #D9534F;
+    }
     /*폰트*/
     #board-tap-area *, #dept_code, #boardEnroll-btn *, th, #board-pagebar-area *{
     	font-family: 'KimjungchulGothic-Bold';
@@ -205,7 +211,7 @@
 	                            <td>${n.boardNo }</td>                            
 	                            <td align="left">
 	                            	<c:if test="${n.importanceLevel eq 'I' }">
-	                            		<button type="button" class="btn btn-danger btn-sm" disabled style="background-color: #c42d2d">중요</button>
+	                            		<button type="button" class="btn btn-danger btn-sm" style="background-color: #c42d2d">중요</button>
 	                            	</c:if>
 	                            ${n.boardTitle }
 	                            	<c:if test="${!empty n.attachmentNo }">
