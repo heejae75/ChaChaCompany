@@ -109,7 +109,17 @@
     	font-size : 17px;
     }
     
+    th {
+    	font-family: 'KimjungchulGothic-Bold';
+    }
     
+    td {
+     	font-family: 'HallymGothic-Regular';
+    }
+    
+    #board-tap-area, #boardList-btn>button, #board-btn-area button{
+    	font-family: 'KimjungchulGothic-Bold';
+    }
     
     </style>
     
@@ -141,7 +151,7 @@
 			<table id="document-table" class="table" align="center">
                  <thead>
                      <tr>
-                         <td width="10%" style="text-align: center;"><b>제목</b></td>
+                         <th width="10%" style="text-align: center; border-bottom:1px;">제목</th>
                          <c:choose>
                           <c:when test="${b.importanceLevel eq 'I'}">
                            <td width="65%"><b style="color: red;">[중요]</b> &nbsp; ${b.boardTitle}</td>      
@@ -154,16 +164,16 @@
                          <td style="text-align: center;" >${b.count}</td>
                      </tr>
                      <tr>
-                         <td style="text-align: center;"><b>작성자</b></td>
+                         <th style="text-align: center; border-bottom:1px;">작성자</th>
                          <td> &nbsp; ${b.boardWriter} [${b.deptName}]</td>
-                         <td style="text-align: center;"><b>작성일</b></td>
+                         <th style="text-align: center; border-bottom:1px; ">작성일</th>
                          <td style="text-align: center;">${b.createDate}</td>
                          
                      </tr>
                  </thead>
                  <tbody id="file-area">
            			<tr>
-             			<td style="text-align: center;"><b>첨부파일</b></td>
+             			<th style="text-align: center; border-bottom:1px; ">첨부파일</th>
           				<td colspan="4">
                   	 		<c:forEach var="at" items="${atList}">
                         		<ul style="padding-left:10px;">
