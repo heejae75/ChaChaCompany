@@ -146,7 +146,7 @@
         	width: 365px;
         	height: 40px;
         }
-
+        
         @media only screen and (max-width: 479px){
             .form-group{
                 padding: 0 25px;
@@ -192,7 +192,7 @@
 						</c:if>
                     </div>
                     <div class="form-group">
-                        <div class="rememberChk">
+                        <div class="rememberChk" style="margin-left : 25px;">
                             <input class="form-check-input" type="checkbox" value="None" id="checkbox1" name="_spring_security_remember_me">
                             <label for="checkbox1">Remember me</label>
                         </div>
