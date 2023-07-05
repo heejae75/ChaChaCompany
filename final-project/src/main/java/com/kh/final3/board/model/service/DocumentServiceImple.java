@@ -107,7 +107,6 @@ public class DocumentServiceImple implements DocumentService{
 
 		int result1 = sqlSession.update("documentMapper.updateDocument", b);
 		
-		System.out.println("update:" + result1);
 		int result2 = 1;
 		
 		for(BoardAttachment at: atList) {
