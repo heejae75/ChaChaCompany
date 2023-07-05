@@ -25,12 +25,6 @@ public interface MainService {
 	//최신 쪽지 조회 
 	ArrayList<Messenger> mainMessengerList(String userId);
 
-	//출근 등록 
-	int insertGoToWork(Attendance at);
-
-	//퇴근 등록 
-	int updateLeaveToWork(Attendance at);
-
 	//임직원 조회 (팀) 
 	ArrayList<Member> mainOthersTeamList(Member m);
 
@@ -72,20 +66,25 @@ public interface MainService {
 	//알림 전체 삭제
 	int menuAlertAllDelete(Member m);
 
+	//출근 조회
 	ArrayList<Attendance> selectOnTime(int userNo);
 
-	//Attendance userMain(int userNo);
-
+	//퇴근 조회 
+	ArrayList<Attendance> mainSelectOffTime(int userNo);
+	
+	//출근 등록 
 	int insertOnTime(Attendance at2);
 
+	//퇴근 등록 
 	int insertOffTime(int userNo);
 
-	ArrayList<Attendance> mainSelectOffTime(int userNo);
-
+	//출근 수정(나중에 다시 하기)
 	int mainUpdateOnTime(int userNo);
 
+	//출근 등록할 때 한번만 등록하게 하기 위한 메소드 
 	int selectCount(int userNo);
 
+	//프로필 조회
 	ArrayList<Member> selectProfile(int userNo);
 	
 

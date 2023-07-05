@@ -146,7 +146,7 @@
         	width: 365px;
         	height: 40px;
         }
-
+        
         @media only screen and (max-width: 479px){
             .form-group{
                 padding: 0 25px;
@@ -185,15 +185,15 @@
                     <div style="height: 20px">
 	                    <!-- 				로그인 실패 메세지 띄워주기 -->
 						<c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION}">
-							<font color="red">
+							<font color="white">
 						  		${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}</p>
 								<c:remove var="SPRING_SECURITY_LAST_EXCEPTION" scope="session"/>
 							</font>
 						</c:if>
                     </div>
                     <div class="form-group">
-                        <div class="rememberChk">
-                            <input class="form-check-input" type="checkbox" value="None" id="checkbox1" name="check">
+                        <div class="rememberChk" style="margin-left : 25px;">
+                            <input class="form-check-input" type="checkbox" value="None" id="checkbox1" name="_spring_security_remember_me">
                             <label for="checkbox1">Remember me</label>
                         </div>
                     </div>

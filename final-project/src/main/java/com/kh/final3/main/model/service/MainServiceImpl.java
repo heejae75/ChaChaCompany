@@ -44,18 +44,6 @@ public class MainServiceImpl implements MainService {
 		return mainDao.mainMessengerList(sqlSession, userId);
 	}
 
-	//출근 등록 
-	@Override
-	public int insertGoToWork(Attendance at) {
-		return mainDao.insertGoToWork(sqlSession, at);
-	}
-
-	//퇴근 등록 
-	@Override
-	public int updateLeaveToWork(Attendance at) {
-		return mainDao.updateLeaveToWork(sqlSession, at);
-	}
-
 	//팀 임직원 조회 
 	@Override
 	public ArrayList<Member> mainOthersTeamList(Member m) {
@@ -139,38 +127,37 @@ public class MainServiceImpl implements MainService {
 		return mainDao.menuAlertAllDelete(sqlSession, m);
 	}
 
-//	@Override
-//	public Attendance userMain(int userNo) {
-//		return mainDao.userMain(sqlSession, userNo);
-//	}
-
+	//출근 등록 
 	@Override
 	public int insertOnTime(Attendance at2) {
 		return mainDao.insertOnTime(sqlSession, at2);
 	}
 
+	//퇴근 등록
 	@Override
 	public int insertOffTime(int userNo) {
 		return mainDao.insertOffTime(sqlSession, userNo);
 	}
 
+	//출근 조회 
 	@Override
 	public ArrayList<Attendance> selectOnTime(int userNo) {
-		//System.out.println(mainDao.selectOnTime(sqlSession, userNo));
-		
 		return mainDao.selectOnTime(sqlSession, userNo);
 	}
 
+	//퇴근 조회
 	@Override
 	public ArrayList<Attendance> mainSelectOffTime(int userNo) {
 		return mainDao.mainSelectOffTime(sqlSession, userNo);
 	}
 
+	//출근 수정(나중에 완료하기)
 	@Override
 	public int mainUpdateOnTime(int userNo) {
 		return mainDao.mainUpdateOnTime(sqlSession, userNo);
 	}
 
+	//출근 등록할 때 한번만 등록하게 하기 위한 메소드 
 	@Override
 	public int selectCount(int userNo) {
 		return mainDao.selectCount(sqlSession, userNo);

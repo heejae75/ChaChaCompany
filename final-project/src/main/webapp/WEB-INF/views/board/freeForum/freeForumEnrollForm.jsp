@@ -124,7 +124,7 @@
 	    	<input type="hidden" name="role" value="${role}"/>
 			<textarea class="form-control" id="p_content" name="boardContent"></textarea>
 	    	<div id="footer">
-	    		<button type="submit" class="btn btn-primary">확인</button>
+	    		<button type="submit" class="btn btn-success">확인</button>
 	    		<button type="button" class="btn btn-danger">취소</button>
 	    	</div>
 	    </form>

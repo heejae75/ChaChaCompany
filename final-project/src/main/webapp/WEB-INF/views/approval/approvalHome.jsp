@@ -51,8 +51,9 @@
                 </tbody>
             </table>
         </div>
+        <br>
         <div id="approval-home_2">
-			<h3>승인/반려 통계 그래프</h3>
+			<h4>승인/반려 통계 그래프</h4>
 			<canvas id="graph-area"></canvas>
         </div>
     </div>

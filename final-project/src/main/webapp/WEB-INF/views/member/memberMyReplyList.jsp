@@ -70,13 +70,13 @@
 							</c:when>
 							<c:otherwise>
 								<li class="page-item">
-									<a class="page-link" href="/final3/${role}/detailList.fr?currentPage=${pi.currentPage-1}&&boardNo=${board.boardNo}">이전페이지</a>
+									<a class="page-link" href="/final3/${role}/myReplyList.fr?currentPage=${pi.currentPage-1}">이전페이지</a>
 								</li>
 							</c:otherwise>
 						</c:choose>
 						<c:forEach var="p" begin="${pi.startPage}" end="${pi.endPage}">
 							<li class="page-item">
-								<a class="page-link" onclick="pageColor()" href="/final3/${role}/detailList.fr?currentPage=${p}&&boardNo=${board.boardNo}">${p}</a>
+								<a class="page-link" onclick="pageColor()" href="/final3/${role}/myReplyList.fr?currentPage=${p}">${p}</a>
 							</li>
 						</c:forEach>
 						<c:choose>
@@ -87,7 +87,7 @@
 							</c:when>
 							<c:otherwise>
 								<li class="page-item">
-									<a class="page-link" href="/final3/${role}/detailList.fr?currentPage=${pi.currentPage+1}&&boardNo=${board.boardNo}">다음페이지</a>
+									<a class="page-link" href="/final3/${role}/myReplyList.fr?currentPage=${pi.currentPage+1}">다음페이지</a>
 								</li>
 							</c:otherwise>
 						</c:choose>					
