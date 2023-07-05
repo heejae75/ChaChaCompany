@@ -18,16 +18,16 @@
             <div id="approval-tap-area">
                 <ul class="nav-tabs" class="nav-tabs nav-pills">
                 	<li role="presentation" class="nav1">
-                      <a href="#" href="list.ap">전체</a>
+                      <a href="list.ap">전체</a>
                     </li>
                     <li role="presentation" class="nav2">
-                      <a href="#" href="list.ap?status=P">진행함</a>
+                      <a href="list.ap?status=P">진행함</a>
                     </li>
                     <li role="presentation" class="nav3">
-                      <a href="#" href="list.ap?status=Y">완료함</a>
+                      <a href="list.ap?status=Y">완료함</a>
                     </li>
                     <li role="presentation" class="nav4">
-                      <a href="#" href="list.ap?status=R">반려함</a>
+                      <a href="list.ap?status=R">반려함</a>
                     </li>
                 </ul>
             </div>
@@ -174,13 +174,13 @@
 		  			<ul class="pagination">
 		                   <c:choose>
 		                    <c:when test="${pi.currentPage eq 1 }">
-				                        <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+				                        <li class="page-item disabled"><a class="page-link" href="#">이전</a></li>
 		                    		</c:when>
 		                    		<c:when test="${!empty keyword}">
-                    					<li class="page-item"><a class="page-link" href="list.ap?currentPage=${pi.currentPage-1}&status=${status}&keyword=${keyword}&option=${option}">Previous</a></li>
+                    					<li class="page-item"><a class="page-link" href="list.ap?currentPage=${pi.currentPage-1}&status=${status}&keyword=${keyword}&option=${option}">이전</a></li>
                     				</c:when>	
 		                    		<c:otherwise>
-		                    			<li class="page-item"><a class="page-link" href="list.ap?currentPage=${pi.currentPage-1}&status=${status}">Previous</a></li>
+		                    			<li class="page-item"><a class="page-link" href="list.ap?currentPage=${pi.currentPage-1}&status=${status}">이전</a></li>
 		                    		</c:otherwise>
 		                    	</c:choose>
 		                    	<c:forEach var="p" begin="${pi.startPage}" end="${pi.endPage}" step="1"> 
@@ -194,13 +194,13 @@
 		                    	
 		                       <c:choose>
 		                			<c:when test="${pi.currentPage eq pi.maxPage}">
-										<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>                		
+										<li class="page-item disabled"><a class="page-link" href="#">다음</a></li>                		
 									</c:when>
 									<c:when test="${!empty keyword}">
-										<li class="page-item"><a class="page-link" href="list.ap?currentPage=${pi.currentPage+1}&status=${status}&keyword=${keyword}&option=${option}">Next</a></li>                		
+										<li class="page-item"><a class="page-link" href="list.ap?currentPage=${pi.currentPage+1}&status=${status}&keyword=${keyword}&option=${option}">다음</a></li>                		
 		                    		</c:when>
 		                			<c:otherwise>
-		                    			<li class="page-item"><a class="page-link" href="list.ap?currentPage=${pi.currentPage+1}&status=${status}">Next</a></li>
+		                    			<li class="page-item"><a class="page-link" href="list.ap?currentPage=${pi.currentPage+1}&status=${status}">다음</a></li>
 									</c:otherwise>
 		                		</c:choose>
 		                    </ul>

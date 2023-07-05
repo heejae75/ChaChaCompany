@@ -106,3 +106,9 @@
    		border : 0;
    		
    }
+   #approval-tap-area, #approval-pagebar-area, #search_code, th{
+   		font-family: 'KimjungchulGothic-Bold';
+   }
+   td {
+   		font-family: 'HallymGothic-Regular';
+   }
