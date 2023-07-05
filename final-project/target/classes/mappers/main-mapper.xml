@@ -160,29 +160,6 @@
 		WHERE ROWNUM BETWEEN 1 AND 6 
 	</select>
 	
-	<!-- 출근 등록  -->
-	<insert id="insertGoToWork">
-		<choose>
-			<when test="leaveType != null">
-			INSERT INTO ATTENDANCE_RECORD (ATT_RECORD_NO, USER_NO, ON_TIME, LEAVE_CODE)
-			VALUES (SEQ_ATNO.NEXTVAL,#{userNo}, TO_DATE(TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS'), #{leaveType})
-			</when>
-			<otherwise>
-			INSERT INTO ATTENDANCE_RECORD (ATT_RECORD_NO, USER_NO, ON_TIME, LEAVE_CODE)
-			VALUES (SEQ_ATNO.NEXTVAL,#{userNo}, TO_DATE(TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS'), 'L1')
-			</otherwise>
-		</choose>
-	</insert>
-	
-	<!-- 퇴근 등록  -->
-	<update id="updateLeaveToWork">
-		UPDATE ATTENDANCE_RECORD 
-		SET OFF_TIME = SYSDATE 
-		WHERE USER_NO = #{userNo} 
-		AND ATT_RECORD_NO = (SELECT MAX(ATT_RECORD_NO) 
-								FROM ATTENDANCE_RECORD)
-	</update>
-	
 	<!-- 팀 임직원 조회  -->
 	<select id="mainOthersTeamList" resultMap="mainMemberResultset">
 		SELECT USER_NO, USER_ID, USER_NAME, JOB_NAME, DEPT_NAME, PHONE, EMAIL, EMPOLYMENT_DATE, CHANGE_NAME
@@ -406,6 +383,7 @@
 		WHERE RECEIVER = #{userNo}
 	</delete>
 
+	<!-- 출근 등록 -->
 	<insert id="insertOnTime">
 		<choose>
 			<when test="leaveType != null">
@@ -417,9 +395,9 @@
 			VALUES (SEQ_ATNO.NEXTVAL,#{userNo}, TO_DATE(TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS'), 'L1')
 			</otherwise>
 		</choose>
-
 	</insert>
 	
+	<!-- 퇴근 등록 -->
 	<insert id="insertOffTime">
 		UPDATE ATTENDANCE_RECORD 
 		SET OFF_TIME = SYSDATE 
@@ -428,6 +406,7 @@
 								FROM ATTENDANCE_RECORD)
 	</insert>
 	
+	<!-- 출근 조회 -->
 	<select id="selectOnTime" resultMap="mainAttendanceResultSet">
 		SELECT *
 		FROM ( SELECT ATT_RECORD_NO, ATT.USER_NO, TO_CHAR(ON_TIME, 'HH24:MI') AS ON_TIME
@@ -439,6 +418,7 @@
 		WHERE ROWNUM = 1
 	</select>
 	
+	<!-- 퇴근 조회 -->
 	<select id="mainSelectOffTime" resultMap="mainAttendanceResultSet">
 		SELECT *
 		FROM ( SELECT ATT_RECORD_NO, ATT.USER_NO, TO_CHAR(OFF_TIME, 'HH24:MI') AS OFF_TIME
@@ -450,6 +430,7 @@
 		WHERE ROWNUM = 1
 	</select>
 	
+	<!-- 출근 수정(나중에 완료하기) -->
 	<update id="mainUpdateOnTime">
 	 	UPDATE ATTENDANCE_RECORD
 		SET ON_TIME = SYSDATE
@@ -463,6 +444,7 @@
 		    WHERE ROWNUM = 1)
 	</update>
 	
+	<!-- 출근 등록할 때 한번만 등록하게 하기 위한 메소드  -->
 	<select id="selectCount" resultType="_int">
 		SELECT COUNT (ON_TIME)
 		FROM (SELECT TO_DATE(TO_CHAR(ON_TIME, 'YYYY-MM-DD')) AS ON_TIME
@@ -471,6 +453,7 @@
 		WHERE ON_TIME LIKE SYSDATE
 	</select>
 	
+	<!-- 프로필 조회 -->
 	<select id="selectProfile" resultMap="mainAttachmentResultSet">
 		SELECT *
 		FROM MEMBER_ATTACHMENT
