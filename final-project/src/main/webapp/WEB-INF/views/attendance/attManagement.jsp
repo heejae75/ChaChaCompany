@@ -111,6 +111,15 @@
         margin:auto;
     }
     
+/*     #tip {
+    position:absolute;
+    color:#FFFFFF;
+    padding:5px;
+    display:none;
+    background:#450e4c;
+    border-radius: 5px;
+}
+     */
     
     
 </style>
@@ -195,10 +204,10 @@
 							<td>
 								<c:choose>
 									<c:when test="${a.onTime eq null }">
-									미입력
+										<div data-toggle="tooltip" data-placement="right">미입력</div>
 									</c:when>
 									<c:otherwise>
-									${a.onTime }
+										<div data-toggle="tooltip" data-placement="right">${a.onTime }</div>
 									</c:otherwise>
 								</c:choose>
 							</td>
@@ -300,6 +309,7 @@
             		});
             	</script>
             </c:if>
+            
 		
 		
 	</div>
@@ -313,13 +323,13 @@
 		<script>
 		$(function(){ // 검색날짜 없다면 오늘날짜를 기본으로 보여주는 함수
 			
-			const date = new Date();
+			var date = new Date();
 		
-			let year = date.getFullYear().toString();
-			let month = (date.getMonth() + 1).toString().padStart(2, '0');
-			let day = date.getDate().toString().padStart(2, '0');
+			var year = date.getFullYear().toString();
+			var month = (date.getMonth() + 1).toString().padStart(2, '0');
+			var day = date.getDate().toString().padStart(2, '0');
 		
-			let formattedDate = year + '-' + month + '-' + day;
+			var formattedDate = year + '-' + month + '-' + day;
 			
 			$("#selectedDate").val(formattedDate);
 		});
@@ -334,22 +344,31 @@
 			var tr = $(this).closest("tr");
 			var td = tr.children();
 			
-			let recordElement = td.eq(8);
-			let plan = td.eq(6).text();
-			let record = td.eq(8).text();
+			var recordElement = td.eq(8).children();
+			var plan = td.eq(6).text();
+			var record = td.eq(8).text();
 			
+			var planTime = new Date("2023-05-21 " + plan);
+			var recordTime = new Date("2023-05-21 " + record);
 			
-			let planTime = new Date("2023-05-21 " + plan);
-			let recordTime = new Date("2023-05-21 " + record);
-			
-			if(plan < record){
+			if(planTime < recordTime || record == "미입력"){
+				
+				var timeGap = (recordTime - planTime)/60000;
 				recordElement.css("color","red");
 				recordElement.css("font-weight","600");
+				recordElement.attr("title", timeGap + "분 지각");
 			}
 			
-		});		
+		});	
+		
 	});
 	
+	</script>
+	
+	<script>
+	$(document).ready(function(){
+	  $('[data-toggle="tooltip"]').tooltip();
+	});
 	</script>
  
   

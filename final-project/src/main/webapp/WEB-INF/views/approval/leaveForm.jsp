@@ -36,7 +36,7 @@
             </div>
             <div id="leave-content">
                 <div id="leave-content1">
-                    <table class="table table-bordered" width="100%" height="100%" style="border-collapse: collapse;vertical-align: middle">
+                    <table class="table table-bordered" width="100%" height="100%" id="member-info-table";>
                         <tr>
                             <th width="13%">작성자</th>
                             <td><input type="text" id="docWriter" value="${loginUser.userName }" readonly></td>
@@ -180,7 +180,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h2 class="modal-title" id="workReceiverModalLabel">결재라인 선택</h2>
+                <h2 class="modal-title" id="workReceiverModalLabel">업무인수자 선택</h2>
                 </div>
                 <div class="modal-body" style="height:500px;">
                     <div id="organization-area">
@@ -329,7 +329,6 @@
 		  </div>
 		</div>
 		<script>
-		//오늘 날짜 이전이면 alert
 		//시간 계산
 		$(function() {
 		  $("#leave-table").on("change", "#start-date, #end-date", function() {
@@ -350,7 +349,7 @@
 		    }
 		
 		    var timeDiff = endDate.getTime() - startDate.getTime();
-		    var dayDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+		    var dayDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24))+1;
 		
 		    if (dayDiff < 0) {
 		      // 마이너스 값인 경우 알림 창 띄우기
@@ -358,7 +357,7 @@
 		      return;
 		    }
 		
-		    $(this).closest("tr").find("#total-date").val(dayDiff);
+		    $(this).closest("tr").find("#total-date").val(dayDiff+"일");
 		  });
 		});
 		
@@ -398,7 +397,7 @@
 			var status = $("#receiver-search-select").val();
 			var keyword = $("#receiver-keyword").val();
     		$.ajax({
-    			url : "searchApprover.ap",
+    			url : "selectApproverList.ap",
     			type : "POST",
     			
     			data :{
@@ -431,7 +430,7 @@
     	function addReceiver(){
     		var tdReceiver = new Array();
     		var checkbox1 = $("#chkMember:checked");
-    		var loginUserNo = "${loginUser.userNo}"
+    		var loginUserNo = "${loginUser.userNo}";
 
     		checkbox1.each(function(i){
     			var tr = checkbox1.parent().parent().eq(i);
@@ -533,7 +532,6 @@
       	    		}
         		}
     		}
-    		console.log(lastRow)
     	}
 		//전체선택, 전체 해제
     	function checkAll(){
@@ -621,7 +619,7 @@
     			}
     		});
     	}
-    	//결재선 검색
+    	//결재자 검색
     	function searchApprover(){
 			var status = $("#approval-search-select").val();
 			var keyword = $("#approval-keyword").val();
@@ -629,7 +627,7 @@
 				alert("검색어를 입력해주세요");
 			}else{
 				$.ajax({
-	    			url : "searchApprover.ap",
+	    			url : "selectApproverList.ap",
 	    			type : "POST",
 	    			data :{
 	    				status : status,
@@ -662,6 +660,8 @@
     	function addApprover1(){
     		var tdArr1 = new Array();
     		var checkbox1 = $("#chkMember:checked");
+    		var loginUserNo = "${loginUser.userNo}";
+    		
     		checkbox1.each(function(i){
     			var tr = checkbox1.parent().parent().eq(i);
     			var td = tr.children();
@@ -677,13 +677,19 @@
     			tdArr1.push(userno);
     			
     		});
+    		if(tdArr1[3] == loginUserNo){
+    			alert("결재자와 작성자가 동일합니다. 다시확인해주세요.");
+    			$("#approver1").attr("value",'');
+    			$("#ApproverList>tbody input[type='checkbox']").prop("checked",false);    			
+    		}else{
     			$("#approver1").attr("value",tdArr1);
     			$("#ApproverList>tbody input[type='checkbox']").prop("checked",false);
-    			
+    		}
     	}
     	function addApprover2(){
     		var tdArr2 = new Array();
     		var checkbox2 = $("#chkMember:checked");
+    		var loginUserNo = "${loginUser.userNo}";
     		
     		checkbox2.each(function(i){
     			var tr = checkbox2.parent().parent().eq(i);
@@ -702,8 +708,14 @@
     			
     			
     			});
-	    		$("#approver2").attr("value",tdArr2);
-	    		$("#ApproverList>tbody input[type='checkbox']").prop("checked",false);
+    		if(tdArr2[3] == loginUserNo){
+    			alert("결재자와 작성자가 동일합니다. 다시확인해주세요.");
+    			$("#approver2").attr("value",'');
+    			$("#ApproverList>tbody input[type='checkbox']").prop("checked",false);    			
+    		}else{
+    			$("#approver2").attr("value",tdArr2);
+    			$("#ApproverList>tbody input[type='checkbox']").prop("checked",false);
+    		}
     	}
     	
     	//결재선 삭제

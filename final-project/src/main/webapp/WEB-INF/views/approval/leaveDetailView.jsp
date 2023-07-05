@@ -87,20 +87,9 @@
                         </tr>
                     </table>
                 </div>
-                <br><br><br>
+                <br>
                 <div id="leave-content2">
-                    <table class="table table-bordered" style="text-align: center;">
-                    	<tbody>
-                            <th width="15%">연차현황</th>
-                            <th width="15%">발생현황</th>
-                            <td><input type="text" value="" id="total-leave" readonly></td>
-                            <th width="15%">사용현황</th>
-                            <td><input type="text" value="" id="use-leave" readonly></td>
-                            <th width="15%">잔여현황</th>
-                            <td><input type="text" value="" id="remain-leave" readonly></td>
-                        </tbody>
-                    </table>
-                    <table class="table table-bordered" style="text-align: center;" id="leave-table">
+                   <table class="table table-bordered" id="leave-table">
                         <thead>
                             <tr>
                                 <th width="16%">휴가신청구분</th>
@@ -112,7 +101,7 @@
                         </thead>
                         <tbody>
                         	<c:set var="arrayLength" value='${fn:length(lList)}' />
-                        	<c:forEach var="l" items="${lList }">
+                        	<c:forEach var="l" items="${lList }" varStatus="i">
 	                            <tr>
 	                                <td>
 	                                     ${l.leaveStatus}
@@ -121,12 +110,12 @@
 	                                     ${l.leaveCode}
 	                                </td>
 	                                <td>
-	                                	<input type="text" id="start-date" value="${l.startDate}" readonly>
+	                                	<input type="text" id="start-date${i.count}" value="${l.startDate}" readonly>
 	                                </td>
 	                                <td>
-	                                    <input type="text" id="end-date" value="${l.endDate}" readonly>
+	                                    <input type="text" id="end-date${i.count}" value="${l.endDate}" readonly>
 	                                <td>
-	                                    <input type="text" id="total-date" value="" readonly>
+	                                    <input type="text" id="total-date${i.count}" value="" readonly>
 	                                </td>
 	                            </tr>
                         	</c:forEach>
@@ -206,15 +195,15 @@
 	<script>
 	//시간 계산
 	$(function(){
-		for(var i=0;i<"${arrayLength}";i++){
-		var startDate = new Date($("#start-date").val());
-		var endDate = new Date($("#end-date").val());
-		
-		var timeDiff = endDate.getTime()-startDate.getTime();
-		
-		var dayDiff = Math.floor(timeDiff/(1000*60*60*24));
-		
-		$("#total-date").attr("value",dayDiff);
+		for(var i=1;i<"${arrayLength}"+1;i++){
+			var startDate = new Date($("#start-date"+i).val());
+			var endDate = new Date($("#end-date"+i).val());
+			
+			var timeDiff = endDate.getTime()-startDate.getTime();
+			
+			var dayDiff = Math.floor(timeDiff/(1000*60*60*24));
+			
+			$("#total-date"+i).attr("value",dayDiff+"일");
 		}
 	});
 		
@@ -245,9 +234,7 @@
 		var docTitle = "${ad.docTitle}";
 		var docType = "${dt}";
 		
-		console.log("최종결제자 : "+lastSignature+"중간 결제자 : "+secondSignature+"전자결재 작성자 : "+docWriter+"전자결재 제목 : "+docTitle+ "전자결재 타입: "+docType);
-			
-		if(loginUserNo === secondApprover){
+		if(loginUserNo == secondApprover){
 			$.ajax({
 				url : "updateSecondApprover.ap",
 				type : "POST",
@@ -264,6 +251,7 @@
 						$("#secondSignature").attr("value",loginUserName);
 						$("#secondDate").attr("value",secondDate);
     					location.reload();
+    					alert("승인이 완료되었습니다.");
 						
 						//실시간 알림 서버에 보내기 
 						if(secondSignature != docWriter){
@@ -274,16 +262,13 @@
 							}
 						}
 						
-    					alert("승인이 완료되었습니다.");
 					}
-					
-					
 				},
 				error : function(){
 					console.log("통신오류")
 				}
 			});
-		}else if(loginUserNo===lastApprover){
+		}else if(loginUserNo==lastApprover){
 			if("${a.secondApprover}" ==null){
 				alert("중간결재자의 승인이 누락되었습니다.");
 			}else{
@@ -306,6 +291,7 @@
     						$("#reject-btn").attr("disabled",true);
     						$("#emergency-btn").attr("checked",false);
     						$("#lastDate").attr("value",lastDate);
+    						alert("승인이 완료되었습니다.");
     						location.reload();
     						
     						//실시간 알림 서버에 보내기 
@@ -316,8 +302,6 @@
     							    socket.send(message);
     							}
     						}
-    						
-    						alert("승인이 완료되었습니다.");
     					}
     				},
     				error : function(){

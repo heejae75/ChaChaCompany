@@ -35,6 +35,12 @@
         #leave-content>div{
             width: 100%;
         }
+        #member-info-table{
+        	border-collapse: collapse;
+        }
+        #member-info-table th,td {
+        	vertical-align: middle;
+        }
         #leave-content1{
             height: 15%;
         }

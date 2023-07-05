@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,13 +34,30 @@ public class MainController {
 	@Autowired
 	private MainService mainService;
 
-	private Todo td;
+	@Autowired
+	private Todo todo;
 
 	//사용자 메인페이지 이동 
 	@RequestMapping("home.ma")
 	public String MainHome() {
 		return "main/userMain";
 	}
+	
+//	@RequestMapping("userMain.ma")
+//	public String userMain(HttpSession session, Model model) {
+//	    Member loginUser = (Member) session.getAttribute("loginUser");
+//	    int userNo = loginUser.getUserNo();
+//	    
+//	    Attendance att = mainService.userMain(userNo);
+//	    System.out.println(att);
+//	    if (att != null) {
+//	        model.addAttribute("att", att);
+//	    } else {
+//	        session.setAttribute("alertMsg", "출퇴근 기록이 없습니다.");
+//	    }
+//	    
+//	    return "main/userMain";
+//	}
 	
 	//최근 공지 불러오기 
 	@ResponseBody
@@ -74,50 +92,50 @@ public class MainController {
 	}
 	
 	//출근등록 
-	@PostMapping("insertGo.ma")
-	//@RequestMapping("insertGo.ma")
-	//@RequestMapping(value="insertGo.ma", method=RequestMethod.POST)
-	public String insertGoToWork(Attendance at, HttpSession session, RedirectAttributes rttr) {
-		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
-		// 근무계획 조회
-		Attendance at2 = mainService.selectLeaveType(userNo);
-		
-		if(at2 == null) { // 근무계획 없으면
-			at.setUserNo(userNo);
-		}else { // 근무계획 있으면
-			at.setUserNo(userNo);
-			at.setLeaveType(at2.getLeaveType());
-		}
-		int result = mainService.insertGoToWork(at);
-
-		if (result > 0) {
-			rttr.addFlashAttribute("onTime", at.getOnTime());
-			session.setAttribute("alertMsg", "출근 성공!");
-		} else {
-			session.setAttribute("alertMsg", "출근 실패! ");
-		}
-
-		return "redirect:/member/mainPage.me";
-	}
-	
-	//퇴근 등록 
-	//@RequestMapping("insertLeave.ma")
-	@RequestMapping(value="insertLeave.ma", method=RequestMethod.POST)
-	public String updateLeaveToWork(Attendance at, HttpSession session, RedirectAttributes rttr) {
-		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
-		
-		at.setUserNo(userNo);
-		
-		int result = mainService.updateLeaveToWork(at);
-		
-		if(result > 0) {
-			rttr.addFlashAttribute("onTime",at.getOnTime());
-			session.setAttribute("alertMsg", "퇴근 성공!");
-		}else {
-			session.setAttribute("alertMsg", "퇴근 실패! ");
-		}
-		return "redirect:/member/mainPage.me";
-	}
+//	@PostMapping("insertGo.ma")
+//	//@RequestMapping("insertGo.ma")
+//	//@RequestMapping(value="insertGo.ma", method=RequestMethod.POST)
+//	public String insertGoToWork(Attendance at, HttpSession session, RedirectAttributes rttr) {
+//		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
+//		// 근무계획 조회
+//		Attendance at2 = mainService.selectLeaveType(userNo);
+//		
+//		if(at2 == null) { // 근무계획 없으면
+//			at.setUserNo(userNo);
+//		}else { // 근무계획 있으면
+//			at.setUserNo(userNo);
+//			at.setLeaveType(at2.getLeaveType());
+//		}
+//		int result = mainService.insertGoToWork(at);
+//
+//		if (result > 0) {
+//			rttr.addFlashAttribute("onTime", at.getOnTime());
+//			session.setAttribute("alertMsg", "출근 성공!");
+//		} else {
+//			session.setAttribute("alertMsg", "출근 실패! ");
+//		}
+//
+//		return "redirect:/member/mainPage.me";
+//	}
+//	
+//	//퇴근 등록 
+//	//@RequestMapping("insertLeave.ma")
+//	@RequestMapping(value="insertLeave.ma", method=RequestMethod.POST)
+//	public String updateLeaveToWork(Attendance at, HttpSession session, RedirectAttributes rttr) {
+//		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
+//		
+//		at.setUserNo(userNo);
+//		
+//		int result = mainService.updateLeaveToWork(at);
+//		
+//		if(result > 0) {
+//			rttr.addFlashAttribute("onTime",at.getOnTime());
+//			session.setAttribute("alertMsg", "퇴근 성공!");
+//		}else {
+//			session.setAttribute("alertMsg", "퇴근 실패! ");
+//		}
+//		return "redirect:/member/mainPage.me";
+//	}
 	
 	//임직원조회(Team)
 	@ResponseBody
@@ -126,7 +144,7 @@ public class MainController {
 		Member m = ((Member)session.getAttribute("loginUser"));
 
 		ArrayList<Member> mainMemberTeam = mainService.mainOthersTeamList(m);
-		
+		System.out.println(mainMemberTeam);
 		return new Gson().toJson(mainMemberTeam);
 	}
 	
@@ -154,11 +172,13 @@ public class MainController {
 	//선택한 날짜 일정 조회 
 	@ResponseBody
 	@RequestMapping(value="mainDailyEvents.ma", method = RequestMethod.POST)
-	public ArrayList<Schedule> mainDailyEvents(@RequestParam("year") int year, @RequestParam("month") int month, @RequestParam("date") int date) {
+	public ArrayList<Schedule> mainDailyEvents(HttpSession session, @RequestParam("year") int year, @RequestParam("month") int month, @RequestParam("date") int date) {
+		String deptCode = ((Member)session.getAttribute("loginUser")).getDeptCode();
 		Map<String, Object> params = new HashMap<>();
 		params.put("year", year);
 		params.put("month", month);
 		params.put("date", date);
+		params.put("deptCode", deptCode);
 		
 		ArrayList<Schedule> events = mainService.mainDailyEvents(params);
 		//System.out.println(events);
@@ -180,15 +200,13 @@ public class MainController {
 	@ResponseBody
 	@RequestMapping(value="mainInsertTodo.ma", method = RequestMethod.POST)
 	public String mainInsertTodo(HttpSession session, String todoContent) {
-		Member m = ((Member)session.getAttribute("loginUser"));
-		int userNo = m.getUserNo();
-		
+		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
+		//System.out.println(userNo);
 		//Todo td = new Todo();
-		td.setUserNo(userNo);
-		td.setTodoContent(todoContent);
+		todo.setUserNo(userNo);
+		todo.setTodoContent(todoContent);
 		
-		int result = mainService.mainInsertTodo(td);
-		//System.out.println(result);
+		int result = mainService.mainInsertTodo(todo);
 		
 		if(result > 0) {
 			return "success";
@@ -213,11 +231,11 @@ public class MainController {
 	@ResponseBody
 	@RequestMapping(value = "updateTodoList.ma", method = RequestMethod.POST)
 	public String updateTodoList(int todoNo, String status) {
-		td.setTodoNo(todoNo);
-		td.setStatus(status);
+		todo.setTodoNo(todoNo);
+		todo.setStatus(status);
 		
-		int result = mainService.updateTodoList(td);
-		System.out.println(result);
+		int result = mainService.updateTodoList(todo);
+		//System.out.println(result);
 		if(result > 0) {
 			return "success";
 		}else {
@@ -229,6 +247,7 @@ public class MainController {
 	@ResponseBody
 	@RequestMapping(value = "deleteTodoList.ma", method = RequestMethod.POST)
 	public String deleteTodoList(int todoNo) {
+		//System.out.println(todoNo);
 		int result = mainService.deleteTodoList(todoNo);
 		
 		return (result > 0) ? "success" : "fail";
@@ -266,7 +285,7 @@ public class MainController {
 		al.setStatus(status);
 		
 		int result = mainService.menuAlertUpdate(al);
-		System.out.println(result);
+		//System.out.println(result);
 		if(result > 0) {
 			return "success";
 		}else {
@@ -286,4 +305,99 @@ public class MainController {
 		return (result > 0) ? "success" : "fail";
 	}
 	
+	//출퇴근 조회
+	@ResponseBody
+	@RequestMapping(value = "mainSelectOnTime.ma", produces = "application/json; charset=UTF-8")
+	public String selectOnTime(HttpSession session) {
+		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
+		//System.out.println(userNo);
+		ArrayList<Attendance> atList = mainService.selectOnTime(userNo);
+
+		//System.out.println(atList);
+		return new Gson().toJson(atList);
+	}
+	
+	//퇴근 조회
+	@ResponseBody
+	@RequestMapping(value = "mainSelectOffTime.ma", produces = "application/json; charset=UTF-8")
+	public String mainSelectOffTime(HttpSession session) {
+		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
+		//System.out.println("off : "+userNo);
+		ArrayList<Attendance> atList = mainService.mainSelectOffTime(userNo);
+
+		//System.out.println(atList);
+		return new Gson().toJson(atList);
+	}
+	
+	//출근 등록 
+	@ResponseBody
+	@RequestMapping(value = "insertOnTime.ma", method = RequestMethod.POST)
+	public String insertOnTime(HttpSession session) {
+		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
+		
+		int count = mainService.selectCount(userNo);
+		
+		//근무계획 조회
+		Attendance at = mainService.selectLeaveType(userNo);
+		Attendance at2 = new Attendance();
+	
+		if(at == null) { // 근무계획 없으면
+			at2.setUserNo(userNo);
+		}else { // 근무계획 있으면
+			at2.setUserNo(userNo);
+			at2.setLeaveType(at.getLeaveType());
+		}
+		
+		if(count > 0) {
+			return "countFail";
+		}else {
+			int result = mainService.insertOnTime(at2);
+			return (result > 0) ? "success" : "fail";
+		}
+		
+	}
+	
+	//퇴근 등록
+	@ResponseBody
+	@RequestMapping(value = "insertOffTime.ma", method = RequestMethod.POST)
+	public String insertOffTime(HttpSession session) {
+		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
+
+		int result = mainService.insertOffTime(userNo);
+		//System.out.println(result);
+		
+		return (result > 0) ? "success" : "fail";
+	}
+	
+	//출근 수정
+	@ResponseBody
+	@RequestMapping(value = "mainUpdateOnTime.ma", method = RequestMethod.POST)
+	public String mainUpdateOnTime(HttpSession session) {
+		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
+
+		int result = mainService.mainUpdateOnTime(userNo);
+		//System.out.println(result);
+		
+		return (result > 0) ? "success" : "fail";
+	}
+	
+	
+
+	@RequestMapping(value="insertMsg.ma", method=RequestMethod.GET)
+	public String msgEnrollForm(@RequestParam("userId") String userId, @RequestParam("userName") String userName, @RequestParam("userNo") String userNo) {
+		System.out.println(userId);
+		System.out.println(userName);
+		System.out.println(userNo);
+		return "messenger/msgReplyForm";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "selectProfile.ma", produces = "application/json; charset=UTF-8")
+	public String selectProfile(HttpSession session) {
+		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
+		
+		ArrayList<Member> mList = mainService.selectProfile(userNo);
+		//System.out.println(mList);
+		return new Gson().toJson(mList);
+	}
 }

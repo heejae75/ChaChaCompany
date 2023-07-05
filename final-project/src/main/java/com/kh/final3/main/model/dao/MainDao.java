@@ -111,6 +111,41 @@ public class MainDao {
 		return sqlSession.delete("mainMapper.menuAlertAllDelete", m);
 	}
 
+//	public Attendance userMain(SqlSessionTemplate sqlSession, int userNo) {
+//		return (Attendance)sqlSession.selectOne("mainMapper.userMain", userNo);
+//	}
 
+	public int insertOnTime(SqlSessionTemplate sqlSession,Attendance at2) {
+		return sqlSession.insert("mainMapper.insertOnTime", at2);
+	}
 
+	public int insertOffTime(SqlSessionTemplate sqlSession, int userNo) {
+		return sqlSession.insert("mainMapper.insertOffTime", userNo);
+	}
+
+	public ArrayList<Attendance> selectOnTime(SqlSessionTemplate sqlSession, int userNo) {
+		//System.out.println((ArrayList)sqlSession.selectList("mainMapper.selectOnTime", userNo));
+		
+		return (ArrayList)sqlSession.selectList("mainMapper.selectOnTime", userNo);
+	}
+
+	public ArrayList<Attendance> mainSelectOffTime(SqlSessionTemplate sqlSession, int userNo) {
+		//System.out.println((ArrayList)sqlSession.selectList("mainMapper.mainSelectOffTime", userNo));
+		
+		return (ArrayList)sqlSession.selectList("mainMapper.mainSelectOffTime", userNo);
+	}
+
+	public int mainUpdateOnTime(SqlSessionTemplate sqlSession, int userNo) {
+		return sqlSession.update("mainMapper.mainUpdateOnTime", userNo);
+	}
+
+	public int selectCount(SqlSessionTemplate sqlSession, int userNo) {
+		return sqlSession.selectOne("mainMapper.selectCount", userNo);
+	}
+
+	//프로필 조회 
+	public ArrayList<Member> selectProfile(SqlSessionTemplate sqlSession, int userNo) {
+		return (ArrayList)sqlSession.selectList("mainMapper.selectProfile", userNo);
+	}
+	
 }

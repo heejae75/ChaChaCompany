@@ -1,7 +1,5 @@
 package com.kh.final3.member.model.vo;
 
-import java.sql.Date;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,5 +31,6 @@ public class Member {
 	
 	private String jobName;
 	private String deptName;
+	private String changeName;
 	
 }

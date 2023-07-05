@@ -68,4 +68,8 @@
 		  </props>
 		  </property>
 	</bean>
+	
+	<bean class="com.kh.final3.todo.model.vo.Todo" id="todo"/>
+	
+	<bean class="com.kh.final3.attendance.model.vo.Attendance" id="attendance"/>
 </beans>

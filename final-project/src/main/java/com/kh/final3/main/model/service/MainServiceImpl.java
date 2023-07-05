@@ -139,6 +139,47 @@ public class MainServiceImpl implements MainService {
 		return mainDao.menuAlertAllDelete(sqlSession, m);
 	}
 
+//	@Override
+//	public Attendance userMain(int userNo) {
+//		return mainDao.userMain(sqlSession, userNo);
+//	}
 
+	@Override
+	public int insertOnTime(Attendance at2) {
+		return mainDao.insertOnTime(sqlSession, at2);
+	}
+
+	@Override
+	public int insertOffTime(int userNo) {
+		return mainDao.insertOffTime(sqlSession, userNo);
+	}
+
+	@Override
+	public ArrayList<Attendance> selectOnTime(int userNo) {
+		//System.out.println(mainDao.selectOnTime(sqlSession, userNo));
+		
+		return mainDao.selectOnTime(sqlSession, userNo);
+	}
+
+	@Override
+	public ArrayList<Attendance> mainSelectOffTime(int userNo) {
+		return mainDao.mainSelectOffTime(sqlSession, userNo);
+	}
+
+	@Override
+	public int mainUpdateOnTime(int userNo) {
+		return mainDao.mainUpdateOnTime(sqlSession, userNo);
+	}
+
+	@Override
+	public int selectCount(int userNo) {
+		return mainDao.selectCount(sqlSession, userNo);
+	}
+
+	//프로필 조회 
+	@Override
+	public ArrayList<Member> selectProfile(int userNo) {
+		return mainDao.selectProfile(sqlSession, userNo);
+	}
 
 }
