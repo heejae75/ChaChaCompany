@@ -46,12 +46,19 @@
         #indexLogoDiv button{
         	border: none;
         	background-color: white;
+        	cursor: pointer;
+        }
+        
+         #indexLogo:hover{
+        	width: 550px;
+        	height: 550px;
         }
         
         #indexLogo{
         	width: 500px;
         	height: 500px;
         	border-radius: 50px;
+        	transition: width 0.5s, height 0.5s;
         }
     </style>
 </head>
