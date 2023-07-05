@@ -103,9 +103,9 @@ public class MemberController {
 		map.put("category", category);
 		map.put("searchWord", searchWord);
 		
-		int listCount = memberService.selectListCount(map); //�쁽�옱 �옱吏곸쨷�씤 �쉶�썝�쓽 �닔
-		int pageLimit = 10; //紐뉙럹�씠吏��뵫 - 1~10�럹�씠吏��뵫 蹂댁뿬以�
-		int boardLimit = 20; //紐뉖챸�뵫 蹂댁뿬以꾩� - 20紐낆뵫 蹂댁뿬以�(Pagination�쓽 蹂��닔紐낃낵 留욎텛湲� �쐞�빐 boardLimit�쑝濡� �젙�쓽�븿)
+		int listCount = memberService.selectListCount(map); 
+		int pageLimit = 10; 
+		int boardLimit = 20; 
 		
 		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
 		ArrayList<Member> list = memberService.selectList(pi, map);
@@ -172,12 +172,12 @@ public class MemberController {
 		
 		member.setAddress(member.getAddress() + " " + detailAddress);
 		
-		int result = memberService.updateMember(member);
+		memberService.updateMember(member);
 		
 		if(check.equals("insert")) {
-			int result3 = memberService.insertMemberAttachment(memberAttachment);
+			memberService.insertMemberAttachment(memberAttachment);
 		}else if(check.equals("update")){
-			int result4 = memberService.updateMemberAttachment(memberAttachment);
+			memberService.updateMemberAttachment(memberAttachment);
 		}
 		
 		mv.setViewName("redirect:myPage.me");
