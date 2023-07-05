@@ -52,6 +52,10 @@
     	width : 85%;
     	margin : auto;
     }
+    .inner_container span{
+    	font-weight:900;
+    	font-size : 20px;
+    }
     .inner_container input{
     	font-size : 18px;
     	font-weight : 900;
@@ -60,10 +64,6 @@
     	border : 1px solid black;
     	height : 200px;
     	width : 200px;	
-    }
-    span{
-    	font-size : 20px;
-    	font-weight : 900;
     }
     .inner_div{
     	height:36px;

@@ -163,6 +163,7 @@
 		        firstDay : 1, // 월요일이 먼저 오게 하기  
 				fixedWeekCount : false, // 해당 월만 보이도록 하기 
 				eventLimit: true, //보이는 이벤트 수 제한 
+				displayEventTime : false, //이벤트 시간을 표시하지 않기 
 				selectable: true,
 		      	height : 800,
 						        

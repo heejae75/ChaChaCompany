@@ -124,7 +124,7 @@
 	    	<input type="hidden" name="boardNo" value="${board.boardNo}">
 			<textarea class="form-control" id="p_content" name="boardContent">${board.boardContent}</textarea>
 	    	<div id="footer">
-	    		<button type="submit" class="btn btn-primary">수정하기</button>
+	    		<button type="submit" class="btn btn-success">수정하기</button>
 	    		<button type="button" class="btn btn-danger">취소</button>
 	    	</div>
 	    </form>

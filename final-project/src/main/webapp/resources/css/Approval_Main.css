@@ -82,3 +82,9 @@
 		 	background-color: #0E6251;
 		 	color: white;
 		 }
+		 #approval-tap-area, th, #approval-home_2>h4{
+   			font-family: 'KimjungchulGothic-Bold';
+   		 }
+   		 td {
+   		font-family: 'HallymGothic-Regular';
+   		}
