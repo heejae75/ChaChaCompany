@@ -43,22 +43,6 @@ public class MainController {
 		return "main/userMain";
 	}
 	
-//	@RequestMapping("userMain.ma")
-//	public String userMain(HttpSession session, Model model) {
-//	    Member loginUser = (Member) session.getAttribute("loginUser");
-//	    int userNo = loginUser.getUserNo();
-//	    
-//	    Attendance att = mainService.userMain(userNo);
-//	    System.out.println(att);
-//	    if (att != null) {
-//	        model.addAttribute("att", att);
-//	    } else {
-//	        session.setAttribute("alertMsg", "출퇴근 기록이 없습니다.");
-//	    }
-//	    
-//	    return "main/userMain";
-//	}
-	
 	//최근 공지 불러오기 
 	@ResponseBody
 	@RequestMapping(value="mainNoticeList.ma", produces="application/json; charset=UTF-8")
@@ -84,58 +68,11 @@ public class MainController {
 	@RequestMapping(value="mainMessengerList.ma", produces="application/json; charseet=UTF-8")
 	public String mainMessengerList(HttpSession session) {
 		String userId = ((Member)session.getAttribute("loginUser")).getUserId();
-//		System.out.println(userId);
+		
 		ArrayList<Messenger> mainMessenger = mainService.mainMessengerList(userId);
-//		System.out.println(mainEmail);
 		
 		return new Gson().toJson(mainMessenger);
 	}
-	
-	//출근등록 
-//	@PostMapping("insertGo.ma")
-//	//@RequestMapping("insertGo.ma")
-//	//@RequestMapping(value="insertGo.ma", method=RequestMethod.POST)
-//	public String insertGoToWork(Attendance at, HttpSession session, RedirectAttributes rttr) {
-//		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
-//		// 근무계획 조회
-//		Attendance at2 = mainService.selectLeaveType(userNo);
-//		
-//		if(at2 == null) { // 근무계획 없으면
-//			at.setUserNo(userNo);
-//		}else { // 근무계획 있으면
-//			at.setUserNo(userNo);
-//			at.setLeaveType(at2.getLeaveType());
-//		}
-//		int result = mainService.insertGoToWork(at);
-//
-//		if (result > 0) {
-//			rttr.addFlashAttribute("onTime", at.getOnTime());
-//			session.setAttribute("alertMsg", "출근 성공!");
-//		} else {
-//			session.setAttribute("alertMsg", "출근 실패! ");
-//		}
-//
-//		return "redirect:/member/mainPage.me";
-//	}
-//	
-//	//퇴근 등록 
-//	//@RequestMapping("insertLeave.ma")
-//	@RequestMapping(value="insertLeave.ma", method=RequestMethod.POST)
-//	public String updateLeaveToWork(Attendance at, HttpSession session, RedirectAttributes rttr) {
-//		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
-//		
-//		at.setUserNo(userNo);
-//		
-//		int result = mainService.updateLeaveToWork(at);
-//		
-//		if(result > 0) {
-//			rttr.addFlashAttribute("onTime",at.getOnTime());
-//			session.setAttribute("alertMsg", "퇴근 성공!");
-//		}else {
-//			session.setAttribute("alertMsg", "퇴근 실패! ");
-//		}
-//		return "redirect:/member/mainPage.me";
-//	}
 	
 	//임직원조회(Team)
 	@ResponseBody
@@ -144,7 +81,7 @@ public class MainController {
 		Member m = ((Member)session.getAttribute("loginUser"));
 
 		ArrayList<Member> mainMemberTeam = mainService.mainOthersTeamList(m);
-		System.out.println(mainMemberTeam);
+		
 		return new Gson().toJson(mainMemberTeam);
 	}
 	
@@ -166,6 +103,7 @@ public class MainController {
 		String deptCode = ((Member)session.getAttribute("loginUser")).getDeptCode();
 		
 		ArrayList<Schedule> list = mainService.mainCalendarList(deptCode);
+		
 		return new Gson().toJson(list);
 	}
 	
@@ -181,7 +119,7 @@ public class MainController {
 		params.put("deptCode", deptCode);
 		
 		ArrayList<Schedule> events = mainService.mainDailyEvents(params);
-		//System.out.println(events);
+
 		return events;
 	}
 	
@@ -192,7 +130,7 @@ public class MainController {
 		Member m = ((Member)session.getAttribute("loginUser"));
 		
 		ArrayList<Approval> aList = mainService.mainApprovalStatus(m);
-		//System.out.println(aList);
+
 		return new Gson().toJson(aList);
 	}
 	
@@ -201,7 +139,7 @@ public class MainController {
 	@RequestMapping(value="mainInsertTodo.ma", method = RequestMethod.POST)
 	public String mainInsertTodo(HttpSession session, String todoContent) {
 		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
-		//System.out.println(userNo);
+
 		//Todo td = new Todo();
 		todo.setUserNo(userNo);
 		todo.setTodoContent(todoContent);
@@ -223,7 +161,7 @@ public class MainController {
 		m.setUserNo(userNo);
 		
 		ArrayList<Todo> list = mainService.mainSelectTodoList(m);
-		//System.out.println(list);
+
 		return new Gson().toJson(list);
 	}
 	
@@ -235,7 +173,7 @@ public class MainController {
 		todo.setStatus(status);
 		
 		int result = mainService.updateTodoList(todo);
-		//System.out.println(result);
+
 		if(result > 0) {
 			return "success";
 		}else {
@@ -247,7 +185,7 @@ public class MainController {
 	@ResponseBody
 	@RequestMapping(value = "deleteTodoList.ma", method = RequestMethod.POST)
 	public String deleteTodoList(int todoNo) {
-		//System.out.println(todoNo);
+
 		int result = mainService.deleteTodoList(todoNo);
 		
 		return (result > 0) ? "success" : "fail";
@@ -270,9 +208,9 @@ public class MainController {
 	@RequestMapping(value = "menuAlertList.ma", produces = "application/json; charset=UTF-8")
 	public String menuAlertList(HttpSession session) {
 		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
-//		System.out.println(userId);
+
 		ArrayList<Alert> mainAlert = mainService.menuAlertList(userNo);
-//		System.out.println(mainEmail);
+
 		return new Gson().toJson(mainAlert);
 	}
 	
@@ -285,7 +223,7 @@ public class MainController {
 		al.setStatus(status);
 		
 		int result = mainService.menuAlertUpdate(al);
-		//System.out.println(result);
+
 		if(result > 0) {
 			return "success";
 		}else {
@@ -310,10 +248,9 @@ public class MainController {
 	@RequestMapping(value = "mainSelectOnTime.ma", produces = "application/json; charset=UTF-8")
 	public String selectOnTime(HttpSession session) {
 		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
-		//System.out.println(userNo);
+
 		ArrayList<Attendance> atList = mainService.selectOnTime(userNo);
 
-		//System.out.println(atList);
 		return new Gson().toJson(atList);
 	}
 	
@@ -322,10 +259,9 @@ public class MainController {
 	@RequestMapping(value = "mainSelectOffTime.ma", produces = "application/json; charset=UTF-8")
 	public String mainSelectOffTime(HttpSession session) {
 		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
-		//System.out.println("off : "+userNo);
+
 		ArrayList<Attendance> atList = mainService.mainSelectOffTime(userNo);
 
-		//System.out.println(atList);
 		return new Gson().toJson(atList);
 	}
 	
@@ -364,25 +300,22 @@ public class MainController {
 		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
 
 		int result = mainService.insertOffTime(userNo);
-		//System.out.println(result);
 		
 		return (result > 0) ? "success" : "fail";
 	}
 	
-	//출근 수정
+	//출근 수정(나중에 완성 시키자)
 	@ResponseBody
 	@RequestMapping(value = "mainUpdateOnTime.ma", method = RequestMethod.POST)
 	public String mainUpdateOnTime(HttpSession session) {
 		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
 
 		int result = mainService.mainUpdateOnTime(userNo);
-		//System.out.println(result);
 		
 		return (result > 0) ? "success" : "fail";
 	}
 	
-	
-
+	//임직원 조회 -> 프로필 모달에서 쪽지 쓰기
 	@RequestMapping(value="insertMsg.ma", method=RequestMethod.GET)
 	public String msgEnrollForm(@RequestParam("userId") String userId, @RequestParam("userName") String userName, @RequestParam("userNo") String userNo) {
 		System.out.println(userId);
@@ -391,13 +324,14 @@ public class MainController {
 		return "messenger/msgReplyForm";
 	}
 	
+	//프로필 사진 조회하기
 	@ResponseBody
 	@RequestMapping(value = "selectProfile.ma", produces = "application/json; charset=UTF-8")
 	public String selectProfile(HttpSession session) {
 		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
 		
 		ArrayList<Member> mList = mainService.selectProfile(userNo);
-		//System.out.println(mList);
+
 		return new Gson().toJson(mList);
 	}
 }
