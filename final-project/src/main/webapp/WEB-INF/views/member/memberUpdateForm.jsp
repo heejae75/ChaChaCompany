@@ -4,6 +4,7 @@
 <!DOCTYPE html>
 <html>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <head>
   <title>마이페이지</title>
   <style>
@@ -136,10 +137,14 @@
 				</div>
 				<hr>
 				<div id="inner_4" class="inner_div">
-					<span>주소</span> <input type="text" class="form-control" style="width:580px;" value="${member.address}" name="address" required>
+					<span>주소</span> <input type="text" id="kakaoAddress" class="form-control" style="width:580px;" value="${member.address}" name="address" readonly required>
+				</div>
+				<br>
+				<div id="inner_5" class="inner_div">
+					<span>상세주소</span> <input type="text" class="form-control" style="width:540px;" name="detailAddress" required>
 				</div>
 				<hr>
-				<div id="inner_4" class="inner_div">
+				<div id="inner_6" class="inner_div">
 					<span>부서</span> <input type="text" class="form-control" style="width:150px;" value="${member.deptName}" readonly>
 					<span style="margin-left:30px">직책</span> <input type="text" class="form-control" style="width:70px;" value="${member.jobName}" readonly>
 					<span style="margin-left:30px">입사일</span> <input type="text" class="form-control" style="width:150px;" value="${member.empolymentDate}" readonly>
@@ -192,6 +197,15 @@
 
         return (key == 8 || key == 9 || key == 46 || (key >= 48 && key <= 57) || (key >= 96 && key <= 105));          
     	});
+    
+	$("#kakaoAddress").click(function(){	
+        new daum.Postcode({
+            oncomplete: function(data) { //선택시 입력값 세팅
+            	$("#kakaoAddress").val(data.address); // 주소 넣기
+                $("#detailAddress").focus(); //상세입력 포커싱
+            }
+        }).open();		
+	});    
 </script>
 </body>
 </html>
