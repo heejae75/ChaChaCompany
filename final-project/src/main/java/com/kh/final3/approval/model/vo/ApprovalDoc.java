@@ -15,7 +15,6 @@ public class ApprovalDoc {
 	private String docType;
 	private String docWriter;
 	private String userName;
-	private String phone;
 	private String docTitle;
 	private String docContent;
 	private String createDate;
