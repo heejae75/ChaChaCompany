@@ -55,9 +55,9 @@ public class MainController {
 	@ResponseBody
 	@RequestMapping(value="mainNoticeLiked.ma", produces="application/json; charset=UTF-8")
 	public String mainNoticeLikedList(HttpSession session) {
-		String userId = ((Member)session.getAttribute("loginUser")).getUserId();
+		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
 		//System.out.println(userId);
-		ArrayList<Board> mainNoticeLiked = mainService.mainNoticeLikedList(userId);
+		ArrayList<Board> mainNoticeLiked = mainService.mainNoticeLikedList(userNo);
 		//System.out.println(mainNoticeLiked);
 		return new Gson().toJson(mainNoticeLiked);
 	}
@@ -250,7 +250,7 @@ public class MainController {
 		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
 
 		ArrayList<Attendance> atList = mainService.selectOnTime(userNo);
-		System.out.println(atList);
+		//System.out.println(atList);
 		return new Gson().toJson(atList);
 	}
 	
@@ -307,9 +307,9 @@ public class MainController {
 	//임직원 조회 -> 프로필 모달에서 쪽지 쓰기
 	@RequestMapping(value="insertMsg.ma", method=RequestMethod.GET)
 	public String msgEnrollForm(@RequestParam("userId") String userId, @RequestParam("userName") String userName, @RequestParam("userNo") String userNo) {
-		System.out.println(userId);
-		System.out.println(userName);
-		System.out.println(userNo);
+//		System.out.println(userId);
+//		System.out.println(userName);
+//		System.out.println(userNo);
 		return "messenger/msgReplyForm";
 	}
 	

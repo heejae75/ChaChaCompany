@@ -20,7 +20,7 @@ public interface MainService {
 	ArrayList<Board> mainNoticeList();
 	
 	//즐겨찾기한 공지사항 조회 
-	ArrayList<Board> mainNoticeLikedList(String userId);
+	ArrayList<Board> mainNoticeLikedList(int userNo);
 
 	//최신 쪽지 조회 
 	ArrayList<Messenger> mainMessengerList(String userId);
