@@ -108,7 +108,7 @@
 		padding-bottom : 20px;
     }
     .reply_div:hover{
-    	background-color : rgb(198, 247, 190);
+    	background-color : lightgray;
     	cursor : pointer;
     }
     .reply_div div{
@@ -254,12 +254,12 @@
 						<c:choose>
 							<c:when test="${pi.currentPage eq 1}">
 								<li class="page-item disabled">
-									<a class="page-link">이전댓글</a>
+									<a class="page-link">이전</a>
 								</li>
 							</c:when>
 							<c:otherwise>
 								<li class="page-item">
-									<a class="page-link" href="/final3/${role}/detailList.fr?currentPage=${pi.currentPage-1}&&boardNo=${board.boardNo}">이전페이지</a>
+									<a class="page-link" href="/final3/${role}/detailList.fr?currentPage=${pi.currentPage-1}&&boardNo=${board.boardNo}">이전</a>
 								</li>
 							</c:otherwise>
 						</c:choose>
@@ -271,12 +271,12 @@
 						<c:choose>
 							<c:when test="${pi.currentPage eq pi.maxPage}">
 								<li class="page-item disabled">
-									<a class="page-link">다음댓글</a>
+									<a class="page-link">다음</a>
 								</li>
 							</c:when>
 							<c:otherwise>
 								<li class="page-item">
-									<a class="page-link" href="/final3/${role}/detailList.fr?currentPage=${pi.currentPage+1}&&boardNo=${board.boardNo}">다음페이지</a>
+									<a class="page-link" href="/final3/${role}/detailList.fr?currentPage=${pi.currentPage+1}&&boardNo=${board.boardNo}">다음</a>
 								</li>
 							</c:otherwise>
 						</c:choose>					
@@ -355,7 +355,7 @@
 
 <script>
 	$(function(){
-		$(".page-link").eq(${pi.currentPage}).css('color', 'red');
+		$(".page-link").eq(${pi.currentPage}).css('color', 'gray');
 	});
 	
 // 	$(".table>tbody>tr").click(function(){
