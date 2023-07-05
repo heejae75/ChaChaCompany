@@ -56,8 +56,8 @@ public class FreeForumController {
 		map.put("currentStatus", currentStatus);
 		
 		int listCount = freeForumService.selectListCount(map);
-		int pageLimit = 5;
-		int boardLimit = 3;
+		int pageLimit = 10;
+		int boardLimit = 20;
 
 		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
 		ArrayList<Board> list = freeForumService.forumList(pi, map);

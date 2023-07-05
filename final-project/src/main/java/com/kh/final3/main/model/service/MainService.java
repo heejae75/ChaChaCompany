@@ -69,9 +69,6 @@ public interface MainService {
 	//출근 조회
 	ArrayList<Attendance> selectOnTime(int userNo);
 
-	//퇴근 조회 
-	ArrayList<Attendance> mainSelectOffTime(int userNo);
-	
 	//출근 등록 
 	int insertOnTime(Attendance at2);
 

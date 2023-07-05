@@ -988,11 +988,11 @@ a{
 				var str = "";
 				
 				if(result.length == 0) {
-					str += "<img src='/final3/resources/image/청록이.jpg' id='member_photo'>"
+					str += "<img src='/final3/resources/image/청록이.jpg'>"
 					
 					$("#menuProfileImg").html(str);
 				}else {
-					str += "<img src='/final3/"+result[0].changeName+"' id='member_photo'>"
+					str += "<img src='/final3/"+result[0].changeName+"'>"
 					
 					$("#menuProfileImg").html(str);
 				}

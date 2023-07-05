@@ -81,13 +81,14 @@
     }
     #popularity_btn{
     	background-color : white;
-    	color : rgb(2, 117, 216);
+    	color : #0E6251;
     }
     #write_btn{
     	float:right;
     }
 	.table>tbody>tr:hover{
-    	background-color : rgb(198, 247, 190);
+    	cursor : pointer;
+    	
     }
     #input_search{
     	width : 400px;
@@ -114,6 +115,17 @@
     	font-size : 15px;
     	font-weight : 900;
     }
+    #board-tap-area, #boardList-btn>button, 
+    #board-btn-area button{
+    	font-family: 'KimjungchulGothic-Bold';
+    }    
+    .table>thead th {
+    	font-family: 'KimjungchulGothic-Bold';
+    }
+    
+    .table>tbody th {
+     	font-family: 'HallymGothic-Regular';
+    }    
 </style>
 </head>
 <body id="body-pd">
@@ -136,10 +148,9 @@
 					</li>
 				</ul>
             </div>
-	    <div class="table-responsive"> 	
-	    	<h1>자유게시판</h1>
+	    <div class="table-responsive">
 	    	<br>
-            <table class="table">
+            <table class="table table-hover">
 				<thead>
 					<tr>
 						<th style="width:70px;">번호</th>
@@ -166,9 +177,9 @@
 				</tbody>
 			</table>
 			<div id="button_div">
-			<button type="button" class="btn btn-primary" id="all_btn" onclick="boardAll()">전체글</button>
+			<button type="button" class="btn btn-primary" id="all_btn" onclick="boardAll()" style="background-color:#0E6251;">전체글</button>
 			<button type="button" class="btn btn-primary" id="popularity_btn" onclick="boardPopularity()">인기글</button>
-			<button type="button" class="btn btn-primary" id="write_btn" onclick="writing()">글쓰기</button>
+			<button type="button" class="btn btn-primary" id="write_btn" onclick="writing()" style="background-color:#0E6251;">글쓰기</button>
 			</div>
 			<br><br>
 			<div id="footer">
@@ -176,14 +187,12 @@
 						<div id="footer_inner">
 							<select name="category">
 						    	<option value="title">제목</option>
-						    	<option value="content">내용</option>
-						    	<option value="title_content">제목+내용</option>
 						    	<option value="writer">글쓴이</option>
 						    </select>
 						    	
 						    <input type="text" class="form-control form-control" id="input_search" name="searchWord">
 						    
-						    <button type="submit" class="btn btn-success">검색</button>		
+						    <button type="submit" class="btn btn-success" style="background-color:#0E6251;">검색</button>		
 						</div>		
 					</form>
 			</div>
@@ -192,12 +201,12 @@
 					<c:choose>
 						<c:when test="${pi.currentPage eq 1}">
 							<li class="page-item disabled">
-								<a class="page-link">이전페이지</a>
+								<a class="page-link">이전</a>
 							</li>
 						</c:when>
 						<c:otherwise>
 							<li class="page-item">
-								<a class="page-link" href="/final3/${role}/list.fr?currentPage=${pi.currentPage-1}">이전페이지</a>
+								<a class="page-link" href="/final3/${role}/list.fr?currentPage=${pi.currentPage-1}">이전</a>
 							</li>
 						</c:otherwise>
 					</c:choose>
@@ -214,7 +223,7 @@
 						</c:when>
 						<c:otherwise>
 							<li class="page-item">
-								<a class="page-link" href="/final3/${role}/list.fr?currentPage=${pi.currentPage+1}">다음페이지</a>
+								<a class="page-link" href="/final3/${role}/list.fr?currentPage=${pi.currentPage+1}">다음</a>
 							</li>
 						</c:otherwise>
 					</c:choose>					
@@ -225,7 +234,7 @@
 	
 <script>
 	$(function(){
-		$(".page-link").eq(${pi.currentPage}).css('color', 'red');
+		$(".page-link").eq(${pi.currentPage}).css('color', 'gray');
 	});
 	
 	function boardAll(){

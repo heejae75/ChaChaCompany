@@ -250,18 +250,7 @@ public class MainController {
 		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
 
 		ArrayList<Attendance> atList = mainService.selectOnTime(userNo);
-
-		return new Gson().toJson(atList);
-	}
-	
-	//퇴근 조회
-	@ResponseBody
-	@RequestMapping(value = "mainSelectOffTime.ma", produces = "application/json; charset=UTF-8")
-	public String mainSelectOffTime(HttpSession session) {
-		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
-
-		ArrayList<Attendance> atList = mainService.mainSelectOffTime(userNo);
-
+		System.out.println(atList);
 		return new Gson().toJson(atList);
 	}
 	
