@@ -206,8 +206,7 @@
                		<td></td>
                		<td colspan="5">
                			<div id="upfile-area" style="text-align:left; font-size:17px">
-               			
-               			
+               				<!-- 첨부파일 이름보여줄 영역 -->
                			</div>
                		</td>
                </tr>

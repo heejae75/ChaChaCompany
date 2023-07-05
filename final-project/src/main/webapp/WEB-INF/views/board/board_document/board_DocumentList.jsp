@@ -9,9 +9,6 @@
    <link href="/final3/resources/css/document-modal.css" rel="stylesheet">
   <style>
 	
-	*{
-		font-family: 'KimjungchulGothic-Bold';
-	}
 	.content{
         width: 1570px;
     }
@@ -129,6 +126,20 @@
         width:fit-content; 
         margin:auto;
     }
+    
+    #board-tap-area, #boardList-btn>button, 
+    #board-btn-area button, #board-search-area, .popup-wrap, #board-pagebar-area{
+    	font-family: 'KimjungchulGothic-Bold';
+    }
+    
+    th {
+    	font-family: 'KimjungchulGothic-Bold';
+    }
+    
+    td {
+     	font-family: 'HallymGothic-Regular';
+    }
+    
     
     </style>
 </head>
