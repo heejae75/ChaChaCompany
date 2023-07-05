@@ -136,7 +136,8 @@
 				FROM BOARD B
 				JOIN MEMBER M ON (BOARD_WRITER = USER_NO)
 				JOIN RECOMMEND R ON (BOARD_NO = REF_BNO)
-				WHERE BOARD_WRITER = (SELECT USER_NO
+                LEFT JOIN RECOMMEND R ON (M.USER_NO = R.REF_UNO)
+				WHERE R.REF_UNO = (SELECT USER_NO
 					                    FROM MEMBER 
 					                    WHERE USER_ID = #{userId})
 				AND B.STATUS = 'Y'
@@ -409,19 +410,7 @@
 	<!-- 출근 조회 -->
 	<select id="selectOnTime" resultMap="mainAttendanceResultSet">
 		SELECT *
-		FROM ( SELECT ATT_RECORD_NO, ATT.USER_NO, TO_CHAR(ON_TIME, 'HH24:MI') AS ON_TIME
-			  FROM ATTENDANCE_RECORD ATT
-			  JOIN MEMBER M ON (M.USER_NO = ATT.USER_NO)
-			  WHERE ATT.USER_NO = #{userNo}
-			    AND TO_DATE(TO_CHAR(ON_TIME, 'YYYY-MM-DD')) = TO_DATE(TO_CHAR(SYSDATE, 'YYYY-MM-DD'))
-			  ORDER BY ON_TIME DESC)
-		WHERE ROWNUM = 1
-	</select>
-	
-	<!-- 퇴근 조회 -->
-	<select id="mainSelectOffTime" resultMap="mainAttendanceResultSet">
-		SELECT *
-		FROM ( SELECT ATT_RECORD_NO, ATT.USER_NO, TO_CHAR(OFF_TIME, 'HH24:MI') AS OFF_TIME
+		FROM ( SELECT ATT_RECORD_NO, ATT.USER_NO, TO_CHAR(ON_TIME, 'HH24:MI') AS ON_TIME, TO_CHAR(OFF_TIME, 'HH24:MI') AS OFF_TIME
 			  FROM ATTENDANCE_RECORD ATT
 			  JOIN MEMBER M ON (M.USER_NO = ATT.USER_NO)
 			  WHERE ATT.USER_NO = #{userNo}
