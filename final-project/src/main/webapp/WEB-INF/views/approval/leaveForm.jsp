@@ -329,7 +329,6 @@
 		  </div>
 		</div>
 		<script>
-		//오늘 날짜 이전이면 alert
 		//시간 계산
 		$(function() {
 		  $("#leave-table").on("change", "#start-date, #end-date", function() {

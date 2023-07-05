@@ -144,6 +144,12 @@
 		WHERE USER_NO = #{userNo}
 	</update>
 	
+	<update id="updateOther">
+		UPDATE MEMBER
+		SET DEPT_CODE = #{deptCode}, JOB_CODE = #{jobCode}, DEPATURE_DATE = #{depatureDate}, AUTH = #{auth}
+		WHERE USER_NO = #{userNo}
+	</update>
+	
 	<!-- customUserDetails 관련 -->
 	<resultMap type="com.kh.final3.member.model.vo.CustomUserDetails" id="customUserSet">
 	 	<result column="USER_ID" property="userId"/>
