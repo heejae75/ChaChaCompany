@@ -35,6 +35,22 @@
    		width:80%;
    		margin:auto;
    	}
+   	
+   	#title-area *{
+   		font-family: 'KimjungchulGothic-Bold';
+   	}
+   	
+    #userCalendar .fc-toolbar {
+    	font-family: 'KimjungchulGothic-Bold';
+    }
+    
+    #userCalendar .fc-view-container {
+    	font-family: 'HallymGothic-Regular';
+    }
+    
+    .modal-content * {
+    	font-family: 'KimjungchulGothic-Bold';
+    }
 </style>
 
 <%@ include file="../common/menubar.jsp"  %> 
@@ -59,7 +75,6 @@
 	</script>
 	<!-- 캘린더 영역 -->
 	<div id="calendar-container">
-		<div id="calendar"></div>
 		<div id="userCalendar"></div>
 	</div>
 	

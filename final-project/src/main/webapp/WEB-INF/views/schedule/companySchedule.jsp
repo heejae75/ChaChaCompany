@@ -9,6 +9,7 @@
 <title>전체 스케줄</title>
 </head>
 <style>
+	
 	.content{
         width: 1570px;
         margin-left : 30px;
@@ -36,6 +37,21 @@
    		margin:auto;
    	}
     
+    #title-area *{
+   		font-family: 'KimjungchulGothic-Bold';
+   	}
+   	
+    #calendar .fc-toolbar {
+    	font-family: 'KimjungchulGothic-Bold';
+    }
+    
+    #calendar .fc-view-container {
+    	font-family: 'HallymGothic-Regular';
+    }
+    
+    .modal-content * {
+    	font-family: 'KimjungchulGothic-Bold';
+    }
 </style>
 
 <%@ include file="../common/menubar.jsp"  %> 

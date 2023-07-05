@@ -156,6 +156,10 @@
     #reply_modal_body button{
     	float:left;
     }
+	#paging{
+    	width:fit-content;
+    	margin:auto;
+    }    
 </style>
 </head>
 <body id="body-pd">
@@ -244,6 +248,41 @@
 				</div>
 				<hr>
 			</c:forEach>
+			<c:if test="${not empty replyList}">
+				<div id="paging">
+					<ul class="pagination">
+						<c:choose>
+							<c:when test="${pi.currentPage eq 1}">
+								<li class="page-item disabled">
+									<a class="page-link">이전댓글</a>
+								</li>
+							</c:when>
+							<c:otherwise>
+								<li class="page-item">
+									<a class="page-link" href="/final3/${role}/detailList.fr?currentPage=${pi.currentPage-1}&&boardNo=${board.boardNo}">이전페이지</a>
+								</li>
+							</c:otherwise>
+						</c:choose>
+						<c:forEach var="p" begin="${pi.startPage}" end="${pi.endPage}">
+							<li class="page-item">
+								<a class="page-link" onclick="pageColor()" href="/final3/${role}/detailList.fr?currentPage=${p}&&boardNo=${board.boardNo}">${p}</a>
+							</li>
+						</c:forEach>
+						<c:choose>
+							<c:when test="${pi.currentPage eq pi.maxPage}">
+								<li class="page-item disabled">
+									<a class="page-link">다음댓글</a>
+								</li>
+							</c:when>
+							<c:otherwise>
+								<li class="page-item">
+									<a class="page-link" href="/final3/${role}/detailList.fr?currentPage=${pi.currentPage+1}&&boardNo=${board.boardNo}">다음페이지</a>
+								</li>
+							</c:otherwise>
+						</c:choose>					
+					</ul>	
+				</div>
+			</c:if>			
 			<div id="replyWrite_div">
 					<textarea id="replyText" name="replyText" class="replyText" required></textarea>
 					<button id="reply_btn" type="button" onclick="reply_insert();">등록하기</button>						
@@ -265,7 +304,7 @@
       <!-- Modal body -->
       <div class="modal-body" id="reply_modal_body">
 		<button class="btn btn-info" onclick="reply_update_view();">수정하기</button>
-      	<form action="deleteReply.fr" method="post">
+      	<form action="deleteReply.fr" method="post" onsubmit="return checkUser()">
       		<input type="hidden" class="replyNo" name="replyNo">
       		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
       		<input type="hidden" name="boardNo" value="${board.boardNo}">
@@ -413,6 +452,15 @@
 			$("#reply_update_modal").show();
 		}else{
 			alert("로그인 정보가 일치하지 않습니다.");
+		}
+	}
+	
+	function checkUser(){
+		if(replyWriter == "${userName}"){
+			return true;
+		}else{
+			alert("로그인 정보가 일치하지 않습니다.");
+			return false;
 		}
 	}
 	

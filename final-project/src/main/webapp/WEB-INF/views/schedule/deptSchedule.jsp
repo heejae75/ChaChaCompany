@@ -37,7 +37,21 @@
    		margin:auto;
    	}
    	
+   	#title-area *{
+   		font-family: 'KimjungchulGothic-Bold';
+   	}
    	
+    #calendar .fc-toolbar {
+    	font-family: 'KimjungchulGothic-Bold';
+    }
+    
+    #calendar .fc-view-container {
+    	font-family: 'HallymGothic-Regular';
+    }
+    
+    .modal-content * {
+    	font-family: 'KimjungchulGothic-Bold';
+    }
     
 </style>
 
@@ -63,7 +77,6 @@
 	<!-- 캘린더 영역 -->
 	<div id="calendar-container">
 		<div id="calendar"></div>
-		<div id="userCalendar"></div>
 	</div>
 	
 	<!-- 모달 -->	

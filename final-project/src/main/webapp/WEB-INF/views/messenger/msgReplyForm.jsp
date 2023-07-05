@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"  %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,6 +14,19 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     
 <style>
+
+	@font-face {
+	    font-family: 'KimjungchulGothic-Bold';
+	    font-style: normal;
+	    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302_01@1.0/KimjungchulGothic-Bold.woff2') format('woff2');
+	}
+		
+	@font-face {
+    	font-family: 'HallymGothic-Regular';
+    	src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2204@1.0/HallymGothic-Regular.woff2') format('woff2');
+   	 	font-style: normal;
+    }
+	
 	.messenger_content {
 	    background-color:#0E6251;
 	    width:100%;
@@ -21,7 +35,7 @@
 	}
 	.innerOuter {
 	    border:1px solid lightgray;
-	    width:80%;
+	    width:970px;
 	    height:100%;
 	    margin:auto;
 	    padding:3% 7%;
@@ -83,13 +97,29 @@
 	#msg-searchNameList th, #msg-searchNameList td{
 		text-align: center;
 	}
+	
+	h1, h2, a, th, select{
+		font-family: 'KimjungchulGothic-Bold';
+	}
+	
+	td, input {
+ 		font-family: 'HallymGothic-Regular';
+	}
+	
+	.messenger_content button {
+		font-family: 'KimjungchulGothic-Bold';
+	}
+	
+	.modal-content button {
+		font-family: 'KimjungchulGothic-Bold';
+	}
         
 </style>
 </head>
 <body>
 	<div class="messenger_content">
 		<div class="innerOuter">
-			<h2 style="font-weight:800;">쪽지 쓰기 </h2> 
+			<h2>쪽지 쓰기 </h2> 
 			<div id="msg_nav">
 				<ul>
 					<li><a href="insert.mg">쪽지쓰기</a></li>
@@ -344,11 +374,12 @@
 	</script>
 	
 	<!-- 프로필에서 쪽지 보내기 스크립 -->
+	<c:if test= '${empty m.messengerNo}'>
 	<script> 
- 		$(document).ready(function() {
- 			var userNo = "<%= request.getParameter("userNo") %>";
- 			var userId = "<%= request.getParameter("userId") %>";  
- 			var userName = "<%= request.getParameter("userName") %>"; 
+		$(document).ready(function() {
+			var userNo = "<%= request.getParameter("userNo") %>";
+			var userId = "<%= request.getParameter("userId") %>";  
+			var userName = "<%= request.getParameter("userName") %>"; 
 			  console.log(userNo);
 			  console.log(userId);
 			  console.log(userName);
@@ -356,5 +387,6 @@
 			$("#recvUno").val(userNo);
 		});
  	</script> 
+ 	</c:if>
 </body>
 </html>
