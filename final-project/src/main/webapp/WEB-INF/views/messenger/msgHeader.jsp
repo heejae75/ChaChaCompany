@@ -14,9 +14,8 @@
 <style>
 	@font-face {
     font-family: 'KimjungchulGothic-Bold';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302_01@1.0/KimjungchulGothic-Bold.woff2') format('woff2');
-    font-weight: 700;
     font-style: normal;
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302_01@1.0/KimjungchulGothic-Bold.woff2') format('woff2');
 	}
 	
 	@font-face {
@@ -64,7 +63,7 @@
 		text-decoration-line: none;
 		color: black;
 		font-size: 20px;
-		font-weight: 700;
+		
 	}
 
 	#msg_nav li a:hover{
@@ -72,11 +71,11 @@
 		color: #009966;	
 	}
 	
-	h2, a, th{
+	h2, a, th, button, select{
 		font-family: 'KimjungchulGothic-Bold';
 	}
 	
-	td {
+	td, input {
 	 	font-family: 'HallymGothic-Regular';
  	}
    	
@@ -98,7 +97,7 @@
 
 <div class="messenger_content">
 	<div class="innerOuter">
-		<h2 style="font-weight:800; ">쪽지 <i id="messenger" class="fa-sharp fa-solid fa-paper-plane fa-sm" style="color: #0E6251;"></i></h2> 
+		<h2>쪽지 <i id="messenger" class="fa-sharp fa-solid fa-paper-plane fa-sm" style="color: #0E6251;"></i></h2> 
 		<div id="msg_header">
 			<!-- 쪽지 네비영역 -->
 			<div id="msg_nav">

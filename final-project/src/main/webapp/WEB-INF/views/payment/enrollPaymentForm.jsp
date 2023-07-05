@@ -6,6 +6,9 @@
 <meta charset="UTF-8">
 <title>급여 명세서 조회 </title>
 <style>
+	*{
+		font-family: 'KimjungchulGothic-Bold';
+	}
 	.content{
         width: 1570px;
     }

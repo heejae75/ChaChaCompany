@@ -7,10 +7,14 @@
    <title>자료실 작성페이지</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <style>
-	  
+	
+	* {
+		font-family: 'KimjungchulGothic-Bold';
+	}
 	.content{
 	  	width: 1570px;
 		margin-top:-105px;
+		
 	}
 	
 	/* 이전으로버튼 */
@@ -186,7 +190,7 @@
                </tr>
                
                <tr>
-                   <td colspan="6"><textarea name ="boardContent" style="resize: none; width: 100%; height: 300px; padding: 0;" required></textarea></td>
+                   <td colspan="6"><textarea name ="boardContent" style="resize: none; width: 100%; height: 300px; padding: 0; font-family: 'HallymGothic-Regular';" required></textarea></td>
                </tr>
            </tbody>
 		</table>

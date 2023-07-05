@@ -159,11 +159,19 @@
                     <tr>
                         <th width="80">선택</th>
                         <th width="120">보낸사람</th>
+                        <c:choose>
+                        	<c:when test="${m.emcStatus eq 'Y' }"> <!-- 긴급 -->
+		                        <th width="80"></th>
+		                        <th width="320">제목</th>
+                        	</c:when>
+                        	
+                        </c:choose>
                         <th width="400">제목</th>
                         <th width="190">날짜</th>
                     </tr>
                 </thead>
                 <tbody>
+                	<tbody>
                 	<c:choose>
 	                	<c:when test="${not empty msgList}">
 	                		<c:forEach var="m" items="${msgList}">
@@ -202,6 +210,7 @@
     	            		</tr>
     	            	</c:otherwise>
                 	</c:choose>
+                </tbody>	
                 </tbody>
             </table>
 		</div>   
