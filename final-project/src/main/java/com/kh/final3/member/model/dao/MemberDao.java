@@ -80,4 +80,9 @@ public class MemberDao{
 		return sqlSession.update("memberMapper.updatePwd", member);
 	}
 
+	public int updateOther(SqlSession sqlSession, Member member) {
+		
+		return sqlSession.update("memberMapper.updateOther", member);
+	}
+
 }

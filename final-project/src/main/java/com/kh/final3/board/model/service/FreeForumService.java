@@ -50,7 +50,7 @@ public interface FreeForumService {
 	int insertReply(Reply reply);
 	
 	//댓글 조회 메서드
-	ArrayList<Reply> selectReplyList(int boardNo);
+	ArrayList<Reply> selectReplyList(PageInfo pi, Map<String, String> map);
 	
 	//댓글 개수 조회 메서드
 	int replyCount(int boardNo);
@@ -66,6 +66,9 @@ public interface FreeForumService {
 
 	//댓글 삭제
 	int deleteReply(int replyNo);
+
+	//마이페이지 댓글 개수 카운팅
+	int replyCount(Map<String, String> map);
 
 	
 

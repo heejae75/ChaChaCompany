@@ -44,9 +44,6 @@ public class MemberController {
 	@Autowired
 	MemberService memberService;
 	
-	@Autowired
-	FreeForumService freeForumService;
-	
 	@GetMapping("/managerPage.me")
 	public String managerPage(Principal p, Model model) {
 		
@@ -132,7 +129,7 @@ public class MemberController {
 	}
 	
 	@PostMapping("/update.me")
-	public ModelAndView updateMember(ModelAndView mv, Member member, MultipartFile upfile, MemberAttachment memberAttachment, HttpSession session) {
+	public ModelAndView updateMember(ModelAndView mv, Member member, String detailAddress, MultipartFile upfile, MemberAttachment memberAttachment, HttpSession session) {
 		String check = "none";
 		
 		SaveFile saveFile = new SaveFile();
@@ -166,11 +163,14 @@ public class MemberController {
 			MemberAttachment match = memberService.selectMemberAttachment(Integer.toString(member.getUserNo()));
 			if(match != null) {
 				new File(session.getServletContext().getRealPath(match.getChangeName())).delete();
+				System.out.println(match.getChangeName());
 				memberAttachment.setOriginName("청록이.jpg");
 				memberAttachment.setChangeName("resources/image/청록이.jpg");
 				memberService.updateMemberAttachment(memberAttachment);
 			}
 		}
+		
+		member.setAddress(member.getAddress() + " " + detailAddress);
 		
 		int result = memberService.updateMember(member);
 		
@@ -204,7 +204,7 @@ public class MemberController {
 	}
 	
 	@PostMapping("/insert.me")
-	public String insertMember(Member member, HttpSession session) {
+	public String insertMember(Member member, String detailAddress, HttpSession session) {
 		
 		if(member.getJobCode().equals("J1") || member.getJobCode().equals("J2") || member.getJobCode().equals("J3")
 				|| member.getJobCode().equals("J4") || member.getJobCode().equals("J5")) {
@@ -212,6 +212,9 @@ public class MemberController {
 		}else {
 			member.setAuth("ROLE_MEMBER");
 		}
+		
+		member.setAddress(member.getAddress()+ " " +detailAddress);
+		member.setUserPwd("1234");
 		
 		int result = memberService.insertMember(member);
 		
@@ -222,7 +225,7 @@ public class MemberController {
 		}
 		
 		
-		return "main/adminMain";
+		return "redirect:mainPage.me";
 	}
 	
 	@ResponseBody
@@ -261,29 +264,24 @@ public class MemberController {
 		return mv;
 	}
 	
-	@GetMapping("/myForumList.me")
-	public String myForumList(@RequestParam(value = "currentPage", defaultValue = "1") int currentPage, Model model) {
+	@PostMapping("/updateOther.me")
+	public String updateOther(Member member, HttpSession session) {
+		System.out.println(member.getDepatureDate());
+		if(member.getJobCode().equals("J6") || member.getJobCode().equals("J7")) {
+			member.setAuth("ROLE_MEMBER");
+		}else {
+			member.setAuth("ROLE_ADMIN");
+		}
 		
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		CustomUserDetails userDetails = (CustomUserDetails)principal;
+		int result = memberService.updateOther(member);
 		
-		Map<String, String> map = new HashMap<>();
-//		map.put("category", category);
-//		map.put("searchWord", searchWord);
-//		map.put("currentStatus", currentStatus);
-		map.put("currentWriterNo", Integer.toString(userDetails.getUserNo()));
-		map.put("currentWriter", userDetails.getUserId());
+		if(result>0) {
+			session.setAttribute("alertMsg", "회원 정보 수정 성공");
+		}else {
+			session.setAttribute("alertMSg", "회원 정보 수정 실패");
+		}
 		
-		int listCount = freeForumService.selectListCount(map);
-		int pageLimit = 5;
-		int boardLimit = 3;
-
-		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
-		ArrayList<Board> list = freeForumService.forumList(pi, map);
-
-		model.addAttribute("list", list);
-		model.addAttribute("pi", pi);
-		
-		return "member/memberMyForumList";
+		return "redirect:list.me";
 	}
+	
 }

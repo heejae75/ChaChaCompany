@@ -41,6 +41,16 @@
     .table>tbody>tr:hover{
     	background-color : rgb(198, 247, 190);
     }
+    #select_div div{
+        float: left;
+    }
+    #select_div>div{
+        margin-left : 90px;
+    }
+    #myModal div{
+    	font-size:18px;
+    	font-weight:900;
+    }
 </style>
 </head>
 <body>
@@ -127,27 +137,62 @@
 	    <br><br>
 	</div>
 	<div class="modal" id="myModal">
-	  <div class="modal-dialog">
-	    <div class="modal-content">
-	
-	      <!-- Modal Header -->
-	      <div class="modal-header">
-	        <h4 class="modal-title">Modal Heading</h4>
-	        <button type="button" class="close" data-dismiss="modal">&times;</button>
-	      </div>
-	
-	      <!-- Modal body -->
-	      <div class="modal-body">
-	        Modal body..
-	      </div>
-	
-	      <!-- Modal footer -->
-	      <div class="modal-footer">
-	        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-	      </div>
-	
-	    </div>
-	  </div>
+	  <form action="updateOther.me" method="post">
+	  	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+	  	<input type="hidden" name="userNo">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		
+		      <!-- Modal Header -->
+		      <div class="modal-header">
+		        <h4 class="modal-title" style="font-size:25px; font-weight:900;">정보 수정</h4>
+		      </div>
+		
+		      <!-- Modal body -->
+		      <div class="modal-body">
+	              <div id="select_div">
+	                  <div>
+	                      <p>부서</p>
+	                      <select name="deptCode">
+	                          <option value="D2">회계관리부</option>
+	                          <option value="D3">마케팅부</option>
+	                          <option value="D4">국내영업부</option>
+	                          <option value="D5">해외영업부</option>
+	                          <option value="D6">기술지원부</option>
+	                          <option value="D7">총무부</option>
+	                          <option value="D8">회계부</option>
+	                          <option value="D9">인사관리부</option>
+	                          <option value="D1">기타</option>
+	                      </select>
+	                  </div>
+	                  <div>
+	                      <p>직급</p>
+	                      <select name="jobCode">
+	                          <option value="J1">대표</option>
+	                          <option value="J2">부사장</option>
+	                          <option value="J3">부장</option>
+	                          <option value="J4">차장</option>
+	                          <option value="J5">과장</option>
+	                          <option value="J6">대리</option>
+	                          <option value="J7">사원</option>
+	                      </select>
+	                  </div>
+	              </div>
+		      </div>
+		      <div style="width:90%; margin-bottom:18px; margin-left:18px;">
+		          <p>퇴사일</p>
+		          <input type="date" class="form-control form-control" name="depatureDate">              	            
+		      </div>
+		
+		      <!-- Modal footer -->
+		      <div class="modal-footer">
+		      	<button type="submit" class="btn btn-success" data-dismiss="modal">수정</button>
+		        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="modalClose();">취소</button>
+		      </div>
+		
+		    </div>
+		  </div>
+	  </form>
 	</div>
 	
 	<script>
@@ -163,8 +208,13 @@
 			$(".table>tbody>tr").click(function(){
 				var dv = event.currentTarget;
 				var userNo = dv.children[0].innerText;
-				location.href = "/final3/admin/detailList.me?userNo=" + userNo;
+				$("input[name=userNo]").val(userNo);
+				$("#myModal").show();
 			});
+		}
+		
+		function modalClose(){
+			$("#myModal").hide();
 		}
 		
 		function orderByJob(){

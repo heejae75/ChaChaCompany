@@ -201,13 +201,27 @@
  		FROM REPLY R
         JOIN MEMBER M ON(R.REPLY_WRITER = M.USER_NO)
  		WHERE R.STATUS = 'Y'
- 		AND REF_BNO = #{refBno}
+ 		<choose>
+ 			<when test="boardNo != null">
+		 		AND REF_BNO = #{boardNo} 			
+ 			</when>
+ 			<otherwise>
+ 				AND REPLY_WRITER = #{userNo}
+ 			</otherwise>
+ 		</choose>
  	</select>
  	
  	<select id="selectReplyCount" resultType="_int">
  		SELECT COUNT(*)
  		FROM REPLY
- 		WHERE REF_BNO = #{boardNo}
+ 		<choose>
+ 			<when test="boardNo != null">
+		 		WHERE REF_BNO = #{boardNo}
+ 			</when>
+ 			<otherwise>
+ 				WHERE REPLY_WRITER = #{userNo}
+ 			</otherwise>
+ 		</choose>
  	</select>
  	
  	<update id="updateForum">
