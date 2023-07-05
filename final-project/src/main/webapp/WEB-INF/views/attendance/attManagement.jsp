@@ -111,16 +111,6 @@
         margin:auto;
     }
     
-/*     #tip {
-    position:absolute;
-    color:#FFFFFF;
-    padding:5px;
-    display:none;
-    background:#450e4c;
-    border-radius: 5px;
-}
-     */
-    
     
 </style>
 </head>
@@ -178,7 +168,7 @@
 					<tbody>
 						 <c:if test="${empty list }">
 							<tr>
-								<td colspan="12">아직 출근한 사람이 없네요.</td>
+								<td colspan="12" style="font-weight:700">아직 출근한 사람이 없네요.</td>
 							</tr>
 						</c:if> 
 					
@@ -289,8 +279,6 @@
               </div>
           </div>
             
-            
-            
             <!-- 현재페이지에 따라 이전/다음버튼 disabled처리 (클래스부여)-->
             <c:if test="${pi.currentPage eq 1 }">
             	<script>
@@ -309,12 +297,8 @@
             		});
             	</script>
             </c:if>
-            
-		
 		
 	</div>
-		
-
 			
       <br><br><br><br>
       
@@ -338,6 +322,11 @@
 
 	<script>
 	
+	$(document).ready(function(){
+		  $('[data-toggle="tooltip"]').tooltip();
+	});
+	
+	// 지각의 경우 글씨 색 변경, 마우스오버시 툴팁
 	$(function(){
 		
 		$("#table-area tbody tr").each(function(){
@@ -364,16 +353,5 @@
 	});
 	
 	</script>
-	
-	<script>
-	$(document).ready(function(){
-	  $('[data-toggle="tooltip"]').tooltip();
-	});
-	</script>
- 
-  
- 
-
-
 </body>
 </html>

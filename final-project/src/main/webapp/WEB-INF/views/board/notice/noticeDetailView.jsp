@@ -241,7 +241,7 @@
      <script>
      // 댓글 입력창 빈칸일때 알람
  	$("#reply-btn").click(function(){
- 		chkblankReply =$("#reply-input").val();
+ 		chkblankReply = $("#reply-input").val();
  		if(chkblankReply.length==0){
  			alert("댓글을 입력해주세요.")
  		}else{

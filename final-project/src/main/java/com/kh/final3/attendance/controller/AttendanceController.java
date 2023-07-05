@@ -96,9 +96,7 @@ public class AttendanceController {
 	public String selectAtt(Attendance att) {
 		// 신청한 근태유형조회(연차휴가/병가/오전반차/오후반차/휴무일/육아휴직/외근/출장)
 		// 조회결과가 없다면 (정상근무)
-		String currentDay = att.getCurrDate();
 		Attendance att2 = attendanceService.selectLeave(att);
-		// System.out.println("근무타입 : " + att2);
 
 		Record r = new Record();
 
@@ -108,18 +106,14 @@ public class AttendanceController {
 			if (attendanceService.selectAtt(att) != null) {
 				r.setWorkRecord(attendanceService.selectAtt(att).getWorkRecord()); // 실적조회(분 단위)
 			}
-			// System.out.println(currentDay + " 근무실적1" + r);
 		} else if (att2.getLeaveType().equals("오전반차") || att2.getLeaveType().equals("오후반차")) { // 반차근무
 			r.setWorkPlan(4 * 60);
 			if (attendanceService.selectAtt(att) != null) {
 				r.setWorkRecord(attendanceService.selectAtt(att).getWorkRecord()); // 실적조회(분 단위)
 			}
-			// System.out.println(currentDay + " 근무실적2" + r);
 		} else { // 휴가, 병가, 휴무일, 육아휴직
 			r = null; // 근무 계획 및 실적 없음
-			// System.out.println(currentDay + " 근무실적3" + r);
 		}
-		// System.out.println("리턴");
 		return new Gson().toJson(r);
 	}
 

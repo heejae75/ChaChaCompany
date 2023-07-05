@@ -266,10 +266,7 @@
 										<c:otherwise>
 											${att.leaveType }
 										</c:otherwise>
-									
 									</c:choose>
-										
-									
 									</td>
 									<td align="right" style="width:10px"><button id="status-btn" class="btn btn-sm btn-default">부재중</button></td>
 								</tr>
@@ -453,18 +450,11 @@
 			timezone                  : "local", 
 			nextDayThreshold          : "09:00:00",
 			displayEventTime          : false,
-			displayEventEnd           : true,
 			firstDay                  : 1, //월요일이 먼저 오게 하려면 1
 			weekNumbers               : false,
 			weekNumberCalculation     : "ISO",
-			eventLimit                : true,
 			selectHelper 			  : true,
 	      	selectMirror			  : true,
-	        dayMaxEvents			  : true,
-			views                     : { 
-			                              month : { eventLimit : 12 } // 한 날짜에 최대 이벤트 12개, 나머지는 + 처리됨
-				                              },
-			timeFormat                : "HH:mm",
 			weekends                  : true, 
 			header                    : {
 										center : "prev, title ,next ",
@@ -481,48 +471,11 @@
 										today: '오늘',
 										},
 										
-	         eventClick: function(arg, event){ // 화면에서 일정 선택하면
+	        eventClick: function(arg){ // 화면에서 일정 선택하면
 	        	 /*나의 근무에서 선택일과 출퇴근시간 변경*/
-	        	 if(arg.start.format("HH:mm") != "00:00"){
-		        	 $("#startTime").text(arg.start.format("HH:mm"));
-		        	 $("#start-time").val(arg.start.format("HH:mm"));
-		        	 $("#request-start-time").val(arg.start.format("HH:mm")); // 근무정정신청폼
-	        	 }else{
-	        		 $("#startTime").text("미입력");
-	        		 $("#start-time").val("미입력");
-	        		 $("#request-start-time").val("미입력");
-	        	 }
-	         
-	        	 if(arg.end != null){
-	        		 $("#endTime").text(arg.end.format("HH:mm"));
-	        		 $("#end-time").val(arg.end.format("HH:mm"));
-	        		 $("#request-end-time").val(arg.end.format("HH:mm"));
-	        	 }else{
-	        		 $("#endTime").text("미입력");
-	        		 $("#end-time").val("미입력");
-	        		 $("#request-end-time").val("미입력");
-	        	 }
-	        	 
-	        	 // 휴가근무인 경우
-	        	 if(arg.title == '연차휴가' || arg.title == '병가' || arg.title == '육아휴직'){
-	        		 $("#formattedDate2").text(arg.start.format("YYYY-MM-DD") + " ~ " + arg.end.format("YYYY-MM-DD"));
-	        		 $("#startTime").text("휴가");
-	        		 $("#endTime").text("휴가");
-	        	 }
-	        	 if(arg.title == '오전반차' || arg.title == '오후반차'){
-	        		 $("#formattedDate2").text(arg.start.format("YYYY-MM-DD"));
-	        		 $("#startTime").text("반차");
-	        		 $("#endTime").text("반차");
-	        	 }
-	         	 
-		        $("#formattedDate2").text(arg.day);
-		        $("#work-date").val(arg.day); // 근무정정신청폼 날짜
+	        	 todaysWork(arg);
 		        
-		        
-		        $("#refAtno").val(arg.id); // 근무정정신청폼 근태번호
-		        $("#leaveType").text(arg.leaveType);
-		        
-				/* 주간실적 progress bar 함수 호출 */
+				/* 주간실적 progress bar*/
 				
 				// 선택한 날짜의 주의 첫 번째 날짜인 월요일
 				var startDate = arg.start.clone().startOf('week').format('YYYY-MM-DD');
@@ -541,7 +494,7 @@
 	           
 	        events: function(start, end, timezone, callback) {
 	        	
-	        	/* 주간실적 progress bar 함수 호출 */
+	        	/* 주간실적 progress bar*/
 				
 	        	// 선택한 날짜의 주의 첫 번째 날짜인 월요일
 	        	var curr = moment();
@@ -631,140 +584,178 @@
 	        	}
 			});
 		});
+   
+   // 이벤트 클릭시 근무 실적 보여주기
+   function todaysWork(arg){
+	 // 출퇴근 미입력시 문구출력
+	 if(arg.start.format("HH:mm") != "00:00"){ 
+      	 $("#startTime").text(arg.start.format("HH:mm"));
+      	 $("#start-time").val(arg.start.format("HH:mm"));
+      	 $("#request-start-time").val(arg.start.format("HH:mm")); // 근무정정신청폼
+  	 }else{
+  		 $("#startTime").text("미입력");
+  		 $("#start-time").val("미입력");
+  		 $("#request-start-time").val("미입력");
+  	 }
+   
+  	 if(arg.end != null){
+  		 $("#endTime").text(arg.end.format("HH:mm"));
+  		 $("#end-time").val(arg.end.format("HH:mm"));
+  		 $("#request-end-time").val(arg.end.format("HH:mm"));
+  	 }else{
+  		 $("#endTime").text("미입력");
+  		 $("#end-time").val("미입력");
+  		 $("#request-end-time").val("미입력");
+  	 }
+  	 
+  	 // 휴가근무인 경우 근태타입 출력
+  	 if(arg.title == '연차휴가' || arg.title == '병가' || arg.title == '육아휴직'){
+  		 $("#formattedDate2").text(arg.start.format("YYYY-MM-DD") + " ~ " + arg.end.format("YYYY-MM-DD"));
+  		 $("#startTime").text("휴가");
+  		 $("#endTime").text("휴가");
+  	 }
+  	 if(arg.title == '오전반차' || arg.title == '오후반차'){
+  		 $("#formattedDate2").text(arg.start.format("YYYY-MM-DD"));
+  		 $("#startTime").text("반차");
+  		 $("#endTime").text("반차");
+  	 }
+   	 
+      $("#formattedDate2").text(arg.day);
+      $("#work-date").val(arg.day); // 근무정정신청폼 날짜
+      
+      
+      $("#refAtno").val(arg.id); // 근무정정신청폼 근태번호
+      $("#leaveType").text(arg.leaveType);
+   };
+   
+   // 오늘날짜 형식 바꾸기
+   $(function(){
+	    var date = new Date();
 
-		// 오늘날짜 형식 바꾸기
-		$(function(){
-			var date = new Date();
+		var year = date.getFullYear().toString();
+		var month = (date.getMonth() + 1).toString().padStart(2, '0');
+		var day = date.getDate().toString().padStart(2, '0');
 
-			var year = date.getFullYear().toString();
-			var month = (date.getMonth() + 1).toString().padStart(2, '0');
-			var day = date.getDate().toString().padStart(2, '0');
+		var formattedDate = year + '-' + month + '-' + day;
 
-			var formattedDate = year + '-' + month + '-' + day;
-
-			$("#formattedDate").text(formattedDate);
-			$("#formattedDate2").text(formattedDate);
-			
-			selectTodo(); // 노트 불러오기 함수 호출
-			
+		$("#formattedDate").text(formattedDate);
+		$("#formattedDate2").text(formattedDate);
+		
+		selectTodo(); // 노트 불러오기 함수 호출
+   });
+   
+   function insertTodo(){
+	   $.ajax({
+			url : "insert.at",
+			data : {
+				userNo : "${loginUser.userNo}",
+				todoContent : $("#todoContent").val(),
+			},
+			beforeSend : function(xhr){
+               xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+           },
+           success : function(result){
+   			if(result == "success"){
+   			
+   				alert("메모 작성 완료");
+   			}
+	    			selectTodo();
+   		},
+           error : function(){
+           	console.log("통신오류");
+           }
 		});
-		
-		function insertTodo(){
-			
-			$.ajax({
-				url : "insert.at",
-				data : {
-					userNo : "${loginUser.userNo}",
-					todoContent : $("#todoContent").val(),
-				},
-				beforeSend : function(xhr){
-	                xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
-	            },
-	            success : function(result){
-	    			if(result == "success"){
-	    			
-	    				alert("메모 작성 완료");
-	    			}
-		    			selectTodo();
-	    		},
-	            error : function(){
-	            	console.log("통신오류");
-	            }
-			});
+   };
+   
+   function selectTodo(){
+	   $.ajax({
+			url : "select.at",
+			data : {
+				userNo : "${loginUser.userNo}",
+			},
+			beforeSend : function(xhr){
+               xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+           },
+           success : function(result){
+   			$("#todoContent").val(result);
+   		},
+           error : function(){
+           	console.log("통신오류");
+           }
+		});  
+   };
+   
+   $(function(){ // 근무 상태  띄우기
+		// ontime not null 이고 offtime null이면 근무중
+		if("${att.onTime}"!="" && "${att.offTime}"==""){
+			$("#status-btn").text("근무중");
+			$("#status-btn").addClass("btn-info");
+			$("#status-btn").css("background-color","#5BC0DE");
 		}
-		
-		function selectTodo(){
-			
-			$.ajax({
-				url : "select.at",
-				data : {
-					userNo : "${loginUser.userNo}",
-				},
-				beforeSend : function(xhr){
-	                xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
-	            },
-	            success : function(result){
-	    			$("#todoContent").val(result);
-	    		},
-	            error : function(){
-	            	console.log("통신오류");
-	            }
-			});
+		// ontime not null 이고 offtime not null이면 퇴근
+		if("${att.onTime}"!="" && "${att.offTime}"!=""){
+			$("#status-btn").text("퇴근");
+			$("#status-btn").addClass("btn-danger");
+			$("#status-btn").css("background-color","#D9534F");
 		}
+   });
+   
+   
+   function weekWorkRecord(startDate, endDate){
+	   /*주간실적 날짜 바꾸기*/
+		$("#weekStart").text(startDate);
+		$("#weekEnd").text(endDate);
 		
-		$(function(){ // 근무 상태 $("#status-btn") 띄우기
-			// ontime not null 이고 offtime null이면 근무중
-			if("${att.onTime}"!="" && "${att.offTime}"==""){
-				$("#status-btn").text("근무중");
-				$("#status-btn").addClass("btn-info");
-				$("#status-btn").css("background-color","#5BC0DE");
-			}
-			// ontime not null 이고 offtime not null이면 퇴근
-			if("${att.onTime}"!="" && "${att.offTime}"!=""){
-				$("#status-btn").text("퇴근");
-				$("#status-btn").addClass("btn-danger");
-				$("#status-btn").css("background-color","#D9534F");
-			}
-		});
+		/* 주간실적 progress bar */
+		var workPlan = 0; // 근무 계획 = 정상근무 외근 출장 8시간 + 반차 4시간 
+		var workRecord = 0; // 근무 실적 = 출근 - 퇴근
+		var extraWork = 0; // 연장 근무 = 실적 - 계획
 		
-		function weekWorkRecord(startDate, endDate){
-			/*주간실적 날짜 바꾸기*/
-			$("#weekStart").text(startDate);
-			$("#weekEnd").text(endDate);
-			
-			/* 주간실적 progress bar */
-			var workPlan = 0; // 근무 계획 = 정상근무 외근 출장 8시간 + 반차 4시간 
-			var workRecord = 0; // 근무 실적 = 출근 - 퇴근
-			var extraWork = 0; // 연장 근무 = 실적 - 계획
-			
-			
-			var existingEvents = $('#calendar').fullCalendar('clientEvents'); // 이미 추가된 이벤트들을 가져옴
-			
-			var currentDate = startDate;
 		
-			existingEvents.forEach(function(e){
-				if(e.day != null && e.day >= startDate && e.day <= endDate){ // 실적이 있으면
-					while(currentDate <= endDate){
-						var result = getWork(currentDate); // 근무계획, 실적 배열 리턴하는 함수호출
-						//console.log(currentDate);
-						//console.log(result)
-						if(result.length != 0){
-							workPlan += result[0];
-							workRecord += result[1];
-						}
-						currentDate = moment(currentDate).add(1, 'day').format('YYYY-MM-DD');
+		var existingEvents = $('#calendar').fullCalendar('clientEvents'); // 이미 추가된 이벤트들을 가져옴
+		
+		var currentDate = startDate;
+	
+		existingEvents.forEach(function(e){
+			if(e.day != null && e.day >= startDate && e.day <= endDate){ // 실적이 있으면
+				while(currentDate <= endDate){
+					var result = getWork(currentDate); // 근무계획, 실적 배열 리턴하는 함수호출
+					if(result.length != 0){
+						workPlan += result[0];
+						workRecord += result[1];
 					}
+					currentDate = moment(currentDate).add(1, 'day').format('YYYY-MM-DD');
 				}
-			});
-			workPlan = workPlan - 8*60*2; // 주말제외
-			extraWork = workRecord - workPlan;
-			if(workPlan < 0 || extraWork < 0){
-				workPlan = 0;
-				extraWork = 0;
 			}
-			
-			$("#work-plan").text("계획 : " + workPlan);
-			$("#work-record").text("실적 : " + workRecord);
-			$("#extra-work").text("초과 : " + extraWork);
-			
-			var fulltime = 52*60; // 주 52시간제
-			// progressbar100% 대비 width값
-			var workRecordProgress =  Math.round(((workRecord-extraWork) / fulltime) * 100) + "%";
-			var extraWorkProgress =  Math.round((extraWork / fulltime) * 100) + "%";
-			// 기본근무시간, 연장근무시간 대비 실적 text값
-			var workRecordProgressBar = Math.round((workRecord / workPlan) * 100) + "%";
-			var extraWorkProgressBar = Math.round((extraWork / (12 * 60)) * 100) + "%";
-			
-			if(workPlan <= workRecord){
-				workRecordProgressBar = "100%";
-			}
-			
-			$("#work-record-progress").css("width",workRecordProgress);
-			$("#work-record-progress").text(workRecordProgressBar);
-			$("#extra-work-progress").css("width",extraWorkProgress);
-			$("#extra-work-progress").text(extraWorkProgressBar);
-				
-			};
+		});
+		workPlan = workPlan - 8*60*2; // 주말제외
+		extraWork = workRecord - workPlan;
+		if(workPlan < 0 || extraWork < 0){
+			workPlan = 0;
+			extraWork = 0;
+		}
+		
+		$("#work-plan").text("계획 : " + workPlan);
+		$("#work-record").text("실적 : " + workRecord);
+		$("#extra-work").text("초과 : " + extraWork);
+		
+		var fulltime = 52*60; // 주 52시간제
+		// progressbar100% 대비 width값
+		var workRecordProgress =  Math.round(((workRecord-extraWork) / fulltime) * 100) + "%";
+		var extraWorkProgress =  Math.round((extraWork / fulltime) * 100) + "%";
+		// 기본근무시간, 연장근무시간 대비 실적 text값
+		var workRecordProgressBar = Math.round((workRecord / workPlan) * 100) + "%";
+		var extraWorkProgressBar = Math.round((extraWork / (12 * 60)) * 100) + "%";
+		
+		if(workPlan <= workRecord){
+			workRecordProgressBar = "100%";
+		}
+		
+		$("#work-record-progress").css("width",workRecordProgress);
+		$("#work-record-progress").text(workRecordProgressBar);
+		$("#extra-work-progress").css("width",extraWorkProgress);
+		$("#extra-work-progress").text(extraWorkProgressBar);
+   };
 	
 	function getWork(currentDate){ // attendanceRecord 먼저 조회해오고, 결과가 만약 null(출퇴근등록 안함)이면 휴가계에서 근무계획 불러오기, 배열로 계획과 실적 return		 
 		var result = [];
@@ -795,7 +786,7 @@
 	// 캘린더날짜 선택해야 근태신청 가능(모달열기)
 	function chkDate(){
 		if($("#work-date").val()){
-			$("#att-request-modal").modal("show");
+			$("#att-request-modal").modal("toggle");
 		}else{
 			alert("캘린더에서 근태를 수정하실 날짜를 먼저 입력하세요.");
 		}
