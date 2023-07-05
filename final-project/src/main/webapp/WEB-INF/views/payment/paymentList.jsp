@@ -116,12 +116,22 @@
         width:fit-content; 
         margin:auto;
     }
+	#option-box, #search-box, #payment-tap-area {
+		font-family: 'KimjungchulGothic-Bold';
+	}
 	
+	th{
+		font-family: 'KimjungchulGothic-Bold';
+	}
+	
+	td{
+		 font-family: 'HallymGothic-Regular';
+	}
     </style>
 </head>
 <%@ include file="../common/menubar.jsp" %>
     <div class="content">
-    	<h1>급여 관리</h1>
+    	<h1 style ="font-family: 'KimjungchulGothic-Bold'; " >급여 관리</h1>
     	  <div id="payment-tap-area">
    			<ul id="nav-tabs"  class="nav-tabs nav-pills">
 				<li role="presentation"  class="active" >
