@@ -87,7 +87,8 @@
     	float:right;
     }
 	.table>tbody>tr:hover{
-    	background-color : #0E6251;
+    	cursor : pointer;
+    	background-color : lightgray;
     }
     #input_search{
     	width : 400px;
@@ -114,6 +115,17 @@
     	font-size : 15px;
     	font-weight : 900;
     }
+    #board-tap-area, #boardList-btn>button, 
+    #board-btn-area button{
+    	font-family: 'KimjungchulGothic-Bold';
+    }    
+    .table>thead th {
+    	font-family: 'KimjungchulGothic-Bold';
+    }
+    
+    .table>tbody th {
+     	font-family: 'HallymGothic-Regular';
+    }    
 </style>
 </head>
 <body id="body-pd">

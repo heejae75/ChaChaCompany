@@ -193,7 +193,7 @@
                     </div>
                     <div class="form-group">
                         <div class="rememberChk">
-                            <input class="form-check-input" type="checkbox" value="None" id="checkbox1" name="check">
+                            <input class="form-check-input" type="checkbox" value="None" id="checkbox1" name="_spring_security_remember_me">
                             <label for="checkbox1">Remember me</label>
                         </div>
                     </div>
