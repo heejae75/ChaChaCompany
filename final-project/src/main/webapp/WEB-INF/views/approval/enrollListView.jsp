@@ -70,16 +70,16 @@
 		  			<ul class="pagination">
 		                   <c:choose>
 		                    		<c:when test="${pi.currentPage eq 1 }">
-				                        <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+				                        <li class="page-item disabled"><a class="page-link" href="#">이전</a></li>
 		                    		</c:when>
 		                    		<c:when test="${!empty keyword}">
-                    					<li class="page-item"><a class="page-link" href="enrollList.ap?currentPage=${pi.currentPage-1}&docCategory=${docCategory}&keyword=${keyword}">Previous</a></li>
+                    					<li class="page-item"><a class="page-link" href="enrollList.ap?currentPage=${pi.currentPage-1}&docCategory=${docCategory}&keyword=${keyword}">이전</a></li>
                     				</c:when>
                     				<c:when test="${empty keyword and !empty docCategory}">
-									<li class="page-item"><a class="page-link" href="enrollList.ap?currentPage=${pi.currentPage+1}&docCategory=${docCategory}">Next</a></li>                		
+									<li class="page-item"><a class="page-link" href="enrollList.ap?currentPage=${pi.currentPage+1}&docCategory=${docCategory}">이전</a></li>                		
 			                   		 </c:when>	
 		                    		<c:otherwise>
-		                    			<li class="page-item"><a class="page-link" href="enrollList.ap?currentPage=${pi.currentPage-1}&docCategory=${docCategory}">Previous</a></li>
+		                    			<li class="page-item"><a class="page-link" href="enrollList.ap?currentPage=${pi.currentPage-1}&docCategory=${docCategory}">이전</a></li>
 		                    		</c:otherwise>
 		                    </c:choose>
 		                    	<c:forEach var="p" begin="${pi.startPage}" end="${pi.endPage}" step="1"> 
@@ -95,16 +95,16 @@
 		                    	</c:forEach>
 		                   <c:choose>
 			                	<c:when test="${pi.currentPage eq pi.maxPage}">
-									<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>                		
+									<li class="page-item disabled"><a class="page-link" href="#">다음</a></li>                		
 								</c:when>
 								<c:when test="${!empty keyword}">
-									<li class="page-item"><a class="page-link" href="enrollList.ap?currentPage=${pi.currentPage+1}&docCategory=${docCategory}&keyword=${keyword}">Next</a></li>                		
+									<li class="page-item"><a class="page-link" href="enrollList.ap?currentPage=${pi.currentPage+1}&docCategory=${docCategory}&keyword=${keyword}">다음</a></li>                		
 			                    </c:when>
 			                    <c:when test="${empty keyword and !empty docCategory}">
-									<li class="page-item"><a class="page-link" href="enrollList.ap?currentPage=${pi.currentPage+1}&docCategory=${docCategory}">Next</a></li>                		
+									<li class="page-item"><a class="page-link" href="enrollList.ap?currentPage=${pi.currentPage+1}&docCategory=${docCategory}">다음</a></li>                		
 			                    </c:when>
 			                	<c:otherwise>
-			                    	<li class="page-item"><a class="page-link" href="enrollList.ap?currentPage=${pi.currentPage+1}">Next</a></li>
+			                    	<li class="page-item"><a class="page-link" href="enrollList.ap?currentPage=${pi.currentPage+1}">다음</a></li>
 								</c:otherwise>
 		                </c:choose>
 		            </ul>
