@@ -127,6 +127,14 @@
         margin:auto;
     }
     
+    #board-btn-area>#enroll-btn{
+    	background-color: #12866f;
+    }
+    
+    #board-btn-area>#enroll-btn:hover{
+    	background-color: #0E6251;
+    }
+    
     #board-tap-area, #boardList-btn>button, 
     #board-btn-area button, #board-search-area, .popup-wrap, #board-pagebar-area{
     	font-family: 'KimjungchulGothic-Bold';
@@ -202,7 +210,7 @@
 			<c:if test="${loginUser.auth eq 'ROLE_ADMIN'}">
 	  			<button class="btn btn-danger" id="document_delete">삭제</button> 
 			</c:if>
-	    	<button class="btn btn-success" onclick="location.href='enroll.dc'">작성</button>               
+	    	<button class="btn btn-success" id="enroll-btn" onclick="location.href='enroll.dc'">작성</button>               
 		</div>
 	
      	<!-- 게시글 리스트 영역 -->
