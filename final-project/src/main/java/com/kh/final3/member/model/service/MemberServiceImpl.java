@@ -111,4 +111,10 @@ public class MemberServiceImpl implements MemberService{
 		return memberDao.updatePwd(sqlSession, member);
 	}
 
+	@Override
+	public int updateOther(Member member) {
+		
+		return memberDao.updateOther(sqlSession, member);
+	}
+
 }

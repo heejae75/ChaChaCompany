@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <title>Document</title>
     <style>
         .outer{
@@ -79,8 +80,6 @@
                         <button type="button" class="btn btn-primary" onclick="idCheck();">중복체크</button>
                     </div>
                     <br><br>
-                    <p>비밀번호</p>
-                    <input type="password" class="form-control form-control" name="userPwd" minlength="8" placeholder="8글자 이상" required>
                     <p>이름</p>
                     <input type="text" class="form-control form-control" name="userName" required>
                     <p>전화번호</p>
@@ -88,7 +87,9 @@
                     <p>이메일</p>
                     <input type="text" class="form-control form-control" name="email" required>
                     <p>주소</p>
-                    <input type="text" class="form-control form-control" name="address" required>
+                    <input type="text" id="kakaoAddress" class="form-control form-control" name="address" placeholder="클릭하세요" readonly required>
+                    <p>상세주소</p>
+                    <input type="text" id="detailAddress" class="form-control form-control" name="detailAddress" required>
                     <p>생년월일</p>
                     <input type="date" class="form-control form-control" name="birth" required>
                     <div id="select_div">
@@ -189,6 +190,15 @@
     		return true;
     	}
     }
+    
+	$("#kakaoAddress").click(function(){	
+        new daum.Postcode({
+            oncomplete: function(data) { //선택시 입력값 세팅
+            	$("#kakaoAddress").val(data.address); // 주소 넣기
+                $("#detailAddress").focus(); //상세입력 포커싱
+            }
+        }).open();		
+	});    
 </script>
 </body>
 </html>

@@ -87,9 +87,14 @@ public class FreeForumDao {
 		return sqlSession.insert("freeForumMapper.insertReply", reply);
 	}
 
-	public ArrayList<Reply> selectReplyList(SqlSession sqlSession, int boardNo) {
+	public ArrayList<Reply> selectReplyList(SqlSession sqlSession, PageInfo pi, Map<String, String> map) {
 		
-		return (ArrayList)sqlSession.selectList("freeForumMapper.selectReplyList", boardNo);
+		int limit = pi.getBoardLimit();
+		int offset = (pi.getCurrentPage()-1)*limit;
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		return (ArrayList)sqlSession.selectList("freeForumMapper.selectReplyList", map, rowBounds);
 	}
 
 	public int selectReplyCount(SqlSession sqlSession, int boardNo) {
@@ -115,6 +120,11 @@ public class FreeForumDao {
 	public int deleteReply(SqlSession sqlSession, int replyNo) {
 		
 		return sqlSession.delete("freeForumMapper.deleteReply", replyNo);
+	}
+
+	public int selectReplyCount(SqlSession sqlSession, Map<String, String> map) {
+		
+		return sqlSession.selectOne("freeForumMapper.selectReplyCount", map);
 	}
 
 

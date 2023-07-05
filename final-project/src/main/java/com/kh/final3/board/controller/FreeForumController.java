@@ -8,8 +8,11 @@ import java.io.PrintWriter;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -66,15 +69,23 @@ public class FreeForumController {
 	}
 
 	@GetMapping("/detailList.fr")
-	public ModelAndView forumDetails(ModelAndView mv, int boardNo) {
+	public ModelAndView forumDetails(ModelAndView mv, int boardNo, @RequestParam(value = "currentPage", defaultValue = "1") int currentPage) {
 
 		int result = freeForumService.increaseForumCount(boardNo);
-
 		if (result > 0) {
+			Map<String, String> map = new HashMap<>();
+			map.put("boardNo", Integer.toString(boardNo));
+			
 			Board board = freeForumService.findForumDetails(boardNo);
 			ArrayList<BoardAttachment> attachmentList = freeForumService.findAttachmentList(boardNo);
-			ArrayList<Reply> replyList = freeForumService.selectReplyList(boardNo);
+			
 			int replyCount = freeForumService.replyCount(boardNo);
+			int pageLimit = 5;
+			int replyLimit = 10;
+			
+			PageInfo pi = Pagination.getPageInfo(replyCount, currentPage, pageLimit, replyLimit);
+
+			ArrayList<Reply> replyList = freeForumService.selectReplyList(pi, map);
 			int recommend = freeForumService.selectRecommendCount(boardNo);
 			int deprecated = freeForumService.selectDeprecatedCount(boardNo);
 			
@@ -82,6 +93,7 @@ public class FreeForumController {
 			mv.addObject("board", board);
 			mv.addObject("replyList", replyList);
 			mv.addObject("replyCount", replyCount);
+			mv.addObject("pi", pi);
 			mv.addObject("recommend", recommend);
 			mv.addObject("deprecated", deprecated);
 			mv.addObject("attachmentList", attachmentList);
@@ -129,6 +141,34 @@ public class FreeForumController {
 	public ModelAndView update(Board board, int boardNo, HttpSession session, ModelAndView mv) {
 		
 		board.setBoardNo(boardNo);
+//		new File(session.getServletContext().getRealPath()).delete();
+		
+		System.out.println(board.getBoardContent());
+		
+		Pattern pattern = Pattern.compile("(\\bfinal3/\\b)(.*?)(\\b\" \\b)");
+		Matcher matcher = pattern.matcher(board.getBoardContent());
+		List<String> compareStr = new ArrayList<>(); //수정한 forum의 첨부파일 풀 경로 + 이름들
+
+		while(matcher.find()) {
+			compareStr.add(matcher.group(2).trim());
+			System.out.println(matcher.group(2).trim());
+		}
+		
+		Board selectBoard = freeForumService.findForumDetails(boardNo);
+		Matcher matcher2 = pattern.matcher(selectBoard.getBoardContent());
+			
+        while(matcher2.find()){
+        	boolean check = false;
+        	for(String str : compareStr) {
+        		if(str.equals(matcher2.group(2).trim())) {
+        			check = true;
+        			break;
+        		}
+        	}
+        	if(!check) {
+        		new File(session.getServletContext().getRealPath(matcher2.group(2).trim())).delete();        		
+        	}
+        }
 		
 		int result = freeForumService.updateForum(board);
 		if(result>0) {
@@ -143,6 +183,15 @@ public class FreeForumController {
 	
 	@GetMapping("/delete.fr")
 	public ModelAndView delete(int boardNo, ModelAndView mv, HttpSession session) {
+		
+		Board board = freeForumService.findForumDetails(boardNo);
+		
+		Pattern pattern = Pattern.compile("(\\bfinal3/\\b)(.*?)(\\b\" \\b)");
+		Matcher matcher = pattern.matcher(board.getBoardContent());
+		
+		while(matcher.find()) {
+			new File(session.getServletContext().getRealPath(matcher.group(2).trim())).delete();
+		}
 		
 		int result = freeForumService.deleteForum(boardNo);
 		
@@ -316,6 +365,55 @@ public class FreeForumController {
 		}
 		
 		return "redirect:detailList.fr?boardNo="+boardNo;
+	}
+	
+	@GetMapping("/myForumList.fr")
+	public String myForumList(@RequestParam(value = "currentPage", defaultValue = "1") int currentPage, Model model) {
+		
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		CustomUserDetails userDetails = (CustomUserDetails)principal;
+		
+		Map<String, String> map = new HashMap<>();
+		map.put("currentWriterNo", Integer.toString(userDetails.getUserNo()));
+		map.put("currentWriter", userDetails.getUserId());
+		
+		int listCount = freeForumService.selectListCount(map);
+		int pageLimit = 5;
+		int boardLimit = 3;
+
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
+		ArrayList<Board> list = freeForumService.forumList(pi, map);
+
+		model.addAttribute("list", list);
+		model.addAttribute("pi", pi);
+		
+		return "member/memberMyForumList";
+	}
+	
+	@GetMapping("/myReplyList.fr")
+	public String myReplyList(@RequestParam(value = "currentPage", defaultValue = "1") int currentPage, Model model) {
+		
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		CustomUserDetails userDetails = (CustomUserDetails)principal;
+		
+		Map<String, String> map = new HashMap<>();
+		map.put("userNo", Integer.toString(userDetails.getUserNo()));
+		
+		int replyCount = freeForumService.replyCount(map);
+		int pageLimit = 5;
+		int replyLimit = 10;
+		
+		PageInfo pi = Pagination.getPageInfo(replyCount, currentPage, pageLimit, replyLimit);
+
+		ArrayList<Reply> replyList = freeForumService.selectReplyList(pi, map);
+		
+		System.out.println(replyList);
+		
+		model.addAttribute("replyList", replyList);
+		model.addAttribute("pi", pi);
+		
+		
+		return "member/memberMyReplyList";
 	}
 	
 }
