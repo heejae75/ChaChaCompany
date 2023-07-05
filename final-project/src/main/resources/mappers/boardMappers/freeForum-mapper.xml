@@ -55,16 +55,8 @@
 						AND BOARD_TITLE
 						LIKE '%'||#{searchWord}||'%'
 					</when>
-					<when test="category == 'content'">
-						AND BOARD_CONTENT
-						LIKE '%'||#{searchWord}||'%'
-					</when>
-					<when test="category == 'title_content'">
-						AND JOB_NAME
-						LIKE '%'||#{searchWord}||'%'
-					</when>
 					<when test="category == 'writer'">
-						AND 
+						AND USER_ID
 						LIKE '%'||#{searchWord}||'%'
 					</when>
 				</choose>
@@ -107,19 +99,11 @@
 		              )
 				<choose>
 					<when test="category == 'title'">
-						AND BOARD_TITLE
-						LIKE '%'||#{searchWord}||'%'
-					</when>
-					<when test="category == 'content'">
-						AND BOARD_CONTENT
-						LIKE '%'||#{searchWord}||'%'
-					</when>
-					<when test="category == 'title_content'">
-						AND JOB_NAME
+						WHERE BOARD_TITLE
 						LIKE '%'||#{searchWord}||'%'
 					</when>
 					<when test="category == 'writer'">
-						AND 
+						WHERE USER_ID
 						LIKE '%'||#{searchWord}||'%'
 					</when>
 				</choose>
