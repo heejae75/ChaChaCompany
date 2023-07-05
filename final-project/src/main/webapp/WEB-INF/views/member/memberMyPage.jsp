@@ -23,7 +23,6 @@
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     }
     #top_buttons_div{
-    	border : 1px solid black;
     	width:200px; height:200px;
     	float:left;
     	margin-left:150px;
@@ -113,12 +112,6 @@
 				</div>
 				<div>
 					내가 쓴 댓글
-				</div>
-				<div>
-					휴가정보보기
-				</div>
-				<div>
-					승진정보보기
 				</div>
 			</div>
 		</div>
