@@ -101,9 +101,9 @@ public class FreeForumServiceImpl implements FreeForumService{
 	}
 
 	@Override
-	public ArrayList<Reply> selectReplyList(int boardNo) {
+	public ArrayList<Reply> selectReplyList(PageInfo pi, Map<String, String> map) {
 		
-		return freeForumDao.selectReplyList(sqlSession, boardNo);
+		return freeForumDao.selectReplyList(sqlSession, pi, map);
 	}
 
 	@Override
@@ -134,6 +134,12 @@ public class FreeForumServiceImpl implements FreeForumService{
 	public int deleteReply(int replyNo) {
 		
 		return freeForumDao.deleteReply(sqlSession, replyNo);
+	}
+
+	@Override
+	public int replyCount(Map<String, String> map) {
+		
+		return freeForumDao.selectReplyCount(sqlSession, map);
 	}
 
 

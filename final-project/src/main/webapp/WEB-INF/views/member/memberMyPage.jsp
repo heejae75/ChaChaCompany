@@ -221,8 +221,12 @@
 			}
 		});
 	}
-	$("#top_buttons_div").children().eq(0).click(function(){
-		location.href = "myForumList.me";
+	$("#top_buttons_div").children().eq(0).click(function(){ //내가 쓴 글 클릭시
+		location.href = "myForumList.fr";
+	});
+	
+	$("#top_buttons_div").children().eq(1).click(function(){ //내가 쓴 댓글 클릭시
+		location.href = "myReplyList.fr";
 	});
 </script>
 </body>

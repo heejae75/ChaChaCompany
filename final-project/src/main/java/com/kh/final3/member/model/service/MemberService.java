@@ -44,4 +44,7 @@ public interface MemberService {
 	
 	//비밀번호 변경 메서드
 	int updatePwd(Member member);
+	
+	//부서, 직급, 퇴사일 변경 메서드
+	int updateOther(Member member);
 }

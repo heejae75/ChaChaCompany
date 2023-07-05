@@ -23,7 +23,7 @@ public class Member {
 	private String deptCode;//	DEPT_CODE	VARCHAR2(4 BYTE)
 	private String jobCode;//	JOB_CODE	VARCHAR2(4 BYTE)
 	private String empolymentDate;//	EMPOLYMENT_DATE	DATE //ajax TO_CHAR로 쓰기 위해 DATE -> STRING 으로 바
-	private Date depatureDate;//	DEPATURE_DATE	DATE
+	private String depatureDate;//	DEPATURE_DATE	DATE
 	private String auth;//	AUTH	VARCHAR2(50 BYTE)
 	private int enabled;//	ENABLED	NUMBER(1,0)
 	private String status;//	STATUS	VARCHAR2(1 BYTE)
