@@ -81,9 +81,9 @@
                     <table class="table table-bordered" width="100%" height="100%" style="border-collapse: collapse;vertical-align: middle">
                         <tr>
                             <th width="15%">작성자</th>
-                            <td><input type="text" id="docWriter" value="${ad.userName}" readonly></td>
+                            <td><input type="text" id="docWriter" value="${loginUser.userName}" readonly></td>
                             <th width="15%">전화번호</th>
-                            <td><input type="text" id="phone" value="${ad.phone}" readonly></td>
+                            <td><input type="text" id="phone" value="${loginUser.phone}" readonly></td>
                             <th width="15%">문서번호</th>
                             <td><input type="text" id="docNo" value="${ad.docNo}" readonly></td>
                         </tr>

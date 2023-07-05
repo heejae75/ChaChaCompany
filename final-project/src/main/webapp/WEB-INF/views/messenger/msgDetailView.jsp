@@ -12,6 +12,18 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <style>
+    
+	    @font-face {
+	    font-family: 'KimjungchulGothic-Bold';
+	    font-style: normal;
+	    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302_01@1.0/KimjungchulGothic-Bold.woff2') format('woff2');
+		}
+		
+		@font-face {
+	    font-family: 'HallymGothic-Regular';
+	    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2204@1.0/HallymGothic-Regular.woff2') format('woff2');
+	    font-style: normal;
+	    }
         .messenger_content {
             background-color:#0E6251;
             width:100%;
@@ -69,7 +81,17 @@
         	font-size:32px;
         }
         
-      
+        h2, a, th, select{
+			font-family: 'KimjungchulGothic-Bold';
+		}
+	
+		td, input {
+	 		font-family: 'HallymGothic-Regular';
+ 		}
+      	
+      	.messenger_content button {
+		font-family: 'KimjungchulGothic-Bold';
+		}
     </style>
 </head>
 <body>

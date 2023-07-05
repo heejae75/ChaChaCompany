@@ -34,16 +34,6 @@ public class MainDao {
 		return (ArrayList)sqlSession.selectList("mainMapper.mainMessengerList", userId);
 	}
 
-	//출근 등록 
-	public int insertGoToWork(SqlSessionTemplate sqlSession, Attendance at) {
-		return sqlSession.insert("mainMapper.insertGoToWork", at);
-	}
-
-	//퇴근 등록 
-	public int updateLeaveToWork(SqlSessionTemplate sqlSession, Attendance at) {
-		return sqlSession.update("mainMapper.updateLeaveToWork", at);
-	}
-
 	//임직원 조회 (팀) 
 	public ArrayList<Member> mainOthersTeamList(SqlSessionTemplate sqlSession, Member m) {
 		return (ArrayList)sqlSession.selectList("mainMapper.mainOthersTeamList",m);
@@ -98,47 +88,48 @@ public class MainDao {
 	public int allDeleteTodoList(SqlSessionTemplate sqlSession, Member m) {
 		return sqlSession.update("mainMapper.allDeleteTodoList", m);
 	}
-
+	
+	//알림 리스트 조회
 	public ArrayList<Alert> menuAlertList(SqlSessionTemplate sqlSession, int userNo) {
 		return (ArrayList)sqlSession.selectList("mainMapper.menuAlertList", userNo);
 	}
 
+	//알림 a태그 선택시 상태 변경(읽음 처리)
 	public int menuAlertUpdate(SqlSessionTemplate sqlSession, Alert al) {
 		return sqlSession.update("mainMapper.menuAlertUpdate",al);
 	}
 
+	//알림 전체 삭제
 	public int menuAlertAllDelete(SqlSessionTemplate sqlSession, Member m) {
 		return sqlSession.delete("mainMapper.menuAlertAllDelete", m);
 	}
 
-//	public Attendance userMain(SqlSessionTemplate sqlSession, int userNo) {
-//		return (Attendance)sqlSession.selectOne("mainMapper.userMain", userNo);
-//	}
-
+	//출근 등록 
 	public int insertOnTime(SqlSessionTemplate sqlSession,Attendance at2) {
 		return sqlSession.insert("mainMapper.insertOnTime", at2);
 	}
 
+	//퇴근 등록 
 	public int insertOffTime(SqlSessionTemplate sqlSession, int userNo) {
 		return sqlSession.insert("mainMapper.insertOffTime", userNo);
 	}
 
+	//출근 조회
 	public ArrayList<Attendance> selectOnTime(SqlSessionTemplate sqlSession, int userNo) {
-		//System.out.println((ArrayList)sqlSession.selectList("mainMapper.selectOnTime", userNo));
-		
 		return (ArrayList)sqlSession.selectList("mainMapper.selectOnTime", userNo);
 	}
 
+	//퇴근 조회 
 	public ArrayList<Attendance> mainSelectOffTime(SqlSessionTemplate sqlSession, int userNo) {
-		//System.out.println((ArrayList)sqlSession.selectList("mainMapper.mainSelectOffTime", userNo));
-		
 		return (ArrayList)sqlSession.selectList("mainMapper.mainSelectOffTime", userNo);
 	}
 
+	//출근 수정(나중에 완료하기)
 	public int mainUpdateOnTime(SqlSessionTemplate sqlSession, int userNo) {
 		return sqlSession.update("mainMapper.mainUpdateOnTime", userNo);
 	}
 
+	//출근 등록할 때 한번만 등록하게 하기 위한 메소드 
 	public int selectCount(SqlSessionTemplate sqlSession, int userNo) {
 		return sqlSession.selectOne("mainMapper.selectCount", userNo);
 	}

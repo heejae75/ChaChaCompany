@@ -127,6 +127,20 @@
         margin:auto;
     }
     
+    #board-tap-area, #boardList-btn>button, 
+    #board-btn-area button, #board-search-area, .popup-wrap, #board-pagebar-area{
+    	font-family: 'KimjungchulGothic-Bold';
+    }
+    
+    th {
+    	font-family: 'KimjungchulGothic-Bold';
+    }
+    
+    td {
+     	font-family: 'HallymGothic-Regular';
+    }
+    
+    
     </style>
 </head>
 <%@ include file="../../common/menubar.jsp" %>

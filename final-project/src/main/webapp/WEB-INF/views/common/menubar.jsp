@@ -460,7 +460,7 @@ a{
 #toast {
     position: fixed;
     bottom: 30px;
-    right: 30px;
+    right: 50px;
     padding: 15px 20px;
     transform: translate(0, 10px);
     border-radius: 30px;
@@ -886,7 +886,7 @@ a{
 				xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
 		    },
 		    success: function(result) {
-		    	//console.log(result);
+
 		    },
 		    error: function() {
 		    	console.log("알림 상태 수정 오류 ");
@@ -909,11 +909,10 @@ a{
 				xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
 			},
 			success : function(result) {
-				//console.log(result);
-				
 				if(result == "success") {
 					alert("모두 삭제했습니다.");
 				}
+				
 				location.reload();
 			},
 			error : function() {
@@ -929,8 +928,6 @@ a{
    	});
    		
    	function alertConnect() {
-    	//console.log(socket);
-    	
     	if(!socket) { //중복 접속 막음 
 	    	var url = "ws://localhost:8888/final3/ws-alert";
 	    	socket = new WebSocket(url);
@@ -950,15 +947,11 @@ a{
     	
     	socket.onmessage = function(evt) {
     		console.log("알림이 도착하였습니다.");
-    		console.log("AlertMessage : "+evt.data);
+    		//console.log("AlertMessage : "+evt.data);
     		
-    		//var userNo = "${loginUser.userNo}"
-    		//console.log(userNo);
-    		//var data = evt.data;
     		var data = JSON.parse(evt.data);
     		var text = data.sender + "님이 [" + data.docType + "] "+ data.content;
     		toast(text);
-    		
     	};
     }
    	
@@ -979,9 +972,10 @@ a{
 	     // 토스트 숨기는 스타일 적용/ 일정시간 후 제거 
 	     toast.removeTimeout = setTimeout(function () {
 	       toast.classList.remove("reveal");
-	     }, 10000);
+	     }, 100000);
    	}
    	
+   	/* 프로필 첨부파일 조회 */
    	function menuSelectProfileImg() {
 		$.ajax({
 			url: "selectProfile.ma",

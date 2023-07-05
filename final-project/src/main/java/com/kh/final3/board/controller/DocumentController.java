@@ -219,7 +219,6 @@ public class DocumentController {
 			for(MultipartFile file : upfile) {
 				//새로운 첨부파일이 있을 경우
 				if(!file.getOriginalFilename().equals("")) {
-					
 					//글번호를 가지고가서 기존 첨부파일 목록 가져오기 
 					ArrayList<BoardAttachment> defaultAttch = documentService.selectBoardAttachmentList(b.getBoardNo());
 					//조회해온 첨부파일 목록이 비어있지 않다면 기존 파일 목록 삭제하기 
@@ -231,10 +230,7 @@ public class DocumentController {
 						//기존 첨부파일 DB에서도 삭제(상태값 변경 -> N)
 						result1 = documentService.deleteAttachment(b.getBoardNo());
 					}
-						
-						
 				}
-					
 				//changeName만들기 
 				String changeName = saveFile.getSaveFile(file, session);
 				
