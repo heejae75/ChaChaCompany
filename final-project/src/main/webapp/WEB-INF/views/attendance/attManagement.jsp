@@ -110,6 +110,13 @@
         width:fit-content; 
         margin:auto;
     }
+    /*폰트*/
+     #att-tap-area *, #title-area, th, #board-pagebar-area *, #btn-area *{
+    	font-family: 'KimjungchulGothic-Bold';
+    }
+    td{
+    	font-family: 'HallymGothic-Regular'
+    }
     
     
 </style>
@@ -239,10 +246,10 @@
             	 <ul class="pagination">
 	                    <c:choose>
 							<c:when test="${empty selectedDate }">
-							 	<li id="previous-btn" class="page-item disabled"><a class="page-link" href="manageAtt.at?currentPage=${pi.currentPage - 1 }">Previous</a></li>
+							 	<li id="previous-btn" class="page-item disabled"><a class="page-link" href="manageAtt.at?currentPage=${pi.currentPage - 1 }">이전</a></li>
 							</c:when>
 							<c:otherwise>
-								<li id="previous-btn" class="page-item"><a class="page-link" href="manageAtt.at?currentPage=${pi.currentPage - 1 }&selectedDate=${selectedDate }">Previous</a></li>
+								<li id="previous-btn" class="page-item"><a class="page-link" href="manageAtt.at?currentPage=${pi.currentPage - 1 }&selectedDate=${selectedDate }">이전</a></li>
 							</c:otherwise>
 						</c:choose>
 						
@@ -269,10 +276,10 @@
 		                    	
                        <c:choose>
 							<c:when test="${empty selectedDate }">
-								<li id="next-btn" class="page-item"><a class="page-link" href="manageAtt.at?currentPage=${pi.currentPage + 1 }">Next</a></li>
+								<li id="next-btn" class="page-item"><a class="page-link" href="manageAtt.at?currentPage=${pi.currentPage + 1 }">다음</a></li>
 							</c:when>
 							<c:otherwise>
-								<li id="next-btn" class="page-item"><a class="page-link" href="manageAtt.at?currentPage=${pi.currentPage + 1 }&selectedDate=${selectedDate }">Next</a></li>
+								<li id="next-btn" class="page-item"><a class="page-link" href="manageAtt.at?currentPage=${pi.currentPage + 1 }&selectedDate=${selectedDate }">다음</a></li>
 							</c:otherwise>
 						</c:choose>
                     </ul>

@@ -109,6 +109,13 @@
         width:fit-content; 
         margin:auto;
     }
+    /*폰트*/
+    #board-tap-area *, #dept_code, #boardEnroll-btn *, th, #board-pagebar-area *{
+    	font-family: 'KimjungchulGothic-Bold';
+    }
+    td{
+    	font-family: 'HallymGothic-Regular'
+    }
    
     </style>
 </head>
@@ -152,7 +159,7 @@
                     </div>
                     <div id="search-box">
                         <input type="text" name="keyword" class="form-control" id="search-input" value="${keyword }"> 
-                        <button class="btn btn-secondary" type="submit" style="background-color: #0E6251; margin-left: 2px;"><i id="search-icon" class="fa-solid fa-magnifying-glass fa-lg"></i></button><!-- icon 사이즈 변경 fa-2xs /xs / sm / lg/ xl/ 2xl -->
+                        <button class="btn btn-secondary" type="submit" style="background-color: #0E6251; margin-left: 2px;"><i id="search-icon" class="fa-solid fa-magnifying-glass fa-lg" style="color:white"></i></button><!-- icon 사이즈 변경 fa-2xs /xs / sm / lg/ xl/ 2xl -->
                     </div>
                   </form>
                     <br><br>
@@ -229,10 +236,10 @@
                     <ul class="pagination">
 	                    <c:choose>
 							<c:when test="${empty status }">
-							 	<li id="previous-btn" class="page-item disabled"><a class="page-link" href="list.no?currentPage=${pi.currentPage - 1 }">Previous</a></li>
+							 	<li id="previous-btn" class="page-item disabled"><a class="page-link" href="list.no?currentPage=${pi.currentPage - 1 }">이전</a></li>
 							</c:when>
 							<c:otherwise>
-								<li id="previous-btn" class="page-item"><a class="page-link" href="list.no?currentPage=${pi.currentPage - 1 }&status=${status }&keyword=${keyword}">Previous</a></li>
+								<li id="previous-btn" class="page-item"><a class="page-link" href="list.no?currentPage=${pi.currentPage - 1 }&status=${status }&keyword=${keyword}">이전</a></li>
 							</c:otherwise>
 						</c:choose>
 						
@@ -259,10 +266,10 @@
 		                    	
                        <c:choose>
 							<c:when test="${empty status }">
-								<li id="next-btn" class="page-item"><a class="page-link" href="list.no?currentPage=${pi.currentPage + 1 }">Next</a></li>
+								<li id="next-btn" class="page-item"><a class="page-link" href="list.no?currentPage=${pi.currentPage + 1 }">다음</a></li>
 							</c:when>
 							<c:otherwise>
-								<li id="next-btn" class="page-item"><a class="page-link" href="list.no?currentPage=${pi.currentPage + 1 }&status=${status }&keyword=${keyword}">Next</a></li>
+								<li id="next-btn" class="page-item"><a class="page-link" href="list.no?currentPage=${pi.currentPage + 1 }&status=${status }&keyword=${keyword}">다음</a></li>
 							</c:otherwise>
 						</c:choose>
 						

@@ -100,7 +100,7 @@
     	padding: 5px
     }
     /* 모달창 */
-    #btn-table{
+    .btn-table{
     	margin: auto;
     	text-align: center;
     }
@@ -112,7 +112,12 @@
     #reserve-status-table td, #reserve-status-table th{
     	padding: 5px
     }
-   
+   	#board-tap-area *, .fc-header-toolbar, th, .modal-title, .modal-footer button{
+    	font-family: 'KimjungchulGothic-Bold';
+    }
+    .fc-bg *, td{
+    	font-family: 'HallymGothic-Regular'
+    }
     
     
     </style>
@@ -134,7 +139,7 @@
 						<a href="list.re">대여</a>
 					</li>
 					<li role="presentation">
-						<a href="#">커뮤니티</a>
+						<a href="list.fr">커뮤니티</a>
 					</li>
 				</ul>
             </div>
@@ -214,10 +219,9 @@
 				    	<input type="text" id="status-reservationNo" style="display:none;">
 				    </div>
 				    <div class="modal-footer" id="status-modal-footer">
-					   	<table id="btn-table">
+					   	<table class="btn-table">
 					   		<tr>
 					   			<td>
-					   			<!-- 로그인유저가 일치하는지 조건 추가 -->
 						   			<button type="button" class="btn btn-default" onclick="updateReservation()">예약수정</button>
 								    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="deleteReservation()">예약삭제</button>
 								    <p id="alertDisable"></p>
@@ -299,8 +303,14 @@
 				    <div class="modal-footer">
 				    	<input type="text" id="startTime" style="display:none">
 				    	<input type="text" id="endTime" style="display:none">
-					      <button type="button" class="btn btn-default" onclick="confirmReservation()">예약</button>
-					      <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+				    	<table class="btn-table">
+				    		<tr>
+				    			<td>
+							      <button type="button" class="btn btn-default" onclick="confirmReservation()">예약</button>
+							      <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+					      		</td>
+					      	</tr>
+					     </table>
 				    </div>
 			  </div>
 		</div>

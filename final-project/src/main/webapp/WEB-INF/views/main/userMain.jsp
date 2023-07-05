@@ -1556,10 +1556,14 @@ a{
 					xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
 				},
 				success : function(result) {
+					var str = "";
 					for(var i in result){
-						//console.log(result[i].offTime);
-						
-						var str = "<div id='mainOffTimeDiv'>퇴근 시간 : "+result[i].offTime+"</div>";
+						console.log(result[i].offTime);
+						if(result[i].offTIme != 'undefined') {
+							str += "<div id='mainOffTimeDiv'>퇴근 시간 : "+result[i].offTime+"</div>";
+						}else {
+							str +=  "";
+						}
 						//$("#onTimeBtn").prop("disabled", false);
 						//$("#offTimeBtn").prop("disabled", true); //퇴근 시간이 조회가 되면 퇴근 비활성화
 	                    //break;

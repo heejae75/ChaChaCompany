@@ -98,6 +98,13 @@
         width:fit-content; 
         margin:auto;
     }
+    /* 폰트적용 */
+    #att-tap-area *, #title-area, th, #board-pagebar-area *, #btn-area *{
+    	font-family: 'KimjungchulGothic-Bold';
+    }
+    td{
+    	font-family: 'HallymGothic-Regular'
+    }
     
 </style>
 </head>
@@ -209,7 +216,7 @@
         	<div id="pagingArea">
         	
             	<ul class="pagination">
-					<li id="previous-btn" class="page-item"><a class="page-link" href="approveRequest.at?currentPage=${pi.currentPage - 1 }">Previous</a></li>
+					<li id="previous-btn" class="page-item"><a class="page-link" href="approveRequest.at?currentPage=${pi.currentPage - 1 }">이전</a></li>
 						
 						<c:forEach var="p" begin="${pi.startPage }" end="${pi.endPage }" step="1">
 							
@@ -221,7 +228,7 @@
 							</c:if>
 								
 						</c:forEach>
-					<li id="next-btn" class="page-item"><a class="page-link" href="approveRequest.at?currentPage=${pi.currentPage + 1 }">Next</a></li>
+					<li id="next-btn" class="page-item"><a class="page-link" href="approveRequest.at?currentPage=${pi.currentPage + 1 }">다음</a></li>
                   </ul>
             
               </div>

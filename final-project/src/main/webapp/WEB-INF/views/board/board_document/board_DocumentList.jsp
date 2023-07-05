@@ -158,7 +158,7 @@
 					<a href="list.re">대여</a>
 				</li>
 				<li role="presentation">
-					<a href="#">커뮤니티</a>
+					<a href="list.fr">커뮤니티</a>
 				</li>
 			</ul>
   		</div>

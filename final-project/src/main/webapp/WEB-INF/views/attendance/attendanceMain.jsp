@@ -190,22 +190,29 @@
 	position: relative;
 	background: #0E6251;
 	border-radius: .4em;
-}
+	}
 
-.alertMsg:after {
-	content: '';
-	position: absolute;
-	bottom: 0;
-	left: 50%;
-	width: 0;
-	height: 0;
-	border: 9px solid transparent;
-	border-top-color: #0E6251;
-	border-bottom: 0;
-	border-right: 0;
-	margin-left: -4.5px;
-	margin-bottom: -9px;
-}
+	.alertMsg:after {
+		content: '';
+		position: absolute;
+		bottom: 0;
+		left: 50%;
+		width: 0;
+		height: 0;
+		border: 9px solid transparent;
+		border-top-color: #0E6251;
+		border-bottom: 0;
+		border-right: 0;
+		margin-left: -4.5px;
+		margin-bottom: -9px;
+	}
+	/*폰트*/
+    #calendar .fc-content, .table *{
+    	font-family: 'HallymGothic-Regular'
+    }
+    #att-tap-area *, .panel-heading, .fc-toolbar{
+    	font-family: 'KimjungchulGothic-Bold';
+    }
     
 </style>
 </head>
