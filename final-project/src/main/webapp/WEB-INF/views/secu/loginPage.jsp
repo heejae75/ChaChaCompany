@@ -185,7 +185,7 @@
                     <div style="height: 20px">
 	                    <!-- 				로그인 실패 메세지 띄워주기 -->
 						<c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION}">
-							<font color="red">
+							<font color="white">
 						  		${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}</p>
 								<c:remove var="SPRING_SECURITY_LAST_EXCEPTION" scope="session"/>
 							</font>
