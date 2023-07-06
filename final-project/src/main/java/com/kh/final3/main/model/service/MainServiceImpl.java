@@ -145,11 +145,6 @@ public class MainServiceImpl implements MainService {
 		return mainDao.selectOnTime(sqlSession, userNo);
 	}
 
-	//퇴근 조회
-	@Override
-	public ArrayList<Attendance> mainSelectOffTime(int userNo) {
-		return mainDao.mainSelectOffTime(sqlSession, userNo);
-	}
 
 	//출근 수정(나중에 완료하기)
 	@Override

@@ -36,7 +36,7 @@
 	<insert id="insertAdmin" parameterType="member">
 		INSERT INTO MEMBER(USER_NO, USER_ID, USER_NAME, USER_PWD, PHONE, EMAIL, ADDRESS, BIRTH, DEPT_CODE, JOB_CODE,
 							EMPOLYMENT_DATE, DEPATURE_DATE, AUTH, ENABLED)
-		VALUES(SEQ_UNO.NEXTVAL, #{userId}, '관리자', #{userPwd}, '010-0000-0000', 'ADMIN@NAVER.COM', 'SYSDATE', SYSDATE, 'D1', 'J1', SYSDATE, SYSDATE, 'ROLE_ADMIN', 1)
+		VALUES(SEQ_UNO.NEXTVAL, #{userId}, '관리자', #{userPwd}, '010-0000-0000', 'ADMIN@NAVER.COM', '서울/영등포', SYSDATE, 'D1', 'J1', SYSDATE, SYSDATE, 'ROLE_ADMIN', 1)
 	</insert>
 	
 	<!-- 아이디로 회원 조회 -->

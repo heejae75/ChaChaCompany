@@ -56,8 +56,8 @@ public class FreeForumController {
 		map.put("currentStatus", currentStatus);
 		
 		int listCount = freeForumService.selectListCount(map);
-		int pageLimit = 10;
-		int boardLimit = 20;
+		int pageLimit = 5;
+		int boardLimit = 10;
 
 		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
 		ArrayList<Board> list = freeForumService.forumList(pi, map);
@@ -368,7 +368,8 @@ public class FreeForumController {
 	}
 	
 	@GetMapping("/myForumList.fr")
-	public String myForumList(@RequestParam(value = "currentPage", defaultValue = "1") int currentPage, Model model) {
+	public String myForumList(@RequestParam(value = "currentPage", defaultValue = "1") int currentPage, Model model,
+			String category, String searchWord, String currentStatus) {
 		
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		CustomUserDetails userDetails = (CustomUserDetails)principal;
@@ -376,10 +377,13 @@ public class FreeForumController {
 		Map<String, String> map = new HashMap<>();
 		map.put("currentWriterNo", Integer.toString(userDetails.getUserNo()));
 		map.put("currentWriter", userDetails.getUserId());
+		map.put("category", category);
+		map.put("searchWord", searchWord);
+		map.put("currentStatus", currentStatus);
 		
 		int listCount = freeForumService.selectListCount(map);
 		int pageLimit = 5;
-		int boardLimit = 3;
+		int boardLimit = 10;
 
 		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
 		ArrayList<Board> list = freeForumService.forumList(pi, map);
