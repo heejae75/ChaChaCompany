@@ -17,6 +17,7 @@
 	  	<result column="ATTACHMENT_NO" property="attachmentNo"/>
 	  	<result column="CATEGORY_NAME" property="categoryName"/>
 	  	<result column="RECOMMEND_COUNT" property="recommendCount"/>
+	  	<result column="REF_MID" property="refMid"/>
  	</resultMap>
  	
 	<resultMap type="attachment" id="attachmentResultSet">
@@ -43,6 +44,7 @@
 		              FROM RECOMMEND R
 		              JOIN BOARD B ON(B.BOARD_NO = R.REF_BNO)
 		              WHERE B.STATUS = 'Y'
+		              AND (CATEGORY_CODE = 'B4' OR CATEGORY_CODE = 'B5' OR CATEGORY_CODE = 'B6')
 		              GROUP BY R.REF_BNO
 		              <![CDATA[HAVING COUNT(*) > 1]]>)
  			</when>
@@ -50,6 +52,7 @@
 		 		SELECT COUNT(*)
 		 		FROM BOARD
 		 		WHERE STATUS = 'Y'
+		 		AND (CATEGORY_CODE = 'B4' OR CATEGORY_CODE = 'B5' OR CATEGORY_CODE = 'B6')
 		 		<choose>
 					<when test="category == 'title'">
 						AND BOARD_TITLE
@@ -72,25 +75,27 @@
  	<select id="selectList" resultMap="boardResultSet">
  		<choose>
  			<when test="currentStatus == 'popularity'">
-		        SELECT BOARD_NO, BOARD_TITLE, CREATE_DATE, COUNT, CATEGORY_NAME, USER_ID AS BOARD_WRITER, COUNT(*) AS RECOMMEND_COUNT
+		        SELECT BOARD_NO, BOARD_TITLE, TO_CHAR(CREATE_DATE, 'YYYY-MM-DD HH24:MI') AS CREATE_DATE, COUNT, CATEGORY_NAME, USER_NAME AS BOARD_WRITER, COUNT(*) AS RECOMMEND_COUNT
 		        FROM (SELECT *
 		              FROM RECOMMEND R
 		              JOIN BOARD B ON(R.REF_BNO = B.BOARD_NO)
 		              JOIN MEMBER M ON(B.BOARD_WRITER = M.USER_NO)
 		              JOIN BOARD_CATEGORY BC ON(B.CATEGORY_CODE = BC.CATEGORY_CODE)
 		              WHERE B.STATUS='Y'
+		              AND (BC.CATEGORY_CODE = 'B4' OR BC.CATEGORY_CODE = 'B5' OR BC.CATEGORY_CODE = 'B6')
 		              ORDER BY BOARD_NO DESC)
-		        GROUP BY BOARD_NO, BOARD_TITLE, CREATE_DATE, COUNT, CATEGORY_NAME, USER_ID
+		        GROUP BY BOARD_NO, BOARD_TITLE, CREATE_DATE, COUNT, CATEGORY_NAME, USER_NAME
 		        <![CDATA[HAVING COUNT(*) > 1]]>
  			</when>
  			<otherwise>
-		        SELECT BOARD_NO, BOARD_TITLE, CREATE_DATE, COUNT, CATEGORY_NAME, USER_ID AS BOARD_WRITER, COUNT(REF_BNO) AS RECOMMEND_COUNT
+		        SELECT BOARD_NO, BOARD_TITLE, TO_CHAR(CREATE_DATE, 'YYYY-MM-DD HH24:MI') AS CREATE_DATE, COUNT, CATEGORY_NAME, USER_NAME AS BOARD_WRITER, COUNT(REF_BNO) AS RECOMMEND_COUNT
 		        FROM (SELECT *
 		              FROM RECOMMEND R
 		              RIGHT JOIN BOARD B ON(R.REF_BNO = B.BOARD_NO)
 		              JOIN MEMBER M ON(B.BOARD_WRITER = M.USER_NO)
 		              JOIN BOARD_CATEGORY BC ON(B.CATEGORY_CODE = BC.CATEGORY_CODE)
 		              WHERE B.STATUS='Y'
+		              AND (BC.CATEGORY_CODE = 'B4' OR BC.CATEGORY_CODE = 'B5' OR BC.CATEGORY_CODE = 'B6')
 					  <choose>
 					  	<when test="currentWriter != null">
 					  		AND M.USER_ID = #{currentWriter}
@@ -107,14 +112,14 @@
 						LIKE '%'||#{searchWord}||'%'
 					</when>
 				</choose>
-		        GROUP BY BOARD_NO, BOARD_TITLE, CREATE_DATE, COUNT, CATEGORY_NAME, USER_ID
+		        GROUP BY BOARD_NO, BOARD_TITLE, CREATE_DATE, COUNT, CATEGORY_NAME, USER_NAME
                 ORDER BY BOARD_NO DESC
  			</otherwise>
  		</choose>
  	</select>
  	
  	<select id="selectForumDetailsByNo" resultMap="boardResultSet">
-		SELECT BOARD_NO, BOARD_TITLE, BOARD_CONTENT, CREATE_DATE, COUNT, CATEGORY_CODE, CATEGORY_NAME, USER_ID AS BOARD_WRITER
+		SELECT BOARD_NO, BOARD_TITLE, USER_ID AS REF_MID, BOARD_CONTENT, CREATE_DATE, COUNT, CATEGORY_CODE, CATEGORY_NAME, USER_NAME AS BOARD_WRITER
 		FROM BOARD B
 		JOIN BOARD_CATEGORY USING(CATEGORY_CODE)
         JOIN MEMBER M ON(B.BOARD_WRITER = M.USER_NO)
@@ -181,7 +186,7 @@
  	</insert>
  	
  	<select id="selectReplyList" resultMap="replyResultSet">
- 		SELECT REPLY_NO, REF_BNO, USER_NAME AS REPLY_WRITER, REPLY_CONTENT, CREATE_DATE
+ 		SELECT REPLY_NO, REF_BNO, USER_NAME AS REPLY_WRITER, REPLY_CONTENT, TO_CHAR(CREATE_DATE, 'YYYY-MM-DD HH24:MI') AS CREATE_DATE
  		FROM REPLY R
         JOIN MEMBER M ON(R.REPLY_WRITER = M.USER_NO)
  		WHERE R.STATUS = 'Y'

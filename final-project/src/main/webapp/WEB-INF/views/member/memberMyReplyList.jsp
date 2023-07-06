@@ -34,7 +34,7 @@
     	font-weight : 900;
     }
 	.table>tbody>tr:hover{
-    	background-color : rgb(198, 247, 190);
+    	cursor : pointer;
     }
 </style>
 </head>
@@ -44,7 +44,7 @@
 <div class="content">
 	    <div class="table-responsive"> 	
 	    	<br>
-            <table class="table" style="width:500px; margin : auto;">
+            <table class="table table-hover" style="width:500px; margin : auto;">
 				<thead>
 					<tr>
 						<th style="width:100px; font-size:30px;">내 댓글</th>
@@ -65,12 +65,12 @@
 						<c:choose>
 							<c:when test="${pi.currentPage eq 1}">
 								<li class="page-item disabled">
-									<a class="page-link">이전댓글</a>
+									<a class="page-link">이전</a>
 								</li>
 							</c:when>
 							<c:otherwise>
 								<li class="page-item">
-									<a class="page-link" href="/final3/${role}/myReplyList.fr?currentPage=${pi.currentPage-1}">이전페이지</a>
+									<a class="page-link" href="/final3/${role}/myReplyList.fr?currentPage=${pi.currentPage-1}">이전</a>
 								</li>
 							</c:otherwise>
 						</c:choose>
@@ -82,12 +82,12 @@
 						<c:choose>
 							<c:when test="${pi.currentPage eq pi.maxPage}">
 								<li class="page-item disabled">
-									<a class="page-link">다음댓글</a>
+									<a class="page-link">다음</a>
 								</li>
 							</c:when>
 							<c:otherwise>
 								<li class="page-item">
-									<a class="page-link" href="/final3/${role}/myReplyList.fr?currentPage=${pi.currentPage+1}">다음페이지</a>
+									<a class="page-link" href="/final3/${role}/myReplyList.fr?currentPage=${pi.currentPage+1}">다음</a>
 								</li>
 							</c:otherwise>
 						</c:choose>					
@@ -100,7 +100,7 @@
 	
 <script>
 	$(function(){
-		$(".page-link").eq(${pi.currentPage}).css('color', 'red');
+		$(".page-link").eq(${pi.currentPage}).css('color', 'gray');
 	});
 	$(".myReply").click(function(){
 		var boardNo = $(this).children().val();
