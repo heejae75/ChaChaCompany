@@ -189,7 +189,7 @@
         	</table>
 	    <hr>   
        	</div>
-       	<c:if test = "${loginUser.userName eq b.boardWriter or (loginUser.auth eq 'ROLE_ADMIN' and loginUser.deptName eq b.deptName) }">
+       	<c:if test = "${loginUser.userName eq b.boardWriter}">
 		<div id="board-btn-area">
 		    	<button class="btn btn-danger" onclick="documentDelete();">삭제</button> 
 		    	<button type="submit" class="btn btn-success" onclick="location.href='update.dc?bno='+${b.boardNo}">수정</button>               

@@ -29,4 +29,6 @@ public class Board {
 	private int refUno; // 즐겨찾기여부
 	private String categoryName; //카테고리 이름
 	private int recommendCount; //추천개수
+	
+	private String refMid;
 }
