@@ -130,11 +130,18 @@
         #approver-btn{
             margin-top: 50px;
         }
-        #ApproverList{
+        #approverList{
         	table-layout : fixed;
+        	height:400px;
+        	overflow-y:scroll;
         }
-        #ApproverList th,td{
+        #approverList th,td{
         	text-align : center;
         	word-break:break-all;
             height: auto;
+        }
+        #receiverList{
+        	table-layout : fixed;
+        	height:400px;
+        	overflow-y:scroll;
         }
