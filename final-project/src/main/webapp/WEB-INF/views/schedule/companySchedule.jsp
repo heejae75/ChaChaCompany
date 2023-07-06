@@ -202,16 +202,18 @@
 	        	//시작,종료날짜 포맷지정 
         		var startDate = moment(start).format('YYYY-MM-DD');
         		var endDate = moment(end).format('YYYY-MM-DD');
+	        	// console.log(startDate);
         		
-        		$startDate = $("#startDate").val(startDate); // 선택한 날짜 value에 담아서 보여주기 
+        		var $startDate = $("#startDate").val(startDate); // 선택한 날짜 value에 담아서 보여주기 
 				
         		$("#addSchedule").on("click", function(){
-		        	
         			var $title = $("#scheduleTitle").val();
 					var $content = $("#scheduleContent").val();
 					var userNo = '${loginUser.userNo}';
 					var deptCode = '${loginUser.deptCode}';
+						startDate = $("#startDate").val();
 						endDate = $("#endDate").val();
+						console.log(startDate);
 					if($title == ""){
 						alert("일정 제목을 입력해주세요");
 						$("#scheduleTitle").focus();
@@ -221,7 +223,7 @@
 						
 					}else if(new Date(endDate) - new Date(startDate) < 0){
 						alert("종료일이 시작일보다 빠를 수 없습니다.");
-						
+						$("#startDate").val("");
 					}else{
 						//정상 입력시 전송할 객체 생성  
 						//ajax로 DB연동 하기 
@@ -288,6 +290,7 @@
 							
 						}else if(new Date($updateEnd) - new Date($updateStart) < 0){
 							alert("종료일이 시작일보다 빠를 수 없습니다.");
+							$("#startDate").val("");
 						}else{
 							//정상적으로 작성되었을 경우 DB연동
 							$.ajax({

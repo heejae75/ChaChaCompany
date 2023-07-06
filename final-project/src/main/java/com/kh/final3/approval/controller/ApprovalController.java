@@ -67,7 +67,7 @@ public class ApprovalController {
 		map.put("option", option);
 
 		int listCount = as.selectListCount(map);
-		int pageLimit = 20;
+		int pageLimit = 10;
 		int boardLimit = 10;
 		
 		
