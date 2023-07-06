@@ -173,9 +173,16 @@ public class MemberController {
 				new File(session.getServletContext().getRealPath(match.getChangeName())).delete();
 				memberAttachment.setOriginName("청록이.jpg");
 				memberAttachment.setChangeName("resources/image/청록이.jpg");
+				
+				Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+				CustomUserDetails userDetails = (CustomUserDetails)principal;
+				memberAttachment.setRefUno(userDetails.getUserNo());
+				
 				memberService.updateMemberAttachment(memberAttachment);
 			}
 		}
+		
+		
 		
 		member.setAddress(member.getAddress() + "/" + detailAddress);
 		
@@ -189,6 +196,23 @@ public class MemberController {
 		
 		mv.setViewName("redirect:myPage.me");
 		return mv;
+	}
+	
+	@PostMapping("/delete.me")
+	public String deleteMember(HttpSession session) {
+		
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		CustomUserDetails userDetails = (CustomUserDetails)principal;
+		
+		
+		int result = memberService.deleteMember(userDetails.getUserNo());
+		
+		if(result>0) {
+			session.setAttribute("alertMsg", "탈퇴하셨습니다.");
+			SecurityContextHolder.clearContext();
+		}
+		
+		return "redirect:/";
 	}
 	
 	@GetMapping("/memberEnroll.me")
@@ -262,8 +286,9 @@ public class MemberController {
 		Member member = Member.builder().userPwd(password).userNo(userDetails.getUserNo()).build();
 		int result = memberService.updatePwd(member);
 		if(result>0) {
-			mv.setViewName("redirect:myPage.me");
-			session.setAttribute("alertMsg", "비밀번호 변경완료");
+			mv.setViewName("redirect:/");
+			SecurityContextHolder.clearContext();
+			session.setAttribute("alertMsg", "비밀번호 변경완료. 다시 로그인 해주세요.");
 		}else {
 			
 		}

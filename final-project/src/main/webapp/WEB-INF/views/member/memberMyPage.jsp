@@ -17,6 +17,7 @@
     .container {
       max-width: 800px;
       margin: 0 auto;
+      height : 900px;
       padding: 20px;
       background-color: #fff;
       border-radius: 8px;
@@ -145,6 +146,11 @@
 			<div id="footer">
 				<button type="button" class="btn btn-success" onclick="showModal('privacy');">개인정보수정</button>
 				<button type="button" class="btn btn-warning" onclick="showModal('changePwd');">비밀번호변경</button>
+				<br><br>
+				<form action="delete.me" method="post" onsubmit="return deleteMember();">
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+					<button type="submit" class="btn btn-danger">회원탈퇴</button>
+				</form>
 			</div>
 		</div>
 	</div>
@@ -214,6 +220,16 @@
 			}
 		});
 	}
+	
+	function deleteMember(){
+		var message = confirm("정말로 탈퇴하시겠습니까?");
+		if(message == true){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
 	$("#top_buttons_div").children().eq(0).click(function(){ //내가 쓴 글 클릭시
 		location.href = "myForumList.fr";
 	});

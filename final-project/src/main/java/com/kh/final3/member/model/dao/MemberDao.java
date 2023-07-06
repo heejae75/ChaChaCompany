@@ -85,4 +85,9 @@ public class MemberDao{
 		return sqlSession.update("memberMapper.updateOther", member);
 	}
 
+	public int deleteMember(SqlSession sqlSession, int userNo) {
+		
+		return sqlSession.update("memberMapper.deleteMember", userNo);
+	}
+
 }
