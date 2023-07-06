@@ -278,7 +278,7 @@
 		                    </select>
 		                         <input class="form-control me-2" id="approval-keyword" type="text" placeholder="Search" aria-label="Search">
 		                         <button class="btn btn-outline-success" type="submit" onclick="searchApprover();">Search</button>
-			        <table id="ApproverList" class="table table-bordered">
+			        <table id="approverList" class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th width="10%"></th>
@@ -288,7 +288,7 @@
                                     <th width="20%">사원ID</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody style="overflow:auto;">
                                
                             </tbody>
                         </table>
@@ -612,7 +612,7 @@
     						 + "<td>"+list[i].userNo+"</td>"
     						 + "</tr>"
     				}
-	    			$("#ApproverList>tbody").html(str);
+	    			$("#approverList>tbody").html(str);
     			},
     			error : function(){
     				console.log("통신오류");
@@ -648,7 +648,7 @@
 	    						 + "<td>"+list[i].userNo+"</td>"
 	    						 + "</tr>"
 	    				}
-		    			$("#ApproverList>tbody").html(str);
+		    			$("#approverList>tbody").html(str);
 	    			},
 	    			error : function(){
 	    				console.log("통신오류");
@@ -680,10 +680,10 @@
     		if(tdArr1[3] == loginUserNo){
     			alert("결재자와 작성자가 동일합니다. 다시확인해주세요.");
     			$("#approver1").attr("value",'');
-    			$("#ApproverList>tbody input[type='checkbox']").prop("checked",false);    			
+    			$("#approverList>tbody input[type='checkbox']").prop("checked",false);    			
     		}else{
     			$("#approver1").attr("value",tdArr1);
-    			$("#ApproverList>tbody input[type='checkbox']").prop("checked",false);
+    			$("#approverList>tbody input[type='checkbox']").prop("checked",false);
     		}
     	}
     	function addApprover2(){
@@ -711,10 +711,10 @@
     		if(tdArr2[3] == loginUserNo){
     			alert("결재자와 작성자가 동일합니다. 다시확인해주세요.");
     			$("#approver2").attr("value",'');
-    			$("#ApproverList>tbody input[type='checkbox']").prop("checked",false);    			
+    			$("#approverList>tbody input[type='checkbox']").prop("checked",false);    			
     		}else{
     			$("#approver2").attr("value",tdArr2);
-    			$("#ApproverList>tbody input[type='checkbox']").prop("checked",false);
+    			$("#approverList>tbody input[type='checkbox']").prop("checked",false);
     		}
     	}
     	
