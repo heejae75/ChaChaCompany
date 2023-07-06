@@ -103,8 +103,10 @@ public class AttendanceController {
 		if (att2 == null || att2.getLeaveType().equals("외근") || att2.getLeaveType().equals("출장")) { // 미출근,정상근무,외근,출장 :
 																									// 계획 8시간, 실적은 출퇴근시간
 			r.setWorkPlan(8 * 60); // 계획(분단위)
-			if (attendanceService.selectAtt(att) != null) {
-				r.setWorkRecord(attendanceService.selectAtt(att).getWorkRecord()); // 실적조회(분 단위)
+			if (attendanceService.selectAtt(att) != null || att2.getLeaveType().equals("정상근무")) {
+				r.setWorkRecord(attendanceService.selectAtt(att).getWorkRecord() - 60); // 실적조회(분 단위) - 점심시간제외
+			}else {
+				r.setWorkRecord(attendanceService.selectAtt(att).getWorkRecord());
 			}
 		} else if (att2.getLeaveType().equals("오전반차") || att2.getLeaveType().equals("오후반차")) { // 반차근무
 			r.setWorkPlan(4 * 60);

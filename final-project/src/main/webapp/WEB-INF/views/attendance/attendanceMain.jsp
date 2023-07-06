@@ -180,7 +180,7 @@
     	color: white;
     	position: absolute;
         display: none;
-    	right: 21%;
+    	right: 12%;
     	top: 55%;
     	padding: 5px 5px;
      }
@@ -323,7 +323,7 @@
 						<table class="table">
 							<thead>
 								<tr style="border-left:2px solid green;height:18%">
-									<td class="sub-title" id="formattedDate2" colspan="2"></td>
+									<td class="sub-title" id="formattedDate2" colspan="2" style="font-size:15px"></td>
 									<td id="btn-td" align="right"><button type="button" id="request-btn" class="btn btn-sm btn-default" onclick="chkDate();">근태사유서신청</button></td>
 								</tr>
 								<tr class="title" style="height:10%;">
@@ -368,8 +368,8 @@
 								<tr style="height:15%;">
 									<td class="date" colspan="3" style="padding-top:15px">
 										<div class="progress" id="progress-bar">
-										  <div id="work-record-progress" class="progress-bar progress-bar-striped progress-bar-info"></div>
-										  <div id="extra-work-progress" class="progress-bar progress-bar-striped progress-bar-danger"></div>
+										  <div id="work-record-progress" class="progress-bar progress-bar-striped progress-bar-info" style="min-width: 2em;"></div>
+										  <div id="extra-work-progress" class="progress-bar progress-bar-striped progress-bar-danger" style="min-width: 2em;"></div>
 										</div>
 									</td>
 								</tr>
@@ -510,6 +510,9 @@
 				var endDate = curr.clone().endOf('isoWeek').format('YYYY-MM-DD');
 				// 주간실적 함수 호출
 				weekWorkRecord(startDate, endDate);
+				
+				$("#work-record-progress").text("0%");
+				$("#extra-work-progress").text("0%"); // 실적 0으로 초기화
 				
 				
 				$.ajax({ // 휴가계획 가져오기
@@ -735,12 +738,12 @@
 				}
 			}
 		});
-		workPlan = workPlan - 8*60*2; // 주말제외
+		
 		extraWork = workRecord - workPlan;
-		if(workPlan < 0 || extraWork < 0){
-			workPlan = 0;
+		if(extraWork < 0){ // 초과근무 음수일 경우 0으로 처리
 			extraWork = 0;
 		}
+		
 		
 		$("#work-plan").text("계획 : " + workPlan);
 		$("#work-record").text("실적 : " + workRecord);
