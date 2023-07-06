@@ -78,9 +78,16 @@ public class MemberController {
 		String userNo = Integer.toString(userDetails.getUserNo());
 		
 		Member member = memberService.selectMemberByUserNo(userNo);
+		
+		int idx = member.getAddress().indexOf("/");
+		String mainAddress = member.getAddress().substring(0, idx);
+		String subAddress = member.getAddress().substring(idx+1);
+		
 		MemberAttachment memberAttachment = memberService.selectMemberAttachment(userNo);
 		
 		model.addAttribute("member", member);
+		model.addAttribute("mainAddress", mainAddress);
+		model.addAttribute("subAddress", subAddress);
 		model.addAttribute("memberAttachment", memberAttachment);
 		
 		//요청한 requestMapping에 따라 다른 페이지로 보내기
@@ -129,7 +136,8 @@ public class MemberController {
 	}
 	
 	@PostMapping("/update.me")
-	public ModelAndView updateMember(ModelAndView mv, Member member, String detailAddress, MultipartFile upfile, MemberAttachment memberAttachment, HttpSession session) {
+	public ModelAndView updateMember(ModelAndView mv, Member member, String detailAddress, MultipartFile upfile, MemberAttachment memberAttachment, HttpSession session
+			,String deletePhotoCheck) {
 		String check = "none";
 		
 		SaveFile saveFile = new SaveFile();
@@ -161,16 +169,15 @@ public class MemberController {
 			memberAttachment.setChangeName("resources/uploadFiles/memberProfile/"+changeName);
 		}else {
 			MemberAttachment match = memberService.selectMemberAttachment(Integer.toString(member.getUserNo()));
-			if(match != null) {
+			if(match != null && deletePhotoCheck.equals("true")) {
 				new File(session.getServletContext().getRealPath(match.getChangeName())).delete();
-				System.out.println(match.getChangeName());
 				memberAttachment.setOriginName("청록이.jpg");
 				memberAttachment.setChangeName("resources/image/청록이.jpg");
 				memberService.updateMemberAttachment(memberAttachment);
 			}
 		}
 		
-		member.setAddress(member.getAddress() + " " + detailAddress);
+		member.setAddress(member.getAddress() + "/" + detailAddress);
 		
 		memberService.updateMember(member);
 		
@@ -213,7 +220,7 @@ public class MemberController {
 			member.setAuth("ROLE_MEMBER");
 		}
 		
-		member.setAddress(member.getAddress()+ " " +detailAddress);
+		member.setAddress(member.getAddress()+ "/" +detailAddress);
 		member.setUserPwd("1234");
 		
 		int result = memberService.insertMember(member);

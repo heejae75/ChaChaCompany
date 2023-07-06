@@ -38,7 +38,7 @@
     	border : 1px solid black;
     }
     #top_buttons_div div:hover{
-    	background-color : rgb(87, 154, 64);
+    	background-color : #0E6251;
     	color : white;
     	cursor: pointer;
     }

@@ -40,7 +40,7 @@
     	border : 1px solid black;
     }
     #top_buttons_div div:hover{
-    	background-color : rgb(87, 154, 64);
+    	background-color : #0E6251;
     	color : white;
     	cursor: pointer;
     }
@@ -96,6 +96,7 @@
 <div class="content">
 	<form action="update.me" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+		<input type="hidden" name="deletePhotoCheck">
 		<div class="container">
 			<div id="head">
 				마이페이지
@@ -137,11 +138,11 @@
 				</div>
 				<hr>
 				<div id="inner_4" class="inner_div">
-					<span>주소</span> <input type="text" id="kakaoAddress" class="form-control" style="width:580px;" value="${member.address}" name="address" readonly required>
+					<span>주소</span> <input type="text" id="kakaoAddress" class="form-control" style="width:580px;" value="${mainAddress}" name="address" readonly required>
 				</div>
 				<br>
 				<div id="inner_5" class="inner_div">
-					<span>상세주소</span> <input type="text" class="form-control" style="width:540px;" name="detailAddress" required>
+					<span>상세주소</span> <input type="text" class="form-control" style="width:540px;" value="${subAddress}" name="detailAddress">
 				</div>
 				<hr>
 				<div id="inner_6" class="inner_div">
@@ -169,6 +170,7 @@
 	//사진 삭제시 청록이로 변경
 	$("#top_buttons_div").children().eq(1).click(function(){
 		$("#member_photo").attr("src", "/final3/resources/image/청록이.jpg");
+		$("input[name=deletePhotoCheck]").val('true');
 		$("#upfile").val('');
 	});
 	
