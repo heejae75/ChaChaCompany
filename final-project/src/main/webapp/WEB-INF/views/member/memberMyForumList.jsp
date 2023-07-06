@@ -32,9 +32,6 @@
     	font-size : 18px;
     	font-weight : 900;
     }
-	.table>tbody>tr:hover{
-    	background-color : rgb(198, 247, 190);
-    }
     #input_search{
     	width : 400px;
     }
@@ -60,6 +57,13 @@
     	font-size : 15px;
     	font-weight : 900;
     }
+    .table>thead th {
+    	font-family: 'KimjungchulGothic-Bold';
+    }
+    
+    .table>tbody th {
+     	font-family: 'HallymGothic-Regular';
+    }     
 </style>
 </head>
 <body id="body-pd">
@@ -69,7 +73,7 @@
 	    <div class="table-responsive"> 	
 	    	<h1>내가 쓴 글</h1>
 	    	<br>
-            <table class="table">
+            <table class="table table-hover">
 				<thead>
 					<tr>
 						<th style="width:70px;">번호</th>
@@ -97,7 +101,7 @@
 			</table>
 			<br><br>
 			<div id="footer">
-					<form action="list.fr" method="get">
+					<form action="myForumList.fr" method="get">
 						<div id="footer_inner">
 							<select name="category">
 						    	<option value="title">제목</option>
@@ -106,7 +110,7 @@
 						    	
 						    <input type="text" class="form-control form-control" id="input_search" name="searchWord">
 						    
-						    <button type="submit" class="btn btn-success">검색</button>		
+						    <button type="submit" class="btn btn-success" style="background-color:#0E6251;">검색</button>		
 						</div>		
 					</form>
 			</div>
@@ -115,29 +119,29 @@
 					<c:choose>
 						<c:when test="${pi.currentPage eq 1}">
 							<li class="page-item disabled">
-								<a class="page-link">이전페이지</a>
+								<a class="page-link">이전</a>
 							</li>
 						</c:when>
 						<c:otherwise>
 							<li class="page-item">
-								<a class="page-link" href="/final3/${role}/myForumList.me?currentPage=${pi.currentPage-1}">이전페이지</a>
+								<a class="page-link" href="/final3/${role}/myForumList.fr?currentPage=${pi.currentPage-1}">이전</a>
 							</li>
 						</c:otherwise>
 					</c:choose>
 					<c:forEach var="p" begin="${pi.startPage}" end="${pi.endPage}">
 						<li class="page-item">
-							<a class="page-link" onclick="pageColor()" href="/final3/${role}/myForumList.me?currentPage=${p}">${p}</a>
+							<a class="page-link" onclick="pageColor()" href="/final3/${role}/myForumList.fr?currentPage=${p}">${p}</a>
 						</li>
 					</c:forEach>
 					<c:choose>
 						<c:when test="${pi.currentPage eq pi.maxPage}">
 							<li class="page-item disabled">
-								<a class="page-link">다음페이지</a>
+								<a class="page-link">다음</a>
 							</li>
 						</c:when>
 						<c:otherwise>
 							<li class="page-item">
-								<a class="page-link" href="/final3/${role}/myForumList.me?currentPage=${pi.currentPage+1}">다음페이지</a>
+								<a class="page-link" href="/final3/${role}/myForumList.fr?currentPage=${pi.currentPage+1}">다음</a>
 							</li>
 						</c:otherwise>
 					</c:choose>					
@@ -148,7 +152,7 @@
 	
 <script>
 	$(function(){
-		$(".page-link").eq(${pi.currentPage}).css('color', 'red');
+		$(".page-link").eq(${pi.currentPage}).css('color', 'gray');
 	});
 	
 	$(".table>tbody>tr").click(function(){

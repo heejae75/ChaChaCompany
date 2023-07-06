@@ -51,7 +51,6 @@ public class MemberLoginController {
 		
 		if(result>0) {
 			mv.setViewName("redirect:/");
-			session.setAttribute("alertMsg", "회원가입 성공");
 		}else {
 			
 		}
