@@ -47,4 +47,7 @@ public interface MemberService {
 	
 	//부서, 직급, 퇴사일 변경 메서드
 	int updateOther(Member member);
+
+	//회원 탈퇴
+	int deleteMember(int userNo);
 }
