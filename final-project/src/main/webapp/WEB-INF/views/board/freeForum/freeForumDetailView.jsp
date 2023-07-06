@@ -226,7 +226,7 @@
 			</div>
 			<br><br><br>
 			<sec:authentication property="principal.Username" var="loginId"/>
-			<c:if test="${loginId eq board.boardWriter}">
+			<c:if test="${loginId eq board.refMid}">
 				<div>
 					<button class="btn btn-secondary" onclick="update();">수정하기</button>
 					<button class="btn btn-secondary" onclick="deleteForum();">삭제하기</button>
