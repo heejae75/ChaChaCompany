@@ -237,12 +237,10 @@
 								
 								success : function(result){
 									if(result == "YYYY"){
-										if(confirm("쪽지가 삭제되었습니다. 휴지통으로 이동하시겠습니까?")){
-											location.href="tlist.mg";
-										}
+										alert("쪽지 삭제에 성공하였습니다. ")
+										
 									}else{
 										alert("쪽지 삭제에 실패하였습니다. 다시 시도해 주세요 ")
-										location.reload();
 									}
 									location.reload();
 								},

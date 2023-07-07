@@ -331,7 +331,7 @@
 	<select id="selectCountRecvMsg" resultType="_int">
 		SELECT COUNT(*)
 		FROM MESSENGER
-		WHERE RECEIVER = 7
+		WHERE RECEIVER = #{userNo}
 		AND RECV_DELETE ='N'
 		AND READ_STATUS ='N'
 	</select>

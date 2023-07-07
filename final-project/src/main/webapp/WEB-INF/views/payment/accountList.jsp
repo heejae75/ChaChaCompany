@@ -152,7 +152,7 @@
 	                    <option value="전체">전체</option>
 	                    <option value="N">미등록</option>
 	                    <option value="Y">등록완료</option>
-	                    <option value="p">등록/변경신청</option>
+	                    <option value="P">등록/변경신청</option>
                 	</select>
 				</div>
 				<div id="search-box">

@@ -112,7 +112,7 @@
 			<script>
 				var $userNo = '${loginUser.userNo}'
 				//읽지 않은 쪽지수 조회해오기 
-				$(function(){
+				$(document).ready(function(){
 					
 					$.ajax({
 						url : "countRecvMsg.mg",
@@ -131,10 +131,10 @@
 							console.log("통신 실패 ");
 						}
 					})
-				})
+				});
 				
 				//삭제된 쪽지수 조회해오기 
-				$(function(){
+				$(document).ready(function(){
 					
 					$.ajax({
 						url : "countTrashMsg.mg",
