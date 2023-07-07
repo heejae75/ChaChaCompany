@@ -202,10 +202,10 @@
 		JOIN DEPARTMENT USING (DEPT_CODE)
 		WHERE STATUS ='Y'
 		<choose>
-			<when test="status == '전체' ">
+			<when test="status == '전체' and keyword != '' ">
 				AND (USER_NAME LIKE '%'||#{keyword}||'%' OR DEPT_NAME LIKE '%'||#{keyword}||'%')
 			</when>
-			<when test="status != '전체' and keyword != null ">
+			<when test="status != '전체' and keyword != '' ">
 				AND ACCOUNT_STATUS = #{status}
 				AND (USER_NAME LIKE '%'||#{keyword}||'%' OR DEPT_NAME LIKE '%'||#{keyword}||'%')
 			</when>
@@ -221,10 +221,13 @@
 		JOIN JOB USING(JOB_CODE)
 		WHERE STATUS ='Y'
 		<choose>
-			<when test="status == '전체' ">
+			<when test="status == '전체' and keyword != '' ">
 				AND (USER_NAME LIKE '%'||#{keyword}||'%' OR DEPT_NAME LIKE '%'||#{keyword}||'%')
 			</when>
-			<when test="status != '전체' and keyword != null ">
+			<when test="status != '전체' and keyword == '' ">
+				AND ACCOUNT_STATUS = #{status}
+			</when>
+			<when test="status != '전체' and keyword != '' ">
 				AND ACCOUNT_STATUS = #{status}
 				AND (USER_NAME LIKE '%'||#{keyword}||'%' OR DEPT_NAME LIKE '%'||#{keyword}||'%')
 			</when>
