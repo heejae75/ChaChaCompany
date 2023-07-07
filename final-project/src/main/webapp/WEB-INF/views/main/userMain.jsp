@@ -1235,7 +1235,7 @@ a{
 					},
 					success : function(result){
 						var str = "";
-						
+						console.log
 						for(var i in result) {
 							if(result[i].lastSignature.includes("대기")){
 								str += "<tr>"
@@ -1553,6 +1553,7 @@ a{
 			});	
 		}
 		
+
 // 		//한번 더 눌렀을 때 업데이트(나중에 하기)
 // 		function updateOnTime() {
 // 			$.ajax({

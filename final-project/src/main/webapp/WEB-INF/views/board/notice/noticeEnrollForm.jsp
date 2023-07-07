@@ -78,6 +78,12 @@
     	font-size: 15px !important;
     	border: none;
     }
+    #board-tap-area *, #btn-area *, th{
+    	font-family: 'KimjungchulGothic-Bold';
+    }
+    td{
+    	font-family: 'HallymGothic-Regular'
+    }
     
     </style>
 </head>
@@ -99,7 +105,7 @@
 						<a href="list.re">대여</a>
 					</li>
 					<li role="presentation">
-						<a href="#">커뮤니티</a>
+						<a href="list.fr">커뮤니티</a>
 					</li>
 				</ul>
             </div>
@@ -141,7 +147,7 @@
 	                </tr>
 	            </table>
                 <br>
-                <div align="center">
+                <div align="center" id="btn-area">
                     <button type="submit" class="btn btn-default">등록하기</button>
                     <button type="reset" class="btn btn-default" onclick="location.href='list.no'">취소하기</button>
                 </div>

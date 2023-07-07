@@ -110,16 +110,13 @@
         width:fit-content; 
         margin:auto;
     }
-    
-/*     #tip {
-    position:absolute;
-    color:#FFFFFF;
-    padding:5px;
-    display:none;
-    background:#450e4c;
-    border-radius: 5px;
-}
-     */
+    /*폰트*/
+     #att-tap-area *, #title-area, th, #board-pagebar-area *, #btn-area *{
+    	font-family: 'KimjungchulGothic-Bold';
+    }
+    td{
+    	font-family: 'HallymGothic-Regular'
+    }
     
     
 </style>
@@ -178,7 +175,7 @@
 					<tbody>
 						 <c:if test="${empty list }">
 							<tr>
-								<td colspan="12">아직 출근한 사람이 없네요.</td>
+								<td colspan="12" style="font-weight:700">아직 출근한 사람이 없네요.</td>
 							</tr>
 						</c:if> 
 					
@@ -249,10 +246,10 @@
             	 <ul class="pagination">
 	                    <c:choose>
 							<c:when test="${empty selectedDate }">
-							 	<li id="previous-btn" class="page-item disabled"><a class="page-link" href="manageAtt.at?currentPage=${pi.currentPage - 1 }">Previous</a></li>
+							 	<li id="previous-btn" class="page-item disabled"><a class="page-link" href="manageAtt.at?currentPage=${pi.currentPage - 1 }">이전</a></li>
 							</c:when>
 							<c:otherwise>
-								<li id="previous-btn" class="page-item"><a class="page-link" href="manageAtt.at?currentPage=${pi.currentPage - 1 }&selectedDate=${selectedDate }">Previous</a></li>
+								<li id="previous-btn" class="page-item"><a class="page-link" href="manageAtt.at?currentPage=${pi.currentPage - 1 }&selectedDate=${selectedDate }">이전</a></li>
 							</c:otherwise>
 						</c:choose>
 						
@@ -279,17 +276,15 @@
 		                    	
                        <c:choose>
 							<c:when test="${empty selectedDate }">
-								<li id="next-btn" class="page-item"><a class="page-link" href="manageAtt.at?currentPage=${pi.currentPage + 1 }">Next</a></li>
+								<li id="next-btn" class="page-item"><a class="page-link" href="manageAtt.at?currentPage=${pi.currentPage + 1 }">다음</a></li>
 							</c:when>
 							<c:otherwise>
-								<li id="next-btn" class="page-item"><a class="page-link" href="manageAtt.at?currentPage=${pi.currentPage + 1 }&selectedDate=${selectedDate }">Next</a></li>
+								<li id="next-btn" class="page-item"><a class="page-link" href="manageAtt.at?currentPage=${pi.currentPage + 1 }&selectedDate=${selectedDate }">다음</a></li>
 							</c:otherwise>
 						</c:choose>
                     </ul>
               </div>
           </div>
-            
-            
             
             <!-- 현재페이지에 따라 이전/다음버튼 disabled처리 (클래스부여)-->
             <c:if test="${pi.currentPage eq 1 }">
@@ -309,12 +304,8 @@
             		});
             	</script>
             </c:if>
-            
-		
 		
 	</div>
-		
-
 			
       <br><br><br><br>
       
@@ -338,6 +329,11 @@
 
 	<script>
 	
+	$(document).ready(function(){
+		  $('[data-toggle="tooltip"]').tooltip();
+	});
+	
+	// 지각의 경우 글씨 색 변경, 마우스오버시 툴팁
 	$(function(){
 		
 		$("#table-area tbody tr").each(function(){
@@ -364,16 +360,5 @@
 	});
 	
 	</script>
-	
-	<script>
-	$(document).ready(function(){
-	  $('[data-toggle="tooltip"]').tooltip();
-	});
-	</script>
- 
-  
- 
-
-
 </body>
 </html>

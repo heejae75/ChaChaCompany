@@ -84,7 +84,12 @@
     #reply-input:hover{
     	cursor: pointer;
     }
-
+	#board-tap-area *, #boardList-btn *, #btn-area *, #boardEnroll-btn *, #replyArea button, th, #board-pagebar-area *, .modal-title{
+    	font-family: 'KimjungchulGothic-Bold';
+    }
+    td, #updateReply-modal input{
+    	font-family: 'HallymGothic-Regular'
+    }
     
    
     </style>
@@ -107,7 +112,7 @@
 						<a href="list.re">대여</a>
 					</li>
 					<li role="presentation">
-						<a href="#">커뮤니티</a>
+						<a href="list.fr">커뮤니티</a>
 					</li>
 				</ul>
             </div>
@@ -163,7 +168,7 @@
 	                </tbody>
 	            </table>
             </div>
-            <div align="center">
+            <div align="center" id="btn-area">
                 <c:if test="${loginUser.userNo eq b.boardWriter or loginUser.auth eq 'ROLE_MANAGER' }">
                     <a class="btn btn-default" onclick="formSubmit(1);">수정하기</a>
                    <a class="btn btn-default" onclick="formSubmit(2);">삭제하기</a>
@@ -241,7 +246,7 @@
      <script>
      // 댓글 입력창 빈칸일때 알람
  	$("#reply-btn").click(function(){
- 		chkblankReply =$("#reply-input").val();
+ 		chkblankReply = $("#reply-input").val();
  		if(chkblankReply.length==0){
  			alert("댓글을 입력해주세요.")
  		}else{

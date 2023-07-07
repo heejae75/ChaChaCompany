@@ -109,7 +109,7 @@
 			  WHERE A.STATUS = 'Y'
 			  AND LEAVE_STATUS = '신청'
 			  AND #{currDate} >= START_DATE
-			  AND #{currDate} <= END_DATE
+			  AND #{currDate} < END_DATE
 			  AND A.DOC_WRITER = #{userNo}
 			  ORDER BY CREATE_DATE DESC) 
 			WHERE ROWNUM = 1

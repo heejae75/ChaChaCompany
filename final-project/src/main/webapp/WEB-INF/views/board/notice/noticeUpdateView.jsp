@@ -74,7 +74,12 @@
     #board-detail th{
         text-align:center;
     }
- 
+ 	 #board-tap-area *, th, #btn-area *{
+    	font-family: 'KimjungchulGothic-Bold';
+    }
+    td{
+    	font-family: 'HallymGothic-Regular'
+    }
     
     </style>
 </head>
@@ -96,7 +101,7 @@
 						<a href="list.re">대여</a>
 					</li>
 					<li role="presentation">
-						<a href="#">커뮤니티</a>
+						<a href="list.fr">커뮤니티</a>
 					</li>
 				</ul>
             </div>
@@ -146,7 +151,7 @@
 	                </tr>
 	            </table>
                 <br>
-                <div align="center">
+                <div align="center" id="btn-area">
                     <button type="submit" class="btn btn-default">수정하기</button>
                     <button type="button" class="btn btn-default" onclick="javascript:history.go(-1);">이전으로</button>
                 </div>
