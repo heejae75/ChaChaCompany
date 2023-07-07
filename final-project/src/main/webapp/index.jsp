@@ -87,11 +87,7 @@
 	}
 	
 	function memberLogin(){
-		location.href = "member/mainPage.me";
-	}
-	
-	function adminLogin(){
-		location.href = "admin/mainPage.me";
+		location.href = "member/main.me";
 	}
 	
 </script>

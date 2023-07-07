@@ -50,6 +50,18 @@ public class MemberController {
 		return "main/managerMain";
 	}
 	
+	@GetMapping("/main.me")
+	public String mainPage() {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal(); 
+		CustomUserDetails userDetails = (CustomUserDetails)principal;
+		if(userDetails.getAuth().equals("ROLE_MEMBER")) {
+			return "redirect:/member/mainPage.me";
+		}else {
+			return "redirect:/admin/mainPage.me";
+		}
+		
+	}
+	
 	@GetMapping("/mainPage.me")
 	public ModelAndView MemberLogin(ModelAndView mv, Principal p, HttpSession session) {
 		if(session.getAttribute("loginUser") == null) {
@@ -58,12 +70,7 @@ public class MemberController {
 			System.out.println(member);
 			session.setAttribute("loginUser", member);
 		}
-		
-//		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal(); 
-//		CustomUserDetails userDetails = (CustomUserDetails)principal;
-//		String username = userDetails.getUsername();
-//		String password = userDetails.getPassword();
-
+	
 		mv.setViewName("main/userMain");
 		
 		return mv;

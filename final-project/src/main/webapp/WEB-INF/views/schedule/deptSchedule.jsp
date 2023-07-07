@@ -384,7 +384,7 @@
 				//이벤트 클릭 -> 수정 포맷 
 				eventClick : function(calEvent, jsEvent, view){
 					
-					if(calEvent.code != null){ //휴가일정은 상세보기 막기 
+					if(calEvent.code != null || calEvent.type =='AS'){ //휴가일정,전체일정은 상세보기 막기 
 						return false;
 					}else{
 						//수정 모달 띄워주기 
