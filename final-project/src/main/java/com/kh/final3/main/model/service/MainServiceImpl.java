@@ -34,8 +34,8 @@ public class MainServiceImpl implements MainService {
 
 	//즐겨찾기 공지 조회 
 	@Override
-	public ArrayList<Board> mainNoticeLikedList(String userId) {
-		return mainDao.mainNoticeLikedList(sqlSession, userId);
+	public ArrayList<Board> mainNoticeLikedList(int userNo) {
+		return mainDao.mainNoticeLikedList(sqlSession, userNo);
 	}
 	
 	//최신 쪽지 조회 
@@ -144,7 +144,6 @@ public class MainServiceImpl implements MainService {
 	public ArrayList<Attendance> selectOnTime(int userNo) {
 		return mainDao.selectOnTime(sqlSession, userNo);
 	}
-
 
 	//출근 수정(나중에 완료하기)
 	@Override

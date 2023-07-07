@@ -25,8 +25,8 @@ public class MainDao {
 	}
 
 	//즐겨찾기한 공지 조회 
-	public ArrayList<Board> mainNoticeLikedList(SqlSessionTemplate sqlSession, String userId) {
-		return (ArrayList)sqlSession.selectList("mainMapper.mainNoticeLikedList", userId);
+	public ArrayList<Board> mainNoticeLikedList(SqlSessionTemplate sqlSession, int userNo) {
+		return (ArrayList)sqlSession.selectList("mainMapper.mainNoticeLikedList", userNo);
 	}
 	
 	//최신 쪽지 조회 
