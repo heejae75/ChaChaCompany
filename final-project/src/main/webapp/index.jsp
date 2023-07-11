@@ -65,7 +65,7 @@
 </head>
 <body>
     <div class="outer">
-        <a href="adminEnroll">관리자 회원가입(임시)</a>
+        <!-- <a href="adminEnroll">관리자 회원가입(임시)</a> -->
 <!--         <div id="memberLogin"> -->
 <!--             <button onclick="memberLogin()">일반사원</button> -->
 <!--         </div> -->
