@@ -175,7 +175,6 @@
             <artifactId>spring-security-taglibs</artifactId>
             <version>${spring.security.version}</version>
         </dependency>
-		<!-- Spring Security 사용을 위한 dependency -->	
 		<!-- 파일업로드 -->
 		<!-- commons-fileupload -->
 		<dependency>

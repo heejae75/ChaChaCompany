@@ -105,7 +105,7 @@
 	                    <td colspan="2" style="font-weight:700; text-align:center; ">직급</td>
 	                    <td colspan="2" style="text-align:center;">${mInfo.jobName}</td> 
 	                    <td colspan="2" style="font-weight:700; text-align:center;">지급계좌</td>
-	                    <td colspan="2" style="text-align:center;">${mInfo.accountNumber }</td>
+	                    <td colspan="2" style="text-align:center;" id="payment_Account"></td>
 	                </tr>
                  	<tr>
 	                    <th colspan="3">지급내역</th>
@@ -278,6 +278,7 @@
 	        					if(pay != null){
 	        						$("#month").html(pay.monthly) //지급월 
 		        					$("#salary").html(pay.salary.toLocaleString()+'₩'); //급여
+		        					$("#payment_Account").html(pay.accountNumber) //지급계좌
 		        					$("#nationalPension").html(pay.nationalPension.toLocaleString()+'₩'); //국민연금
 		        					$("#meals").html(pay.meals.toLocaleString()+'₩'); //식대
 		        					$("#healthInsurance").html(pay.healthInsurance.toLocaleString()+'₩'); //건강보험

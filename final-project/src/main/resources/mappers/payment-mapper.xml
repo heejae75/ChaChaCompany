@@ -34,6 +34,7 @@
 		<result column="MONTHLY" property="monthly"/>
 		<result column="SALARY" property="salary"/>
 		<result column="MEALS" property="meals"/>
+		<result column="ACCOUNT_NUMBER" property="accountNumber"/>	
 		<result column="OVERTIME_PAY" property="overtimePay"/>
 		<result column="HOLIDAY_PAY" property="holidayPay"/>
 		<result column="ANNUAL_LEAVE_PAY" property="annualLeavePay"/>
@@ -85,8 +86,8 @@
 	
 	<!-- 급여 입력 -->
 	<insert id="insertPayment">
-		INSERT INTO PAYMENT (PAY_NO, USER_NO, MONTHLY, SALARY, MEALS, OVERTIME_PAY, HOLIDAY_PAY, ANNUAL_LEAVE_PAY, OTHER_PAY)
-				VALUES(SEQ_PAY.NEXTVAL, #{userNo}, #{monthly},#{salary},#{meals}, #{overtimePay},#{holidayPay},#{annualLeavePay},#{otherPay})
+		INSERT INTO PAYMENT (PAY_NO, USER_NO, MONTHLY, SALARY, MEALS, ACCOUNT_NUMBER, OVERTIME_PAY, HOLIDAY_PAY, ANNUAL_LEAVE_PAY, OTHER_PAY)
+				VALUES(SEQ_PAY.NEXTVAL, #{userNo}, #{monthly},#{salary},#{meals}, #{accountNumber}, #{overtimePay},#{holidayPay},#{annualLeavePay},#{otherPay})
 	</insert>
 	
 	<!-- 급여 목록 조회  -->
@@ -167,7 +168,7 @@
 	
 	<!-- 급여 월별 조회 메소드 -->
 	<select id="monthPayment" resultMap="paymentResultSet">
-		SELECT PAY_NO, TO_CHAR(MONTHLY,'YYYY-MM') AS MONTHLY, SALARY, MEALS, OVERTIME_PAY, HOLIDAY_PAY, ANNUAL_LEAVE_PAY, OTHER_PAY, 
+		SELECT PAY_NO, TO_CHAR(MONTHLY,'YYYY-MM') AS MONTHLY, ACCOUNT_NUMBER, SALARY, MEALS, OVERTIME_PAY, HOLIDAY_PAY, ANNUAL_LEAVE_PAY, OTHER_PAY, 
        		   (SALARY* NATIONAL_PENSION)/2 AS NATIONAL_PENSION , (SALARY * HEALTH_INSURANCE) AS HEALTH_INSURANCE, 
       		   (SALARY* EMP_INSURANCE) AS EMP_INSURANCE , (SALARY*LNG_INSURANCE) AS LNG_INSURANCE
 		FROM PAYMENT

@@ -169,7 +169,8 @@
 				</tr>
 				<tr>
 					<td style="font-weight: 800;" >작성자</td>
-					<td colspan="5" style="text-align: left;">${loginUser.userName}</td>
+					<td colspan="5" style="text-align: left;">${loginUser.userName}
+					<input type="hidden" name="boardWriter" value="${loginUser.userNo}"></td>
 				</tr>
 				<tr>
 					<td style="font-weight: 800;" >첨부파일</td>

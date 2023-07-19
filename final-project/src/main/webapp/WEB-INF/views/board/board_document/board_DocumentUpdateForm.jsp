@@ -177,12 +177,19 @@
 				</tr>
 				<tr>
 					<td style="font-weight: 800;">제목</td>  
-					<td colspan="5"><input value="${b.boardTitle}" name="boardTitle" type="text" class="form-control" style="width :100%; height:100%; font-size: 17px;"></td>      
+					<td colspan="5">
+						<input value="${b.boardTitle}" name="boardTitle" type="text" class="form-control" style="width :100%; height:100%; font-size: 17px;">
+					</td>      
 				</tr>
 				<tr>
 					<td style="font-weight: 800;" >작성자</td>
 					<td  colspan="5" style="text-align: left;">${b.boardWriter}</td>
-					
+				</tr>
+				<tr>
+					<td style="font-weight: 800;" >수정자</td>
+					<td  colspan="5" style="text-align: left;">${loginUser.userName}
+						<input type="hidden" value="${loginUser.userNo}" name="boardWriter">
+					</td>
 				</tr>
 			</thead>
       		<tbody>
@@ -199,22 +206,22 @@
 				<tr>
 					<td style="font-weight: 800;" >첨부파일</td>
                   	<td colspan="5">
-                   		<input type="file" name="upfile" accept=".pdf,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.hwp,.jpg"  multiple required>
+                   		<input type="file" name="upfile" accept=".pdf,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.hwp,.jpg" multiple>
                    	</td>
                	</tr>
               	<tr>
                		<td></td>
                		<td colspan="5">
                			<div id="upfile-area" style="text-align:left; font-size:17px">
-               				<!-- 첨부파일 이름보여줄 영역 -->
+               				<!-- 선택된 첨부파일 이름보여줄 영역 -->
                			</div>
                		</td>
                </tr>
-              	
               	<tr>
-                   <td colspan="6"><textarea name ="boardContent" style="resize: none; width: 100%; height: 300px; padding: 0;  font-family: 'HallymGothic-Regular'; " required>${b.boardContent}</textarea></td>
+                   	<td colspan="6">
+                   		<textarea name ="boardContent" style="resize: none; width: 100%; height: 300px; padding: 0;  font-family: 'HallymGothic-Regular'; " required>${b.boardContent}</textarea>
+               		</td>
                	</tr>
-               
            </tbody>
 		</table>
 		<hr style="width:80%;">

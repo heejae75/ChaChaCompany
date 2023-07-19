@@ -402,7 +402,7 @@
             <div class="popup-wrap" id="popup"> <!-- 모달을 감싸줄 박스 -->
                 <div class="popup"> <!-- 실질적 모달 팝업 -->
                     <div class="popup-head"> <!-- 로고영역 -->
-                        <span class="head-title" style="font-size: 30px; color:white;">KH COMPANY</span>
+                        <span class="head-title" style="font-size: 30px; color:white;"><img style="width: 50px; height: 50px; margin-left:3px" src="/final3/resources/image/logoWhite.png"></span>
                     </div>
                     <div class="popup-body"> <!-- 컨텐츠 영역  -->
                         <div class="body-content">

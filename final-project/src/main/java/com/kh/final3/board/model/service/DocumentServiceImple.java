@@ -117,7 +117,14 @@ public class DocumentServiceImple implements DocumentService{
 		
 		return result1*result2;
 	}
+	
+	//게시글 수정 - 첨부파일 X
+	@Override
+	public int updateDocument(Board b) {
 
+		return documentDao.updateDocument(sqlSession, b);
+	}
+	
 	//게시글 삭제 메소드 
 	@Override
 	@Transactional
@@ -165,6 +172,8 @@ public class DocumentServiceImple implements DocumentService{
 
 		return documentDao.selectDeleteAttachList(sqlSession,bno);
 	}
+
+	
 
 
 	
