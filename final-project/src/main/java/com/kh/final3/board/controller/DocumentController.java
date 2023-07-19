@@ -144,7 +144,6 @@ public class DocumentController {
 						
 						e.printStackTrace();
 					}
-					
 					//Attachment에refBno, categoryCode, originName, changeName, filePath 세팅하기 
 					BoardAttachment at = BoardAttachment.builder()
 														.refBno(b.getBoardNo())
@@ -154,15 +153,12 @@ public class DocumentController {
 														.filePath("/resources/uploadFiles/boardDocument/"+changeName).build();
 					//atList에 at 담기
 					atList.add(at);
-					
-					
 				}
-				
 			}
 		
-		String userNo = String.valueOf(((Member)session.getAttribute("loginUser")).getUserNo());
+//		String userNo = String.valueOf(((Member)session.getAttribute("loginUser")).getUserNo());
 		
-		b.setBoardWriter(userNo); //로그인 가능 후 지우고 로그인 유저 번호로 바꾸기 
+//		b.setBoardWriter(userNo); 
 		
 		int result = documentService.insertDocument(b,atList);
 		
@@ -208,66 +204,68 @@ public class DocumentController {
 	@RequestMapping(value="update.dc", method= RequestMethod.POST)
 	public ModelAndView updateDocument(Board b, ArrayList<MultipartFile> upfile,
 									   ModelAndView mv, HttpSession session) {
-		
 		int result1 = 0;
+		//새로운 첨부파일을 담아줄 list
+		ArrayList <BoardAttachment> atList = new ArrayList<>(); 
 		
-		ArrayList <BoardAttachment> atList = new ArrayList<>();
-			
+		if(!upfile.isEmpty()) {//첨부파일이 있을경우 
 			for(MultipartFile file : upfile) {
 				//새로운 첨부파일이 있을 경우
 				if(!file.getOriginalFilename().equals("")) {
 					//글번호를 가지고가서 기존 첨부파일 목록 가져오기 
-					ArrayList<BoardAttachment> defaultAttch = documentService.selectBoardAttachmentList(b.getBoardNo());
+					ArrayList<BoardAttachment> defaultAtt = documentService.selectBoardAttachmentList(b.getBoardNo());
 					//조회해온 첨부파일 목록이 비어있지 않다면 기존 파일 목록 삭제하기 
-					if (!defaultAttch.isEmpty()) {
-						for(BoardAttachment defaultFile : defaultAttch) {
+					if (!defaultAtt.isEmpty()) {
+						for(BoardAttachment defaultFile : defaultAtt) {
 							
 							new File(session.getServletContext().getRealPath(defaultFile.getFilePath())).delete();
 						}					
 						//기존 첨부파일 DB에서도 삭제(상태값 변경 -> N)
 						result1 = documentService.deleteAttachment(b.getBoardNo());
 					}
+					//changeName만들기 
+					String changeName = saveFile.getSaveFile(file, session);
+					//파일 업로드시킬 경로 구하기 
+					String savePath = session.getServletContext().getRealPath("/resources/uploadFiles/boardDocument/");
+					
+					//파일 업로드 하기 
+					try {
+						file.transferTo(new File(savePath+changeName));
+					} catch (IllegalStateException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					
+					//Attachment에refBno, categoryCode, originName, changeName, filePath 세팅하기 
+					BoardAttachment at = BoardAttachment.builder()
+							.refBno(b.getBoardNo())
+							.categoryCode(b.getCategoryCode())
+							.originName(file.getOriginalFilename())
+							.changeName(changeName)
+							.filePath("/resources/uploadFiles/boardDocument/"+changeName).build();
+					//atList에 at 담기
+					atList.add(at);
 				}
-				//changeName만들기 
-				String changeName = saveFile.getSaveFile(file, session);
-				
-				//파일 업로드시킬 경로 구하기 
-				String savePath = session.getServletContext().getRealPath("/resources/uploadFiles/boardDocument/");
-				
-				//파일 업로드 하기 
-				try {
-					file.transferTo(new File(savePath+changeName));
-					
-				} catch (IllegalStateException e) {
-					
-					e.printStackTrace();
-				} catch (IOException e) {
-					
-					e.printStackTrace();
-				}
-				
-				//Attachment에refBno, categoryCode, originName, changeName, filePath 세팅하기 
-				BoardAttachment at = BoardAttachment.builder()
-													.refBno(b.getBoardNo())
-													.categoryCode(b.getCategoryCode())
-													.originName(file.getOriginalFilename())
-													.changeName(changeName)
-													.filePath("/resources/uploadFiles/boardDocument/"+changeName).build();
-				//atList에 at 담기
-				atList.add(at);
-				
-		}
-		
-		//System.out.println(atList); // 확인용 
-		
-		//게시글과 첨부파일 수정 
-		int result2 = documentService.updateDocument(b, atList);
-		
-		if(result1*result2>0) {
-			session.setAttribute("alertMsg","게시글 수정 완료");
-			mv.setViewName("redirect:/member/detail.dc?bno="+b.getBoardNo());
-		}else {
-			mv.addObject("errorMsg","게시글 수정 실패").setViewName("redirect:/member/list.dc");
+			}
+			int result2 = documentService.updateDocument(b, atList);
+			
+			if(result1*result2>0) {
+				session.setAttribute("alertMsg","게시글 수정 완료");
+				mv.setViewName("redirect:/member/detail.dc?bno="+b.getBoardNo());
+			}else {
+				mv.addObject("errorMsg","게시글 수정 실패").setViewName("redirect:/member/list.dc");
+			}
+			
+		}else { //새로운 첨부파일 없이 수정시 
+			int result2 =documentService.updateDocument(b);
+			if(result2>0) {
+				session.setAttribute("alertMsg","게시글 수정 완료");
+				mv.setViewName("redirect:/member/detail.dc?bno="+b.getBoardNo());
+			}else {
+				mv.addObject("errorMsg","게시글 수정 실패").setViewName("redirect:/member/list.dc");
+			}
+			
 		}
 		
 		return mv;

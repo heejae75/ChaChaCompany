@@ -97,7 +97,7 @@
 	                    <td style="text-align:center;"><input type="date" class="form-control" id="monthly" name="monthly"></td>
 	                    <td style="font-weight:700; text-align:center; ">계좌번호</td>
 	                    <td style="text-align:center;" >${mInfo.bank}</td>
-	                    <td colspan ="2" style="text-align:center;" >${mInfo.accountNumber}</td>
+	                    <td colspan ="2" style="text-align:center;"><input type="hidden" class="form-control"  name="accountNumber" value="${mInfo.accountNumber}">${mInfo.accountNumber}</td>
 	                </tr>
 	                 <tr>
 	                    <th colspan="4">지급내역</th>
@@ -217,6 +217,7 @@
 				            	monthly : $("#monthly").val(),
 				            	salary : $("#salary").val(),
 				            	meals : $("#meals").val(),
+				            	accountNumber : account,
 				            	overtimePay : $("#overtimePay").val(),
 				            	holidayPay : $("#holidayPay").val(),
 				            	annualLeavePay : $("annualLeavPay").val(),
@@ -234,7 +235,7 @@
 				            		alert("급여 등록에 실패하였습니다. 다시 시도해주세요");
 				            	}
 			            		
-				            	location.reload();
+				            	location.href="payment.ad";
 				            },
 				            
 				            error : function(){

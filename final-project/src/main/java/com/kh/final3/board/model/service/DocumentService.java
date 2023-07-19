@@ -36,6 +36,9 @@ public interface DocumentService {
 	//게시글 수정 메소드 
 	int updateDocument(Board b, ArrayList<BoardAttachment> atList);
 	
+	//게시글 수정 - 첨부파일 X
+	int updateDocument(Board b);
+	
 	//첨부파일 삭제 메소드 
 	int deleteAttachment(int boardNo);
 	
@@ -47,6 +50,7 @@ public interface DocumentService {
 	
 	//삭제된 첨부파일 조회 메소드(업로드 파일삭제용도)
 	ArrayList<BoardAttachment> selectDeleteAttachList(int bno);
+	
 	
 
 

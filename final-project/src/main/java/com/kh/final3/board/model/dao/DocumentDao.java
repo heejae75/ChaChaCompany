@@ -79,6 +79,11 @@ public class DocumentDao {
 
 		return (ArrayList)sqlSession.selectList("documentMapper.selectDeleteAttachList", bno);
 	}
+
+	public int updateDocument(SqlSessionTemplate sqlSession, Board b) {
+		
+		return sqlSession.update("documentMapper.updateDocument", b);
+	}
 	
 
 	

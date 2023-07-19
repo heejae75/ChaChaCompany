@@ -42,6 +42,7 @@
 		<result column ="USER_NAME" property="boardWriter"/>	
 		<result column ="CATEGORY_CODE" property="categoryCode"/>
 		<result column ="CREATE_DATE" property="createDate"/>
+		<result column = "MODIFY_DATE" property="modifyDate"/>
 		<result column ="COUNT" property="count"/>
 		<result column ="IMPORTANCE_LEVEL" property="importanceLevel"/>
 		<result column ="DEPT_NAME" property="deptName"/>	
@@ -99,7 +100,9 @@
 	</update>
 	<!-- 게시글 조회 메소드 -->
 	<select id="selectDocument" resultMap="DocumentResultSet">
-		SELECT BOARD_NO,BOARD_TITLE, BOARD_CONTENT,CATEGORY_CODE, IMPORTANCE_LEVEL, COUNT, TO_CHAR(B.CREATE_DATE,'YYYY-MM-DD') AS CREATE_DATE,
+		SELECT BOARD_NO,BOARD_TITLE, BOARD_CONTENT,CATEGORY_CODE, IMPORTANCE_LEVEL, COUNT, 
+			   TO_CHAR(B.CREATE_DATE,'YYYY-MM-DD') AS CREATE_DATE,
+			   TO_CHAR(B.MODIFY_DATE,'YYYY-MM-DD') AS MODIFY_DATE,
        		   USER_NAME, DEPT_NAME
 		FROM BOARD B
 		JOIN MEMBER ON (B.BOARD_WRITER = USER_NO)
@@ -145,6 +148,7 @@
 			SET CATEGORY_CODE = #{categoryCode},
 				BOARD_TITLE = #{boardTitle} , 
 				BOARD_CONTENT = #{boardContent}, 
+				BOARD_WRITER = #{boardWriter},
 				IMPORTANCE_LEVEL =#{importanceLevel},
 				MODIFY_DATE = SYSDATE
 			WHERE BOARD_NO = #{boardNo}	

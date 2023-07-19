@@ -170,6 +170,15 @@
                          <td style="text-align: center;">${b.createDate}</td>
                          
                      </tr>
+                     <c:if test="${not empty b.modifyDate}">
+                     <tr>
+                         <th style="border-bottom:1px;"></th>
+                         <td></td>
+                         <th style="text-align: center; border-bottom:1px; ">수정일</th>
+                         <td style="text-align: center;">${b.modifyDate}</td>
+                         
+                     </tr>
+                     </c:if>
                  </thead>
                  <tbody id="file-area">
            			<tr>
@@ -189,7 +198,7 @@
         	</table>
 	    <hr>   
        	</div>
-       	<c:if test = "${loginUser.userName eq b.boardWriter}">
+       	<c:if test = "${(loginUser.userName eq b.boardWriter) or (loginUser.deptName eq b.deptName and loginUser.auth eq 'ROLE_ADMIN')}">
 		<div id="board-btn-area">
 		    	<button class="btn btn-danger" onclick="documentDelete();">삭제</button> 
 		    	<button type="submit" class="btn btn-success" onclick="location.href='update.dc?bno='+${b.boardNo}">수정</button>               

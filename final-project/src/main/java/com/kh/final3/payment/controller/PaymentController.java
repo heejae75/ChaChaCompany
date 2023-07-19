@@ -91,7 +91,6 @@ public class PaymentController {
 		key.put("month", month);
 		
 		int count = paymentService.compareMonthly(key); 
-		
 		if(count>0) { //등록된 명세서 있음  
 			return "duplicate";
 		}else {// 등록된 명세서 없음 
