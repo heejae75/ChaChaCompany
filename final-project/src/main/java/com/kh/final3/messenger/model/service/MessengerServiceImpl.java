@@ -3,10 +3,9 @@ package com.kh.final3.messenger.model.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.apache.ibatis.session.SqlSession;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.kh.final3.common.vo.PageInfo;
 import com.kh.final3.member.model.vo.Member;
@@ -17,10 +16,10 @@ import com.kh.final3.messenger.model.vo.Messenger;
 public class MessengerServiceImpl implements MessengerService{
 	
 	@Autowired
-	SqlSession sqlSession;
+	public SqlSessionTemplate sqlSession;
 	
 	@Autowired
-	MessengerDao msgDao;
+	public MessengerDao msgDao;
 
 	//쪽지 개수 세어오는 메소드 
 	@Override

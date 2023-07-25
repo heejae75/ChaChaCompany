@@ -18,7 +18,7 @@ import com.kh.final3.schedule.model.vo.Schedule;
 public class ScheduleController {
 
 	@Autowired
-	private ScheduleService scheduleService;
+	public ScheduleService scheduleService;
 	
 	//페이지 이동 메소드 
 	@RequestMapping("schedule.sc")
