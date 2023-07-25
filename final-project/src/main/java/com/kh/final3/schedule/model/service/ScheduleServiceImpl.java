@@ -1,9 +1,8 @@
 package com.kh.final3.schedule.model.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import org.apache.ibatis.session.SqlSession;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +14,10 @@ import com.kh.final3.schedule.model.vo.Schedule;
 public class ScheduleServiceImpl implements ScheduleService{
 	
 	@Autowired
-	private ScheduleDao scheduleDao;
+	public ScheduleDao scheduleDao;
 	
 	@Autowired
-	private SqlSession sqlSession;
+	public SqlSessionTemplate sqlSession;
 	
 	//부서 일정 등록 메소드
 	@Override

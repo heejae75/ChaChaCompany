@@ -507,6 +507,13 @@ a{
 
 		<!-- 헤더 오른쪽  -->
         <div class="header_right">
+        	<!-- 날씨 -->
+        	<div class="header_weather">
+        		<a href="#" id="weather_icon">
+                	
+            	</a>
+        	</div>
+        
         	<!-- 쪽지  -->
             <div class="header_letter">
             	<a href="#">
@@ -529,13 +536,6 @@ a{
                 	<i class="fa-sharp fa-solid fa-envelope fa-lg" style="color: #0E6251;"></i>
                 </a>
             </div>
-
-			<!-- 실시간 채팅  -->
-<!--             <div class="header_chat"> -->
-<!--             <div id="alarm">7</div> -->
-<!--                 	<i class="fa-sharp fa-solid fa-comments fa-lg" style="color: #0E6251;"></i> -->
-<!--             </div> -->
-       
 
 			<!-- 알림  -->
             <div class="header_alert">
@@ -728,6 +728,7 @@ a{
     <script>
     	$(function() {
     		menuSelectProfileImg();
+    		selectWeather();
     	});	
     	
     	document.addEventListener("DOMContentLoaded", function(event) {
@@ -809,6 +810,96 @@ a{
         });
         
     });
+    
+    /*날씨 조회*/
+    function selectWeather(){
+		//오늘 날짜 구하기 Format(YYYYMMdd)
+    	var date = new Date();
+    	var year = date.getFullYear();
+    	var month = date.getMonth() +1 ;
+    	var day = date.getDate();
+    	
+    	//10월 이전달에는 0 붙여주기
+    	if(month < 10 ){  
+    		month = '0' + month
+    	}
+    	//10일 이전에는 0 붙여주
+    	if(day < 10){ 
+    		day = '0' + day
+    	}
+    	
+    	var today = year+month+day
+    	
+    	//현재시간 구하기 
+    	var hour = date.getHours();
+    	var minute = date.getMinutes();
+    	var baseTime = "";
+    	
+    	//30분 이전일경우 조회 기준 시간을 한시간 전으로 지정 
+    	if(minute < 30 ){
+    		hour = hour-1
+    		if(hour < 10 ){
+	    		baseTime = "0"+ hour + "30"
+    		}else{
+    			baseTime = hour+"30"
+    		}
+    	}else{
+    		if(hour < 10 ){
+	    		baseTime = "0"+ hour + "30"
+    		}else{
+    			baseTime = hour+"30"
+    		}
+    	}
+    	
+    	console.log(today) //오늘 날짜
+    	console.log(baseTime) // 조회 기준 시간 
+    	
+    	$.ajax({
+    		url : "weather.ma",
+    		
+    		data : { 
+    			baseDate : today ,
+    			baseTime : baseTime	
+    		},
+			
+    		success : function(weatherInfo){
+    			console.log(weatherInfo.response.body.items);
+    			var itemsArr = weatherInfo.response.body.items.item;
+    			
+    			var sky = "";
+    			var rain = "";
+    			
+    			if(itemsArr[18].fcstValue == 1){
+    				sky = "맑음";
+    			}else if(itemsArr[18].fcstValue == 3){
+    				sky = "구름 많음"
+    			}else{
+    				sky = "흐림";
+    			}
+    			
+    			if(itemsArr[6].fcstValue == 1 || itemsArr[6].fcstValue == 5){
+    				rain = "비";
+    			}else if(itemsArr[6].fcstValue == 2 || itemsArr[6].fcstValue == 6){
+    				rain = "비/눈";
+    			}else if(itemsArr[6].fcstValue == 3 || itemsArr[6].fcstValue == 7 ){
+    				rain = "눈";
+    			}
+    			
+    			var temp = itemsArr[25].fcstValue;
+				
+    			console.log(itemsArr[25].fcstValue)
+    			
+    			$("#weather_icon").html(rain);
+
+    		},
+    		
+    		error : function(){
+    			console.log("통신 실패");
+    		}
+			
+    	})
+    }
+    
     
     /* 알림 목록 조회 */
    	function menuAlertList() {

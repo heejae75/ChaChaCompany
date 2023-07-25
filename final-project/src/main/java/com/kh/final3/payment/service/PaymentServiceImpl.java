@@ -3,7 +3,7 @@ package com.kh.final3.payment.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.apache.ibatis.session.SqlSession;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,10 +17,10 @@ import com.kh.final3.payment.model.vo.Payment;
 public class PaymentServiceImpl implements PaymentService {
 	
 	@Autowired
-	private PaymentDao paymentDao;
+	public PaymentDao paymentDao;
 	
 	@Autowired
-	private SqlSession sqlSession;
+	public SqlSessionTemplate sqlSession;
 	
 	//전체 회원수 조회
 	@Override

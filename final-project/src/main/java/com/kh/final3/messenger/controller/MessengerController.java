@@ -26,7 +26,7 @@ import com.kh.final3.messenger.model.vo.Messenger;
 public class MessengerController {
 
 	@Autowired
-	MessengerService msgService;
+	public MessengerService msgService;
 	
 	//쪽지 페이지로 이동 메소드(받은쪽지함)
 	@RequestMapping("list.mg")

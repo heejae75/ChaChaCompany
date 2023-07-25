@@ -17,4 +17,8 @@ public class CommonController {
 		
 		return "main/mainPage";
 	}
+	
+	
+		
+	
 }

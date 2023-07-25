@@ -22,7 +22,7 @@ import com.kh.final3.payment.service.PaymentService;
 public class PaymentController {
 	
 	@Autowired
-	private PaymentService paymentService;
+	public PaymentService paymentService;
 	
 	//관리자 - 급여 관리 페이지 이동 
 	@RequestMapping("payment.ad")
