@@ -5,11 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.Locale;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +18,10 @@ public class WeatherController {
 	
 	@ResponseBody
 	@RequestMapping(value="weather.ma", produces = "application/json; charset=UTF-8")
-	public String selectWeather(String baseDate, String baseTime) throws IOException {
+	public String selectWeather() throws IOException {
+		
+		//발표일 format 지정
+		LocalDateTime today = LocalDateTime.now().minusMinutes(30); //현재시간 기준 30분 이전 
 		
 		String apiUrl = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst";
 		String serviceKey = "7zxXenAGLgeB%2BpWfu4otC7O%2B%2FNtGcsyOTvsbLe0qKv5vHOV9L93bTTlaZr9nHkDacPSV33NDe6YpPDyPkv6kyQ%3D%3D";
@@ -30,8 +30,8 @@ public class WeatherController {
 		apiUrl +="&pageNo=1";				//페이지번호
 		apiUrl +="&numOfRows=60";			//한페이지에 보여질 결과 개수 
 		apiUrl +="&dataType=json";			//요청자료타입
-		apiUrl +="&base_date="+baseDate;	//발표일
-		apiUrl +="&base_time="+baseTime;	//발표시간
+		apiUrl +="&base_date="+ today.format(DateTimeFormatter.ofPattern("YYYYMMdd"));	//발표일
+		apiUrl +="&base_time="+ today.format(DateTimeFormatter.ofPattern("HHmm"));	//발표시간
 		apiUrl +="&nx=58";					//예보 지점의 X좌표 
 		apiUrl +="&ny=126";					//예보 지점의 Y좌표
 		
